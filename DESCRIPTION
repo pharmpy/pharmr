@@ -2,11 +2,13 @@ Package: pharmr
 Encoding: UTF-8
 Version: 0.1
 Date: 2021-01-04
-Title: A wrapper for the Pharmpy pharmacometrics library
+Title: A Wrapper for the Pharmpy Pharmacometrics Library
 Authors@R: c(person("Rikard", "Nordgren", role=c("aut", "cre", "cph"), email="rikard.nordgren@farmaci.uu.se"))
 Maintainer: Rikard Nordgren <rikard.nordgren@farmaci.uu.se>
 Depends:
     R (>= 3.3.0)
+SystemRequirements:
+    Python (>= 3.6.0)
 Imports:
     methods,
     reticulate
