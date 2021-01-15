@@ -9,3 +9,9 @@ pharmr::install_pharmpy()
 ```
 
 If python was not installed on your system you will get a question if you want help with installing miniconda.
+
+You might need to restart the R session before doing
+
+```R
+library(pharmr)
+```
