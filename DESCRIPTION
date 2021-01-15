@@ -10,7 +10,6 @@ Depends:
 SystemRequirements:
     Python (>= 3.6.0)
 Imports:
-    methods,
     reticulate
 NeedsCompilation: no
 Description: An R wrapper for the Pharmpy pharmacometrics library via the reticulate package.
