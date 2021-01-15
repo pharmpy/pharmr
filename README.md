@@ -15,3 +15,8 @@ You might need to restart the R session before doing
 ```R
 library(pharmr)
 ```
+
+## Documentation
+
+[Pharmpy documentation](https://pharmpy.github.io)
+[Getting started in R](https://pharmpy.github.io/latest/using_r.html#using-r)
