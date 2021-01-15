@@ -1,3 +1,3 @@
 install_pharmpy <- function() {
-    reticulate::py_install("pharmpy-core")
+    reticulate::py_install("pharmpy-core", pip=T)
 }
