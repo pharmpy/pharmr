@@ -11,6 +11,8 @@ SystemRequirements:
     Python (>= 3.6.0)
 Imports:
     reticulate
+Suggests:
+    testthat
 NeedsCompilation: no
 Description: An R wrapper for the Pharmpy pharmacometrics library via the reticulate package.
 URL: https://github.com/pharmpy/pharmr
