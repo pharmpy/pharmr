@@ -67,4 +67,5 @@ split_to_items <- function(arguments_raw) {
   return(arguments)
 }
 
+library(pharmr)
 build_docs()
