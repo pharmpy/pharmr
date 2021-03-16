@@ -1,4 +1,4 @@
-create_docs <- function() {
+build_docs <- function() {
   py_capture_output <- reticulate:::py_capture_output
   import_builtins <- reticulate::import_builtins
   
@@ -6,7 +6,7 @@ create_docs <- function() {
   modeling <- reticulate::import("pharmpy.modeling")
   
   funcs <- modeling$`__all__`
-  
+
   for (func in funcs) {
     py_doc <- py_capture_output(import_builtins()$help(get(func)), type = "stdout")
     py_doc <- unlist(strsplit(py_doc, split='\n'))[-1]
@@ -66,3 +66,5 @@ split_to_items <- function(arguments_raw) {
   }
   return(arguments)
 }
+
+build_docs()
