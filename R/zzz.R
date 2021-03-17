@@ -10,8 +10,5 @@
         for (func in funcs) {
             assign(func, modeling[[func]], env)
         }
-
-        pharmpy_results <- reticulate::import("pharmpy.results")
-        assign("read_results", pharmpy_results$read_results, env)
     }
 }
