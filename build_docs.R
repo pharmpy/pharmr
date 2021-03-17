@@ -1,14 +1,14 @@
 build_docs <- function() {
+  modeling <- reticulate::import("pharmpy.modeling")
+  funcs <- modeling$`__all__`
+  
   py_capture_output <- reticulate:::py_capture_output
   import_builtins <- reticulate::import_builtins
   
-  reticulate::import("pharmpy")
-  modeling <- reticulate::import("pharmpy.modeling")
-  
-  funcs <- modeling$`__all__`
-
   for (func in funcs) {
     py_doc <- py_capture_output(import_builtins()$help(get(func)), type = "stdout")
+    py_doc <- gsub('\\\\mathsf', '\\text', py_doc)
+    py_doc <- gsub('\\cdot', '*', py_doc)
     py_doc <- unlist(strsplit(py_doc, split='\n'))[-1]
     py_doc <- lapply(py_doc, trimws)
     py_doc <- py_doc[py_doc != '']
@@ -43,9 +43,18 @@ build_docs <- function() {
                         '\\href{', doc_link, func, '}{Link to Python API reference} (e.g. for correct rendering of equations)\n\n',
                         description, '\n}\n', 
                         '\\usage{\n', py_doc[1], '\n}\n',
-                        '\\arguments{\n', arguments, '\n}\n',
-                        '\\value{\n', value, '\n}\n',
                         sep = '')
+    
+    if ('Parameters' %in% py_doc) {
+      rd_content <- paste(rd_content,
+                          '\\arguments{\n', arguments, '\n}\n',
+                          sep = '')
+    }
+    if ('Returns' %in% py_doc) {
+      rd_content <- paste(rd_content,
+                          '\\value{\n', value, '\n}\n',
+                          sep = '')
+    }
     
     rd_file <- cat(rd_content, file = file_name)
   }
