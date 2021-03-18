@@ -22,12 +22,12 @@ build_docs <- function() {
 
     arguments <- c('')
     value <- c('')
-    description <- py_doc[-1]
+    details <- py_doc[-1]
     
     if ('Parameters' %in% py_doc) {
       parameters_start_index <- match('Parameters', py_doc)
       arguments <- py_doc[-1:-(parameters_start_index + 1)]
-      description <- py_doc[2:(parameters_start_index - 1)]
+      details <- py_doc[2:(parameters_start_index - 1)]
       if ('Returns' %in% py_doc) {
         returns_start_index <- match('Returns', py_doc)
         value <- py_doc[-1:-(returns_start_index + 1)]
@@ -35,10 +35,11 @@ build_docs <- function() {
       }
       arguments <- split_to_items(arguments)
     }
-    
-    description <- paste(description, collapse = '\n\n')
-    
-    value <- paste(value, collapse = '\n\n')
+
+    description <- unlist(strsplit(as.character(details[1]), '\\. '))[1]
+    details <- paste(details, collapse = '\n\n')
+
+    value <- paste(value, collapse = '\n')
     file_name <- paste(getwd(), '/man/', func, '.Rd', sep = '')
     
     doc_link <- 'https://pharmpy.github.io/latest/reference/pharmpy.modeling.html?highlight=add_cov#pharmpy.modeling.'
@@ -46,10 +47,11 @@ build_docs <- function() {
     rd_content <- paste('\\name{', func, '}\n',
                         '\\alias{', func, '}\n',
                         '\\title{', func, '}\n',
-                        '\\description{\n', 
-                        '\\href{', doc_link, func, '}{Link to Python API reference} (for correct rendering of equations, tables etc.)\n\n',
-                        description, 
-                        '\n\n\\bold{Usage}\n\n\\code{', py_doc[1], '}\n', '\n}\n', 
+                        '\\description{\n',
+                        description, '.\n\n\\bold{Usage}\n\n\\code{', py_doc[1], '}\n', '\n}\n',
+                        '\\details{\n',
+                        '\\href{', doc_link, func, '}{Link to Python API reference} (for correct rendering of equations, tables etc.).\n\n',
+                        details,'\n}\n',
                         sep = '')
     
     if ('Parameters' %in% py_doc) {
