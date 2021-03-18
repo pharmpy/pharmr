@@ -6,34 +6,28 @@ build_docs <- function() {
   import_builtins <- reticulate::import_builtins
   
   for (func in funcs) {
-    py_doc <- py_capture_output(import_builtins()$help(get(func)), type = "stdout")
-    py_doc <- gsub('\\\\mathsf', '', py_doc)
-    py_doc <- gsub('\\cdot', '*', py_doc)
-    py_doc <- gsub('\\\\text', '', py_doc)
-    py_doc <- gsub('\\\\frac', 'frac', py_doc)
-    py_doc <- gsub('\\\\log', 'log', py_doc)
-    py_doc <- gsub('\\\\exp', 'exp', py_doc)
-    py_doc <- gsub('\\\\min', 'min', py_doc)
-    py_doc <- gsub('\\\\max', 'max', py_doc)
-    
-    py_doc <- unlist(strsplit(py_doc, split='\n'))[-1]
-    py_doc <- lapply(py_doc, trimws)
-    py_doc <- py_doc[py_doc != '']
+    py_original <- py_capture_output(import_builtins()$help(get(func)), type = "stdout")
+    py_subbed_macros <- sub_latex_macros(py_original)
+    py_split <- unlist(strsplit(py_subbed_macros, split='\n'))[-1]
+    py_trimmed <- lapply(py_split, trimws)
+    py_doc <- py_trimmed[py_trimmed != '']
 
     arguments <- c('')
     value <- c('')
     details <- py_doc[-1]
-    
-    if ('Parameters' %in% py_doc) {
-      parameters_start_index <- match('Parameters', py_doc)
-      arguments <- py_doc[-1:-(parameters_start_index + 1)]
-      details <- py_doc[2:(parameters_start_index - 1)]
-      if ('Returns' %in% py_doc) {
-        returns_start_index <- match('Returns', py_doc)
-        value <- py_doc[-1:-(returns_start_index + 1)]
-        arguments <- arguments[1:(length(arguments) - length(value) - 2)]
-      }
+    argument_pos <- find_argument_position(py_doc)
+    value_pos <- find_value_position(py_doc)
+
+    if (!is.na(argument_pos$start)){
+      arguments <- py_doc[argument_pos$start:argument_pos$end]
       arguments <- split_to_items(arguments)
+      details <- py_doc[2:(argument_pos$start-3)]
+    }
+    if (!is.na(value_pos$start)) {
+      value <- py_doc[value_pos$start:value_pos$end]
+      if (is.na(argument_pos$start)){
+        details <- py_doc[2:(value_pos$start-3)]
+      }
     }
 
     description <- unlist(strsplit(as.character(details[1]), '\\. '))[1]
@@ -47,8 +41,8 @@ build_docs <- function() {
     rd_content <- paste('\\name{', func, '}\n',
                         '\\alias{', func, '}\n',
                         '\\title{', func, '}\n',
-                        '\\description{\n',
-                        description, '.\n\n\\bold{Usage}\n\n\\code{', py_doc[1], '}\n', '\n}\n',
+                        '\\description{\n', description, '.\n\n',
+                        '\\bold{Usage}\n\n\\code{', py_doc[1], '}\n', '\n}\n',
                         '\\details{\n',
                         '\\href{', doc_link, func, '}{Link to Python API reference} (for correct rendering of equations, tables etc.).\n\n',
                         details,'\n}\n',
@@ -69,8 +63,41 @@ build_docs <- function() {
   }
 }
 
+sub_latex_macros <- function(doc_orignal) {
+  doc_subbed <- gsub('\\\\mathsf', '', doc_orignal) %>%
+    gsub('\\cdot', '*', .) %>%
+    gsub('\\\\text', '', .) %>%
+    gsub('\\\\frac', 'frac', .) %>%
+    gsub('\\\\log', 'log', .) %>%
+    gsub('\\\\exp', 'exp', .) %>%
+    gsub('\\\\min', 'min', .) %>%
+    gsub('\\\\max', 'max', .)
+
+  return(doc_subbed)
+}
+
+find_argument_position <- function(full_doc) {
+  start_index <- match('Parameters', full_doc) + 2
+  if (is.na(start_index)) {
+    return(list(start = NA, end = NA))
+  }
+  if ('Returns' %in% full_doc) {
+    end_index <- match('Returns', full_doc) - 1
+  }
+  else {
+    end_index <- length(full_doc)
+  }
+  return(list(start = start_index, end = end_index))
+}
+
+find_value_position <- function(full_doc) {
+  start_index <- match('Returns', full_doc) + 2
+  end_index <- length(full_doc)
+  return(list(start = start_index, end = end_index))
+}
+
 split_to_items <- function(arguments_raw) {
-  list_of_items <- grep(' : ', arguments_raw, value = TRUE)
+  list_of_items <- grep(':', arguments_raw, value = TRUE)
   arguments <- ''
   
   for (def in list_of_items) {
@@ -85,5 +112,6 @@ split_to_items <- function(arguments_raw) {
   return(arguments)
 }
 
+library(magrittr)
 library(pharmr)
 build_docs()
