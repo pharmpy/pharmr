@@ -36,7 +36,7 @@ build_docs <- function() {
     value <- paste(value, collapse = '\n')
     file_name <- paste(getwd(), '/man/', func, '.Rd', sep = '')
     
-    doc_link <- 'https://pharmpy.github.io/latest/reference/pharmpy.modeling.html?highlight=add_cov#pharmpy.modeling.'
+    doc_link <- 'https://pharmpy.github.io/latest/reference/pharmpy.modeling.html'  # Add full link, underfull \hbox error (spaces are added)
     
     rd_content <- paste('\\name{', func, '}\n',
                         '\\alias{', func, '}\n',
@@ -44,7 +44,7 @@ build_docs <- function() {
                         '\\description{\n', description, '.\n\n',
                         '\\bold{Usage}\n\n\\code{', py_doc[1], '}\n', '\n}\n',
                         '\\details{\n',
-                        '\\href{', doc_link, func, '}{Link to Python API reference} (for correct rendering of equations, tables etc.).\n\n',
+                        'Link to Python\n\\href{', doc_link, '}{API reference} (for correct rendering of equations, tables etc.).\n',
                         details,'\n}\n',
                         sep = '')
     
