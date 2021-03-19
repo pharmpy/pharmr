@@ -10,6 +10,10 @@ jobs:
         uses: actions/checkout@v1
       - name: Setting up R
         uses: r-lib/actions/setup-r@v1
+      - name: Set up devtools
+        run: |
+          install.packages('devtools')
+        shell: Rscript {0}
       - name: Running tests
         run: devtools::test()
         shell: Rscript {0}
