@@ -1,0 +1,15 @@
+on: workflow_dispatch
+
+name: test-pharmr 
+
+jobs:
+  test-pharmr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pharmr 
+        uses: actions/checkout@v1
+      - name: Setting up R
+        uses: r-lib/actions/setup-r@v1
+      - name: Running tests
+        run: devtools::test()
+        shell: Rscript {0}
