@@ -2,66 +2,145 @@
 \alias{add_covariate_effect}
 \title{add_covariate_effect}
 \description{
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html?highlight=add_cov#pharmpy.modeling.add_covariate_effect}{Link to Python API reference} (e.g. for correct rendering of equations)
+Adds covariate effect to :class:`pharmpy.model`.
 
+\bold{Usage}
+
+\code{add_covariate_effect(model, parameter, covariate, effect, operation='*')}
+
+}
+\details{
+Link to Python
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
 Adds covariate effect to :class:`pharmpy.model`. The following effects have templates:
 
 - Linear function for continuous covariates (*lin*)
 
-- Initial estimate: 0.001
+- Function:
 
-- Upper bound: 100,000 if the median of the covariate is equal to the minimum, otherwise
+.. math::
 
-:math:`1/(median - min)`
+{coveff} = 1 + {theta} * ({cov} - {median})
 
-- Lower bound: -100,000 if the median of the covariate is equal to the maximum, otherwise
+- Init:  0.001
 
-:math:`1/(median - max)`
+- Upper:
+
+- If median of covariate equals minimum: :math:`100,000`
+
+- Otherwise: :math:`frac{1}{{median} - {min}}`
+
+- Lower:
+
+- If median of covariate equals maximum: :math:`-100,000`
+
+- Otherwise: :math:`frac{1}{{median} - {max}}`
 
 - Linear function for categorical covariates (*cat*)
 
-- Initial estimate: 0.001
+- Function:
 
-- Upper bound: 100,000
+- If covariate is most common category:
 
-- Lower bound: -100,000
+.. math::
+
+{coveff} = 1
+
+- For each additional category:
+
+.. math::
+
+{coveff} = 1 + {theta}
+
+- Init: :math:`0.001`
+
+- Upper: :math:`100,000`
+
+- Lower: :math:`-100,000`
 
 - Piecewise linear function/"hockey-stick", continuous covariates only (*piece_lin*)
 
-- Initial estimate: 0.001
+- Function:
 
-- Upper bound: for first state 1/(median - minimum), otherwise 100,000
+- If cov <= median:
 
-- Lower bound: for first state -100,000, otherwise 1/(median - maximum)
+.. math::
+
+{coveff} = 1 + {theta1} * ({cov} - {median})
+
+- If cov > median:
+
+.. math::
+
+{coveff} = 1 + {theta2} * ({cov} - {median})
+
+- Init: :math:`0.001`
+
+- Upper:
+
+- For first state: :math:`frac{1}{{median} - {min}}`
+
+- Otherwise: :math:`100,000`
+
+- Lower:
+
+- For first state: :math:`-100,000`
+
+- Otherwise: :math:`frac{1}{{median} - {max}}`
 
 - Exponential function, continuous covariates only (*exp*)
 
-- Initial estimate: 0.001 unless lower bound > 0.001 or upper bound < 0.001. In that case
+- Function:
 
-:math:`init = (upper - lower)/2`, if init = 0: :math:`init = upper/2`
+.. math::
 
-- Upper bound: if :math:`min - median = 0` or :math:`max - median = 0`, upper bound is 100.
+{coveff} = exp({theta} * ({cov} - {median}))
 
-Otherwise the upper bound is
+- Init:
 
-:math:`min(log(0.01)/(min - median), log(100)/(max - median))`
+- If lower > 0.001 or upper < 0.001: :math:`frac{{upper} - {lower}}{2}`
 
-- Lower bound: if :math:`min - median = 0` or :math:`max - median = 0`, lower bound is 0.01.
+- If estimated init is 0: :math:`frac{{upper}}{2}`
 
-Otherwise the lower bound is
+- Otherwise: :math:`0.001`
 
-:math:`max(log(0.01)/(max - median), log(100)/(min - median))`
+- Upper:
+
+- If min - median = 0 or max - median = 0: :math:`100`
+
+- Otherwise:
+
+.. math::
+
+min(frac{log(0.01)}{{min} - {median}},
+
+frac{log(100)}{{max} - {median}})
+
+- Lower:
+
+- If min - median = 0 or max - median = 0: :math:`0.01`
+
+- Otherwise:
+
+.. math::
+
+max(frac{log(0.01)}{{max} - {median}},
+
+frac{log(100)}{{min} - {median}})
 
 - Power function, continuous covariates only (*pow*)
 
-- Initial estimate: 0.001
+- Function:
 
-- Upper bound: 100,000
+.. math::
 
-- Lower bound: -100
-}
-\usage{
-add_covariate_effect(model, parameter, covariate, effect, operation='*')
+{coveff} = (frac{{cov}}{{median}})^{theta}
+
+- Init: :math:`0.001`
+
+- Upper: :math:`100,000`
+
+- Lower: :math:`-100`
 }
 \arguments{
 
@@ -90,7 +169,4 @@ operation
 }{
 str, optional, Whether the covariate effect should be added or multiplied (default).
 }
-}
-\value{
-
 }

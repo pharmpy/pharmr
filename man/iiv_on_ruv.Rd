@@ -2,12 +2,17 @@
 \alias{iiv_on_ruv}
 \title{iiv_on_ruv}
 \description{
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html?highlight=add_cov#pharmpy.modeling.iiv_on_ruv}{Link to Python API reference} (e.g. for correct rendering of equations)
+Multiplies epsilons with exponential (new) etas.
 
-Multiplies epsilons with exponential (new) etas. Initial estimates for new etas are 0.09.
+\bold{Usage}
+
+\code{iiv_on_ruv(model, list_of_eps=None, same_eta=True, eta_names=None)}
+
 }
-\usage{
-iiv_on_ruv(model, list_of_eps=None, same_eta=True, eta_names=None)
+\details{
+Link to Python
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
+Multiplies epsilons with exponential (new) etas. Initial estimates for new etas are 0.09.
 }
 \arguments{
 
@@ -19,14 +24,16 @@ Model, Pharmpy model to apply IIV on epsilons.
 \item{
 list_of_eps
 }{
-list, List of epsilons to multiply with exponential etas. If None, all epsilons will
+str, list, Name/names of epsilons to multiply with exponential etas. If None, all epsilons will
 }
 \item{
 same_eta
 }{
 bool, Boolean of whether all RUVs from input should use the same new ETA or if one ETA
 }
+\item{
+eta_names
+}{
+str, list, Custom names of new etas. Must be equal to the number epsilons or 1 if same eta.
 }
-\value{
-
 }

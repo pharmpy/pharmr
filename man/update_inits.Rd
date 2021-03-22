@@ -2,14 +2,19 @@
 \alias{update_inits}
 \title{update_inits}
 \description{
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html?highlight=add_cov#pharmpy.modeling.update_inits}{Link to Python API reference} (e.g. for correct rendering of equations)
+Updates initial estimates from previous output.
 
+\bold{Usage}
+
+\code{update_inits(model, force_individual_estimates=False)}
+
+}
+\details{
+Link to Python
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
 Updates initial estimates from previous output. Can be forced if no initial
 
 individual estimates have been read.
-}
-\usage{
-update_inits(model, force_individual_estimates=False)
 }
 \arguments{
 
@@ -23,7 +28,4 @@ force_individual_estimates
 }{
 bool, Whether update of initial individual estimates should be forced.
 }
-}
-\value{
-
 }

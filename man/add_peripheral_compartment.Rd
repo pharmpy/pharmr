@@ -2,8 +2,16 @@
 \alias{add_peripheral_compartment}
 \title{add_peripheral_compartment}
 \description{
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html?highlight=add_cov#pharmpy.modeling.add_peripheral_compartment}{Link to Python API reference} (e.g. for correct rendering of equations)
+Add a peripheral distribution compartment to model.
 
+\bold{Usage}
+
+\code{add_peripheral_compartment(model)}
+
+}
+\details{
+Link to Python
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
 Add a peripheral distribution compartment to model
 
 The rate of flow from the central to the peripheral compartment
@@ -24,22 +32,13 @@ n
 
 ==  ===================================================
 
-1   :math:`\mathsf{CL} = \mathsf{CL'}`, :math:`\mathsf{VC} = \mathsf{VC'}`,
+1   :math:`{CL} = {CL'}`, :math:`{VC} = {VC'}`,
 
-:math:`\mathsf{QP1} = \mathsf{CL'}` and :math:`\mathsf{VP1} = \mathsf{VC'} \cdot 0.05`
+:math:`{QP1} = {CL'}` and :math:`{VP1} = {VC'} \* 0.05`
 
-2   :math:`\mathsf{QP1} = \mathsf{QP1' / 2}`, :math:`\mathsf{VP1} = \mathsf{VP1'}`,
+2   :math:`{QP1} = {QP1' / 2}`, :math:`{VP1} = {VP1'}`,
 
-:math:`\mathsf{QP2} = \mathsf{QP1' / 2}` and :math:`\mathsf{VP2} = \mathsf{VP1'}`
+:math:`{QP2} = {QP1' / 2}` and :math:`{VP2} = {VP1'}`
 
 ==  ===================================================
-}
-\usage{
-add_peripheral_compartment(model)
-}
-\arguments{
-
-}
-\value{
-
 }

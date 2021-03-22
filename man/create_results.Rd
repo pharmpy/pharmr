@@ -2,16 +2,15 @@
 \alias{create_results}
 \title{create_results}
 \description{
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html?highlight=add_cov#pharmpy.modeling.create_results}{Link to Python API reference} (e.g. for correct rendering of equations)
+NULL.
 
+\bold{Usage}
 
-}
-\usage{
-create_results(path, **kwargs)
-}
-\arguments{
+\code{create_results(path, **kwargs)}
 
 }
-\value{
+\details{
+Link to Python
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
 
 }

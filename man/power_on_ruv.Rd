@@ -2,14 +2,19 @@
 \alias{power_on_ruv}
 \title{power_on_ruv}
 \description{
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html?highlight=add_cov#pharmpy.modeling.power_on_ruv}{Link to Python API reference} (e.g. for correct rendering of equations)
+Applies a power effect to provided epsilons.
 
+\bold{Usage}
+
+\code{power_on_ruv(model, list_of_eps=None)}
+
+}
+\details{
+Link to Python
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
 Applies a power effect to provided epsilons. Initial estimates for new thetas are 1 if the error
 
 model is proportional, otherwise they are 0.1.
-}
-\usage{
-power_on_ruv(model, list_of_eps=None)
 }
 \arguments{
 
@@ -21,9 +26,6 @@ Model, Pharmpy model to create block effect on.
 \item{
 list_of_eps
 }{
-list, List of epsilons to apply power effect. If None, all epsilons will be used.
+str, list, Name/names of epsilons to apply power effect. If None, all epsilons will be used.
 }
-}
-\value{
-
 }

@@ -2,16 +2,15 @@
 \alias{set_ode_solver}
 \title{set_ode_solver}
 \description{
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html?highlight=add_cov#pharmpy.modeling.set_ode_solver}{Link to Python API reference} (e.g. for correct rendering of equations)
+NULL.
 
+\bold{Usage}
 
-}
-\usage{
-set_ode_solver(model, solver)
-}
-\arguments{
+\code{set_ode_solver(model, solver)}
 
 }
-\value{
+\details{
+Link to Python
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
 
 }

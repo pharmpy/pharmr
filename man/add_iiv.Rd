@@ -2,8 +2,16 @@
 \alias{add_iiv}
 \title{add_iiv}
 \description{
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html?highlight=add_cov#pharmpy.modeling.add_iiv}{Link to Python API reference} (e.g. for correct rendering of equations)
+Adds IIVs to :class:`pharmpy.model`.
 
+\bold{Usage}
+
+\code{add_iiv(model, list_of_parameters, expression, operation='*', eta_names=None)}
+
+}
+\details{
+Link to Python
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
 Adds IIVs to :class:`pharmpy.model`. Effects that currently have templates are:
 
 - Additive (*add*)
@@ -17,9 +25,6 @@ Adds IIVs to :class:`pharmpy.model`. Effects that currently have templates are:
 For all except exponential the operation input is not needed. Otherwise user specified
 
 input is supported. Initial estimates for new etas are 0.09.
-}
-\usage{
-add_iiv(model, list_of_parameters, expression, operation='*', eta_names=None)
 }
 \arguments{
 
@@ -43,7 +48,9 @@ operation
 }{
 str, list, optional, Whether the new IIV should be added or multiplied (default).
 }
+\item{
+eta_names
+}{
+str, list, optional, Custom name/names of new eta
 }
-\value{
-
 }

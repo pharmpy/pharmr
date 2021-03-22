@@ -2,12 +2,17 @@
 \alias{remove_iiv}
 \title{remove_iiv}
 \description{
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html?highlight=add_cov#pharmpy.modeling.remove_iiv}{Link to Python API reference} (e.g. for correct rendering of equations)
+Removes all IIV omegas given a list with eta names and/or parameter names..
 
-Removes all IIV omegas given a list with eta names and/or parameter names.
+\bold{Usage}
+
+\code{remove_iiv(model, list_to_remove=None)}
+
 }
-\usage{
-remove_iiv(model, list_to_remove=None)
+\details{
+Link to Python
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
+Removes all IIV omegas given a list with eta names and/or parameter names.
 }
 \arguments{
 
@@ -19,9 +24,6 @@ Model, Pharmpy model to create block effect on.
 \item{
 list_to_remove
 }{
-list, List of etas and/or parameter name to remove. If None, all etas that are IIVs will
+str, list, Name/names of etas and/or parameter name to remove. If None, all etas that are IIVs will
 }
-}
-\value{
-
 }

@@ -2,14 +2,19 @@
 \alias{fix_parameters_to}
 \title{fix_parameters_to}
 \description{
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html?highlight=add_cov#pharmpy.modeling.fix_parameters_to}{Link to Python API reference} (e.g. for correct rendering of equations)
+Fix parameters to.
 
+\bold{Usage}
+
+\code{fix_parameters_to(model, parameter_names, values)}
+
+}
+\details{
+Link to Python
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
 Fix parameters to
 
 Fix all listed parameters to specified value/values
-}
-\usage{
-fix_parameters_to(model, parameter_names, values)
 }
 \arguments{
 

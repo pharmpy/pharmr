@@ -2,16 +2,15 @@
 \alias{set_name}
 \title{set_name}
 \description{
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html?highlight=add_cov#pharmpy.modeling.set_name}{Link to Python API reference} (e.g. for correct rendering of equations)
+NULL.
 
+\bold{Usage}
 
-}
-\usage{
-set_name(model, name)
-}
-\arguments{
+\code{set_name(model, name)}
 
 }
-\value{
+\details{
+Link to Python
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
 
 }

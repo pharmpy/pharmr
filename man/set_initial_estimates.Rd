@@ -2,16 +2,31 @@
 \alias{set_initial_estimates}
 \title{set_initial_estimates}
 \description{
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html?highlight=add_cov#pharmpy.modeling.set_initial_estimates}{Link to Python API reference} (e.g. for correct rendering of equations)
+Set initial estimates.
 
-Set initial estimates
+\bold{Usage}
+
+\code{set_initial_estimates(model, inits)}
+
 }
-\usage{
-set_initial_estimates(model, inits)
+\details{
+Link to Python
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
+Set initial estimates
 }
 \arguments{
 
+\item{
+model
+}{
+Model, inits : A dictionary of parameter: init for parameters to change
+}
+\item{
+inits
+}{
+A dictionary of parameter, NULL
+}
 }
 \value{
-model: Model
+model : Model
 }

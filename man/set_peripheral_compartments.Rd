@@ -2,16 +2,15 @@
 \alias{set_peripheral_compartments}
 \title{set_peripheral_compartments}
 \description{
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html?highlight=add_cov#pharmpy.modeling.set_peripheral_compartments}{Link to Python API reference} (e.g. for correct rendering of equations)
+NULL.
 
+\bold{Usage}
 
-}
-\usage{
-set_peripheral_compartments(model, n)
-}
-\arguments{
+\code{set_peripheral_compartments(model, n)}
 
 }
-\value{
+\details{
+Link to Python
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
 
 }

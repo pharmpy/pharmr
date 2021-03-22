@@ -2,14 +2,19 @@
 \alias{unfix_parameters_to}
 \title{unfix_parameters_to}
 \description{
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html?highlight=add_cov#pharmpy.modeling.unfix_parameters_to}{Link to Python API reference} (e.g. for correct rendering of equations)
+Unix parameters to.
 
+\bold{Usage}
+
+\code{unfix_parameters_to(model, parameter_names, values)}
+
+}
+\details{
+Link to Python
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
 Unix parameters to
 
 Unfix all listed parameters to specified value/values
-}
-\usage{
-unfix_parameters_to(model, parameter_names, values)
 }
 \arguments{
 

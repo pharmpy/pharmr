@@ -2,21 +2,23 @@
 \alias{remove_iov}
 \title{remove_iov}
 \description{
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html?highlight=add_cov#pharmpy.modeling.remove_iov}{Link to Python API reference} (e.g. for correct rendering of equations)
+Removes all IOV omegas..
 
-Removes all IOV omegas.
+\bold{Usage}
+
+\code{remove_iov(model)}
+
 }
-\usage{
-remove_iov(model)
+\details{
+Link to Python
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
+Removes all IOV omegas.
 }
 \arguments{
 
 \item{
 model
 }{
-Model, Pharmpy model to create block effect on.
+Model, Pharmpy model to remove IOV from.
 }
-}
-\value{
-
 }

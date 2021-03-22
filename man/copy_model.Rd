@@ -2,16 +2,15 @@
 \alias{copy_model}
 \title{copy_model}
 \description{
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html?highlight=add_cov#pharmpy.modeling.copy_model}{Link to Python API reference} (e.g. for correct rendering of equations)
+NULL.
 
+\bold{Usage}
 
-}
-\usage{
-copy_model(model)
-}
-\arguments{
+\code{copy_model(model)}
 
 }
-\value{
+\details{
+Link to Python
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
 
 }
