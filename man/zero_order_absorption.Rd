@@ -20,4 +20,9 @@ used.
 }
 \arguments{
 
+\item{
+model
+}{
+Model, Model to set or change to first order absorption rate
+}
 }

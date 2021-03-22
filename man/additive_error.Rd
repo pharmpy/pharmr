@@ -16,4 +16,9 @@ Set an additive error model. Initial estimate for new sigma is :math:`(min(DV)/2
 }
 \arguments{
 
+\item{
+model
+}{
+Model, Set error model for this model
+}
 }

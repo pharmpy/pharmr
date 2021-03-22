@@ -18,4 +18,9 @@ the previous rate if available, otherwise it is set to the time of first observa
 }
 \arguments{
 
+\item{
+model
+}{
+Model, Model to set or change to bolus absorption rate
+}
 }

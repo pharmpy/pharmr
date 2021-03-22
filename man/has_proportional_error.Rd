@@ -16,4 +16,9 @@ Check if a model has a proportional error model
 }
 \arguments{
 
+\item{
+model
+}{
+Model, The model to check
+}
 }

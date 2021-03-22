@@ -16,4 +16,9 @@ Set or change to bolus absorption rate.
 }
 \arguments{
 
+\item{
+model
+}{
+Model, Model to set or change absorption rate
+}
 }

@@ -18,4 +18,9 @@ proportional and 0.09 for additive.
 }
 \arguments{
 
+\item{
+model
+}{
+Model, Set error model for this model
+}
 }

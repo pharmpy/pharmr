@@ -20,4 +20,9 @@ first observation/2 is used.
 }
 \arguments{
 
+\item{
+model
+}{
+Model, Model to set or change absorption rate
+}
 }

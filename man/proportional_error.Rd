@@ -16,4 +16,9 @@ Set a proportional error model. Initial estimate for new sigma is 0.09.
 }
 \arguments{
 
+\item{
+model
+}{
+Model, Set error model for this model
+}
 }

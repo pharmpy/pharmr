@@ -16,4 +16,9 @@ Remove error model.
 }
 \arguments{
 
+\item{
+model
+}{
+Model, Remove error model for this model
+}
 }

@@ -16,4 +16,9 @@ Check if a model has a combined additive and proportinal error model
 }
 \arguments{
 
+\item{
+model
+}{
+Model, The model to check
+}
 }
