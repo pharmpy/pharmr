@@ -1,4 +1,4 @@
-on: repository_dispatch
+on: workflow_dispatch
 
 name: Build docs
 
