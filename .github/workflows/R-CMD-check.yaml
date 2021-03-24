@@ -81,12 +81,25 @@ jobs:
           Rscript -e "try(remotes::install_local())"
           Rscript -e "try(pharmr::install_pharmpy())"
 
-      - name: Check
+      - name: Check (as cran)
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: |
           options(crayon.enabled = TRUE)
           rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
+        shell: Rscript {0}
+
+      - name: Upload check results
+        if: failure()
+        uses: actions/upload-artifact@main
+        with:
+          name: ${{ runner.os }}-r${{ matrix.config.r }}-results-cran
+          path: check
+
+      - name: Check (to run python)
+        run: |
+          options(crayon.enabled = TRUE)
+          rcmdcheck::rcmdcheck(args = c("--no-manual"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
       - name: Upload check results
