@@ -6,7 +6,6 @@ jobs:
   test-dispatch:
     steps:
       - name: Print message
-        if: github.event.action == 'ping'
         run: echo 'workflow started'
 
       # Add check of pharmr, build docs, commit, release
