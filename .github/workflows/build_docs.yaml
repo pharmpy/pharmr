@@ -4,6 +4,7 @@ name: Build docs
 
 jobs:
   test-dispatch:
+    runs-on: ubuntu-latest
     steps:
       - name: Print message
         run: echo 'workflow started'
