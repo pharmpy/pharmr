@@ -34,7 +34,7 @@ build_docs <- function() {
     details <- paste(details, collapse = '\n\n')
 
     value <- paste(value, collapse = '\n')
-    file_name <- paste(getwd(), '/man/', func, '.Rd', sep = '')
+    file_name <- paste(here('man', func), '.Rd', sep = '')
     
     doc_link <- 'https://pharmpy.github.io/latest/reference/pharmpy.modeling.html'  # Add full link, underfull \hbox error (spaces are added)
     
@@ -113,5 +113,7 @@ split_to_items <- function(arguments_raw) {
 }
 
 library(magrittr)
+library(here)
 library(pharmr)
+
 build_docs()
