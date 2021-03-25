@@ -75,6 +75,11 @@ jobs:
           name: results-cran
           path: check
 
+      - name: Install deploy dependencies
+        run: |
+          install.packages("here")
+        shell: Rscript {0}
+
       - name: update-description
         run: |
           Rscript deploy/update_desciption.R minor
