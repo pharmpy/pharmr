@@ -1,4 +1,5 @@
 build_docs <- function() {
+  pharmpy <- reticulate::import("pharmpy")
   modeling <- reticulate::import("pharmpy.modeling")
   funcs <- modeling$`__all__`
   
@@ -45,7 +46,7 @@ build_docs <- function() {
                         '\\bold{Usage}\n\n\\code{', py_doc[1], '}\n', '\n}\n',
                         '\\details{\n',
                         'Link to Python\n\\href{', doc_link, '}{API reference} (for correct rendering of equations, tables etc.).\n',
-                        details,'\n}\n',
+                        details,'\n\nThis documentation was automatically generated from Pharmpy (', pharmpy$`__version__`, ').}\n',
                         sep = '')
     
     if ('Parameters' %in% py_doc) {
