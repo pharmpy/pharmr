@@ -13,4 +13,5 @@ Add an individual or pk parameter to a model.
 Link to Python
 \href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
 Add an individual or pk parameter to a model
-}
+
+This documentation was automatically generated from Pharmpy (0.22.0).}

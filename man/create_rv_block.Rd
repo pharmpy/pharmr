@@ -19,7 +19,8 @@ be fixed. Initial estimates for covariance between the etas is dependent on whet
 the model has results from a previous results. In that case, the correlation will
 
 be calculated from individual estimates, otherwise correlation will be set to 10%.
-}
+
+This documentation was automatically generated from Pharmpy (0.22.0).}
 \arguments{
 
 \item{

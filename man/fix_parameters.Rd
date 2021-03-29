@@ -15,7 +15,8 @@ Link to Python
 Fix parameters
 
 Fix all listed parameters
-}
+
+This documentation was automatically generated from Pharmpy (0.22.0).}
 \arguments{
 
 \item{

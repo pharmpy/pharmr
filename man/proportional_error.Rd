@@ -13,7 +13,8 @@ Set a proportional error model.
 Link to Python
 \href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
 Set a proportional error model. Initial estimate for new sigma is 0.09.
-}
+
+This documentation was automatically generated from Pharmpy (0.22.0).}
 \arguments{
 
 \item{

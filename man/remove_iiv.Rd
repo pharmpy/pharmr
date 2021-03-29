@@ -13,7 +13,8 @@ Removes all IIV omegas given a list with eta names and/or parameter names..
 Link to Python
 \href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
 Removes all IIV omegas given a list with eta names and/or parameter names.
-}
+
+This documentation was automatically generated from Pharmpy (0.22.0).}
 \arguments{
 
 \item{

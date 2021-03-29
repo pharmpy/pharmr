@@ -13,7 +13,8 @@ Set or change to bolus absorption rate..
 Link to Python
 \href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
 Set or change to bolus absorption rate.
-}
+
+This documentation was automatically generated from Pharmpy (0.22.0).}
 \arguments{
 
 \item{

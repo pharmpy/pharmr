@@ -13,7 +13,8 @@ Splits an block structure given a list of etas to separate..
 Link to Python
 \href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
 Splits an block structure given a list of etas to separate.
-}
+
+This documentation was automatically generated from Pharmpy (0.22.0).}
 \arguments{
 
 \item{

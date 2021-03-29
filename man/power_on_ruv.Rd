@@ -15,7 +15,8 @@ Link to Python
 Applies a power effect to provided epsilons. Initial estimates for new thetas are 1 if the error
 
 model is proportional, otherwise they are 0.1.
-}
+
+This documentation was automatically generated from Pharmpy (0.22.0).}
 \arguments{
 
 \item{

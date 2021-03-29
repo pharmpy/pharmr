@@ -31,4 +31,5 @@ n
 :math:`{VP1} = {VP1'} + {VP2'}`
 
 ==  ===================================================
-}
+
+This documentation was automatically generated from Pharmpy (0.22.0).}

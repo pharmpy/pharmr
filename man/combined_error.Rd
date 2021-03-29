@@ -15,7 +15,8 @@ Link to Python
 Set a combined error model. Initial estimates for new sigmas are :math:`(min(DV)/2)²` for
 
 proportional and 0.09 for additive.
-}
+
+This documentation was automatically generated from Pharmpy (0.22.0).}
 \arguments{
 
 \item{

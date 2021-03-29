@@ -15,4 +15,5 @@ Link to Python
 Sets elimination to Michaelis-Menten. Initial estimate for CLMM is set to CL and KM is set to
 
 :math:`2*max(DV)`.
-}
+
+This documentation was automatically generated from Pharmpy (0.22.0).}

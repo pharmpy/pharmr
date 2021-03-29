@@ -25,7 +25,8 @@ Adds IIVs to :class:`pharmpy.model`. Effects that currently have templates are:
 For all except exponential the operation input is not needed. Otherwise user specified
 
 input is supported. Initial estimates for new etas are 0.09.
-}
+
+This documentation was automatically generated from Pharmpy (0.22.0).}
 \arguments{
 
 \item{

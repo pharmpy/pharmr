@@ -15,4 +15,5 @@ Link to Python
 Sets elimination to mixed Michaelis-Menten and first order. Initial estimate for CLMM is set
 
 to CL/2 and KM is set to :math:`2*max(DV)`.
-}
+
+This documentation was automatically generated from Pharmpy (0.22.0).}

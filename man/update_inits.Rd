@@ -15,7 +15,8 @@ Link to Python
 Updates initial estimates from previous output. Can be forced if no initial
 
 individual estimates have been read.
-}
+
+This documentation was automatically generated from Pharmpy (0.22.0).}
 \arguments{
 
 \item{

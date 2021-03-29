@@ -41,4 +41,5 @@ n
 :math:`{QP2} = {QP1' / 2}` and :math:`{VP2} = {VP1'}`
 
 ==  ===================================================
-}
+
+This documentation was automatically generated from Pharmpy (0.22.0).}

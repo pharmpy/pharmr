@@ -21,7 +21,8 @@ Applies a John Draper transformation [1]_ to specified etas from a
 Journal of the Royal Statistical Society. Series C (Applied Statistics),
 
 29(2), 190-197. doi:10.2307/2986305
-}
+
+This documentation was automatically generated from Pharmpy (0.22.0).}
 \arguments{
 
 \item{

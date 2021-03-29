@@ -13,4 +13,5 @@ Read model from file.
 Link to Python
 \href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
 Read model from file
-}
+
+This documentation was automatically generated from Pharmpy (0.22.0).}

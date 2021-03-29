@@ -17,4 +17,5 @@ Add lag time to the dose compartment of model. Initial estimate for lag time is 
 previous lag time if available, otherwise it is set to the time of first observation/2 is
 
 used.
-}
+
+This documentation was automatically generated from Pharmpy (0.22.0).}

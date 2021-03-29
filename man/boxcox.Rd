@@ -15,7 +15,8 @@ Link to Python
 Applies a boxcox transformation to specified etas from a :class:`pharmpy.model`. Initial
 
 estimate for lambda is 0.1 with bounds (-3, 3).
-}
+
+This documentation was automatically generated from Pharmpy (0.22.0).}
 \arguments{
 
 \item{
