@@ -1,6 +1,6 @@
 .onLoad <- function(libname, pkgname) {
-    check_pharmpy()
     if (reticulate::py_module_available("pharmpy")) {
+        check_pharmpy()
         reticulate::import("pharmpy")
 
         env <- parent.env(environment())
