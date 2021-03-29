@@ -1,4 +1,5 @@
 .onLoad <- function(libname, pkgname) {
+    check_pharmpy()
     if (reticulate::py_module_available("pharmpy")) {
         reticulate::import("pharmpy")
 
