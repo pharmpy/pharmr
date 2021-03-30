@@ -21,3 +21,12 @@ library(pharmr)
 [Pharmpy documentation](https://pharmpy.github.io)
 
 [Getting started in R](https://pharmpy.github.io/latest/using_r.html#using-r)
+
+A simple example of reading a model, performing a simple transformation, and run the model in NONMEM:
+
+```R
+model <- read_model(here('demo', 'pheno.mod')) %>%
+  add_parameter('MAT') %>%
+  update_source() %>%
+  fit()
+```
