@@ -1,9 +1,11 @@
+# For help debugging build failures open an issue on the RStudio community with the 'github-actions' tag.
+# https://community.rstudio.com/new-topic?category=Package%20development&tags=github-actions
 on: workflow_dispatch
 
-name: Build docs
+name: full-R-CMD-check
 
 jobs:
-  deploy:
+  full-R-CMD-check:
     runs-on: ubuntu-latest
     
     env:
@@ -19,6 +21,8 @@ jobs:
           r-version: 'release'
 
       - uses: r-lib/actions/setup-pandoc@v1
+
+      - uses: r-lib/actions/setup-tinytex@master
 
       - name: Query dependencies
         run: |
@@ -63,7 +67,7 @@ jobs:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: |
           options(crayon.enabled = TRUE)
-          rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
+          rcmdcheck::rcmdcheck(args = c("--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
       - name: Upload check results
@@ -72,20 +76,3 @@ jobs:
         with:
           name: results-cran
           path: check
-
-      - name: Install deploy dependencies
-        run: |
-          install.packages("here")
-        shell: Rscript {0}
-
-      - name: update-description
-        run: |
-          Rscript deploy/update_desciption.R minor
-          git add DESCRIPTION
-          git commit -m "Update DESCRIPTION"
-          git push https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmpy.github.io.git
-        env:
-          REPO_KEY: ${{secrets.DOC_TOKEN}}
-          USERNAME: github-actions[bot]
-
-  # Add check of pharmr, build docs, commit, release
