@@ -1,5 +1,7 @@
 # pharmr
-R wrapper to pharmpy
+Pharmr is an R wrapper to Pharmpy, a Python library for pharmacometrics. It provides an R interface to
+all functions found in the `modeling`-module (documented 
+[here](https://pharmpy.github.io/latest/reference/pharmpy.modeling.html)).
 
 ## Installation
 
