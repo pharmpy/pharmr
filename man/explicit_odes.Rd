@@ -11,7 +11,7 @@ Convert model from compartmental system to explicit ODE system.
 }
 \details{
 Link to Python
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.explicit_odes}{API reference} (for correct rendering of equations, tables etc.).
 Convert model from compartmental system to explicit ODE system
 
 or do nothing if it already has an explicit ODE system

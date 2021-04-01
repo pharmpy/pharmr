@@ -11,7 +11,7 @@ Set initial estimates.
 }
 \details{
 Link to Python
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.set_initial_estimates}{API reference} (for correct rendering of equations, tables etc.).
 Set initial estimates
 
 This documentation was automatically generated from Pharmpy (0.22.0).}
@@ -20,12 +20,12 @@ This documentation was automatically generated from Pharmpy (0.22.0).}
 \item{
 model
 }{
-Model, inits : A dictionary of parameter: init for parameters to change
+Model
 }
 \item{
 inits
 }{
-A dictionary of parameter, NULL
+A listionary of parameter
 }
 }
 \value{

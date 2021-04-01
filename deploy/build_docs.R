@@ -37,7 +37,8 @@ build_docs <- function() {
     value <- paste(value, collapse = '\n')
     file_name <- paste(here('man', func), '.Rd', sep = '')
     
-    doc_link <- 'https://pharmpy.github.io/latest/reference/pharmpy.modeling.html'  # Add full link, underfull \hbox error (spaces are added)
+    doc_link <- paste('https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.', func,
+                      sep='')
     
     rd_content <- paste('\\name{', func, '}\n',
                         '\\alias{', func, '}\n',
@@ -48,7 +49,7 @@ build_docs <- function() {
                         'Link to Python\n\\href{', doc_link, '}{API reference} (for correct rendering of equations, tables etc.).\n',
                         details,'\n\nThis documentation was automatically generated from Pharmpy (', pharmpy$`__version__`, ').}\n',
                         sep = '')
-    
+
     if ('Parameters' %in% py_doc) {
       rd_content <- paste(rd_content,
                           '\\arguments{\n', arguments, '\n}\n',
@@ -59,7 +60,7 @@ build_docs <- function() {
                           '\\value{\n', value, '\n}\n',
                           sep = '')
     }
-    
+
     rd_file <- cat(rd_content, file = file_name)
   }
 }
@@ -97,23 +98,51 @@ find_value_position <- function(full_doc) {
   return(list(start = start_index, end = end_index))
 }
 
-split_to_items <- function(arguments_raw) {
-  list_of_items <- grep(':', arguments_raw, value = TRUE)
-  arguments <- ''
+split_to_items <- function(args_raw) {
+  args_split <- ''
   
-  for (def in list_of_items) {
-    split <- unlist(strsplit(def, ':'))
-    item <- trimws(split[1])
-    type <- trimws(split[2])
+  name_idx <- grep(':', args_raw)
+  all_idx <- 1:length(args_raw)
+  definition_idx <- all_idx %>%
+    cbind(all=., intervals=findInterval(., name_idx)) %>%
+    data.frame()
+
+  for (i in unique(definition_idx[,'intervals'])) {
+    arg_idx <- definition_idx %>%
+      filter(intervals == i) %>%
+      pull(all)
     
-    definition_index <- match(def, arguments_raw) + 1
-    definition <- paste(type, trimws(arguments_raw[definition_index]), sep = ', ')
-    arguments <- paste(arguments, '\\item{', item, '}{', definition, '}', sep = '\n')
+    item_start <- arg_idx[1]
+
+    split <- unlist(strsplit(args_raw[[item_start]], ':'))
+    item <- trimws(split[1])
+    type <- trimws(split[2]) %>%
+      sub_python_args()
+    
+    if (length(arg_idx) > 1) {
+      description <- paste(args_raw[arg_idx][-1], collapse=' ')
+      definition <- paste(type, description, sep = '. ')
+    }
+    else {
+      definition <- type
+    }
+    args_split <- paste(args_split, '\\item{', item, '}{', definition, '}', sep = '\n')
   }
-  return(arguments)
+  
+  return(args_split)
 }
 
-library(magrittr)
+sub_python_args <- function(type) {
+  type <- type %>%
+    gsub('list', 'vector', .) %>%
+    gsub('dict', 'list', .) %>%
+    gsub('str', 'character', .) %>%
+    gsub('int', 'numeric', .)
+  
+  return(type)
+} 
+
+library(dplyr)
 library(here)
 library(pharmr)
 

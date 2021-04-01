@@ -11,7 +11,7 @@ Sets elimination to Michaelis-Menten.
 }
 \details{
 Link to Python
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.michaelis_menten_elimination}{API reference} (for correct rendering of equations, tables etc.).
 Sets elimination to Michaelis-Menten. Initial estimate for CLMM is set to CL and KM is set to
 
 :math:`2*max(DV)`.

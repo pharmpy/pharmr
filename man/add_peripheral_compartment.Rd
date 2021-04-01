@@ -11,7 +11,7 @@ Add a peripheral distribution compartment to model.
 }
 \details{
 Link to Python
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.add_peripheral_compartment}{API reference} (for correct rendering of equations, tables etc.).
 Add a peripheral distribution compartment to model
 
 The rate of flow from the central to the peripheral compartment

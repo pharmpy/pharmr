@@ -11,7 +11,7 @@ Applies a power effect to provided epsilons.
 }
 \details{
 Link to Python
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.power_on_ruv}{API reference} (for correct rendering of equations, tables etc.).
 Applies a power effect to provided epsilons. Initial estimates for new thetas are 1 if the error
 
 model is proportional, otherwise they are 0.1.
@@ -22,11 +22,11 @@ This documentation was automatically generated from Pharmpy (0.22.0).}
 \item{
 model
 }{
-Model, Pharmpy model to create block effect on.
+Model. Pharmpy model to create block effect on.
 }
 \item{
 list_of_eps
 }{
-str, list, Name/names of epsilons to apply power effect. If None, all epsilons will be used.
+character, vector. Name/names of epsilons to apply power effect. If None, all epsilons will be used. None is default.
 }
 }

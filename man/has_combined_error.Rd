@@ -11,7 +11,7 @@ Check if a model has a combined additive and proportinal error model.
 }
 \details{
 Link to Python
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.has_combined_error}{API reference} (for correct rendering of equations, tables etc.).
 Check if a model has a combined additive and proportinal error model
 
 This documentation was automatically generated from Pharmpy (0.22.0).}
@@ -20,6 +20,6 @@ This documentation was automatically generated from Pharmpy (0.22.0).}
 \item{
 model
 }{
-Model, The model to check
+Model. The model to check
 }
 }

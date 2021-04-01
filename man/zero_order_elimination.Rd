@@ -11,7 +11,7 @@ Sets elimination to zero order.
 }
 \details{
 Link to Python
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.zero_order_elimination}{API reference} (for correct rendering of equations, tables etc.).
 Sets elimination to zero order. Initial estimate for KM is set to 1% of smallest
 
 observation.

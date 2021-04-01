@@ -11,7 +11,7 @@ Removes all IOV omegas..
 }
 \details{
 Link to Python
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.remove_iov}{API reference} (for correct rendering of equations, tables etc.).
 Removes all IOV omegas.
 
 This documentation was automatically generated from Pharmpy (0.22.0).}
@@ -20,6 +20,6 @@ This documentation was automatically generated from Pharmpy (0.22.0).}
 \item{
 model
 }{
-Model, Pharmpy model to remove IOV from.
+Model. Pharmpy model to remove IOV from.
 }
 }

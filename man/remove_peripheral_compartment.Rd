@@ -11,7 +11,7 @@ Remove a peripheral distribution compartment from model.
 }
 \details{
 Link to Python
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.remove_peripheral_compartment}{API reference} (for correct rendering of equations, tables etc.).
 Remove a peripheral distribution compartment from model
 
 Initial estimates:

@@ -11,7 +11,7 @@ Adds covariate effect to :class:`pharmpy.model`.
 }
 \details{
 Link to Python
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.add_covariate_effect}{API reference} (for correct rendering of equations, tables etc.).
 Adds covariate effect to :class:`pharmpy.model`. The following effects have templates:
 
 - Linear function for continuous covariates (*lin*)
@@ -148,26 +148,26 @@ This documentation was automatically generated from Pharmpy (0.22.0).}
 \item{
 model
 }{
-Model, Pharmpy model to add covariate effect to.
+Model. Pharmpy model to add covariate effect to.
 }
 \item{
 parameter
 }{
-str, Name of parameter to add covariate effect to.
+character. Name of parameter to add covariate effect to.
 }
 \item{
 covariate
 }{
-str, Name of covariate.
+character. Name of covariate.
 }
 \item{
 effect
 }{
-str, Type of covariate effect. May be abbreviated covariate effect (see above) or custom.
+character. Type of covariate effect. May be abbreviated covariate effect (see above) or custom.
 }
 \item{
 operation
 }{
-str, optional, Whether the covariate effect should be added or multiplied (default).
+character, optional. Whether the covariate effect should be added or multiplied (default).
 }
 }

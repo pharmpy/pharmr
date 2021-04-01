@@ -11,7 +11,7 @@ Set a combined error model.
 }
 \details{
 Link to Python
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.combined_error}{API reference} (for correct rendering of equations, tables etc.).
 Set a combined error model. Initial estimates for new sigmas are :math:`(min(DV)/2)²` for
 
 proportional and 0.09 for additive.
@@ -22,6 +22,6 @@ This documentation was automatically generated from Pharmpy (0.22.0).}
 \item{
 model
 }{
-Model, Set error model for this model
+Model. Set error model for this model
 }
 }

@@ -11,7 +11,7 @@ Creates a full or partial block structure of etas.
 }
 \details{
 Link to Python
-\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html}{API reference} (for correct rendering of equations, tables etc.).
+\href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.create_rv_block}{API reference} (for correct rendering of equations, tables etc.).
 Creates a full or partial block structure of etas. The etas must be IIVs and cannot
 
 be fixed. Initial estimates for covariance between the etas is dependent on whether
@@ -26,11 +26,11 @@ This documentation was automatically generated from Pharmpy (0.22.0).}
 \item{
 model
 }{
-Model, Pharmpy model to create block effect on.
+Model. Pharmpy model to create block effect on.
 }
 \item{
 list_of_rvs
 }{
-list, List of etas to create a block structure from. If None, all etas that are IIVs and
+vector. List of etas to create a block structure from. If None, all etas that are IIVs and non-fixed will be used (full block). None is default.
 }
 }
