@@ -1,0 +1,21 @@
+Package: pharmr
+Encoding: UTF-8
+Version: 0.22.9000
+Date: 2021-03-29
+Title: A Wrapper for the Pharmpy Pharmacometrics Library
+Authors@R: c(person("Rikard", "Nordgren", role=c("aut", "cre", "cph"), email="rikard.nordgren@farmaci.uu.se"))
+Maintainer: Rikard Nordgren <rikard.nordgren@farmaci.uu.se>
+Depends:
+    R (>= 3.3.0)
+SystemRequirements:
+    Python (>= 3.6.0)
+Imports:
+    reticulate, utils
+Suggests:
+    testthat, magrittr, here
+NeedsCompilation: no
+Description: An R wrapper for the Pharmpy pharmacometrics library via the reticulate package.
+URL: https://github.com/pharmpy/pharmr
+BugReports: https://github.com/pharmpy/pharmr/issues
+License: BSD_2_clause + file LICENSE
+Copyright: 2021 Rikard Nordgren
