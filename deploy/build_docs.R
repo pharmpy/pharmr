@@ -135,6 +135,7 @@ split_to_items <- function(args_raw) {
 sub_python_args <- function(type) {
   type <- type %>%
     gsub('list', 'vector', .) %>%
+    gsub('dictionary', 'list', .) %>%
     gsub('dict', 'list', .) %>%
     gsub('str', 'character', .) %>%
     gsub('int', 'numeric', .)
