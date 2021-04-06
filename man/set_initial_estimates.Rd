@@ -25,7 +25,7 @@ Model
 \item{
 inits
 }{
-A listionary of parameter
+A list of parameter
 }
 }
 \value{
