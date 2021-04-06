@@ -76,6 +76,7 @@ jobs:
       - name: Install deploy dependencies
         run: |
           install.packages("here")
+          install.packages("dplyr")
         shell: Rscript {0}
 
       - name: Update description
@@ -101,5 +102,3 @@ jobs:
         env:
           REPO_KEY: ${{secrets.ACCESS_TOKEN}}
           USERNAME: github-actions[bot]
-
-  # Add check of pharmr, build docs, commit, release
