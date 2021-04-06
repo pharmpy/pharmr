@@ -20,20 +20,6 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v1
 
-
-      - name: test push
-        run: |
-          cp DESCRIPTION DESCRIPTION_copy
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add DESCRIPTION_copy
-          git commit -m "Testing new workflow config"
-          git push https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
-        env:
-          REPO_KEY: ${{secrets.ACCESS_TOKEN}}
-          USERNAME: github-actions[bot]
-
-
       - name: Query dependencies
         run: |
           install.packages('remotes')
@@ -92,13 +78,25 @@ jobs:
           install.packages("here")
         shell: Rscript {0}
 
-      - name: update-description
+      - name: Update description
         run: |
           Rscript deploy/update_desciption.R minor
-          git add DESCRIPTION
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add DESCRIPTION
           git commit -m "Update DESCRIPTION"
+          git push https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
+        env:
+          REPO_KEY: ${{secrets.ACCESS_TOKEN}}
+          USERNAME: github-actions[bot]
+
+      - name: Update docs
+        run: |
+          Rscript deploy/build_docs.R
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add man/
+          git commit -m "Update documentation"
           git push https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
         env:
           REPO_KEY: ${{secrets.ACCESS_TOKEN}}
