@@ -82,6 +82,8 @@ jobs:
         run: |
           Rscript deploy/update_desciption.R minor
           git add DESCRIPTION
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Update DESCRIPTION"
           git push https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmpy.github.io.git
         env:
