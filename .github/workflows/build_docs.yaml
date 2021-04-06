@@ -95,13 +95,13 @@ jobs:
       - name: Check if any changes to documentation
         run: |
           if git diff --exit-code man/; then
-            echo "::set-env name=has_been_updated::false"
+            echo "has_been_updated=false" >> $GITHUB_ENV
           else
-            echo "::set-env name=has_been_updated::true"
+            echo "has_been_updated=true" >> $GITHUB_ENV
           fi
 
       - name: Commit changes to documentation
-        if: ${{ env.has_been_updated == 'true' }}
+        if: ${{ env.has_been_updated == true}}
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
