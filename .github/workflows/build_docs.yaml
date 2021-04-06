@@ -58,7 +58,18 @@ jobs:
           Rscript -e "try(remotes::install_local())"
           Rscript -e "try(pharmr::install_pharmpy())"
 
-      - name: Check (as cran)
+      - name: Install deploy dependencies
+        run: |
+          install.packages("here")
+          install.packages("dplyr")
+        shell: Rscript {0}
+
+      - name: Update DESCRIPTION and documentation
+        run: |
+          Rscript deploy/update_desciption.R minor
+          Rscript deploy/build_docs.R
+
+      - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: |
@@ -73,29 +84,12 @@ jobs:
           name: results-cran
           path: check
 
-      - name: Install deploy dependencies
+      - name: Push changes
         run: |
-          install.packages("here")
-          install.packages("dplyr")
-        shell: Rscript {0}
-
-      - name: Update description
-        run: |
-          Rscript deploy/update_desciption.R minor
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add DESCRIPTION
           git commit -m "Update DESCRIPTION"
-          git push https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
-        env:
-          REPO_KEY: ${{secrets.ACCESS_TOKEN}}
-          USERNAME: github-actions[bot]
-
-      - name: Update docs
-        run: |
-          Rscript deploy/build_docs.R
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add man/
           git commit -m "Update documentation"
           git push https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
