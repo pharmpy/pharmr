@@ -24,7 +24,7 @@ n
 
 2   :math:`{CL} = {CL'}`,
 
-:math:`{QP1} = {CL'}` and :math:`{VP1} = {VC'} \* 0.05`
+:math:`{QP1} = {CL'}` and :math:`{VP1} = {VC'} * 0.05`
 
 3   :math:`{QP1} = ({QP1'} + {QP2'}) / 2`,
 

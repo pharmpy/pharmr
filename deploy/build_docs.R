@@ -67,14 +67,15 @@ build_docs <- function() {
 }
 
 sub_latex_macros <- function(doc_orignal) {
-  doc_subbed <- gsub('\\\\mathsf', '', doc_orignal) %>%
-    gsub('\\cdot', '*', .) %>%
-    gsub('\\\\text', '', .) %>%
-    gsub('\\\\frac', 'frac', .) %>%
-    gsub('\\\\log', 'log', .) %>%
-    gsub('\\\\exp', 'exp', .) %>%
-    gsub('\\\\min', 'min', .) %>%
-    gsub('\\\\max', 'max', .)
+  doc_subbed <- doc_orignal %>%
+    str_replace_all('\\\\mathsf', '') %>%
+    str_replace_all('\\\\cdot', '*') %>%
+    str_replace_all('\\\\text', '') %>%
+    str_replace_all('\\\\frac', 'frac') %>%
+    str_replace_all('\\\\log', 'log') %>%
+    str_replace_all('\\\\exp', 'exp') %>%
+    str_replace_all('\\\\min', 'min') %>%
+    str_replace_all('\\\\max', 'max')
 
   return(doc_subbed)
 }
