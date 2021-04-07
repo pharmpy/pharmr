@@ -2,7 +2,7 @@
 \alias{set_name}
 \title{set_name}
 \description{
-NULL.
+NA.
 
 \bold{Usage}
 

@@ -2,7 +2,7 @@
 \alias{copy_model}
 \title{copy_model}
 \description{
-NULL.
+NA.
 
 \bold{Usage}
 

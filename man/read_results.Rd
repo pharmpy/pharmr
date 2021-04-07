@@ -2,7 +2,7 @@
 \alias{read_results}
 \title{read_results}
 \description{
-NULL.
+NA.
 
 \bold{Usage}
 

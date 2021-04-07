@@ -2,7 +2,7 @@
 \alias{first_order_elimination}
 \title{first_order_elimination}
 \description{
-NULL.
+NA.
 
 \bold{Usage}
 

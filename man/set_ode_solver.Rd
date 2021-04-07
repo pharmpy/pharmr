@@ -2,7 +2,7 @@
 \alias{set_ode_solver}
 \title{set_ode_solver}
 \description{
-NULL.
+NA.
 
 \bold{Usage}
 

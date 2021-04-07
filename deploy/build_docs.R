@@ -8,11 +8,15 @@ build_docs <- function() {
   
   for (func in funcs) {
     py_original <- py_capture_output(import_builtins()$help(get(func)), type = "stdout")
-    py_subbed_macros <- sub_latex_macros(py_original)
-    py_split <- unlist(strsplit(py_subbed_macros, split='\n'))[-1]
-    py_trimmed <- lapply(py_split, trimws)
-    py_doc <- py_trimmed[py_trimmed != '']
 
+    py_doc <- py_original %>%
+      sub_latex_macros() %>%
+      str_split('\n') %>%
+      lapply(trimws) %>%
+      unlist() %>%
+      discard(~. == '') %>%
+      tail(n = length(.)-1)
+      
     arguments <- c('')
     value <- c('')
     details <- py_doc[-1]
@@ -145,8 +149,7 @@ split_to_items <- function(args_raw) {
   return(args_split)
 }
 
-library(dplyr)
-library(stringr)
+library(tidyverse)
 library(here)
 library(pharmr)
 

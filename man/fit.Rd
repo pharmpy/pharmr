@@ -2,7 +2,7 @@
 \alias{fit}
 \title{fit}
 \description{
-NULL.
+NA.
 
 \bold{Usage}
 

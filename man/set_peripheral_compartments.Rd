@@ -2,7 +2,7 @@
 \alias{set_peripheral_compartments}
 \title{set_peripheral_compartments}
 \description{
-NULL.
+NA.
 
 \bold{Usage}
 

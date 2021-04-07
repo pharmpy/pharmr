@@ -2,7 +2,7 @@
 \alias{create_results}
 \title{create_results}
 \description{
-NULL.
+NA.
 
 \bold{Usage}
 
