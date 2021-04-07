@@ -6,7 +6,7 @@ Applies a t-distribution transformation to specified etas from a :class:`pharmpy
 
 \bold{Usage}
 
-\code{tdist(model, list_of_etas=None)}
+\code{tdist(model, list_of_etas=NULL)}
 
 }
 \details{

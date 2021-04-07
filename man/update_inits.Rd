@@ -6,7 +6,7 @@ Updates initial estimates from previous output.
 
 \bold{Usage}
 
-\code{update_inits(model, force_individual_estimates=False)}
+\code{update_inits(model, force_individual_estimates=FALSE)}
 
 }
 \details{

@@ -6,7 +6,7 @@ Adds IIVs to :class:`pharmpy.model`.
 
 \bold{Usage}
 
-\code{add_iiv(model, list_of_parameters, expression, operation='*', eta_names=None)}
+\code{add_iiv(model, list_of_parameters, expression, operation='*', eta_names=NULL)}
 
 }
 \details{

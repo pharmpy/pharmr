@@ -6,7 +6,7 @@ Adds IOVs to :class:`pharmpy.model`.
 
 \bold{Usage}
 
-\code{add_iov(model, occ, list_of_parameters=None, eta_names=None)}
+\code{add_iov(model, occ, list_of_parameters=NULL, eta_names=NULL)}
 
 }
 \details{

@@ -6,7 +6,7 @@ Applies a power effect to provided epsilons.
 
 \bold{Usage}
 
-\code{power_on_ruv(model, list_of_eps=None)}
+\code{power_on_ruv(model, list_of_eps=NULL)}
 
 }
 \details{

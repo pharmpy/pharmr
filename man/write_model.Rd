@@ -6,7 +6,7 @@ Write model to file.
 
 \bold{Usage}
 
-\code{write_model(model, path='', force=False)}
+\code{write_model(model, path='', force=FALSE)}
 
 }
 \details{

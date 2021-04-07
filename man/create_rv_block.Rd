@@ -6,7 +6,7 @@ Creates a full or partial block structure of etas.
 
 \bold{Usage}
 
-\code{create_rv_block(model, list_of_rvs=None)}
+\code{create_rv_block(model, list_of_rvs=NULL)}
 
 }
 \details{

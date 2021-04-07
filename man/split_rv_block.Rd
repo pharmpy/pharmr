@@ -6,7 +6,7 @@ Splits an block structure given a list of etas to separate..
 
 \bold{Usage}
 
-\code{split_rv_block(model, list_of_rvs=None)}
+\code{split_rv_block(model, list_of_rvs=NULL)}
 
 }
 \details{

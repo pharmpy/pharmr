@@ -6,7 +6,7 @@ Applies a John Draper transformation [1]_ to specified etas from a.
 
 \bold{Usage}
 
-\code{john_draper(model, list_of_etas=None)}
+\code{john_draper(model, list_of_etas=NULL)}
 
 }
 \details{

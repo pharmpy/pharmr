@@ -6,7 +6,7 @@ Applies a boxcox transformation to specified etas from a :class:`pharmpy.model`.
 
 \bold{Usage}
 
-\code{boxcox(model, list_of_etas=None)}
+\code{boxcox(model, list_of_etas=NULL)}
 
 }
 \details{

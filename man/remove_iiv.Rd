@@ -6,7 +6,7 @@ Removes all IIV omegas given a list with eta names and/or parameter names..
 
 \bold{Usage}
 
-\code{remove_iiv(model, list_to_remove=None)}
+\code{remove_iiv(model, list_to_remove=NULL)}
 
 }
 \details{

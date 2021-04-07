@@ -33,6 +33,7 @@ build_docs <- function() {
 
     description <- unlist(strsplit(as.character(details[1]), '\\. '))[1]
     details <- paste(details, collapse = '\n\n')
+    usage <- sub_python_args(py_doc[1])
 
     value <- paste(value, collapse = '\n')
     file_name <- paste(here('man', func), '.Rd', sep = '')
@@ -44,7 +45,7 @@ build_docs <- function() {
                         '\\alias{', func, '}\n',
                         '\\title{', func, '}\n',
                         '\\description{\n', description, '.\n\n',
-                        '\\bold{Usage}\n\n\\code{', py_doc[1], '}\n', '\n}\n',
+                        '\\bold{Usage}\n\n\\code{', usage, '}\n', '\n}\n',
                         '\\details{\n',
                         'Link to Python\n\\href{', doc_link, '}{API reference} (for correct rendering of equations, tables etc.).\n',
                         details,'\n\nThis documentation was automatically generated from Pharmpy (', pharmpy$`__version__`, ').}\n',
@@ -77,6 +78,20 @@ sub_latex_macros <- function(doc_orignal) {
 
   return(doc_subbed)
 }
+
+sub_python_args <- function(type) {
+  type <- type %>%
+    str_replace_all('list\\b', 'vector') %>%
+    str_replace_all('dictionary\\b', 'list') %>%
+    str_replace_all('dict\\b', 'list') %>%
+    str_replace_all('str\\b', 'character') %>%
+    str_replace_all('int\\b', 'numeric') %>%
+    str_replace_all('None\\b', 'NULL') %>%
+    str_replace_all('True\\b', 'TRUE') %>%
+    str_replace_all('False\\b', 'FALSE')
+  
+  return(type)
+} 
 
 find_argument_position <- function(full_doc) {
   start_index <- match('Parameters', full_doc) + 2
@@ -132,18 +147,8 @@ split_to_items <- function(args_raw) {
   return(args_split)
 }
 
-sub_python_args <- function(type) {
-  type <- type %>%
-    gsub('list', 'vector', .) %>%
-    gsub('dictionary', 'list', .) %>%
-    gsub('dict', 'list', .) %>%
-    gsub('str', 'character', .) %>%
-    gsub('int', 'numeric', .)
-  
-  return(type)
-} 
-
 library(dplyr)
+library(stringr)
 library(here)
 library(pharmr)
 
