@@ -67,31 +67,28 @@ build_docs <- function() {
 }
 
 sub_latex_macros <- function(doc_orignal) {
-  doc_subbed <- doc_orignal %>%
-    str_replace_all('\\\\mathsf', '') %>%
-    str_replace_all('\\\\cdot', '*') %>%
-    str_replace_all('\\\\text', '') %>%
-    str_replace_all('\\\\frac', 'frac') %>%
-    str_replace_all('\\\\log', 'log') %>%
-    str_replace_all('\\\\exp', 'exp') %>%
-    str_replace_all('\\\\min', 'min') %>%
-    str_replace_all('\\\\max', 'max')
+  doc_subbed <- str_replace_all(doc_orignal, c('\\\\mathsf'='',
+                                               '\\\\cdot'='*', 
+                                               '\\\\text'='', 
+                                               '\\\\frac'='frac', 
+                                               '\\\\log'='log', 
+                                               '\\\\exp'='exp', 
+                                               '\\\\min'='min', 
+                                               '\\\\max'='max'))
 
   return(doc_subbed)
 }
 
-sub_python_args <- function(type) {
-  type <- type %>%
-    str_replace_all('list\\b', 'vector') %>%
-    str_replace_all('dictionary\\b', 'list') %>%
-    str_replace_all('dict\\b', 'list') %>%
-    str_replace_all('str\\b', 'character') %>%
-    str_replace_all('int\\b', 'numeric') %>%
-    str_replace_all('None\\b', 'NULL') %>%
-    str_replace_all('True\\b', 'TRUE') %>%
-    str_replace_all('False\\b', 'FALSE')
+sub_python_args <- function(py_args) {
+  r_args <- str_replace_all(py_args, c('list\\b'='vector', 
+                                       'dict(ionary)*\\b'='list',
+                                       'str\\b'='character', 
+                                       'int\\b'='numeric',
+                                       'None\\b'='NULL', 
+                                       'True\\b'='TRUE',
+                                       'False\\b'='FALSE'))
   
-  return(type)
+  return(r_args)
 } 
 
 find_argument_position <- function(full_doc) {
