@@ -1,7 +1,7 @@
 Package: pharmr
 Encoding: UTF-8
 Version: 0.22.0
-Date: 2021-04-07
+Date: 2021-04-08
 Title: A Wrapper for the Pharmpy Pharmacometrics Library
 Authors@R: c(person("Rikard", "Nordgren", role=c("aut", "cre", "cph"), email="rikard.nordgren@farmaci.uu.se"))
 Maintainer: Rikard Nordgren <rikard.nordgren@farmaci.uu.se>
