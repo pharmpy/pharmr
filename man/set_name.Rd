@@ -2,7 +2,7 @@
 \alias{set_name}
 \title{set_name}
 \description{
-NA.
+Sets name of model object.
 
 \bold{Usage}
 
@@ -12,6 +12,6 @@ NA.
 \details{
 Link to Python
 \href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.set_name}{API reference} (for correct rendering of equations, tables etc.).
+Sets name of model object
 
-
-This documentation was automatically generated from Pharmpy (0.22.0).}
+This documentation was automatically generated from Pharmpy (0.22.10).}

@@ -137,7 +137,8 @@ split_to_items <- function(args_raw) {
       sub_python_args()
     
     if (length(arg_idx) > 1) {
-      description <- paste(args_raw[arg_idx][-1], collapse=' ')
+      description <- paste(args_raw[arg_idx][-1], collapse=' ') %>%
+        sub_python_args()
       definition <- paste(type, description, sep = '. ')
     }
     else {

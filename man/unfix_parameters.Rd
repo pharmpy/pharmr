@@ -16,18 +16,18 @@ Unfix parameters
 
 Unfix all listed parameters
 
-This documentation was automatically generated from Pharmpy (0.22.0).}
+This documentation was automatically generated from Pharmpy (0.22.10).}
 \arguments{
 
 \item{
 model
 }{
-Model
+Model. Pharmpy model
 }
 \item{
 parameter_names
 }{
-vector or character. one parameter name or a list of parameter names
+vector or character. one parameter name or a vector of parameter names
 }
 }
 \value{

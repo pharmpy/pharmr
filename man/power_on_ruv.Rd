@@ -16,7 +16,7 @@ Applies a power effect to provided epsilons. Initial estimates for new thetas ar
 
 model is proportional, otherwise they are 0.1.
 
-This documentation was automatically generated from Pharmpy (0.22.0).}
+This documentation was automatically generated from Pharmpy (0.22.10).}
 \arguments{
 
 \item{
@@ -27,6 +27,6 @@ Model. Pharmpy model to create block effect on.
 \item{
 list_of_eps
 }{
-character, vector. Name/names of epsilons to apply power effect. If None, all epsilons will be used. None is default.
+character, vector. Name/names of epsilons to apply power effect. If NULL, all epsilons will be used. NULL is default.
 }
 }
