@@ -16,7 +16,7 @@ Applies a t-distribution transformation to specified etas from a :class:`pharmpy
 
 estimate for degrees of freedom is 80 with bounds (3, 100).
 
-This documentation was automatically generated from Pharmpy (0.22.0).}
+This documentation was automatically generated from Pharmpy (0.22.10).}
 \arguments{
 
 \item{
@@ -27,6 +27,6 @@ Model. Pharmpy model to apply t distribution transformation to.
 \item{
 list_of_etas
 }{
-character, vector. Name/names of etas to transform. If None, all etas will be transformed (default).
+character, vector. Name/names of etas to transform. If NULL, all etas will be transformed (default).
 }
 }

@@ -22,7 +22,7 @@ Journal of the Royal Statistical Society. Series C (Applied Statistics),
 
 29(2), 190-197. doi:10.2307/2986305
 
-This documentation was automatically generated from Pharmpy (0.22.0).}
+This documentation was automatically generated from Pharmpy (0.22.10).}
 \arguments{
 
 \item{
@@ -33,6 +33,6 @@ Model. Pharmpy model to apply John Draper transformation to.
 \item{
 list_of_etas
 }{
-character, vector. Name/names of etas to transform. If None, all etas will be transformed (default).
+character, vector. Name/names of etas to transform. If NULL, all etas will be transformed (default).
 }
 }

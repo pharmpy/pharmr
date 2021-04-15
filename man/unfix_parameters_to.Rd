@@ -16,23 +16,23 @@ Unix parameters to
 
 Unfix all listed parameters to specified value/values
 
-This documentation was automatically generated from Pharmpy (0.22.0).}
+This documentation was automatically generated from Pharmpy (0.22.10).}
 \arguments{
 
 \item{
 model
 }{
-Model
+Model. Pharmpy model
 }
 \item{
 parameter_names
 }{
-vector or character. one parameter name or a list of parameter names
+vector or character. one parameter name or a vector of parameter names
 }
 \item{
 values
 }{
-vector or numeric. one value or a list of values (must be equal to number of parameter_names)
+vector or numeric. one value or a vector of values (must be equal to number of parameter_names)
 }
 }
 \value{

@@ -20,7 +20,7 @@ the model has results from a previous results. In that case, the correlation wil
 
 be calculated from individual estimates, otherwise correlation will be set to 10%.
 
-This documentation was automatically generated from Pharmpy (0.22.0).}
+This documentation was automatically generated from Pharmpy (0.22.10).}
 \arguments{
 
 \item{
@@ -31,6 +31,6 @@ Model. Pharmpy model to create block effect on.
 \item{
 list_of_rvs
 }{
-vector. List of etas to create a block structure from. If None, all etas that are IIVs and non-fixed will be used (full block). None is default.
+vector. List of etas to create a block structure from. If NULL, all etas that are IIVs and non-fixed will be used (full block). NULL is default.
 }
 }
