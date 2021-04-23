@@ -1,6 +1,8 @@
 context("test-docs")
 
 test_that("pharmr documentation has been rendered correctly", {
+  skip_on_cran()
+  
   dir_path <- system.file('man', package='pharmr')
   
   if (dir_path == '') {
