@@ -1,13 +1,9 @@
 context("test-docs")
 
 test_that("pharmr documentation has been rendered correctly", {
-  skip_on_cran()
-  
   dir_path <- system.file('man', package='pharmr')
-  
   if (dir_path == '') {
-    system_path <- system.file(package='pharmr')
-    dir_path <- gsub('pharmr.Rcheck\\/pharmr', 'pharmr.Rcheck\\/00_pkg_src\\/pharmr\\/man', system_path)
+    dir_path <- file.path('..', '..', '00_pkg_src', 'pharmr', 'man')
   }
 
   add_iiv_path <- paste(dir_path, 'add_iiv.Rd', sep='/')
