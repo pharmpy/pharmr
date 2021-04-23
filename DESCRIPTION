@@ -18,6 +18,13 @@ Suggests:
     testthat, magrittr, here
 NeedsCompilation: no
 Description: An R wrapper for the Pharmpy pharmacometrics library via the reticulate package.
+Config/reticulate:
+  list(
+    packages = list(
+      list(package = "altair"), 
+      list(package = "pharmpy-core")
+    )
+  )
 URL: https://github.com/pharmpy/pharmr
 BugReports: https://github.com/pharmpy/pharmr/issues
 License: BSD_2_clause + file LICENSE
