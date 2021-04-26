@@ -13,11 +13,11 @@ Depends:
 SystemRequirements:
     Python (>= 3.6.0)
 Imports:
-    reticulate (>= 1.19)
+    reticulate (>= 1.19),
     utils
 Suggests:
-    testthat
-    magrittr
+    testthat,
+    magrittr,
     here
 NeedsCompilation: no
 Description: An R wrapper for the Pharmpy pharmacometrics library via the reticulate package.
