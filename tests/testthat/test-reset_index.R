@@ -8,5 +8,5 @@ test_that("multi index can be reset", {
   res <- read_results('results.json')
   df <- reset_index(res$covariate_effects)
 
-  expect_match(names(df) == c("parameter", "covariate", "condition", "p5", "mean", "p95"))
+  expect_equal(names(df), c("parameter", "covariate", "condition", "p5", "mean", "p95"))
 })
