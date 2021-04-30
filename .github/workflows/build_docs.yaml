@@ -85,6 +85,7 @@ jobs:
           path: check
 
       - name: Commit changes to DESCRIPTION
+        if: !(git diff DESCRIPTION --exit-code)
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -92,7 +93,14 @@ jobs:
           git commit -m "Update DESCRIPTION"
           git push https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
 
-      - name: Check if any changes to documentation
+      - name: Add documentation
+        if: ${{ env.has_been_updated == true}}
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add man/
+
+      - name: Check if any files have been staged
         run: |
           no_of_files=$(git diff --name-only --cached | wc -c)
           if [[ "$no_of_files" != "0" ]]; then
