@@ -142,7 +142,7 @@ frac{log(100)}{{min} - {median}})
 
 - Lower: :math:`-100`
 
-This documentation was automatically generated from Pharmpy (0.22.10).}
+This documentation was automatically generated from Pharmpy (0.23.3).}
 \arguments{
 
 \item{

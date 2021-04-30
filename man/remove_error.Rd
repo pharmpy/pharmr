@@ -14,7 +14,7 @@ Link to Python
 \href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.remove_error}{API reference} (for correct rendering of equations, tables etc.).
 Remove error model.
 
-This documentation was automatically generated from Pharmpy (0.22.10).}
+This documentation was automatically generated from Pharmpy (0.23.3).}
 \arguments{
 
 \item{

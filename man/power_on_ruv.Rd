@@ -16,7 +16,7 @@ Applies a power effect to provided epsilons. Initial estimates for new thetas ar
 
 model is proportional, otherwise they are 0.1.
 
-This documentation was automatically generated from Pharmpy (0.22.10).}
+This documentation was automatically generated from Pharmpy (0.23.3).}
 \arguments{
 
 \item{

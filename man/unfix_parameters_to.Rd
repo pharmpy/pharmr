@@ -16,7 +16,7 @@ Unix parameters to
 
 Unfix all listed parameters to specified value/values
 
-This documentation was automatically generated from Pharmpy (0.22.10).}
+This documentation was automatically generated from Pharmpy (0.23.3).}
 \arguments{
 
 \item{
