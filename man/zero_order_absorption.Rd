@@ -18,7 +18,7 @@ the previous rate if available, otherwise it is set to the time of first observa
 
 used.
 
-This documentation was automatically generated from Pharmpy (0.22.10).}
+This documentation was automatically generated from Pharmpy (0.23.3).}
 \arguments{
 
 \item{
