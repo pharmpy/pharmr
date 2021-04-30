@@ -91,14 +91,14 @@ jobs:
           git add DESCRIPTION
           git commit -m "Update DESCRIPTION"
           git push https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
-          git update-index --refresh
 
       - name: Check if any changes to documentation
         run: |
-          if git diff-index --quiet HEAD --; then
-            echo "has_been_updated=false" >> $GITHUB_ENV
-          else
+          no_of_files=$(git diff --name-only --cached | wc -c)
+          if [[ "$no_of_files" != "0" ]]; then
             echo "has_been_updated=true" >> $GITHUB_ENV
+          else
+            echo "has_been_updated=false" >> $GITHUB_ENV
           fi
 
       - name: Commit changes to documentation
