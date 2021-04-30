@@ -94,13 +94,9 @@ jobs:
 
       - name: Check if any files have been staged
         run: |
-          no_of_files=$(git diff --name-only --cached | wc -c)
-          echo "$no_of_files"
-          if [[ "$no_of_files" != "0" ]]; then
-            echo "files have been staged"
+          if [[ "$(git diff --name-only --cached | wc -c)" != "0" ]]; then
             echo "has_been_updated=true" >> $GITHUB_ENV
           else
-            echo "files have not been staged"
             echo "has_been_updated=false" >> $GITHUB_ENV
           fi
 
