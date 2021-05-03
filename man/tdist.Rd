@@ -16,7 +16,7 @@ Applies a t-distribution transformation to specified etas from a :class:`pharmpy
 
 estimate for degrees of freedom is 80 with bounds (3, 100).
 
-This documentation was automatically generated from Pharmpy (0.23.3).}
+This documentation was automatically generated from Pharmpy (0.23.4).}
 \arguments{
 
 \item{

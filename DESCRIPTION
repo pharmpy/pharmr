@@ -1,6 +1,6 @@
 Package: pharmr
 Encoding: UTF-8
-Version: 0.23.3
+Version: 0.23.4
 Date: 2021-05-03
 Title: A Wrapper for the Pharmpy Pharmacometrics Library
 Authors@R: c(
@@ -20,7 +20,7 @@ Suggests:
     magrittr,
     here
 NeedsCompilation: no
-Description: An R wrapper for the Pharmpy pharmacometrics library via the reticulate package. The Pharmpy documentation was automatically generated from Pharmpy version 0.23.3.
+Description: An R wrapper for the Pharmpy pharmacometrics library via the reticulate package. The Pharmpy documentation was automatically generated from Pharmpy version 0.23.4.
 Config/reticulate:
   list(
     packages = list(

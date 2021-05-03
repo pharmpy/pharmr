@@ -22,7 +22,7 @@ Journal of the Royal Statistical Society. Series C (Applied Statistics),
 
 29(2), 190-197. doi:10.2307/2986305
 
-This documentation was automatically generated from Pharmpy (0.23.3).}
+This documentation was automatically generated from Pharmpy (0.23.4).}
 \arguments{
 
 \item{

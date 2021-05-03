@@ -14,7 +14,7 @@ Link to Python
 \href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.additive_error}{API reference} (for correct rendering of equations, tables etc.).
 Set an additive error model. Initial estimate for new sigma is :math:`(min(DV)/2)²`.
 
-This documentation was automatically generated from Pharmpy (0.23.3).}
+This documentation was automatically generated from Pharmpy (0.23.4).}
 \arguments{
 
 \item{

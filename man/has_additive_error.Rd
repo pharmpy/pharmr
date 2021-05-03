@@ -14,7 +14,7 @@ Link to Python
 \href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.has_additive_error}{API reference} (for correct rendering of equations, tables etc.).
 Check if a model has an additive error model
 
-This documentation was automatically generated from Pharmpy (0.23.3).}
+This documentation was automatically generated from Pharmpy (0.23.4).}
 \arguments{
 
 \item{

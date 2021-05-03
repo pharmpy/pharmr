@@ -20,7 +20,7 @@ the model has results from a previous results. In that case, the correlation wil
 
 be calculated from individual estimates, otherwise correlation will be set to 10%.
 
-This documentation was automatically generated from Pharmpy (0.23.3).}
+This documentation was automatically generated from Pharmpy (0.23.4).}
 \arguments{
 
 \item{
