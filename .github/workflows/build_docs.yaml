@@ -101,7 +101,7 @@ jobs:
           fi
 
       - name: Commit changes
-        if: ${{ env.has_been_updated == true }}
+        if: ${{ env.has_been_updated == 'true' }}
         run: |
           echo "Committing changes"
           git config --local user.name "github-actions[bot]"
