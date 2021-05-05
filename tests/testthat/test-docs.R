@@ -5,6 +5,9 @@ test_that("pharmr documentation has been rendered correctly", {
   if (dir_path == '') {
     dir_path <- file.path('..', '..', '00_pkg_src', 'pharmr', 'man')
   }
+  if (!dir.exists(dir_path)) {
+    dir_path <- file.path('..', '..´', '..', 'pharmr', 'man')
+  }
 
   add_iiv_path <- paste(dir_path, 'add_iiv.Rd', sep='/')
   help_lines <- readLines(add_iiv_path)
