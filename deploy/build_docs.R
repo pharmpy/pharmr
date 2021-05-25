@@ -78,7 +78,8 @@ sub_latex_macros <- function(doc_orignal) {
                                                '\\\\log'='log', 
                                                '\\\\exp'='exp', 
                                                '\\\\min'='min', 
-                                               '\\\\max'='max'))
+                                               '\\\\max'='max',
+                                               '\\\\epsilon'='epsilon'))
 
   return(doc_subbed)
 }
