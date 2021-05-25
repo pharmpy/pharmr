@@ -16,7 +16,7 @@ Fix parameters to
 
 Fix all listed parameters to specified value/values
 
-This documentation was automatically generated from Pharmpy (0.23.4).}
+This documentation was automatically generated from Pharmpy (0.24.2).}
 \arguments{
 
 \item{

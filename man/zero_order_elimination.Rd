@@ -16,4 +16,4 @@ Sets elimination to zero order. Initial estimate for KM is set to 1% of smallest
 
 observation.
 
-This documentation was automatically generated from Pharmpy (0.23.4).}
+This documentation was automatically generated from Pharmpy (0.24.2).}

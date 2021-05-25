@@ -16,7 +16,7 @@ Set or change to first order absorption rate. Initial estimate for absorption ra
 
 the previous rate if available, otherwise it is set to the time of first observation/2 is used.
 
-This documentation was automatically generated from Pharmpy (0.23.4).}
+This documentation was automatically generated from Pharmpy (0.24.2).}
 \arguments{
 
 \item{

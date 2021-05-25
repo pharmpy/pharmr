@@ -26,7 +26,7 @@ For all except exponential the operation input is not needed. Otherwise user spe
 
 input is supported. Initial estimates for new etas are 0.09.
 
-This documentation was automatically generated from Pharmpy (0.23.4).}
+This documentation was automatically generated from Pharmpy (0.24.2).}
 \arguments{
 
 \item{

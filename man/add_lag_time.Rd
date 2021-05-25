@@ -18,4 +18,4 @@ previous lag time if available, otherwise it is set to the time of first observa
 
 used.
 
-This documentation was automatically generated from Pharmpy (0.23.4).}
+This documentation was automatically generated from Pharmpy (0.24.2).}

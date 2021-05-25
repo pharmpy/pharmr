@@ -6,7 +6,7 @@ Set a combined error model.
 
 \bold{Usage}
 
-\code{combined_error(model)}
+\code{combined_error(model, data_trans=NULL)}
 
 }
 \details{
@@ -16,12 +16,33 @@ Set a combined error model. Initial estimates for new sigmas are :math:`(min(DV)
 
 proportional and 0.09 for additive.
 
-This documentation was automatically generated from Pharmpy (0.23.4).}
+The error function being applied depends on the data transformation.
+
++------------------------+-----------------------------------------------------+
+
+| Data transformation    | Combined error                                      |
+
++========================+=====================================================+
+
+| :math:`y`              | :math:`f + f epsilon_1 + epsilon_2`               |
+
++------------------------+-----------------------------------------------------+
+
+| :math:`log(y)`         | :math:`log(f) + epsilon_1 + frac{epsilon_2}{f}` |
+
++------------------------+-----------------------------------------------------+
+
+This documentation was automatically generated from Pharmpy (0.24.2).}
 \arguments{
 
 \item{
 model
 }{
 Model. Set error model for this model
+}
+\item{
+data_trans
+}{
+character or expression. A data transformation expression or NULL (default) to use the transformation specified by the model.
 }
 }
