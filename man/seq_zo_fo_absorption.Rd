@@ -18,7 +18,7 @@ absorption rate is set the previous rate if available, otherwise it is set to th
 
 first observation/2 is used.
 
-This documentation was automatically generated from Pharmpy (0.24.2).}
+This documentation was automatically generated from Pharmpy (0.25.0).}
 \arguments{
 
 \item{

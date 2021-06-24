@@ -16,7 +16,7 @@ Applies a boxcox transformation to specified etas from a :class:`pharmpy.model`.
 
 estimate for lambda is 0.1 with bounds (-3, 3).
 
-This documentation was automatically generated from Pharmpy (0.24.2).}
+This documentation was automatically generated from Pharmpy (0.25.0).}
 \arguments{
 
 \item{
