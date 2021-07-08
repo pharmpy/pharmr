@@ -16,4 +16,4 @@ Convert model from compartmental system to explicit ODE system
 
 or do nothing if it already has an explicit ODE system
 
-This documentation was automatically generated from Pharmpy (0.25.0).}
+This documentation was automatically generated from Pharmpy (0.25.1).}

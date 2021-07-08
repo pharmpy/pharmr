@@ -14,4 +14,4 @@ Link to Python
 \href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.theta_as_stdev}{API reference} (for correct rendering of equations, tables etc.).
 Use thetas to estimate standard deviation of error
 
-This documentation was automatically generated from Pharmpy (0.25.0).}
+This documentation was automatically generated from Pharmpy (0.25.1).}

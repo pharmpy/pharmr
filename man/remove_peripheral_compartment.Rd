@@ -32,4 +32,4 @@ n
 
 ==  ===================================================
 
-This documentation was automatically generated from Pharmpy (0.25.0).}
+This documentation was automatically generated from Pharmpy (0.25.1).}
