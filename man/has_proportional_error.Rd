@@ -14,7 +14,7 @@ Link to Python
 \href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.has_proportional_error}{API reference} (for correct rendering of equations, tables etc.).
 Check if a model has a proportional error model
 
-This documentation was automatically generated from Pharmpy (0.25.1).}
+This documentation was automatically generated from Pharmpy (0.26.0).}
 \arguments{
 
 \item{

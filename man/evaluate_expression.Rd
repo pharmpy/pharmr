@@ -22,7 +22,7 @@ population parameters. If the model has parameter estimates these
 
 will be used. Initial estimates will be used for non-estimated parameters.
 
-This documentation was automatically generated from Pharmpy (0.25.1).}
+This documentation was automatically generated from Pharmpy (0.26.0).}
 \arguments{
 
 \item{

@@ -16,7 +16,7 @@ Updates initial estimates from previous output. Can be forced if no initial
 
 individual estimates have been read.
 
-This documentation was automatically generated from Pharmpy (0.25.1).}
+This documentation was automatically generated from Pharmpy (0.26.0).}
 \arguments{
 
 \item{

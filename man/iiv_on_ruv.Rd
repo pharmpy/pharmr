@@ -14,7 +14,7 @@ Link to Python
 \href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.iiv_on_ruv}{API reference} (for correct rendering of equations, tables etc.).
 Multiplies epsilons with exponential (new) etas. Initial estimates for new etas are 0.09.
 
-This documentation was automatically generated from Pharmpy (0.25.1).}
+This documentation was automatically generated from Pharmpy (0.26.0).}
 \arguments{
 
 \item{

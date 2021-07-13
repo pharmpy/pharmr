@@ -16,7 +16,7 @@ Adds IOVs to :class:`pharmpy.model`. Initial estimate of new IOVs are 10% of the
 
 it is based on.
 
-This documentation was automatically generated from Pharmpy (0.25.1).}
+This documentation was automatically generated from Pharmpy (0.26.0).}
 \arguments{
 
 \item{
