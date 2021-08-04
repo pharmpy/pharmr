@@ -18,4 +18,4 @@ Let the code of the underlying source language be updated to reflect
 
 changes in the model object.
 
-This documentation was automatically generated from Pharmpy (0.26.0).}
+This documentation was automatically generated from Pharmpy (0.26.1).}

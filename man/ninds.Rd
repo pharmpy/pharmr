@@ -14,4 +14,4 @@ Link to Python
 \href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.ninds}{API reference} (for correct rendering of equations, tables etc.).
 Retrieve the number of individuals in the model dataset
 
-This documentation was automatically generated from Pharmpy (0.26.0).}
+This documentation was automatically generated from Pharmpy (0.26.1).}

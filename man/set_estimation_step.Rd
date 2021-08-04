@@ -18,7 +18,7 @@ Sets estimation step for a model. Methods currently supported are:
 
 FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM
 
-This documentation was automatically generated from Pharmpy (0.26.0).}
+This documentation was automatically generated from Pharmpy (0.26.1).}
 \arguments{
 
 \item{

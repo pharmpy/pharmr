@@ -14,7 +14,7 @@ Link to Python
 \href{https://pharmpy.github.io/latest/reference/pharmpy.modeling.html#pharmpy.modeling.remove_iov}{API reference} (for correct rendering of equations, tables etc.).
 Removes all IOV omegas.
 
-This documentation was automatically generated from Pharmpy (0.26.0).}
+This documentation was automatically generated from Pharmpy (0.26.1).}
 \arguments{
 
 \item{

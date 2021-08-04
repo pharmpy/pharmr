@@ -30,7 +30,7 @@ The error function being applied depends on the data transformation.
 
 +------------------------+----------------------------------------+
 
-This documentation was automatically generated from Pharmpy (0.26.0).}
+This documentation was automatically generated from Pharmpy (0.26.1).}
 \arguments{
 
 \item{

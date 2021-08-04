@@ -42,4 +42,4 @@ n
 
 ==  ===================================================
 
-This documentation was automatically generated from Pharmpy (0.26.0).}
+This documentation was automatically generated from Pharmpy (0.26.1).}
