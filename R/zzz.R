@@ -1,4 +1,5 @@
 on_load_pharmpy <- function() {
+    message("Loading pharmpy")
     check_pharmpy(pharmpy$`__version__`)
     env <- parent.env(environment())
     
@@ -17,7 +18,5 @@ on_error_pharmpy <- function() {
 pharmpy <- NULL
 
 .onLoad <- function(libname, pkgname) {
-    if (reticulate::py_module_available("pharmpy")) {
-        pharmpy <<- reticulate::import("pharmpy", delay_load=list(on_load=on_load_pharmpy, on_error=on_error_pharmpy))
-    }
+    pharmpy <<- reticulate::import("pharmpy", delay_load=list(on_load=on_load_pharmpy, on_error=on_error_pharmpy))
 }
