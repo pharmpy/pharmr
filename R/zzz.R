@@ -1,22 +1,27 @@
 on_load_pharmpy <- function() {
     message("Loading pharmpy")
     check_pharmpy(pharmpy$`__version__`)
-    env <- parent.env(environment())
-    
-    # Assign all functions in pharmpy.modeling to the parent environment
-    funcs <- pharmpy$modeling$`__all__`
-    for (func in funcs) {
-        assign(func, pharmpy$modeling[[func]], env)
-    }
 }
 
-on_error_pharmpy <- function() {
+on_error_pharmpy <- function(e) {
     message("Error importing pharmpy")
     message("Check if pharmpy is installed")
+    message("Install by pharmr::install_pharmpy() and reload library")
+}
+
+load_pharmpy <- function() {
+    message("Loading pharmpy functions")
+    funcs <- pharmpy$modeling$`__all__`
+    for (func in funcs) {
+        env <- parent.env(environment())
+        assign(func, pharmpy$modeling[[func]], env)
+    }
 }
 
 pharmpy <- NULL
 
 .onLoad <- function(libname, pkgname) {
-    pharmpy <<- reticulate::import("pharmpy", delay_load=list(on_load=on_load_pharmpy, on_error=on_error_pharmpy))
+    pharmpy <<- reticulate::import("pharmpy", delay_load=list(on_load=on_load_pharmpy, 
+                                                              on_error=on_error_pharmpy))
+    try(load_pharmpy())
 }
