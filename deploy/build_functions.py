@@ -1,5 +1,6 @@
-from inspect import getfullargspec, getmembers, isfunction
+from inspect import getdoc, getfullargspec, getmembers, isfunction
 from pathlib import Path
+import re
 
 import pharmpy.modeling
 
@@ -10,12 +11,14 @@ def create_functions():
 
     for _, func in modeling_functions:
         r_func = create_r_func(func)
-        full_str += f'{r_func}\n\n'
+        r_doc = create_r_doc(func)
+        full_str += f'{r_doc}\n{r_func}\n\n'
 
+    print(full_str)
     pharmr_root = Path(__file__).parent.parent
     func_path = pharmr_root / 'R' / 'functions_wrapper.R'
-    with open(func_path, 'w') as f:
-        f.write(full_str)
+    # with open(func_path, 'w') as f:
+    #     f.write(full_str)
 
 
 def create_r_func(func):
@@ -26,10 +29,10 @@ def create_r_func(func):
 
     if defaults:
         if len(args) > len(defaults):
-            defaults_new = [py_to_r(str(d)) for d in defaults]
+            defaults_new = [py_to_r(d, is_arg=True) for d in defaults]
             defaults = [None for _ in range(len(args) - len(defaults_new))] + defaults_new
         args_defaults = {arg: default for arg, default in zip(args, defaults)}
-        arg_list = [(f'{arg}={default}' if default else f'{arg}') for arg, default in args_defaults.items()]
+        arg_list = [(f'{arg}={default}' if default is not None else f'{arg}') for arg, default in args_defaults.items()]
     else:
         arg_list = args
 
@@ -43,19 +46,115 @@ def create_r_func(func):
     return r_func
 
 
-def py_to_r(arg):
-    py_to_r_dict = {'None': 'NULL',
-                    'True': 'TRUE',
-                    'False': 'FALSE',
-                    '': '\"\"'}
+def create_r_doc(func):
+    doc = getdoc(func)
+
+    if not doc:
+        return f'#\' @title\n' \
+               f'#\' {func.__name__}\n' \
+               f'#\' \n' \
+               f'#\' @export'
+
+    doc_description, doc_parameters, doc_returns = split_doc_to_subtypes(doc)
+
+    doc_str = f'@title\n{func.__name__}\n\n@description\n'
+
+    for row in doc_description:
+        is_list = row.startswith('-')
+        if is_list:
+            row = re.sub('^- ', '* ', row)
+        doc_str += f'{row}\n'
+
+    if doc_parameters:
+        doc_str += create_r_params_or_returns(doc_parameters, 'param')
+    if doc_returns:
+        doc_str += create_r_params_or_returns(doc_returns, 'return')
+
+    r_doc = ''
+    for row in doc_str.split('\n'):
+        r_doc += f'#\' {row}\n'
+        
+    r_doc += f'#\' @export'
+    return r_doc 
+
+
+def create_r_params_or_returns(doc_list, doc_type):
+    doc_str = '\n'
+    for row in doc_list:
+        type_declare_pattern = re.compile(r'([\w0-9]+) : ([\w0-9]+)')
+        if type_declare_pattern.match(row):
+            type_declare = row.split(' : ')
+            doc_str += f'@{doc_type} {type_declare[0]} ({py_to_r(type_declare[1], is_str=True)})'
+        else:
+            doc_str += f' {row}\n'
+    return doc_str
+
+
+def split_doc_to_subtypes(doc_str):
+    doc_split = doc_str.split('\n')
+
+    doc_type_current = 'description'
+    doc_description = []
+    doc_parameters = []
+    doc_returns = []
+
+    for row in doc_split:
+        if row == 'Parameters':
+            doc_type_current = 'parameters'
+            continue
+        elif row == 'Returns':
+            doc_type_current = 'returns'
+            continue
+
+        if doc_type_current == 'description':
+            doc_description += [row.strip()]
+        elif doc_type_current == 'parameters':
+            if not row.startswith('--'):
+                doc_parameters += [row.strip()]
+        elif doc_type_current == 'returns':
+            if not row.startswith('--'):
+                doc_returns += [row.strip()]
+
+    return doc_description, doc_parameters, doc_returns
+
+
+py_to_r_dict_basic = {'None': 'NULL',
+                      'True': 'TRUE',
+                      'False': 'FALSE'}
+
+
+def py_to_r(arg, is_arg=False, is_str=False):
+    if is_arg:
+        return py_to_r_arg(arg)
+    elif is_str:
+        return py_to_r_str(arg)
+
+
+def py_to_r_arg(arg):
+    py_to_r_dict = {**py_to_r_dict_basic,
+                    **{'{}': 'list()',
+                       '[]': 'c()',
+                       '': '\'\''}}
+
+    arg_str = str(arg)
 
     try:
-        return py_to_r_dict[arg]
+        return py_to_r_dict[arg_str]
     except KeyError:
         if isinstance(arg, str):
             return f'\'{arg}\''
         else:
             return arg
+
+
+def py_to_r_str(arg):
+    py_to_r_dict = {**py_to_r_dict_basic,
+                    **{'dict': 'list',
+                       'list': 'vector',
+                       'bool': 'logical'}}
+
+    py = re.compile("|".join(py_to_r_dict.keys()))
+    return py.sub(lambda r: py_to_r_dict[r.group(0)], arg)
 
 
 if __name__ == '__main__':
