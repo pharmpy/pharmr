@@ -14,11 +14,10 @@ def create_functions():
         r_doc = create_r_doc(func)
         full_str += f'{r_doc}\n{r_func}\n\n'
 
-    print(full_str)
     pharmr_root = Path(__file__).parent.parent
     func_path = pharmr_root / 'R' / 'functions_wrapper.R'
-    # with open(func_path, 'w') as f:
-    #     f.write(full_str)
+    with open(func_path, 'w') as f:
+        f.write(full_str)
 
 
 def create_r_func(func):
@@ -63,7 +62,9 @@ def create_r_doc(func):
         is_list = row.startswith('-')
         if is_list:
             row = re.sub('^- ', '* ', row)
-        doc_str += f'{row}\n'
+        if row.startswith('.. '):
+            row = re.sub(r'^\.\. ', '', row)
+        doc_str += f'{py_to_r(row, is_str=True)}\n'
 
     if doc_parameters:
         doc_str += create_r_params_or_returns(doc_parameters, 'param')
@@ -86,7 +87,7 @@ def create_r_params_or_returns(doc_list, doc_type):
             type_declare = row.split(' : ')
             doc_str += f'@{doc_type} {type_declare[0]} ({py_to_r(type_declare[1], is_str=True)})'
         else:
-            doc_str += f' {row}\n'
+            doc_str += f' {py_to_r(row, is_str=True)}\n'
     return doc_str
 
 
@@ -148,13 +149,28 @@ def py_to_r_arg(arg):
 
 
 def py_to_r_str(arg):
+    arg_new = arg
     py_to_r_dict = {**py_to_r_dict_basic,
-                    **{'dict': 'list',
-                       'list': 'vector',
-                       'bool': 'logical'}}
+                    **{r'\blist\b': 'vector',
+                       r'\bdict\b': 'list',
+                       'dictionary': 'list',
+                       'bool': 'logical',
+                       r'\\mathsf': '',
+                       r'\\cdot': '*',
+                       r'\\text': '',
+                       r'\\frac': 'frac',
+                       r'\\log': 'log',
+                       r'\\exp': 'exp',
+                       r'\\min': 'min',
+                       r'\\max': 'max',
+                       r'\\epsilon': 'epsilon',
+                       r'\[([0-9]+)\]_*': r'(\1)'}
+                    }
 
-    py = re.compile("|".join(py_to_r_dict.keys()))
-    return py.sub(lambda r: py_to_r_dict[r.group(0)], arg)
+    for key, value in py_to_r_dict.items():
+        arg_new = re.sub(key, value, arg_new)
+
+    return arg_new
 
 
 if __name__ == '__main__':
