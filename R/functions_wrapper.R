@@ -152,8 +152,7 @@ add_estimation_step <- function(model, method, interaction=TRUE, options=NULL, i
 #' @param list_of_parameters (str, vector) Name/names of parameter to add new IIVs to.
 #' @param expression (str, vector) Effect/effects on eta. Either abbreviated (see above) or custom.
 #' @param operation (str, vector, optional) Whether the new IIV should be added or multiplied (default).
-#'  eta_names: str, vector, optional
-#'  Custom name/names of new eta
+#' @param eta_names (str, vector, optional) Custom name/names of new eta
 #' 
 #' @export
 add_iiv <- function(model, list_of_parameters, expression, operation='*', eta_names=NULL) {
@@ -165,6 +164,10 @@ add_iiv <- function(model, list_of_parameters, expression, operation='*', eta_na
 #' 
 #' @description
 #' Add an individual or pk parameter to a model
+#' 
+#' 
+#' @param model (Model) Pharmpy model
+#' @param name (str) Name of individual/pk parameter
 #' 
 #' @export
 add_individual_parameter <- function(model, name) {
@@ -183,8 +186,7 @@ add_individual_parameter <- function(model, name) {
 #' @param occ (str) Name of occasion column.
 #' @param list_of_parameters (str, vector) List of names of parameters and random variables. Accepts random variable names, parameter
 #'  names, or a mix of both.
-#'  eta_names: str, vector
-#'  Custom names of new etas. Must be equal to the number of input etas times the number of
+#' @param eta_names (str, vector) Custom names of new etas. Must be equal to the number of input etas times the number of
 #'  categories for occasion.
 #' 
 #' @export
@@ -214,6 +216,9 @@ add_iov <- function(model, occ, list_of_parameters=NULL, eta_names=NULL) {
 #' 2   :math:`{QP1} = {QP1' / 2}`, :math:`{VP1} = {VP1'}`,
 #' :math:`{QP2} = {QP1' / 2}` and :math:`{VP2} = {VP1'}`
 #' ==  ===================================================
+#' 
+#' 
+#' @param model (Model) Pharmpy model
 #' 
 #' @export
 add_peripheral_compartment <- function(model) {
@@ -257,6 +262,9 @@ calculate_individual_parameter_statistics <- function(model, exprs, seed=NULL) {
 #' 
 #' Definition: ieta_shr = (var(eta) / omega)
 #' 
+#' 
+#' @param model (Model) Pharmpy model
+#' 
 #' @export
 calculate_individual_shrinkage <- function(model) {
     return(pharmpy$modeling$calculate_individual_shrinkage(model))
@@ -296,9 +304,8 @@ calculate_pk_parameters_statistics <- function(model, seed=NULL) {
 #' @param model (Model) Model to convert
 #' @param to_format (str) Name of format to convert into. Currently supported 'nlmixr'
 #'  
-#'  Results
-#'  Model
-#'  New model object with new underlying model format.
+#' 
+#' @return model (Model) New model object with new underlying model format.
 #' 
 #' @export
 convert_model <- function(model, to_format) {
@@ -310,6 +317,9 @@ convert_model <- function(model, to_format) {
 #' 
 #' @description
 #' Copies model to a new model object
+#' 
+#' 
+#' @param model (Model) Pharmpy model
 #' 
 #' @export
 copy_model <- function(model) {
@@ -340,6 +350,12 @@ create_joint_distribution <- function(model, rvs=NULL) {
 #' @title
 #' create_results
 #' 
+#' @description
+#' Create results object
+#' 
+#' 
+#' @param path (str, Path) Path to run directory
+#' 
 #' @export
 create_results <- function(path) {
     return(pharmpy$modeling$create_results(path))
@@ -357,6 +373,7 @@ create_results <- function(path) {
 #' will be used. Initial estimates will be used for non-estimated parameters.
 #' 
 #' 
+#' @param model (Model) Pharmpy model
 #' @param expression (str or sympy expression) Expression to evaluate
 #'  
 #' 
@@ -375,6 +392,9 @@ evaluate_expression <- function(model, expression) {
 #' Convert model from compartmental system to explicit ODE system
 #' or do nothing if it already has an explicit ODE system
 #' 
+#' 
+#' @param model (Model) Pharmpy model
+#' 
 #' @export
 explicit_odes <- function(model) {
     return(pharmpy$modeling$explicit_odes(model))
@@ -382,6 +402,12 @@ explicit_odes <- function(model) {
 
 #' @title
 #' fit
+#' 
+#' @description
+#' Fit models.
+#' 
+#' 
+#' @param models (vector) List of models
 #' 
 #' @export
 fit <- function(models) {
@@ -433,6 +459,9 @@ fix_parameters_to <- function(model, parameter_names, values) {
 #' @description
 #' Retrieve the number of individuals in the model dataset
 #' 
+#' 
+#' @param model (Model) Pharmpy model
+#' 
 #' @export
 get_number_of_individuals <- function(model) {
     return(pharmpy$modeling$get_number_of_individuals(model))
@@ -444,6 +473,9 @@ get_number_of_individuals <- function(model) {
 #' @description
 #' Retrieve the total number of observations in the model dataset
 #' 
+#' 
+#' @param model (Model) Pharmpy model
+#' 
 #' @export
 get_number_of_observations <- function(model) {
     return(pharmpy$modeling$get_number_of_observations(model))
@@ -454,6 +486,9 @@ get_number_of_observations <- function(model) {
 #' 
 #' @description
 #' Number of observations for each individual
+#' 
+#' 
+#' @param model (Model) Pharmpy model
 #' 
 #' @export
 get_number_of_observations_per_individual <- function(model) {
@@ -510,6 +545,9 @@ has_proportional_error_model <- function(model) {
 #' 
 #' currently defined as having Infusion dose with rate not in dataset
 #' 
+#' 
+#' @param model (Model) Pharmpy model
+#' 
 #' @export
 has_zero_order_absorption <- function(model) {
     return(pharmpy$modeling$has_zero_order_absorption(model))
@@ -520,6 +558,9 @@ has_zero_order_absorption <- function(model) {
 #' 
 #' @description
 #' Read model from file
+#' 
+#' 
+#' @param path (str or Path) Path to model
 #' 
 #' @export
 read_model <- function(path) {
@@ -532,6 +573,9 @@ read_model <- function(path) {
 #' @description
 #' Read model directly from the model code in a string
 #' 
+#' 
+#' @param code (str) Model code to read
+#' 
 #' @export
 read_model_from_string <- function(code) {
     return(pharmpy$modeling$read_model_from_string(code))
@@ -539,6 +583,12 @@ read_model_from_string <- function(code) {
 
 #' @title
 #' read_results
+#' 
+#' @description
+#' Read results object
+#' 
+#' 
+#' @param path (str, Path) Path to results file
 #' 
 #' @export
 read_results <- function(path) {
@@ -612,6 +662,9 @@ remove_iov <- function(model) {
 #' @description
 #' Remove lag time from the dose compartment of model.
 #' 
+#' 
+#' @param model (Model) Pharmpy model
+#' 
 #' @export
 remove_lag_time <- function(model) {
     return(pharmpy$modeling$remove_lag_time(model))
@@ -633,6 +686,9 @@ remove_lag_time <- function(model) {
 #' 3   :math:`{QP1} = ({QP1'} + {QP2'}) / 2`,
 #' :math:`{VP1} = {VP1'} + {VP2'}`
 #' ==  ===================================================
+#' 
+#' 
+#' @param model (Model) Pharmpy model
 #' 
 #' @export
 remove_peripheral_compartment <- function(model) {
@@ -712,6 +768,9 @@ set_combined_error_model <- function(model, data_trans=NULL) {
 #' @description
 #' Dynamic transform both sides
 #' 
+#' 
+#' @param model (Model) Pharmpy model
+#' 
 #' @export
 set_dtbs_error_model <- function(model) {
     return(pharmpy$modeling$set_dtbs_error_model(model))
@@ -758,6 +817,12 @@ set_first_order_absorption <- function(model) {
 #' @title
 #' set_first_order_elimination
 #' 
+#' @description
+#' Sets elimination to first order
+#' 
+#' 
+#' @param model (Model) Pharmpy model
+#' 
 #' @export
 set_first_order_elimination <- function(model) {
     return(pharmpy$modeling$set_first_order_elimination(model))
@@ -775,8 +840,7 @@ set_first_order_elimination <- function(model) {
 #'  be chosen. NULL is default.
 #' @param same_eta (logical) Boolean of whether all RUVs from input should use the same new ETA or if one ETA
 #'  should be created for each RUV. TRUE is default.
-#'  eta_names: str, vector
-#'  Custom names of new etas. Must be equal to the number epsilons or 1 if same eta.
+#' @param eta_names (str, vector) Custom names of new etas. Must be equal to the number epsilons or 1 if same eta.
 #' 
 #' @export
 set_iiv_on_ruv <- function(model, list_of_eps=NULL, same_eta=TRUE, eta_names=NULL) {
@@ -808,6 +872,9 @@ set_initial_estimates <- function(model, inits) {
 #' previous lag time if available, otherwise it is set to the time of first observation/2 is
 #' used.
 #' 
+#' 
+#' @param model (Model) Pharmpy model
+#' 
 #' @export
 set_lag_time <- function(model) {
     return(pharmpy$modeling$set_lag_time(model))
@@ -819,6 +886,9 @@ set_lag_time <- function(model) {
 #' @description
 #' Sets elimination to Michaelis-Menten. Initial estimate for CLMM is set to CL and KM is set to
 #' :math:`2*max(DV)`.
+#' 
+#' 
+#' @param model (Model) Pharmpy model
 #' 
 #' @export
 set_michaelis_menten_elimination <- function(model) {
@@ -832,6 +902,9 @@ set_michaelis_menten_elimination <- function(model) {
 #' Sets elimination to mixed Michaelis-Menten and first order. Initial estimate for CLMM is set
 #' to CL/2 and KM is set to :math:`2*max(DV)`.
 #' 
+#' 
+#' @param model (Model) Pharmpy model
+#' 
 #' @export
 set_mixed_mm_fo_elimination <- function(model) {
     return(pharmpy$modeling$set_mixed_mm_fo_elimination(model))
@@ -843,6 +916,10 @@ set_mixed_mm_fo_elimination <- function(model) {
 #' @description
 #' Sets name of model object
 #' 
+#' 
+#' @param model (Model) Pharmpy model
+#' @param new_name (str) New name of model
+#' 
 #' @export
 set_name <- function(model, new_name) {
     return(pharmpy$modeling$set_name(model, new_name))
@@ -851,6 +928,13 @@ set_name <- function(model, new_name) {
 #' @title
 #' set_ode_solver
 #' 
+#' @description
+#' Sets ode solver
+#' 
+#' 
+#' @param model (Model) Pharmpy model
+#' @param solver (str) Solver to use
+#' 
 #' @export
 set_ode_solver <- function(model, solver) {
     return(pharmpy$modeling$set_ode_solver(model, solver))
@@ -858,6 +942,13 @@ set_ode_solver <- function(model, solver) {
 
 #' @title
 #' set_peripheral_compartments
+#' 
+#' @description
+#' Sets the number of peripheral compartments to a specified number.
+#' 
+#' 
+#' @param model (Model) Pharmpy model
+#' @param n (int) Number of transit compartments
 #' 
 #' @export
 set_peripheral_compartments <- function(model, n) {
@@ -931,6 +1022,10 @@ set_seq_zo_fo_absorption <- function(model) {
 #' set the previous rate if available, otherwise it is set to the time of first observation/2
 #' is used.
 #' 
+#' 
+#' @param model (Model) Pharmpy model
+#' @param n (int) Number of transit compartments
+#' 
 #' @export
 set_transit_compartments <- function(model, n) {
     return(pharmpy$modeling$set_transit_compartments(model, n))
@@ -941,6 +1036,9 @@ set_transit_compartments <- function(model, n) {
 #' 
 #' @description
 #' Encode error model with one epsilon and W as weight
+#' 
+#' 
+#' @param model (Model) Pharmpy model
 #' 
 #' @export
 set_weighted_error_model <- function(model) {
@@ -970,6 +1068,9 @@ set_zero_order_absorption <- function(model) {
 #' Sets elimination to zero order. Initial estimate for KM is set to 1% of smallest
 #' observation.
 #' 
+#' 
+#' @param model (Model) Pharmpy model
+#' 
 #' @export
 set_zero_order_elimination <- function(model) {
     return(pharmpy$modeling$set_zero_order_elimination(model))
@@ -993,6 +1094,12 @@ split_joint_distribution <- function(model, rvs=NULL) {
 
 #' @title
 #' summarize_models
+#' 
+#' @description
+#' Summarize results of multiple model runs, includes runtime, ofv and parameter estimates (with errors).
+#' 
+#' 
+#' @param models (vector) List of models
 #' 
 #' @export
 summarize_models <- function(models) {
@@ -1115,6 +1222,9 @@ update_inits <- function(model, force_individual_estimates=FALSE) {
 #' Let the code of the underlying source language be updated to reflect
 #' changes in the model object.
 #' 
+#' 
+#' @param model (Model) Pharmpy model
+#' 
 #' @export
 update_source <- function(model) {
     return(pharmpy$modeling$update_source(model))
@@ -1126,6 +1236,9 @@ update_source <- function(model) {
 #' @description
 #' Use thetas to estimate standard deviation of error
 #' 
+#' 
+#' @param model (Model) Pharmpy model
+#' 
 #' @export
 use_thetas_for_error_stdev <- function(model) {
     return(pharmpy$modeling$use_thetas_for_error_stdev(model))
@@ -1136,6 +1249,11 @@ use_thetas_for_error_stdev <- function(model) {
 #' 
 #' @description
 #' Write model to file
+#' 
+#' 
+#' @param model (Model) Pharmpy model
+#' @param path (str) Destination path
+#' @param force (logical) Force overwrite, default is TRUE
 #' 
 #' @export
 write_model <- function(model, path='', force=TRUE) {
