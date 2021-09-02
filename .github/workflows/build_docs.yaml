@@ -67,7 +67,10 @@ jobs:
       - name: Update DESCRIPTION and documentation
         run: |
           Rscript deploy/update_description.R
-          Rscript deploy/build_docs.R
+          python deploy/build_functions.py
+          echo 'library(devtools); devtools::document()' > run_roxygen.R
+          Rscript run_roxygen.R
+          rm run_roxygen.R
 
       - name: Check
         env:
@@ -89,6 +92,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add DESCRIPTION
+          git add R/functions_wrapper.R
           git add man/
           git status
 
