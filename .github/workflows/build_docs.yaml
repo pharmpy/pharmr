@@ -68,8 +68,8 @@ jobs:
       - name: Update DESCRIPTION and documentation
         run: |
           cd deploy
-          Rscript deploy/update_description.R
-          Rscript deploy/document_pharmpy.R
+          Rscript update_description.R
+          Rscript document_pharmpy.R
           cd ..
 
       - name: Check
