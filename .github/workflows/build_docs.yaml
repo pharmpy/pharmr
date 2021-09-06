@@ -67,12 +67,7 @@ jobs:
       - name: Update DESCRIPTION and documentation
         run: |
           Rscript deploy/update_description.R
-          echo 'library(reticulate); reticulate::py_run_file("deploy/build_functions.py")' > deploy/build_functions.R
-          Rscript deploy/build_functions.R
-          echo 'library(devtools); devtools::document()' > run_roxygen.R
-          Rscript run_roxygen.R
-          rm deploy/build_functions.R
-          rm run_roxygen.R
+          Rscript deploy/document_pharmpy.R
 
       - name: Check
         env:
