@@ -1,4 +1,5 @@
 from inspect import getdoc, getfullargspec, getmembers, isfunction
+import os
 from pathlib import Path
 import re
 
@@ -14,7 +15,8 @@ def create_functions():
         r_doc = create_r_doc(func)
         full_str += f'{r_doc}\n{r_func}\n\n'
 
-    pharmr_root = Path(__file__).parent.parent
+    cwd = os.getcwd()
+    pharmr_root = Path(cwd).parent.parent
     func_path = pharmr_root / 'R' / 'functions_wrapper.R'
     with open(func_path, 'w') as f:
         f.write(full_str)
