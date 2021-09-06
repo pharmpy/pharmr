@@ -51,7 +51,7 @@ jobs:
         run: |
           Rscript -e "try(remotes::install_github('rstudio/reticulate'))"
           Rscript -e "try(reticulate::install_miniconda())"
-          Rscript -e "try(reticulate::conda_create('r-reticulate', python_version='3.9'))"
+          Rscript -e "try(reticulate::conda_create('r-reticulate'))"
 
       - name: Install Pharmr
         run: |
@@ -67,9 +67,11 @@ jobs:
       - name: Update DESCRIPTION and documentation
         run: |
           Rscript deploy/update_description.R
-          python3 deploy/build_functions.py
+          echo 'library(reticulate); reticulate::py_run_file("deploy/build_functions.py")' > deploy/build_functions.R
+          Rscript deploy/build_functions.R
           echo 'library(devtools); devtools::document()' > run_roxygen.R
           Rscript run_roxygen.R
+          rm deploy/build_functions.R
           rm run_roxygen.R
 
       - name: Check
