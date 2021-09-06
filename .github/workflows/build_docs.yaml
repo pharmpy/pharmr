@@ -62,6 +62,7 @@ jobs:
         run: |
           install.packages("here")
           install.packages("tidyverse")
+          install.packages("devtools")
         shell: Rscript {0}
 
       - name: Update DESCRIPTION and documentation
