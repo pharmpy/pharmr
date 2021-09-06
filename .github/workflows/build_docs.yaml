@@ -67,7 +67,7 @@ jobs:
       - name: Update DESCRIPTION and documentation
         run: |
           Rscript deploy/update_description.R
-          python deploy/build_functions.py
+          python3 deploy/build_functions.py
           echo 'library(devtools); devtools::document()' > run_roxygen.R
           Rscript run_roxygen.R
           rm run_roxygen.R
