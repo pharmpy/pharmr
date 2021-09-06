@@ -67,8 +67,10 @@ jobs:
 
       - name: Update DESCRIPTION and documentation
         run: |
+          cd deploy
           Rscript deploy/update_description.R
           Rscript deploy/document_pharmpy.R
+          cd ..
 
       - name: Check
         env:
