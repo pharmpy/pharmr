@@ -18,7 +18,7 @@ def create_functions():
     cwd = os.getcwd()
     print(cwd)
     print(os.listdir(cwd))
-    pharmr_root = Path(cwd).parent.parent
+    pharmr_root = Path(cwd).parent
     print(pharmr_root)
     print(os.listdir(pharmr_root))
     func_path = pharmr_root / 'R' / 'functions_wrapper.R'
