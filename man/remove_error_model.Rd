@@ -9,6 +9,9 @@ remove_error_model(model)
 \arguments{
 \item{model}{(Model) Remove error model for this model}
 }
+\value{
+Model (Reference to the same model)
+}
 \description{
 Remove error model.
 }

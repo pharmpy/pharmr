@@ -9,6 +9,9 @@ copy_model(model)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 }
+\value{
+Model (A copy of the input model)
+}
 \description{
 Copies model to a new model object
 }

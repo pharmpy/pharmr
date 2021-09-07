@@ -7,7 +7,10 @@
 read_model(path)
 }
 \arguments{
-\item{path}{(str or Path) Path to model}
+\item{path}{(str or Path) Path to model
+
+Model
+Read model object}
 }
 \description{
 Read model from file

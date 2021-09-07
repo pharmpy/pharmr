@@ -4,18 +4,25 @@
 \alias{set_additive_error_model}
 \title{set_additive_error_model}
 \usage{
-set_additive_error_model(model, data_trans = NULL)
+set_additive_error_model(model, data_trans = NULL, series_terms = 2)
 }
 \arguments{
 \item{model}{(Model) Set error model for this model}
 
 \item{data_trans}{(str or expression) A data transformation expression or NULL (default) to use the transformation
-specified by the model.}
+specified by the model. Series expansion will be used for approximation.}
+
+\item{series_terms}{(int) Number of terms to use for the series expansion approximation for data
+transformation.}
+}
+\value{
+Model (Reference to the same model)
 }
 \description{
 Set an additive error model. Initial estimate for new sigma is :math:\verb{(min(DV)/2)²}.
 
-The error function being applied depends on the data transformation.
+The error function being applied depends on the data transformation. The table displays
+some examples.
 
 +------------------------+----------------------------------------+
 | Data transformation    | Additive error                         |

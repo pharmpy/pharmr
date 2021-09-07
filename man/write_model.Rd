@@ -11,8 +11,11 @@ write_model(model, path = "", force = TRUE)
 
 \item{path}{(str) Destination path}
 
-\item{force}{(logical) Force overwrite, default is TRUE}
+\item{force}{(logical) Force overwrite, default is TRUE
+
+Model
+Reference to the same model object}
 }
 \description{
-Write model to file
+Write model code to file
 }

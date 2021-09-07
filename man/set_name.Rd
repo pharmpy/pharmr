@@ -11,6 +11,9 @@ set_name(model, new_name)
 
 \item{new_name}{(str) New name of model}
 }
+\value{
+Model (Reference to the same model object)
+}
 \description{
-Sets name of model object
+Set name of model object
 }

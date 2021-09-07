@@ -7,7 +7,10 @@
 get_number_of_observations_per_individual(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model}
+\item{model}{(Model) Pharmpy model
+
+pd.Series
+Number of observations in the model dataset}
 }
 \description{
 Number of observations for each individual

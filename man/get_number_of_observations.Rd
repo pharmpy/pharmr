@@ -7,7 +7,10 @@
 get_number_of_observations(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model}
+\item{model}{(Model) Pharmpy model
+
+int
+Number of observations in the model dataset}
 }
 \description{
 Retrieve the total number of observations in the model dataset

@@ -7,7 +7,10 @@
 get_number_of_individuals(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model}
+\item{model}{(Model) Pharmpy model
+
+int
+Number of individuals in the model dataset}
 }
 \description{
 Retrieve the number of individuals in the model dataset

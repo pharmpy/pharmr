@@ -7,8 +7,11 @@
 read_model_from_string(code)
 }
 \arguments{
-\item{code}{(str) Model code to read}
+\item{code}{(str) Model code to read
+
+Model
+Read model object}
 }
 \description{
-Read model directly from the model code in a string
+Read model from the model code in a string
 }

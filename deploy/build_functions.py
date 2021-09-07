@@ -15,13 +15,11 @@ def create_functions():
         r_doc = create_r_doc(func)
         full_str += f'{r_doc}\n{r_func}\n\n'
 
+    # TODO: more general way to get right directory
     cwd = os.getcwd()
-    print(cwd)
-    print(os.listdir(cwd))
     pharmr_root = Path(cwd).parent
-    print(pharmr_root)
-    print(os.listdir(pharmr_root))
     func_path = pharmr_root / 'R' / 'functions_wrapper.R'
+
     with open(func_path, 'w') as f:
         f.write(full_str)
 
@@ -109,8 +107,11 @@ def split_doc_to_subtypes(doc_str):
         if row == 'Parameters':
             doc_type_current = 'parameters'
             continue
-        elif row == 'Returns':
+        elif row == 'Returns' or row == 'Return' or row == 'Results':
             doc_type_current = 'returns'
+            continue
+        elif row == 'Example' or row == 'Examples':
+            doc_type_current = 'example'
             continue
 
         if doc_type_current == 'description':
@@ -121,6 +122,8 @@ def split_doc_to_subtypes(doc_str):
         elif doc_type_current == 'returns':
             if not row.startswith('--'):
                 doc_returns += [row.strip()]
+        elif doc_type_current == 'example':
+            continue
 
     return doc_description, doc_parameters, doc_returns
 

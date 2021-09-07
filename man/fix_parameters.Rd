@@ -12,7 +12,7 @@ fix_parameters(model, parameter_names)
 \item{parameter_names}{(vector or str) one parameter name or a vector of parameter names}
 }
 \value{
-model (Model)
+Model (Reference to the same model)
 }
 \description{
 Fix parameters

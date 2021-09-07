@@ -7,7 +7,10 @@
 update_source(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model}
+\item{model}{(Model) Pharmpy model
+
+Model
+Reference to the same model object}
 }
 \description{
 Update source

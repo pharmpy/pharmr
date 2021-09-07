@@ -226,6 +226,19 @@ add_peripheral_compartment <- function(model) {
 }
 
 #' @title
+#' calculate_eta_shrinkage
+#' 
+#' @description
+#' Calculate eta shrinkage for each eta
+#' 
+#' Variance = FALSE to get sd scale
+#' 
+#' @export
+calculate_eta_shrinkage <- function(model, sd=FALSE) {
+    return(pharmpy$modeling$calculate_eta_shrinkage(model, sd))
+}
+
+#' @title
 #' calculate_individual_parameter_statistics
 #' 
 #' @description
@@ -305,7 +318,9 @@ calculate_pk_parameters_statistics <- function(model, seed=NULL) {
 #' @param to_format (str) Name of format to convert into. Currently supported 'nlmixr'
 #'  
 #' 
-#' @return model (Model) New model object with new underlying model format.
+#'  Model
+#'  New model object with new underlying model format.
+#'  
 #' 
 #' @export
 convert_model <- function(model, to_format) {
@@ -320,6 +335,9 @@ convert_model <- function(model, to_format) {
 #' 
 #' 
 #' @param model (Model) Pharmpy model
+#'  
+#' 
+#' @return Model (A copy of the input model) 
 #' 
 #' @export
 copy_model <- function(model) {
@@ -427,7 +445,8 @@ fit <- function(models) {
 #' @param parameter_names (vector or str) one parameter name or a vector of parameter names
 #'  
 #' 
-#' @return model (Model)
+#' @return Model (Reference to the same model) 
+#' 
 #' @export
 fix_parameters <- function(model, parameter_names) {
     return(pharmpy$modeling$fix_parameters(model, parameter_names))
@@ -444,10 +463,11 @@ fix_parameters <- function(model, parameter_names) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param parameter_names (vector or str) one parameter name or a vector of parameter names
-#' @param values (vector or int) one value or a vector of values (must be equal to number of parameter_names)
+#' @param values (vector or float) one value or a vector of values (must be equal to number of parameter_names)
 #'  
 #' 
-#' @return model (Model)
+#' @return Model (Reference to the same model object) 
+#' 
 #' @export
 fix_parameters_to <- function(model, parameter_names, values) {
     return(pharmpy$modeling$fix_parameters_to(model, parameter_names, values))
@@ -461,6 +481,11 @@ fix_parameters_to <- function(model, parameter_names, values) {
 #' 
 #' 
 #' @param model (Model) Pharmpy model
+#'  
+#' 
+#'  int
+#'  Number of individuals in the model dataset
+#'  
 #' 
 #' @export
 get_number_of_individuals <- function(model) {
@@ -475,6 +500,11 @@ get_number_of_individuals <- function(model) {
 #' 
 #' 
 #' @param model (Model) Pharmpy model
+#'  
+#' 
+#'  int
+#'  Number of observations in the model dataset
+#'  
 #' 
 #' @export
 get_number_of_observations <- function(model) {
@@ -489,6 +519,11 @@ get_number_of_observations <- function(model) {
 #' 
 #' 
 #' @param model (Model) Pharmpy model
+#'  
+#' 
+#'  pd.Series
+#'  Number of observations in the model dataset
+#'  
 #' 
 #' @export
 get_number_of_observations_per_individual <- function(model) {
@@ -554,6 +589,25 @@ has_zero_order_absorption <- function(model) {
 }
 
 #' @title
+#' load_example_model
+#' 
+#' @description
+#' Load an example model
+#' 
+#' Load an example model from models built into Pharmpy
+#' 
+#' 
+#' @param name (str) Name of the model. Currently available model is "pheno"
+#'  
+#' 
+#' @return Model (Loaded model object) 
+#' 
+#' @export
+load_example_model <- function(name) {
+    return(pharmpy$modeling$load_example_model(name))
+}
+
+#' @title
 #' read_model
 #' 
 #' @description
@@ -561,6 +615,11 @@ has_zero_order_absorption <- function(model) {
 #' 
 #' 
 #' @param path (str or Path) Path to model
+#'  
+#' 
+#'  Model
+#'  Read model object
+#'  
 #' 
 #' @export
 read_model <- function(path) {
@@ -571,10 +630,15 @@ read_model <- function(path) {
 #' read_model_from_string
 #' 
 #' @description
-#' Read model directly from the model code in a string
+#' Read model from the model code in a string
 #' 
 #' 
 #' @param code (str) Model code to read
+#'  
+#' 
+#'  Model
+#'  Read model object
+#'  
 #' 
 #' @export
 read_model_from_string <- function(code) {
@@ -603,6 +667,9 @@ read_results <- function(path) {
 #' 
 #' 
 #' @param model (Model) Remove error model for this model
+#'  
+#' 
+#' @return Model (Reference to the same model) 
 #' 
 #' @export
 remove_error_model <- function(model) {
@@ -701,7 +768,8 @@ remove_peripheral_compartment <- function(model) {
 #' @description
 #' Set an additive error model. Initial estimate for new sigma is :math:`(min(DV)/2)²`.
 #' 
-#' The error function being applied depends on the data transformation.
+#' The error function being applied depends on the data transformation. The table displays
+#' some examples.
 #' 
 #' +------------------------+----------------------------------------+
 #' | Data transformation    | Additive error                         |
@@ -714,11 +782,16 @@ remove_peripheral_compartment <- function(model) {
 #' 
 #' @param model (Model) Set error model for this model
 #' @param data_trans (str or expression) A data transformation expression or NULL (default) to use the transformation
-#'  specified by the model.
+#'  specified by the model. Series expansion will be used for approximation.
+#' @param series_terms (int) Number of terms to use for the series expansion approximation for data
+#'  transformation.
+#'  
+#' 
+#' @return Model (Reference to the same model) 
 #' 
 #' @export
-set_additive_error_model <- function(model, data_trans=NULL) {
-    return(pharmpy$modeling$set_additive_error_model(model, data_trans))
+set_additive_error_model <- function(model, data_trans=NULL, series_terms=2) {
+    return(pharmpy$modeling$set_additive_error_model(model, data_trans, series_terms))
 }
 
 #' @title
@@ -914,11 +987,14 @@ set_mixed_mm_fo_elimination <- function(model) {
 #' set_name
 #' 
 #' @description
-#' Sets name of model object
+#' Set name of model object
 #' 
 #' 
 #' @param model (Model) Pharmpy model
 #' @param new_name (str) New name of model
+#'  
+#' 
+#' @return Model (Reference to the same model object) 
 #' 
 #' @export
 set_name <- function(model, new_name) {
@@ -992,6 +1068,9 @@ set_power_on_ruv <- function(model, list_of_eps=NULL) {
 #' @param model (Model) Set error model for this model
 #' @param data_trans (str or expression) A data transformation expression or NULL (default) to use the transformation
 #'  specified by the model.
+#'  
+#' 
+#' @return Model (Reference to the same model) 
 #' 
 #' @export
 set_proportional_error_model <- function(model, data_trans=NULL) {
@@ -1093,17 +1172,18 @@ split_joint_distribution <- function(model, rvs=NULL) {
 }
 
 #' @title
-#' summarize_models
+#' summarize_modelfit_results
 #' 
 #' @description
-#' Summarize results of multiple model runs, includes runtime, ofv and parameter estimates (with errors).
+#' Summarize results of multiple model runs, includes runtime, ofv and parameter estimates
+#' (with errors).
 #' 
 #' 
 #' @param models (vector) List of models
 #' 
 #' @export
-summarize_models <- function(models) {
-    return(pharmpy$modeling$summarize_models(models))
+summarize_modelfit_results <- function(models) {
+    return(pharmpy$modeling$summarize_modelfit_results(models))
 }
 
 #' @title
@@ -1171,7 +1251,8 @@ transform_etas_tdist <- function(model, list_of_etas=NULL) {
 #' @param parameter_names (vector or str) one parameter name or a vector of parameter names
 #'  
 #' 
-#' @return model (Model)
+#' @return Model (Reference to the same model object) 
+#' 
 #' @export
 unfix_parameters <- function(model, parameter_names) {
     return(pharmpy$modeling$unfix_parameters(model, parameter_names))
@@ -1188,10 +1269,10 @@ unfix_parameters <- function(model, parameter_names) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param parameter_names (vector or str) one parameter name or a vector of parameter names
-#' @param values (vector or int) one value or a vector of values (must be equal to number of parameter_names)
+#' @param values (vector or float) one value or a vector of values (must be equal to number of parameter_names)
 #'  
 #' 
-#' @return model (Model)
+#' @return Model (Reference to the same model)
 #' @export
 unfix_parameters_to <- function(model, parameter_names, values) {
     return(pharmpy$modeling$unfix_parameters_to(model, parameter_names, values))
@@ -1201,12 +1282,20 @@ unfix_parameters_to <- function(model, parameter_names, values) {
 #' update_inits
 #' 
 #' @description
-#' Updates initial estimates from previous output. Can be forced if no initial
-#' individual estimates have been read.
+#' Update initial parameter estimate for a model
+#' 
+#' Updates initial estimates of population parameters for a model from
+#' its modelfit_results. If the model has used initial estimates for
+#' individual estimates these will also be updated. If initial estimates
 #' 
 #' 
-#' @param model (Model) Pharmpy model to create block effect on.
-#' @param force_individual_estimates (logical) Whether update of initial individual estimates should be forced.
+#' @param model (Model) Pharmpy model to update initial estimates
+#' @param force_individual_estimates (logical) Update initial individual estimates even if model din't use them previously.
+#'  
+#' 
+#'  Model
+#'  Reference to the same model
+#'  
 #' 
 #' @export
 update_inits <- function(model, force_individual_estimates=FALSE) {
@@ -1224,6 +1313,11 @@ update_inits <- function(model, force_individual_estimates=FALSE) {
 #' 
 #' 
 #' @param model (Model) Pharmpy model
+#'  
+#' 
+#'  Model
+#'  Reference to the same model object
+#'  
 #' 
 #' @export
 update_source <- function(model) {
@@ -1248,12 +1342,17 @@ use_thetas_for_error_stdev <- function(model) {
 #' write_model
 #' 
 #' @description
-#' Write model to file
+#' Write model code to file
 #' 
 #' 
 #' @param model (Model) Pharmpy model
 #' @param path (str) Destination path
 #' @param force (logical) Force overwrite, default is TRUE
+#'  
+#' 
+#'  Model
+#'  Reference to the same model object
+#'  
 #' 
 #' @export
 write_model <- function(model, path='', force=TRUE) {
