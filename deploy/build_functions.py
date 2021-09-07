@@ -16,7 +16,11 @@ def create_functions():
         full_str += f'{r_doc}\n{r_func}\n\n'
 
     cwd = os.getcwd()
+    print(cwd)
+    print(os.listdir(cwd))
     pharmr_root = Path(cwd).parent.parent
+    print(pharmr_root)
+    print(os.listdir(pharmr_root))
     func_path = pharmr_root / 'R' / 'functions_wrapper.R'
     with open(func_path, 'w') as f:
         f.write(full_str)
