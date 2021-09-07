@@ -15,3 +15,6 @@ Read model object}
 \description{
 Read model from file
 }
+\seealso{
+read_model_from_string : Read model from string
+}

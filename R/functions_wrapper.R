@@ -300,8 +300,9 @@ calculate_individual_shrinkage <- function(model) {
 #'  pd.DataFrame
 #'  A DataFrame of statistics indexed on parameter and covariate value.
 #'  
-#'  See Also
-#' @return calculate_individual_parameter_statistics (Calculation of statistics for arbitrary parameters)
+#' @seealso
+#' calculate_individual_parameter_statistics : Calculation of statistics for arbitrary parameters
+#' 
 #' @export
 calculate_pk_parameters_statistics <- function(model, seed=NULL) {
     return(pharmpy$modeling$calculate_pk_parameters_statistics(model, seed))
@@ -446,6 +447,14 @@ fit <- function(models) {
 #'  
 #' 
 #' @return Model (Reference to the same model) 
+#' @seealso
+#' fix_parameters_to : Fixing and setting parameter initial estimates in the same function
+#' 
+#' unfix_paramaters : Unfixing parameters
+#' 
+#' unfix_paramaters_to : Unfixing parameters and setting a new initial estimate in the same
+#' 
+#' function
 #' 
 #' @export
 fix_parameters <- function(model, parameter_names) {
@@ -467,6 +476,14 @@ fix_parameters <- function(model, parameter_names) {
 #'  
 #' 
 #' @return Model (Reference to the same model object) 
+#' @seealso
+#' fix_parameters : Fix parameters
+#' 
+#' unfix_paramaters : Unfixing parameters
+#' 
+#' unfix_paramaters_to : Unfixing parameters and setting a new initial estimate in the same
+#' 
+#' function
 #' 
 #' @export
 fix_parameters_to <- function(model, parameter_names, values) {
@@ -486,6 +503,14 @@ fix_parameters_to <- function(model, parameter_names, values) {
 #'  int
 #'  Number of individuals in the model dataset
 #'  
+#' @note
+#' For NONMEM models this is the number of individuals of the active dataset, i.e. after filteringof IGNORE and ACCEPT and removal of individuals with no observations.
+#' @seealso
+#' get_number_of_observations : Get the number of observations in a dataset
+#' 
+#' get_number_of_observations_per_individual : Get the number of observations per individual in a
+#' 
+#' dataset
 #' 
 #' @export
 get_number_of_individuals <- function(model) {
@@ -505,6 +530,14 @@ get_number_of_individuals <- function(model) {
 #'  int
 #'  Number of observations in the model dataset
 #'  
+#' @note
+#' For NONMEM models this is the number of observations of the active dataset, i.e. after filteringof IGNORE and ACCEPT and removal of individuals with no observations.
+#' @seealso
+#' get_number_of_individuals : Get the number of individuals in a dataset
+#' 
+#' get_number_of_observations_per_individual : Get the number of observations per individual in a
+#' 
+#' dataset
 #' 
 #' @export
 get_number_of_observations <- function(model) {
@@ -524,6 +557,14 @@ get_number_of_observations <- function(model) {
 #'  pd.Series
 #'  Number of observations in the model dataset
 #'  
+#' @note
+#' For NONMEM models this is the individuals and number of observations of the active dataset, i.e.after filtering of IGNORE and ACCEPT and removal of individuals with no observations.
+#' @seealso
+#' get_number_of_individuals : Get the number of individuals in a dataset
+#' 
+#' get_number_of_observations_per_individual : Get the number of observations per individual in a
+#' 
+#' dataset
 #' 
 #' @export
 get_number_of_observations_per_individual <- function(model) {
@@ -620,6 +661,8 @@ load_example_model <- function(name) {
 #'  Model
 #'  Read model object
 #'  
+#' @seealso
+#' read_model_from_string : Read model from string
 #' 
 #' @export
 read_model <- function(path) {
@@ -639,6 +682,8 @@ read_model <- function(path) {
 #'  Model
 #'  Read model object
 #'  
+#' @seealso
+#' read_model : Read model from file
 #' 
 #' @export
 read_model_from_string <- function(code) {
@@ -788,6 +833,10 @@ remove_peripheral_compartment <- function(model) {
 #'  
 #' 
 #' @return Model (Reference to the same model) 
+#' @seealso
+#' set_proportional_error_model : Proportional error model
+#' 
+#' set_combined_error_model : Combined error model
 #' 
 #' @export
 set_additive_error_model <- function(model, data_trans=NULL, series_terms=2) {
@@ -1071,6 +1120,10 @@ set_power_on_ruv <- function(model, list_of_eps=NULL) {
 #'  
 #' 
 #' @return Model (Reference to the same model) 
+#' @seealso
+#' set_additive_error_model : Additive error model
+#' 
+#' set_combined_error_model : Combined error model
 #' 
 #' @export
 set_proportional_error_model <- function(model, data_trans=NULL) {
@@ -1252,6 +1305,14 @@ transform_etas_tdist <- function(model, list_of_etas=NULL) {
 #'  
 #' 
 #' @return Model (Reference to the same model object) 
+#' @seealso
+#' unfix_paramaters_to : Unfixing parameters and setting a new initial estimate in the same
+#' 
+#' function
+#' 
+#' fix_parameters : Fix parameters
+#' 
+#' fix_parameters_to : Fixing and setting parameter initial estimates in the same function
 #' 
 #' @export
 unfix_parameters <- function(model, parameter_names) {

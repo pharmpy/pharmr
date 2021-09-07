@@ -32,7 +32,7 @@ def create_r_func(func):
 
     if defaults:
         if len(args) > len(defaults):
-            defaults_new = [py_to_r(d, is_arg=True) for d in defaults]
+            defaults_new = [py_to_r_arg(d) for d in defaults]
             defaults = [None for _ in range(len(args) - len(defaults_new))] + defaults_new
         args_defaults = {arg: default for arg, default in zip(args, defaults)}
         arg_list = [(f'{arg}={default}' if default is not None else f'{arg}') for arg, default in args_defaults.items()]
@@ -58,22 +58,28 @@ def create_r_doc(func):
                f'#\' \n' \
                f'#\' @export'
 
-    doc_description, doc_parameters, doc_returns = split_doc_to_subtypes(doc)
+    doc_dict = split_doc_to_subtypes(doc)
 
     doc_str = f'@title\n{func.__name__}\n\n@description\n'
 
-    for row in doc_description:
+    for row in doc_dict['description']:
         is_list = row.startswith('-')
         if is_list:
             row = re.sub('^- ', '* ', row)
         if row.startswith('.. '):
             row = re.sub(r'^\.\. ', '', row)
-        doc_str += f'{py_to_r(row, is_str=True)}\n'
+        doc_str += f'{py_to_r_str(row)}\n'
 
-    if doc_parameters:
-        doc_str += create_r_params_or_returns(doc_parameters, 'param')
-    if doc_returns:
-        doc_str += create_r_params_or_returns(doc_returns, 'return')
+    if 'params' in doc_dict.keys():
+        doc_str += create_r_params_or_returns(doc_dict['params'], 'param')
+    if 'returns' in doc_dict.keys():
+        doc_str += create_r_params_or_returns(doc_dict['returns'], 'return')
+    if 'notes' in doc_dict.keys():
+        doc_str += '@note\n'
+        doc_str += ''.join(doc_dict['notes']) + '\n'
+    if 'see_also' in doc_dict.keys():
+        doc_str += '@seealso\n'
+        doc_str += '\n\n'.join(doc_dict['see_also']) + '\n'
 
     r_doc = ''
     for row in doc_str.split('\n'):
@@ -89,67 +95,53 @@ def create_r_params_or_returns(doc_list, doc_type):
         type_declare_pattern = re.compile(r'([\w0-9]+) : ([\w0-9]+)')
         if type_declare_pattern.match(row):
             type_declare = row.split(' : ')
-            doc_str += f'@{doc_type} {type_declare[0]} ({py_to_r(type_declare[1], is_str=True)})'
+            doc_str += f'@{doc_type} {type_declare[0]} ({py_to_r_str(type_declare[1])})'
         else:
-            doc_str += f' {py_to_r(row, is_str=True)}\n'
+            doc_str += f' {py_to_r_str(row)}\n'
     return doc_str
 
 
 def split_doc_to_subtypes(doc_str):
     doc_split = doc_str.split('\n')
 
+    # add notes
+    doc_titles = {'Parameters': 'params',
+                  'Returns': 'returns',
+                  'Return': 'returns',
+                  'Results': 'returns',
+                  'Example': 'example',
+                  'Examples': 'example',
+                  'Notes': 'notes',
+                  'See also': 'see_also',
+                  'See Also': 'see_also'}
+
     doc_type_current = 'description'
-    doc_description = []
-    doc_parameters = []
-    doc_returns = []
+
+    doc_dict = dict()
+    doc_dict[doc_type_current] = []
 
     for row in doc_split:
-        if row == 'Parameters':
-            doc_type_current = 'parameters'
-            continue
-        elif row == 'Returns' or row == 'Return' or row == 'Results':
-            doc_type_current = 'returns'
-            continue
-        elif row == 'Example' or row == 'Examples':
-            doc_type_current = 'example'
+        if row in doc_titles.keys():
+            doc_type_current = doc_titles[row]
+            doc_dict[doc_type_current] = []
             continue
 
-        if doc_type_current == 'description':
-            doc_description += [row.strip()]
-        elif doc_type_current == 'parameters':
-            if not row.startswith('--'):
-                doc_parameters += [row.strip()]
-        elif doc_type_current == 'returns':
-            if not row.startswith('--'):
-                doc_returns += [row.strip()]
-        elif doc_type_current == 'example':
-            continue
+        if not row.startswith('--') and doc_type_current != 'example':
+            doc_dict[doc_type_current].append(row.strip())
 
-    return doc_description, doc_parameters, doc_returns
-
-
-py_to_r_dict_basic = {'None': 'NULL',
-                      'True': 'TRUE',
-                      'False': 'FALSE'}
-
-
-def py_to_r(arg, is_arg=False, is_str=False):
-    if is_arg:
-        return py_to_r_arg(arg)
-    elif is_str:
-        return py_to_r_str(arg)
+    return doc_dict
 
 
 def py_to_r_arg(arg):
-    py_to_r_dict = {**py_to_r_dict_basic,
-                    **{'{}': 'list()',
-                       '[]': 'c()',
-                       '': '\'\''}}
-
-    arg_str = str(arg)
+    py_to_r_dict = {'None': 'NULL',
+                    'True': 'TRUE',
+                    'False': 'FALSE',
+                    '{}': 'list()',
+                    '[]': 'c()',
+                    '': '\'\''}
 
     try:
-        return py_to_r_dict[arg_str]
+        return py_to_r_dict[str(arg)]
     except KeyError:
         if isinstance(arg, str):
             return f'\'{arg}\''
@@ -158,28 +150,30 @@ def py_to_r_arg(arg):
 
 
 def py_to_r_str(arg):
-    arg_new = arg
-    py_to_r_dict = {**py_to_r_dict_basic,
-                    **{r'\blist\b': 'vector',
-                       r'\bdict\b': 'list',
-                       'dictionary': 'list',
-                       'bool': 'logical',
-                       r'\\mathsf': '',
-                       r'\\cdot': '*',
-                       r'\\text': '',
-                       r'\\frac': 'frac',
-                       r'\\log': 'log',
-                       r'\\exp': 'exp',
-                       r'\\min': 'min',
-                       r'\\max': 'max',
-                       r'\\epsilon': 'epsilon',
-                       r'\[([0-9]+)\]_*': r'(\1)'}
+    py_to_r_dict = {'None': 'NULL',
+                    'True': 'TRUE',
+                    'False': 'FALSE',
+                    r'\blist\b': 'vector',
+                    r'\bdict\b': 'list',
+                    'dictionary': 'list',
+                    'bool': 'logical',
+                    r'\\mathsf': '',
+                    r'\\cdot': '*',
+                    r'\\text': '',
+                    r'\\frac': 'frac',
+                    r'\\log': 'log',
+                    r'\\exp': 'exp',
+                    r'\\min': 'min',
+                    r'\\max': 'max',
+                    r'\\epsilon': 'epsilon',
+                    r'\[([0-9]+)\]_*': r'(\1)'
                     }
 
+    arg_sub = arg
     for key, value in py_to_r_dict.items():
-        arg_new = re.sub(key, value, arg_new)
+        arg_sub = re.sub(key, value, arg_sub)
 
-    return arg_new
+    return arg_sub
 
 
 if __name__ == '__main__':

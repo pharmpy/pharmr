@@ -28,3 +28,8 @@ The error function being applied depends on the data transformation.
 | :math:\code{log(y)}         | :math:\code{log(f) + epsilon_1}           |
 +------------------------+----------------------------------------+
 }
+\seealso{
+set_additive_error_model : Additive error model
+
+set_combined_error_model : Combined error model
+}

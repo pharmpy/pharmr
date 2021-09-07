@@ -15,3 +15,13 @@ Number of observations in the model dataset}
 \description{
 Retrieve the total number of observations in the model dataset
 }
+\note{
+For NONMEM models this is the number of observations of the active dataset, i.e. after filteringof IGNORE and ACCEPT and removal of individuals with no observations.
+}
+\seealso{
+get_number_of_individuals : Get the number of individuals in a dataset
+
+get_number_of_observations_per_individual : Get the number of observations per individual in a
+
+dataset
+}

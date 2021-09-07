@@ -12,12 +12,7 @@ calculate_pk_parameters_statistics(model, seed = NULL)
 \item{seed}{(int or numpy rng)
 
 pd.DataFrame
-A DataFrame of statistics indexed on parameter and covariate value.
-
-See Also}
-}
-\value{
-calculate_individual_parameter_statistics (Calculation of statistics for arbitrary parameters)
+A DataFrame of statistics indexed on parameter and covariate value.}
 }
 \description{
 Calculate statistics for common pharmacokinetic parameters
@@ -25,4 +20,7 @@ Calculate statistics for common pharmacokinetic parameters
 Calculate the mean (expected value of the distribution), variance
 (variance of the distribution) and standard error for some individual
 pre-defined pharmacokinetic parameters.
+}
+\seealso{
+calculate_individual_parameter_statistics : Calculation of statistics for arbitrary parameters
 }

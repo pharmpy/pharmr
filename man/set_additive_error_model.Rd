@@ -32,3 +32,8 @@ some examples.
 | :math:\code{log(y)}         | :math:\verb{log(f) + frac\{epsilon_1\}\{f\}} |
 +------------------------+----------------------------------------+
 }
+\seealso{
+set_proportional_error_model : Proportional error model
+
+set_combined_error_model : Combined error model
+}

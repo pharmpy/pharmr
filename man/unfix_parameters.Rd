@@ -19,3 +19,12 @@ Unfix parameters
 
 Unfix all listed parameters
 }
+\seealso{
+unfix_paramaters_to : Unfixing parameters and setting a new initial estimate in the same
+
+function
+
+fix_parameters : Fix parameters
+
+fix_parameters_to : Fixing and setting parameter initial estimates in the same function
+}
