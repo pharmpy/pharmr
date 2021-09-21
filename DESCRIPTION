@@ -5,7 +5,16 @@ Date: 2021-09-07
 Title: A Wrapper for the 'Pharmpy' 'Pharmacometrics' Library
 Authors@R: c(
   person("Rikard", "Nordgren", role=c("aut", "cre", "cph"), email="rikard.nordgren@farmaci.uu.se"),
-  person("Stella", "Belin", role=c("aut", "cph"), email="stella.belin@farmaci.uu.se"))
+  person("Stella", "Belin", role=c("aut", "cph"), email="stella.belin@farmaci.uu.se")
+  person("Mats O.", "Karlsson", role=c("sad")),
+  person("Andrew C.", "Hooker", role=c("sad")),
+  person("Sebastian", "Ueckert", role=c("sad"), ORCID="0000-0002-3712-0255")),
+  person("Simon", "Carter", role=c("rev")),
+  person("Simon", "Buatois", role=c("rev")),
+  person("João A.", "Abrantes", role=c("rev")),
+  person("F. Hoffmann-La Roche Ltd.", role=c("fnd"))
+)
+
 Maintainer: Rikard Nordgren <rikard.nordgren@farmaci.uu.se>
 Depends:
     R (>= 3.3.0),
