@@ -28,7 +28,7 @@ Suggests:
     magrittr,
     here
 NeedsCompilation: no
-Description: An R wrapper for the Pharmpy pharmacometrics library via the reticulate package. The Pharmpy documentation was automatically generated from Pharmpy version 0.31.3.
+Description: An R wrapper for the 'Pharmpy' 'pharmacometrics' library via the 'reticulate package'. The 'Pharmpy' documentation was automatically generated from 'Pharmpy' version 0.31.3.
 Config/reticulate:
   list(
     packages = list(
