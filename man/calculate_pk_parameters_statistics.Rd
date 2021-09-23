@@ -4,12 +4,12 @@
 \alias{calculate_pk_parameters_statistics}
 \title{calculate_pk_parameters_statistics}
 \usage{
-calculate_pk_parameters_statistics(model, seed = NULL)
+calculate_pk_parameters_statistics(model, rng = NULL)
 }
 \arguments{
 \item{model}{(Model) A previously estimated model}
 
-\item{seed}{(int or numpy rng)
+\item{rng}{(Generator or int) Random number generator or seed
 
 pd.DataFrame
 A DataFrame of statistics indexed on parameter and covariate value.}

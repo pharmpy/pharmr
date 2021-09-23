@@ -19,16 +19,21 @@ add_estimation_step(
 
 \item{interaction}{(logical) whether to use interaction or not, default is true}
 
-\item{options}{(list) any additional options. Note that this removes old options}
+\item{options}{(list) any additional tool specific options. Note that this removes old options}
 
-\item{idx}{(int) index of estimation step, default is NULL (adds step last)}
-}
-\value{
-model (Model)
+\item{idx}{(int) index of estimation step, default is NULL (adds step at the end)
+
+Model
+Reference to the same model object}
 }
 \description{
 Add estimation step
 
 Adds estimation step for a model in a given index. Methods currently supported are:
 FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM
+}
+\seealso{
+set_estimation_step
+
+remove_estimation_step
 }

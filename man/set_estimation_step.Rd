@@ -21,14 +21,19 @@ set_estimation_step(
 
 \item{options}{(list) any additional options. Note that this removes old options}
 
-\item{est_idx}{(int) index of estimation step, default is 0 (first estimation step)}
-}
-\value{
-model (Model)
+\item{est_idx}{(int) index of estimation step, default is 0 (first estimation step)
+
+Model
+Reference to the same model object}
 }
 \description{
 Set estimation step
 
 Sets estimation step for a model. Methods currently supported are:
 FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM
+}
+\seealso{
+add_estimation_step
+
+remove_estimation_step
 }

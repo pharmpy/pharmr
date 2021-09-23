@@ -7,10 +7,19 @@
 set_lag_time(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model}
+\item{model}{(Model) Pharmpy model
+
+Model
+Reference to same model}
 }
 \description{
-Add lag time to the dose compartment of model. Initial estimate for lag time is set the
-previous lag time if available, otherwise it is set to the time of first observation/2 is
-used.
+Add lag time to the dose compartment of model.
+
+Initial estimate for lag time is set the
+previous lag time if available, otherwise it is set to the time of first observation/2.
+}
+\seealso{
+set_transit_compartments
+
+remove_lag_time
 }

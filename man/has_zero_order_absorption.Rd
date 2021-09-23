@@ -7,7 +7,10 @@
 has_zero_order_absorption(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model}
+\item{model}{(Model) Pharmpy model
+
+Model
+Reference to same model}
 }
 \description{
 Check if ode system describes a zero order absorption

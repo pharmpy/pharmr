@@ -7,9 +7,14 @@
 summarize_modelfit_results(models)
 }
 \arguments{
-\item{models}{(vector) List of models}
+\item{models}{(vector) List of models
+
+pd.DataFrame
+A DataFrame of modelfit results, one row per model.}
 }
 \description{
-Summarize results of multiple model runs, includes runtime, ofv and parameter estimates
-(with errors).
+Summarize results of multiple model runs
+
+Summarize different results after fitting a model, includes runtime, ofv,
+and parameter estimates (with errors).
 }

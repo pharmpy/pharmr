@@ -7,8 +7,16 @@
 has_combined_error_model(model)
 }
 \arguments{
-\item{model}{(Model) The model to check}
+\item{model}{(Model) The model to check
+
+logical
+TRUE if the model has a combined error model and FALSE otherwise}
 }
 \description{
 Check if a model has a combined additive and proportinal error model
+}
+\seealso{
+has_additive_error_model : Check if a model has an additive error model
+
+has_proportional_error_model : Check if a model has a proportional error model
 }

@@ -4,7 +4,7 @@
 \alias{calculate_individual_parameter_statistics}
 \title{calculate_individual_parameter_statistics}
 \usage{
-calculate_individual_parameter_statistics(model, exprs, seed = NULL)
+calculate_individual_parameter_statistics(model, exprs, rng = NULL)
 }
 \arguments{
 \item{model}{(Model) A previously estimated model}
@@ -12,7 +12,7 @@ calculate_individual_parameter_statistics(model, exprs, seed = NULL)
 \item{exprs}{(str, sympy expression or iterable of str or sympy expressions) Expressions or equations for parameters of interest. If equations are used
 the names of the left hand sides will be used as the names of the parameters.}
 
-\item{seed}{(int or numpy rng)
+\item{rng}{(Generator or int) Random number generator or int seed
 
 pd.DataFrame
 A DataFrame of statistics indexed on parameter and covariate value.}
@@ -27,5 +27,6 @@ variable used in the model can be used in the expression. The exception
 being that variables that depends on the solution of the ODE system
 cannot be used. If covariates are used in the expression the statistics
 of the parameter is calculated at the median value of each covariate as well
-as at the 5:th and 95:th percentiles.
+as at the 5:th and 95:th percentiles. If no parameter uncertainty is available
+for the model the standard error will not be calculated.
 }

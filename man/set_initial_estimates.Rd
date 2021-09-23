@@ -9,10 +9,10 @@ set_initial_estimates(model, inits)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{inits}{(list) A list of parameter init for parameters to change}
-}
-\value{
-model (Model)
+\item{inits}{(list) A list of parameter init for parameters to change
+
+Model
+Reference to the same model object}
 }
 \description{
 Set initial estimates

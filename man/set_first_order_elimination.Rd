@@ -7,8 +7,16 @@
 set_first_order_elimination(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model}
+\item{model}{(Model) Pharmpy model
+
+Model
+Reference to same model}
 }
 \description{
 Sets elimination to first order
+}
+\seealso{
+set_zero_order_elimination
+
+set_michaelis_menten_elimination
 }

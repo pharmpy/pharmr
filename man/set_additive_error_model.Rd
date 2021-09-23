@@ -13,10 +13,10 @@ set_additive_error_model(model, data_trans = NULL, series_terms = 2)
 specified by the model. Series expansion will be used for approximation.}
 
 \item{series_terms}{(int) Number of terms to use for the series expansion approximation for data
-transformation.}
-}
-\value{
-Model (Reference to the same model)
+transformation.
+
+Model
+Reference to the same model object}
 }
 \description{
 Set an additive error model. Initial estimate for new sigma is :math:\verb{(min(DV)/2)²}.

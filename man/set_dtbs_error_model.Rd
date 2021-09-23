@@ -7,7 +7,10 @@
 set_dtbs_error_model(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model}
+\item{model}{(Model) Pharmpy model
+
+Model
+Reference to the same model}
 }
 \description{
 Dynamic transform both sides

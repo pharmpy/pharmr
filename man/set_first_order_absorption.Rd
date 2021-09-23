@@ -7,9 +7,19 @@
 set_first_order_absorption(model)
 }
 \arguments{
-\item{model}{(Model) Model to set or change to use first order absorption rate}
+\item{model}{(Model) Model to set or change to use first order absorption rate
+
+Model
+Reference to same model}
 }
 \description{
-Set or change to first order absorption rate. Initial estimate for absorption rate is set
-the previous rate if available, otherwise it is set to the time of first observation/2 is used.
+Set or change to first order absorption rate.
+
+Initial estimate for absorption rate is set to
+the previous rate if available, otherwise it is set to the time of first observation/2.
+}
+\seealso{
+set_bolus_order_absorption
+
+set_zero_order_absorption
 }

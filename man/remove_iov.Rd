@@ -7,8 +7,18 @@
 remove_iov(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model to remove IOV from.}
+\item{model}{(Model) Pharmpy model to remove IOV from.
+
+Model
+Reference to the same model}
 }
 \description{
-Removes all IOV omegas.
+Removes all IOV etas
+}
+\seealso{
+add_iiv
+
+add_iov
+
+remove_iiv
 }

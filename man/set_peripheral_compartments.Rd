@@ -9,8 +9,16 @@ set_peripheral_compartments(model, n)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{n}{(int) Number of transit compartments}
+\item{n}{(int) Number of transit compartments
+
+Model
+Reference to same model}
 }
 \description{
 Sets the number of peripheral compartments to a specified number.
+}
+\seealso{
+add_peripheral_compartment
+
+remove_peripheral_compartment
 }

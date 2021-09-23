@@ -9,9 +9,18 @@ transform_etas_tdist(model, list_of_etas = NULL)
 \arguments{
 \item{model}{(Model) Pharmpy model to apply t distribution transformation to.}
 
-\item{list_of_etas}{(str, vector) Name/names of etas to transform. If NULL, all etas will be transformed (default).}
+\item{list_of_etas}{(str, vector) Name/names of etas to transform. If NULL, all etas will be transformed (default).
+
+Model
+Reference to the same model}
 }
 \description{
-Applies a t-distribution transformation to specified etas from a :class:\code{pharmpy.model}. Initial
-estimate for degrees of freedom is 80 with bounds (3, 100).
+Applies a t-distribution transformation to selected etas
+
+Initial estimate for degrees of freedom is 80 with bounds (3, 100).
+}
+\seealso{
+transform_etas_boxcox
+
+transform_etas_john_draper
 }

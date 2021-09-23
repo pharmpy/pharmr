@@ -7,8 +7,16 @@
 remove_lag_time(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model}
+\item{model}{(Model) Pharmpy model
+
+Model
+Reference to same model}
 }
 \description{
 Remove lag time from the dose compartment of model.
+}
+\seealso{
+set_transit_compartments
+
+set_lag_time
 }

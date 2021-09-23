@@ -11,10 +11,10 @@ unfix_parameters_to(model, parameter_names, values)
 
 \item{parameter_names}{(vector or str) one parameter name or a vector of parameter names}
 
-\item{values}{(vector or float) one value or a vector of values (must be equal to number of parameter_names)}
-}
-\value{
-Model (Reference to the same model)
+\item{values}{(vector or float) one value or a vector of values (must be equal to number of parameter_names)
+
+Model
+Reference to the same model object}
 }
 \description{
 Unix parameters to

@@ -15,9 +15,20 @@ add_iov(model, occ, list_of_parameters = NULL, eta_names = NULL)
 names, or a mix of both.}
 
 \item{eta_names}{(str, vector) Custom names of new etas. Must be equal to the number of input etas times the number of
-categories for occasion.}
+categories for occasion.
+
+Model
+Reference to the same model}
 }
 \description{
-Adds IOVs to :class:\code{pharmpy.model}. Initial estimate of new IOVs are 10\% of the IIV eta
-it is based on.
+Adds IOVs to :class:\code{pharmpy.model}.
+
+Initial estimate of new IOVs are 10\% of the IIV eta it is based on.
+}
+\seealso{
+add_iiv
+
+remove_iiv
+
+remove_iov
 }

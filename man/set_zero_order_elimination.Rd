@@ -7,9 +7,18 @@
 set_zero_order_elimination(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model}
+\item{model}{(Model) Pharmpy model
+
+Model
+Reference to same model}
 }
 \description{
-Sets elimination to zero order. Initial estimate for KM is set to 1\% of smallest
-observation.
+Sets elimination to zero order.
+
+Initial estimate for KM is set to 1\% of smallest observation.
+}
+\seealso{
+set_first_order_elimination
+
+set_michaelis_menten_elimination
 }

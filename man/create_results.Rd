@@ -7,8 +7,15 @@
 create_results(path)
 }
 \arguments{
-\item{path}{(str, Path) Path to run directory}
+\item{path}{(str, Path) Path to run directory
+kwargs
+Arguments to pass to tool specific create results function
+
+Results object for tool}
 }
 \description{
-Create results object
+Create/recalculate results object given path to run directory
+}
+\seealso{
+read_results
 }

@@ -7,10 +7,10 @@
 remove_error_model(model)
 }
 \arguments{
-\item{model}{(Model) Remove error model for this model}
-}
-\value{
-Model (Reference to the same model)
+\item{model}{(Model) Remove error model for this model
+
+Model
+Reference to the same model object}
 }
 \description{
 Remove error model.

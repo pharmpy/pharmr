@@ -9,10 +9,10 @@ unfix_parameters(model, parameter_names)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{parameter_names}{(vector or str) one parameter name or a vector of parameter names}
-}
-\value{
-Model (Reference to the same model object)
+\item{parameter_names}{(vector or str) one parameter name or a vector of parameter names
+
+Model
+Reference to the same model object}
 }
 \description{
 Unfix parameters

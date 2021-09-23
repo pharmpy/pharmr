@@ -7,8 +7,13 @@
 read_results(path)
 }
 \arguments{
-\item{path}{(str, Path) Path to results file}
+\item{path}{(str, Path) Path to results file
+
+Results object for tool}
 }
 \description{
-Read results object
+Read results object from file
+}
+\seealso{
+create_results
 }

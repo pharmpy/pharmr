@@ -7,8 +7,16 @@
 set_bolus_absorption(model)
 }
 \arguments{
-\item{model}{(Model) Model to set or change absorption rate}
+\item{model}{(Model) Model to set or change absorption rate
+
+Model
+Reference to same model}
 }
 \description{
 Set or change to bolus absorption rate.
+}
+\seealso{
+set_zero_order_absorption
+
+set_first_order_absorption
 }

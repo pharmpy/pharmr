@@ -4,13 +4,15 @@
 \alias{copy_model}
 \title{copy_model}
 \usage{
-copy_model(model)
+copy_model(model, name = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
-}
-\value{
-Model (A copy of the input model)
+
+\item{name}{(str) Optional new name of model
+
+Model
+A copy of the input model}
 }
 \description{
 Copies model to a new model object

@@ -7,8 +7,14 @@
 fit(models)
 }
 \arguments{
-\item{models}{(vector) List of models}
+\item{models}{(vector) List of models or one single model
+
+Model
+Reference to same model}
 }
 \description{
 Fit models.
+}
+\seealso{
+run_tool
 }

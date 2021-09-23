@@ -10,10 +10,10 @@ set_proportional_error_model(model, data_trans = NULL)
 \item{model}{(Model) Set error model for this model}
 
 \item{data_trans}{(str or expression) A data transformation expression or NULL (default) to use the transformation
-specified by the model.}
-}
-\value{
-Model (Reference to the same model)
+specified by the model.
+
+Model
+Reference to the same model object}
 }
 \description{
 Set a proportional error model. Initial estimate for new sigma is 0.09.

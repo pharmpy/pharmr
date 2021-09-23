@@ -7,10 +7,22 @@
 set_seq_zo_fo_absorption(model)
 }
 \arguments{
-\item{model}{(Model) Model to set or change absorption rate}
+\item{model}{(Model) Model to set or change absorption rate
+
+Model
+Reference to same model}
 }
 \description{
-Set or change to sequential zero order first order absorption rate. Initial estimate for
+Set or change to sequential zero order first order absorption rate.
+
+Initial estimate for
 absorption rate is set the previous rate if available, otherwise it is set to the time of
-first observation/2 is used.
+first observation/2.
+}
+\seealso{
+set_bolus_order_absorption
+
+set_zero_order_absorption
+
+set_first_order_absorption
 }

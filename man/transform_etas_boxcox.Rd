@@ -9,9 +9,18 @@ transform_etas_boxcox(model, list_of_etas = NULL)
 \arguments{
 \item{model}{(Model) Pharmpy model to apply boxcox transformation to.}
 
-\item{list_of_etas}{(str, vector) Name/names of etas to transform. If NULL, all etas will be transformed (default).}
+\item{list_of_etas}{(str, vector) Name/names of etas to transform. If NULL, all etas will be transformed (default).
+
+Model
+Reference to the same model}
 }
 \description{
-Applies a boxcox transformation to specified etas from a :class:\code{pharmpy.model}. Initial
-estimate for lambda is 0.1 with bounds (-3, 3).
+Applies a boxcox transformation to selected etas
+
+Initial estimate for lambda is 0.1 with bounds (-3, 3).
+}
+\seealso{
+transform_etas_tdist
+
+transform_etas_john_draper
 }

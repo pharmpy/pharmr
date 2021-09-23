@@ -12,7 +12,7 @@ convert_model(model, to_format)
 \item{to_format}{(str) Name of format to convert into. Currently supported 'nlmixr'
 
 Model
-New model object with new underlying model format.}
+New model object with new underlying model format}
 }
 \description{
 Convert model to other format

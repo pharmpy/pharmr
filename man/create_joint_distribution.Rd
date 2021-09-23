@@ -10,7 +10,10 @@ create_joint_distribution(model, rvs = NULL)
 \item{model}{(Model) Pharmpy model}
 
 \item{rvs}{(vector) Sequence of etas or names of etas to combine. If NULL, all etas that are IIVs and
-non-fixed will be used (full block). NULL is default.}
+non-fixed will be used (full block). NULL is default.
+
+Model
+Reference to the same model}
 }
 \description{
 Combines some or all etas into a joint distribution.
@@ -19,4 +22,7 @@ The etas must be IIVs and cannot
 be fixed. Initial estimates for covariance between the etas is dependent on whether
 the model has results from a previous results. In that case, the correlation will
 be calculated from individual estimates, otherwise correlation will be set to 10\%.
+}
+\seealso{
+split_joint_distribution : split etas into separate distributions
 }

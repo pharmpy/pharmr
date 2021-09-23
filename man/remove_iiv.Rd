@@ -10,8 +10,18 @@ remove_iiv(model, to_remove = NULL)
 \item{model}{(Model) Pharmpy model to create block effect on.}
 
 \item{to_remove}{(str, vector) Name/names of etas and/or name/names of individual parameters to remove.
-If NULL, all etas that are IIVs will be removed. NULL is default.}
+If NULL, all etas that are IIVs will be removed. NULL is default.
+
+Model
+Reference to the same model}
 }
 \description{
-Removes all IIV omegas given a vector with eta names and/or parameter names.
+Removes all IIV etas given a vector with eta names and/or parameter names.
+}
+\seealso{
+remove_iov
+
+add_iiv
+
+add_iov
 }

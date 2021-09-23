@@ -7,10 +7,16 @@
 calculate_individual_shrinkage(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model}
+\item{model}{(Model) Pharmpy model
+
+DataFrame
+Shrinkage for each eta and individual}
 }
 \description{
 Calculate the individual eta-shrinkage
 
 Definition: ieta_shr = (var(eta) / omega)
+}
+\seealso{
+calculate_eta_shrinkage
 }

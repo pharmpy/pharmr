@@ -7,9 +7,18 @@
 set_michaelis_menten_elimination(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model}
+\item{model}{(Model) Pharmpy model
+
+Model
+Reference to the same model}
 }
 \description{
-Sets elimination to Michaelis-Menten. Initial estimate for CLMM is set to CL and KM is set to
-:math:\code{2*max(DV)}.
+Sets elimination to Michaelis-Menten.
+
+Initial estimate for CLMM is set to CL and KM is set to :math:\code{2*max(DV)}.
+}
+\seealso{
+set_first_order_elimination
+
+set_zero_order_elimination
 }

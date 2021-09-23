@@ -15,10 +15,15 @@ add_covariate_effect(model, parameter, covariate, effect, operation = "*")
 
 \item{effect}{(str) Type of covariate effect. May be abbreviated covariate effect (see above) or custom.}
 
-\item{operation}{(str, optional) Whether the covariate effect should be added or multiplied (default).}
+\item{operation}{(str, optional) Whether the covariate effect should be added or multiplied (default).
+
+Model
+Reference to the same model}
 }
 \description{
-Adds covariate effect to :class:\code{pharmpy.model}. The following effects have templates:
+Adds covariate effect to :class:\code{pharmpy.model}.
+
+The following effects have templates:
 \itemize{
 \item Linear function for continuous covariates (\emph{lin})
 \item Function:

@@ -9,11 +9,16 @@ remove_estimation_step(model, idx)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{idx}{(int) index of estimation step to remove}
-}
-\value{
-model (Model)
+\item{idx}{(int) index of estimation step to remove
+
+Model
+Reference to the same model object}
 }
 \description{
 Remove estimation step
+}
+\seealso{
+add_estimation_step
+
+set_estimation_step
 }

@@ -9,8 +9,29 @@ set_ode_solver(model, solver)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{solver}{(str) Solver to use}
+\item{solver}{(str) Solver to use or NULL for no preference
+
+Model
+Reference to same model}
 }
 \description{
-Sets ode solver
+Sets ODE solver to use for model
+
+Recognized solvers and their corresponding NONMEM advans:
+
++------------------------+------------------+
+| Solver                 | NONMEM ADVAN     |
++========================+==================+
+| CVODES                 | ADVAN14          |
++------------------------+------------------+
+| DGEAR                  | ADVAN8           |
++------------------------+------------------+
+| DVERK                  | ADVAN6           |
++------------------------+------------------+
+| IDA                    | ADVAN15          |
++------------------------+------------------+
+| LSODA                  | ADVAN13          |
++------------------------+------------------+
+| LSODI                  | ADVAN9           |
++------------------------+------------------+
 }

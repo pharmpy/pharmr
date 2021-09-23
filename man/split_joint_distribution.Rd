@@ -10,8 +10,14 @@ split_joint_distribution(model, rvs = NULL)
 \item{model}{(Model) Pharmpy model}
 
 \item{rvs}{(str, vector) Name/names of etas to separate. If NULL, all etas that are IIVs and
-non-fixed will become single. NULL is default.}
+non-fixed will become single. NULL is default.
+
+Model
+Reference to the same model}
 }
 \description{
 Splits etas following a joint distribution into separate distributions.
+}
+\seealso{
+create_joint_distribution : combine etas into a join distribution
 }

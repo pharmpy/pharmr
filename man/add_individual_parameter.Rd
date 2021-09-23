@@ -9,7 +9,10 @@ add_individual_parameter(model, name)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{name}{(str) Name of individual/pk parameter}
+\item{name}{(str) Name of individual/pk parameter
+
+Model
+Reference to same model}
 }
 \description{
 Add an individual or pk parameter to a model

@@ -9,10 +9,10 @@ set_name(model, new_name)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{new_name}{(str) New name of model}
-}
-\value{
-Model (Reference to the same model object)
+\item{new_name}{(str) New name of model
+
+Model
+Reference to the same model object}
 }
 \description{
 Set name of model object
