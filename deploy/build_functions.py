@@ -76,10 +76,10 @@ def create_r_doc(func):
         doc_str += create_r_returns(doc_dict['returns']) + '\n\n'
     if 'notes' in doc_dict.keys():
         doc_str += '@note\n'
-        doc_str += ''.join(doc_dict['notes']) + '\n'
+        doc_str += ''.join(doc_dict['notes']) + '\n\n'
     if 'see_also' in doc_dict.keys():
         doc_str += '@seealso\n'
-        doc_str += '\n\n'.join(doc_dict['see_also']) + '\n'
+        doc_str += '\n\n'.join(doc_dict['see_also']) + '\n\n'
 
     r_doc = ''
     for row in doc_str.split('\n'):
@@ -90,7 +90,7 @@ def create_r_doc(func):
 
 
 def create_r_params(doc_list):
-    doc_str = '\n'
+    doc_str = ''
     for row in doc_list:
         type_declare_pattern = re.compile(r'([\w0-9]+) : ([\w0-9]+)')
         if type_declare_pattern.match(row):
@@ -115,7 +115,6 @@ def create_r_returns(doc_list):
 def split_doc_to_subtypes(doc_str):
     doc_split = doc_str.split('\n')
 
-    # add notes
     doc_titles = {'Parameters': 'params',
                   'Returns': 'returns',
                   'Return': 'returns',
@@ -147,8 +146,6 @@ def py_to_r_arg(arg):
     py_to_r_dict = {'None': 'NULL',
                     'True': 'TRUE',
                     'False': 'FALSE',
-                    '{}': 'list()',
-                    '[]': 'c()',
                     '': '\'\''}
 
     try:

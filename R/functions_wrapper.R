@@ -100,7 +100,6 @@
 #' * Lower: :math:`-100`
 #' 
 #' 
-#' 
 #' @param model (Model) Pharmpy model to add covariate effect to.
 #' @param parameter (str) Name of parameter to add covariate effect to.
 #' @param covariate (str) Name of covariate.
@@ -124,7 +123,6 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' Adds estimation step for a model in a given index. Methods currently supported are:
 #' FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #' @param method (str) estimation method to change to
 #' @param interaction (logical) whether to use interaction or not, default is true
@@ -137,6 +135,7 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' set_estimation_step
 #' 
 #' remove_estimation_step
+#' 
 #' 
 #' @export
 add_estimation_step <- function(model, method, interaction=TRUE, options=NULL, idx=NULL) {
@@ -159,7 +158,6 @@ add_estimation_step <- function(model, method, interaction=TRUE, options=NULL, i
 #' For all except exponential the operation input is not needed. Otherwise user specified
 #' input is supported. Initial estimates for new etas are 0.09.
 #' 
-#' 
 #' @param model (Model) Pharmpy model to add new IIVs to.
 #' @param list_of_parameters (str, vector) Name/names of parameter to add new IIVs to.
 #' @param expression (str, vector) Effect/effects on eta. Either abbreviated (see above) or custom.
@@ -175,6 +173,7 @@ add_estimation_step <- function(model, method, interaction=TRUE, options=NULL, i
 #' 
 #' remove_iov
 #' 
+#' 
 #' @export
 add_iiv <- function(model, list_of_parameters, expression, operation='*', eta_names=NULL) {
     return(pharmpy$modeling$add_iiv(model, list_of_parameters, expression, operation, eta_names))
@@ -185,7 +184,6 @@ add_iiv <- function(model, list_of_parameters, expression, operation='*', eta_na
 #' 
 #' @description
 #' Add an individual or pk parameter to a model
-#' 
 #' 
 #' @param model (Model) Pharmpy model
 #' @param name (str) Name of individual/pk parameter
@@ -206,7 +204,6 @@ add_individual_parameter <- function(model, name) {
 #' 
 #' Initial estimate of new IOVs are 10% of the IIV eta it is based on.
 #' 
-#' 
 #' @param model (Model) Pharmpy model to add new IOVs to.
 #' @param occ (str) Name of occasion column.
 #' @param list_of_parameters (str, vector) List of names of parameters and random variables. Accepts random variable names, parameter
@@ -222,6 +219,7 @@ add_individual_parameter <- function(model, name) {
 #' remove_iiv
 #' 
 #' remove_iov
+#' 
 #' 
 #' @export
 add_iov <- function(model, occ, list_of_parameters=NULL, eta_names=NULL) {
@@ -251,7 +249,6 @@ add_iov <- function(model, occ, list_of_parameters=NULL, eta_names=NULL) {
 #' :math:`{QP2} = {QP1' / 2}` and :math:`{VP2} = {VP1'}`
 #' ==  ===================================================
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (Model) Reference to same model
@@ -260,6 +257,7 @@ add_iov <- function(model, occ, list_of_parameters=NULL, eta_names=NULL) {
 #' set_peripheral_compartment
 #' 
 #' remove_peripheral_compartment
+#' 
 #' 
 #' @export
 add_peripheral_compartment <- function(model) {
@@ -272,7 +270,6 @@ add_peripheral_compartment <- function(model) {
 #' @description
 #' Calculate eta shrinkage for each eta
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #' @param sd (logical) Calculate shrinkage on the standard deviation scale (default is to calculate on the
 #'  variance scale)
@@ -281,6 +278,7 @@ add_peripheral_compartment <- function(model) {
 #' 
 #' @seealso
 #' calculate_individual_shrinkage
+#' 
 #' 
 #' @export
 calculate_eta_shrinkage <- function(model, sd=FALSE) {
@@ -303,7 +301,6 @@ calculate_eta_shrinkage <- function(model, sd=FALSE) {
 #' as at the 5:th and 95:th percentiles. If no parameter uncertainty is available
 #' for the model the standard error will not be calculated.
 #' 
-#' 
 #' @param model (Model) A previously estimated model
 #' @param exprs (str, sympy expression or iterable of str or sympy expressions) Expressions or equations for parameters of interest. If equations are used
 #'  the names of the left hand sides will be used as the names of the parameters.
@@ -325,13 +322,13 @@ calculate_individual_parameter_statistics <- function(model, exprs, rng=NULL) {
 #' 
 #' Definition: ieta_shr = (var(eta) / omega)
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (DataFrame) Shrinkage for each eta and individual
 #' 
 #' @seealso
 #' calculate_eta_shrinkage
+#' 
 #' 
 #' @export
 calculate_individual_shrinkage <- function(model) {
@@ -348,7 +345,6 @@ calculate_individual_shrinkage <- function(model) {
 #' (variance of the distribution) and standard error for some individual
 #' pre-defined pharmacokinetic parameters.
 #' 
-#' 
 #' @param model (Model) A previously estimated model
 #' @param rng (Generator or integer) Random number generator or seed
 #'  
@@ -356,6 +352,7 @@ calculate_individual_shrinkage <- function(model) {
 #' 
 #' @seealso
 #' calculate_individual_parameter_statistics : Calculation of statistics for arbitrary parameters
+#' 
 #' 
 #' @export
 calculate_pk_parameters_statistics <- function(model, rng=NULL) {
@@ -367,7 +364,6 @@ calculate_pk_parameters_statistics <- function(model, rng=NULL) {
 #' 
 #' @description
 #' Convert model to other format
-#' 
 #' 
 #' @param model (Model) Model to convert
 #' @param to_format (str) Name of format to convert into. Currently supported 'nlmixr'
@@ -385,7 +381,6 @@ convert_model <- function(model, to_format) {
 #' 
 #' @description
 #' Copies model to a new model object
-#' 
 #' 
 #' @param model (Model) Pharmpy model
 #' @param name (str) Optional new name of model
@@ -409,7 +404,6 @@ copy_model <- function(model, name=NULL) {
 #' the model has results from a previous results. In that case, the correlation will
 #' be calculated from individual estimates, otherwise correlation will be set to 10%.
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #' @param rvs (vector) Sequence of etas or names of etas to combine. If NULL, all etas that are IIVs and
 #'  non-fixed will be used (full block). NULL is default.
@@ -418,6 +412,7 @@ copy_model <- function(model, name=NULL) {
 #' 
 #' @seealso
 #' split_joint_distribution : split etas into separate distributions
+#' 
 #' 
 #' @export
 create_joint_distribution <- function(model, rvs=NULL) {
@@ -430,7 +425,6 @@ create_joint_distribution <- function(model, rvs=NULL) {
 #' @description
 #' Create/recalculate results object given path to run directory
 #' 
-#' 
 #' @param path (str, Path) Path to run directory
 #'  kwargs
 #'  Arguments to pass to tool specific create results function
@@ -439,6 +433,7 @@ create_joint_distribution <- function(model, rvs=NULL) {
 #' 
 #' @seealso
 #' read_results
+#' 
 #' 
 #' @export
 create_results <- function(path) {
@@ -453,7 +448,6 @@ create_results <- function(path) {
 #' 
 #' Pharmpy functions that use random sampling take a random number generator or seed as input.
 #' This function can be used to create a default new random number generator.
-#' 
 #' 
 #' @param seed (integer or rng) Seed for the random number generator or NULL (default) for a randomized seed. If seed
 #'  is generator it will be passed through.
@@ -477,7 +471,6 @@ create_rng <- function(seed) {
 #' population parameters. If the model has parameter estimates these
 #' will be used. Initial estimates will be used for non-estimated parameters.
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #' @param expression (str or sympy expression) Expression to evaluate
 #'  
@@ -495,13 +488,13 @@ evaluate_expression <- function(model, expression) {
 #' @description
 #' Fit models.
 #' 
-#' 
 #' @param models (vector) List of models or one single model
 #'  
 #' @return (Model) Reference to same model
 #' 
 #' @seealso
 #' run_tool
+#' 
 #' 
 #' @export
 fit <- function(models) {
@@ -515,7 +508,6 @@ fit <- function(models) {
 #' Fix parameters
 #' 
 #' Fix all listed parameters
-#' 
 #' 
 #' @param model (Model) Pharmpy model
 #' @param parameter_names (vector or str) one parameter name or a vector of parameter names
@@ -531,6 +523,7 @@ fit <- function(models) {
 #' 
 #' function
 #' 
+#' 
 #' @export
 fix_parameters <- function(model, parameter_names) {
     return(pharmpy$modeling$fix_parameters(model, parameter_names))
@@ -543,7 +536,6 @@ fix_parameters <- function(model, parameter_names) {
 #' Fix parameters to
 #' 
 #' Fix all listed parameters to specified value/values
-#' 
 #' 
 #' @param model (Model) Pharmpy model
 #' @param parameter_names (vector or str) one parameter name or a vector of parameter names
@@ -560,6 +552,7 @@ fix_parameters <- function(model, parameter_names) {
 #' 
 #' function
 #' 
+#' 
 #' @export
 fix_parameters_to <- function(model, parameter_names, values) {
     return(pharmpy$modeling$fix_parameters_to(model, parameter_names, values))
@@ -573,7 +566,6 @@ fix_parameters_to <- function(model, parameter_names, values) {
 #' 
 #' A covariate in the model is here defined to be a data item
 #' affecting the model prediction excluding dosing items.
-#' 
 #' 
 #' @param model (Model) Pharmpy model
 #' @param strings (logical) Return strings instead of symbols? FALSE (default) will give symbols
@@ -592,19 +584,20 @@ get_model_covariates <- function(model, strings=FALSE) {
 #' @description
 #' Retrieve the number of individuals in the model dataset
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (integer) Number of individuals in the model dataset
 #' 
 #' @note
 #' For NONMEM models this is the number of individuals of the active dataset, i.e. after filteringof IGNORE and ACCEPT and removal of individuals with no observations.
+#' 
 #' @seealso
 #' get_number_of_observations : Get the number of observations in a dataset
 #' 
 #' get_number_of_observations_per_individual : Get the number of observations per individual in a
 #' 
 #' dataset
+#' 
 #' 
 #' @export
 get_number_of_individuals <- function(model) {
@@ -617,19 +610,20 @@ get_number_of_individuals <- function(model) {
 #' @description
 #' Retrieve the total number of observations in the model dataset
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (integer) Number of observations in the model dataset
 #' 
 #' @note
 #' For NONMEM models this is the number of observations of the active dataset, i.e. after filteringof IGNORE and ACCEPT and removal of individuals with no observations.
+#' 
 #' @seealso
 #' get_number_of_individuals : Get the number of individuals in a dataset
 #' 
 #' get_number_of_observations_per_individual : Get the number of observations per individual in a
 #' 
 #' dataset
+#' 
 #' 
 #' @export
 get_number_of_observations <- function(model) {
@@ -642,19 +636,20 @@ get_number_of_observations <- function(model) {
 #' @description
 #' Number of observations for each individual
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (pd.Series) Number of observations in the model dataset
 #' 
 #' @note
 #' For NONMEM models this is the individuals and number of observations of the active dataset, i.e.after filtering of IGNORE and ACCEPT and removal of individuals with no observations.
+#' 
 #' @seealso
 #' get_number_of_individuals : Get the number of individuals in a dataset
 #' 
 #' get_number_of_observations_per_individual : Get the number of observations per individual in a
 #' 
 #' dataset
+#' 
 #' 
 #' @export
 get_number_of_observations_per_individual <- function(model) {
@@ -667,7 +662,6 @@ get_number_of_observations_per_individual <- function(model) {
 #' @description
 #' Check if a model has an additive error model
 #' 
-#' 
 #' @param model (Model) The model to check
 #'  
 #' @return (logical) TRUE if the model has an additive error model and FALSE otherwise
@@ -676,6 +670,7 @@ get_number_of_observations_per_individual <- function(model) {
 #' has_proportional_error_model : Check if a model has a proportional error model
 #' 
 #' has_combined_error_model : Check if a model has a combined error model
+#' 
 #' 
 #' @export
 has_additive_error_model <- function(model) {
@@ -688,7 +683,6 @@ has_additive_error_model <- function(model) {
 #' @description
 #' Check if a model has a combined additive and proportinal error model
 #' 
-#' 
 #' @param model (Model) The model to check
 #'  
 #' @return (logical) TRUE if the model has a combined error model and FALSE otherwise
@@ -697,6 +691,7 @@ has_additive_error_model <- function(model) {
 #' has_additive_error_model : Check if a model has an additive error model
 #' 
 #' has_proportional_error_model : Check if a model has a proportional error model
+#' 
 #' 
 #' @export
 has_combined_error_model <- function(model) {
@@ -709,7 +704,6 @@ has_combined_error_model <- function(model) {
 #' @description
 #' Check if a model has a proportional error model
 #' 
-#' 
 #' @param model (Model) The model to check
 #'  
 #' @return (logical) TRUE if the model has a proportional error model and FALSE otherwise
@@ -718,6 +712,7 @@ has_combined_error_model <- function(model) {
 #' has_additive_error_model : Check if a model has an additive error model
 #' 
 #' has_combined_error_model : Check if a model has a combined error model
+#' 
 #' 
 #' @export
 has_proportional_error_model <- function(model) {
@@ -731,7 +726,6 @@ has_proportional_error_model <- function(model) {
 #' Check if ode system describes a zero order absorption
 #' 
 #' currently defined as having Infusion dose with rate not in dataset
-#' 
 #' 
 #' @param model (Model) Pharmpy model
 #'  
@@ -751,7 +745,6 @@ has_zero_order_absorption <- function(model) {
 #' 
 #' Load an example model from models built into Pharmpy
 #' 
-#' 
 #' @param name (str) Name of the model. Currently available model is "pheno"
 #'  
 #' @return (Model) Loaded model object
@@ -768,7 +761,6 @@ load_example_model <- function(name) {
 #' @description
 #' Predict influential individuals for a model using a machine learning model.
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (pd.Dataframe) Dataframe over the individuals with a `dofv` column containing the raw predicted delta-OFV and an `influential` column with a logicalean to tell whether the individual is influential or not.
@@ -777,6 +769,7 @@ load_example_model <- function(name) {
 #' predict_influential_outliers
 #' 
 #' predict_outliers
+#' 
 #' 
 #' @export
 predict_influential_individuals <- function(model) {
@@ -789,7 +782,6 @@ predict_influential_individuals <- function(model) {
 #' @description
 #' Predict influential outliers for a model using a machine learning model.
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (pd.Dataframe) Dataframe over the individuals with a `outliers` and `dofv` columns containing the raw predictions and `influential`, `outlier` and `influential_outlier` logicalean columns.
@@ -798,6 +790,7 @@ predict_influential_individuals <- function(model) {
 #' predict_influential_individuals
 #' 
 #' predict_outliers
+#' 
 #' 
 #' @export
 predict_influential_outliers <- function(model) {
@@ -812,7 +805,6 @@ predict_influential_outliers <- function(model) {
 #' 
 #' See the :ref:`simeval <Individual OFV summary>` documentation for a definition of the `residual`
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (pd.Dataframe) Dataframe over the individuals with a `residual` column containing the raw predicted residuals and a `outlier` column with a logicalean to tell whether the individual is an outlier or not.
@@ -821,6 +813,7 @@ predict_influential_outliers <- function(model) {
 #' predict_influential_individuals
 #' 
 #' predict_influential_outliers
+#' 
 #' 
 #' @export
 predict_outliers <- function(model) {
@@ -833,13 +826,13 @@ predict_outliers <- function(model) {
 #' @description
 #' Read model from file
 #' 
-#' 
 #' @param path (str or Path) Path to model
 #'  
 #' @return (Model) Read model object
 #' 
 #' @seealso
 #' read_model_from_string : Read model from string
+#' 
 #' 
 #' @export
 read_model <- function(path) {
@@ -852,13 +845,13 @@ read_model <- function(path) {
 #' @description
 #' Read model from the model code in a string
 #' 
-#' 
 #' @param code (str) Model code to read
 #'  
 #' @return (Model) Read model object
 #' 
 #' @seealso
 #' read_model : Read model from file
+#' 
 #' 
 #' @export
 read_model_from_string <- function(code) {
@@ -871,13 +864,13 @@ read_model_from_string <- function(code) {
 #' @description
 #' Read results object from file
 #' 
-#' 
 #' @param path (str, Path) Path to results file
 #'  
 #' @return (Results object for tool) 
 #' 
 #' @seealso
 #' create_results
+#' 
 #' 
 #' @export
 read_results <- function(path) {
@@ -889,7 +882,6 @@ read_results <- function(path) {
 #' 
 #' @description
 #' Remove error model.
-#' 
 #' 
 #' @param model (Model) Remove error model for this model
 #'  
@@ -907,7 +899,6 @@ remove_error_model <- function(model) {
 #' @description
 #' Remove estimation step
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #' @param idx (integer) index of estimation step to remove
 #'  
@@ -917,6 +908,7 @@ remove_error_model <- function(model) {
 #' add_estimation_step
 #' 
 #' set_estimation_step
+#' 
 #' 
 #' @export
 remove_estimation_step <- function(model, idx) {
@@ -928,7 +920,6 @@ remove_estimation_step <- function(model, idx) {
 #' 
 #' @description
 #' Removes all IIV etas given a vector with eta names and/or parameter names.
-#' 
 #' 
 #' @param model (Model) Pharmpy model to create block effect on.
 #' @param to_remove (str, vector) Name/names of etas and/or name/names of individual parameters to remove.
@@ -943,6 +934,7 @@ remove_estimation_step <- function(model, idx) {
 #' 
 #' add_iov
 #' 
+#' 
 #' @export
 remove_iiv <- function(model, to_remove=NULL) {
     return(pharmpy$modeling$remove_iiv(model, to_remove))
@@ -953,7 +945,6 @@ remove_iiv <- function(model, to_remove=NULL) {
 #' 
 #' @description
 #' Removes all IOV etas
-#' 
 #' 
 #' @param model (Model) Pharmpy model to remove IOV from.
 #'  
@@ -966,6 +957,7 @@ remove_iiv <- function(model, to_remove=NULL) {
 #' 
 #' remove_iiv
 #' 
+#' 
 #' @export
 remove_iov <- function(model) {
     return(pharmpy$modeling$remove_iov(model))
@@ -977,7 +969,6 @@ remove_iov <- function(model) {
 #' @description
 #' Remove lag time from the dose compartment of model.
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (Model) Reference to same model
@@ -986,6 +977,7 @@ remove_iov <- function(model) {
 #' set_transit_compartments
 #' 
 #' set_lag_time
+#' 
 #' 
 #' @export
 remove_lag_time <- function(model) {
@@ -1009,7 +1001,6 @@ remove_lag_time <- function(model) {
 #' :math:`{VP1} = {VP1'} + {VP2'}`
 #' ==  ===================================================
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (Model) Reference to same model
@@ -1018,6 +1009,7 @@ remove_lag_time <- function(model) {
 #' set_peripheral_compartment
 #' 
 #' add_peripheral_compartment
+#' 
 #' 
 #' @export
 remove_peripheral_compartment <- function(model) {
@@ -1029,7 +1021,6 @@ remove_peripheral_compartment <- function(model) {
 #' 
 #' @description
 #' Run tool workflow
-#' 
 #' 
 #' @param name (str) Name of tool to run
 #'  args
@@ -1051,7 +1042,6 @@ run_tool <- function(name) {
 #' @description
 #' Sample individual estimates given their covariance.
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #' @param parameters (vector) A vector of a subset of individual parameters to sample. Default is NULL, which means all.
 #' @param samples_per_id (integer) Number of samples per individual
@@ -1066,6 +1056,7 @@ run_tool <- function(name) {
 #' 
 #' sample_parameters_uniformly : Sample parameter vectors using uniform distribution
 #' 
+#' 
 #' @export
 sample_individual_estimates <- function(model, parameters=NULL, samples_per_id=100, rng=NULL) {
     return(pharmpy$modeling$sample_individual_estimates(model, parameters, samples_per_id, rng))
@@ -1078,7 +1069,6 @@ sample_individual_estimates <- function(model, parameters=NULL, samples_per_id=1
 #' Sample parameter vectors using the covariance matrix
 #' 
 #' If modelfit_results is not provided the results from the model will be used
-#' 
 #' 
 #' @param model (Model) Input model
 #' @param modelfit_results (ModelfitResults) Alternative results object. Default is to use the one in model
@@ -1096,6 +1086,7 @@ sample_individual_estimates <- function(model, parameters=NULL, samples_per_id=1
 #' 
 #' sample_individual_estimates : Sample individual estiates given their covariance
 #' 
+#' 
 #' @export
 sample_parameters_from_covariance_matrix <- function(model, modelfit_results=NULL, parameters=NULL, force_posdef_samples=NULL, force_posdef_covmatrix=FALSE, n=1, rng=NULL) {
     return(pharmpy$modeling$sample_parameters_from_covariance_matrix(model, modelfit_results, parameters, force_posdef_samples, force_posdef_covmatrix, n, rng))
@@ -1109,7 +1100,6 @@ sample_parameters_from_covariance_matrix <- function(model, modelfit_results=NUL
 #' 
 #' Each parameter value will be randomly sampled from a uniform distribution
 #' with the bounds being estimate ± estimate * fraction.
-#' 
 #' 
 #' @param model (Model) Pharmpy model
 #' @param fraction (numeric) Fraction of estimate value to use for distribution bounds
@@ -1127,6 +1117,7 @@ sample_parameters_from_covariance_matrix <- function(model, modelfit_results=NUL
 #' uncertainty covariance matrix
 #' 
 #' sample_individual_estimates : Sample individual estiates given their covariance
+#' 
 #' 
 #' @export
 sample_parameters_uniformly <- function(model, fraction=0.1, parameters=NULL, force_posdef_samples=NULL, n=1, rng=NULL) {
@@ -1150,7 +1141,6 @@ sample_parameters_uniformly <- function(model, fraction=0.1, parameters=NULL, fo
 #' | :math:`log(y)`         | :math:`log(f) + frac{epsilon_1}{f}` |
 #' +------------------------+----------------------------------------+
 #' 
-#' 
 #' @param model (Model) Set error model for this model
 #' @param data_trans (str or expression) A data transformation expression or NULL (default) to use the transformation
 #'  specified by the model. Series expansion will be used for approximation.
@@ -1164,6 +1154,7 @@ sample_parameters_uniformly <- function(model, fraction=0.1, parameters=NULL, fo
 #' 
 #' set_combined_error_model : Combined error model
 #' 
+#' 
 #' @export
 set_additive_error_model <- function(model, data_trans=NULL, series_terms=2) {
     return(pharmpy$modeling$set_additive_error_model(model, data_trans, series_terms))
@@ -1175,7 +1166,6 @@ set_additive_error_model <- function(model, data_trans=NULL, series_terms=2) {
 #' @description
 #' Set or change to bolus absorption rate.
 #' 
-#' 
 #' @param model (Model) Model to set or change absorption rate
 #'  
 #' @return (Model) Reference to same model
@@ -1184,6 +1174,7 @@ set_additive_error_model <- function(model, data_trans=NULL, series_terms=2) {
 #' set_zero_order_absorption
 #' 
 #' set_first_order_absorption
+#' 
 #' 
 #' @export
 set_bolus_absorption <- function(model) {
@@ -1207,7 +1198,6 @@ set_bolus_absorption <- function(model) {
 #' | :math:`log(y)`         | :math:`log(f) + epsilon_1 + frac{epsilon_2}{f}` |
 #' +------------------------+-----------------------------------------------------+
 #' 
-#' 
 #' @param model (Model) Set error model for this model
 #' @param data_trans (str or expression) A data transformation expression or NULL (default) to use the transformation
 #'  specified by the model.
@@ -1219,6 +1209,7 @@ set_bolus_absorption <- function(model) {
 #' 
 #' set_proportional_error_model: Proportional error model
 #' 
+#' 
 #' @export
 set_combined_error_model <- function(model, data_trans=NULL) {
     return(pharmpy$modeling$set_combined_error_model(model, data_trans))
@@ -1229,7 +1220,6 @@ set_combined_error_model <- function(model, data_trans=NULL) {
 #' 
 #' @description
 #' Dynamic transform both sides
-#' 
 #' 
 #' @param model (Model) Pharmpy model
 #'  
@@ -1250,7 +1240,6 @@ set_dtbs_error_model <- function(model) {
 #' Sets estimation step for a model. Methods currently supported are:
 #' FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #' @param method (str) estimation method to change to
 #' @param interaction (logical) whether to use interaction or not, default is true
@@ -1264,8 +1253,9 @@ set_dtbs_error_model <- function(model) {
 #' 
 #' remove_estimation_step
 #' 
+#' 
 #' @export
-set_estimation_step <- function(model, method, interaction=TRUE, options=list(), est_idx=0) {
+set_estimation_step <- function(model, method, interaction=TRUE, options={}, est_idx=0) {
     return(pharmpy$modeling$set_estimation_step(model, method, interaction, options, est_idx))
 }
 
@@ -1278,7 +1268,6 @@ set_estimation_step <- function(model, method, interaction=TRUE, options=list(),
 #' Initial estimate for absorption rate is set to
 #' the previous rate if available, otherwise it is set to the time of first observation/2.
 #' 
-#' 
 #' @param model (Model) Model to set or change to use first order absorption rate
 #'  
 #' @return (Model) Reference to same model
@@ -1287,6 +1276,7 @@ set_estimation_step <- function(model, method, interaction=TRUE, options=list(),
 #' set_bolus_order_absorption
 #' 
 #' set_zero_order_absorption
+#' 
 #' 
 #' @export
 set_first_order_absorption <- function(model) {
@@ -1299,7 +1289,6 @@ set_first_order_absorption <- function(model) {
 #' @description
 #' Sets elimination to first order
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (Model) Reference to same model
@@ -1308,6 +1297,7 @@ set_first_order_absorption <- function(model) {
 #' set_zero_order_elimination
 #' 
 #' set_michaelis_menten_elimination
+#' 
 #' 
 #' @export
 set_first_order_elimination <- function(model) {
@@ -1322,7 +1312,6 @@ set_first_order_elimination <- function(model) {
 #' 
 #' Initial variance for new etas is 0.09.
 #' 
-#' 
 #' @param model (Model) Pharmpy model to apply IIV on epsilons.
 #' @param list_of_eps (str, vector) Name/names of epsilons to multiply with exponential etas. If NULL, all epsilons will
 #'  be chosen. NULL is default.
@@ -1335,6 +1324,7 @@ set_first_order_elimination <- function(model) {
 #' @seealso
 #' set_power_on_ruv
 #' 
+#' 
 #' @export
 set_iiv_on_ruv <- function(model, list_of_eps=NULL, same_eta=TRUE, eta_names=NULL) {
     return(pharmpy$modeling$set_iiv_on_ruv(model, list_of_eps, same_eta, eta_names))
@@ -1345,7 +1335,6 @@ set_iiv_on_ruv <- function(model, list_of_eps=NULL, same_eta=TRUE, eta_names=NUL
 #' 
 #' @description
 #' Set initial estimates
-#' 
 #' 
 #' @param model (Model) Pharmpy model
 #' @param inits (list) A list of parameter init for parameters to change
@@ -1367,7 +1356,6 @@ set_initial_estimates <- function(model, inits) {
 #' Initial estimate for lag time is set the
 #' previous lag time if available, otherwise it is set to the time of first observation/2.
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (Model) Reference to same model
@@ -1376,6 +1364,7 @@ set_initial_estimates <- function(model, inits) {
 #' set_transit_compartments
 #' 
 #' remove_lag_time
+#' 
 #' 
 #' @export
 set_lag_time <- function(model) {
@@ -1390,7 +1379,6 @@ set_lag_time <- function(model) {
 #' 
 #' Initial estimate for CLMM is set to CL and KM is set to :math:`2*max(DV)`.
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (Model) Reference to the same model
@@ -1399,6 +1387,7 @@ set_lag_time <- function(model) {
 #' set_first_order_elimination
 #' 
 #' set_zero_order_elimination
+#' 
 #' 
 #' @export
 set_michaelis_menten_elimination <- function(model) {
@@ -1413,7 +1402,6 @@ set_michaelis_menten_elimination <- function(model) {
 #' 
 #' Initial estimate for CLMM is set to CL/2 and KM is set to :math:`2*max(DV)`.
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (Model) Reference to the same model
@@ -1425,6 +1413,7 @@ set_michaelis_menten_elimination <- function(model) {
 #' 
 #' set_michaelis_menten_elimination
 #' 
+#' 
 #' @export
 set_mixed_mm_fo_elimination <- function(model) {
     return(pharmpy$modeling$set_mixed_mm_fo_elimination(model))
@@ -1435,7 +1424,6 @@ set_mixed_mm_fo_elimination <- function(model) {
 #' 
 #' @description
 #' Set name of model object
-#' 
 #' 
 #' @param model (Model) Pharmpy model
 #' @param new_name (str) New name of model
@@ -1472,7 +1460,6 @@ set_name <- function(model, new_name) {
 #' | LSODI                  | ADVAN9           |
 #' +------------------------+------------------+
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #' @param solver (str) Solver to use or NULL for no preference
 #'  
@@ -1490,7 +1477,6 @@ set_ode_solver <- function(model, solver) {
 #' @description
 #' Sets the number of peripheral compartments to a specified number.
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #' @param n (integer) Number of transit compartments
 #'  
@@ -1500,6 +1486,7 @@ set_ode_solver <- function(model, solver) {
 #' add_peripheral_compartment
 #' 
 #' remove_peripheral_compartment
+#' 
 #' 
 #' @export
 set_peripheral_compartments <- function(model, n) {
@@ -1515,7 +1502,6 @@ set_peripheral_compartments <- function(model, n) {
 #' Initial estimates for new thetas are 1 if the error
 #' model is proportional, otherwise they are 0.1.
 #' 
-#' 
 #' @param model (Model) Pharmpy model to create block effect on.
 #' @param list_of_eps (str, vector) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
 #'  NULL is default.
@@ -1524,6 +1510,7 @@ set_peripheral_compartments <- function(model, n) {
 #' 
 #' @seealso
 #' set_iiv_on_ruv
+#' 
 #' 
 #' @export
 set_power_on_ruv <- function(model, list_of_eps=NULL) {
@@ -1546,7 +1533,6 @@ set_power_on_ruv <- function(model, list_of_eps=NULL) {
 #' | :math:`log(y)`         | :math:`log(f) + epsilon_1`           |
 #' +------------------------+----------------------------------------+
 #' 
-#' 
 #' @param model (Model) Set error model for this model
 #' @param data_trans (str or expression) A data transformation expression or NULL (default) to use the transformation
 #'  specified by the model.
@@ -1557,6 +1543,7 @@ set_power_on_ruv <- function(model, list_of_eps=NULL) {
 #' set_additive_error_model : Additive error model
 #' 
 #' set_combined_error_model : Combined error model
+#' 
 #' 
 #' @export
 set_proportional_error_model <- function(model, data_trans=NULL) {
@@ -1573,7 +1560,6 @@ set_proportional_error_model <- function(model, data_trans=NULL) {
 #' absorption rate is set the previous rate if available, otherwise it is set to the time of
 #' first observation/2.
 #' 
-#' 
 #' @param model (Model) Model to set or change absorption rate
 #'  
 #' @return (Model) Reference to same model
@@ -1584,6 +1570,7 @@ set_proportional_error_model <- function(model, data_trans=NULL) {
 #' set_zero_order_absorption
 #' 
 #' set_first_order_absorption
+#' 
 #' 
 #' @export
 set_seq_zo_fo_absorption <- function(model) {
@@ -1599,7 +1586,6 @@ set_seq_zo_fo_absorption <- function(model) {
 #' Initial estimate for absorption rate is
 #' set the previous rate if available, otherwise it is set to the time of first observation/2.
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #' @param n (integer) Number of transit compartments
 #'  
@@ -1607,6 +1593,7 @@ set_seq_zo_fo_absorption <- function(model) {
 #' 
 #' @seealso
 #' set_lag_time
+#' 
 #' 
 #' @export
 set_transit_compartments <- function(model, n) {
@@ -1619,13 +1606,13 @@ set_transit_compartments <- function(model, n) {
 #' @description
 #' Encode error model with one epsilon and W as weight
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (Model) Reference to the same model
 #' 
 #' @seealso
 #' use_thetas_for_error_stdev : Use thetas to estimate error
+#' 
 #' 
 #' @export
 set_weighted_error_model <- function(model) {
@@ -1641,7 +1628,6 @@ set_weighted_error_model <- function(model) {
 #' Initial estimate for absorption rate is set
 #' the previous rate if available, otherwise it is set to the time of first observation/2.
 #' 
-#' 
 #' @param model (Model) Model to set or change to first order absorption rate
 #'  
 #' @return (Model) Reference to the same model
@@ -1650,6 +1636,7 @@ set_weighted_error_model <- function(model) {
 #' set_bolus_order_absorption
 #' 
 #' set_first_order_absorption
+#' 
 #' 
 #' @export
 set_zero_order_absorption <- function(model) {
@@ -1664,7 +1651,6 @@ set_zero_order_absorption <- function(model) {
 #' 
 #' Initial estimate for KM is set to 1% of smallest observation.
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (Model) Reference to same model
@@ -1673,6 +1659,7 @@ set_zero_order_absorption <- function(model) {
 #' set_first_order_elimination
 #' 
 #' set_michaelis_menten_elimination
+#' 
 #' 
 #' @export
 set_zero_order_elimination <- function(model) {
@@ -1685,7 +1672,6 @@ set_zero_order_elimination <- function(model) {
 #' @description
 #' Splits etas following a joint distribution into separate distributions.
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #' @param rvs (str, vector) Name/names of etas to separate. If NULL, all etas that are IIVs and
 #'  non-fixed will become single. NULL is default.
@@ -1694,6 +1680,7 @@ set_zero_order_elimination <- function(model) {
 #' 
 #' @seealso
 #' create_joint_distribution : combine etas into a join distribution
+#' 
 #' 
 #' @export
 split_joint_distribution <- function(model, rvs=NULL) {
@@ -1708,7 +1695,6 @@ split_joint_distribution <- function(model, rvs=NULL) {
 #' 
 #' Summarize different results after fitting a model, includes runtime, ofv,
 #' and parameter estimates (with errors).
-#' 
 #' 
 #' @param models (vector) List of models
 #'  
@@ -1728,7 +1714,6 @@ summarize_modelfit_results <- function(models) {
 #' 
 #' Initial estimate for lambda is 0.1 with bounds (-3, 3).
 #' 
-#' 
 #' @param model (Model) Pharmpy model to apply boxcox transformation to.
 #' @param list_of_etas (str, vector) Name/names of etas to transform. If NULL, all etas will be transformed (default).
 #'  
@@ -1738,6 +1723,7 @@ summarize_modelfit_results <- function(models) {
 #' transform_etas_tdist
 #' 
 #' transform_etas_john_draper
+#' 
 #' 
 #' @export
 transform_etas_boxcox <- function(model, list_of_etas=NULL) {
@@ -1756,7 +1742,6 @@ transform_etas_boxcox <- function(model, list_of_etas=NULL) {
 #' Journal of the Royal Statistical Society. Series C (Applied Statistics),
 #' 29(2), 190-197. doi:10.2307/2986305
 #' 
-#' 
 #' @param model (Model) Pharmpy model to apply John Draper transformation to.
 #' @param list_of_etas (str, vector) Name/names of etas to transform. If NULL, all etas will be transformed (default).
 #'  
@@ -1766,6 +1751,7 @@ transform_etas_boxcox <- function(model, list_of_etas=NULL) {
 #' transform_etas_boxcox
 #' 
 #' transform_etas_tdist
+#' 
 #' 
 #' @export
 transform_etas_john_draper <- function(model, list_of_etas=NULL) {
@@ -1780,7 +1766,6 @@ transform_etas_john_draper <- function(model, list_of_etas=NULL) {
 #' 
 #' Initial estimate for degrees of freedom is 80 with bounds (3, 100).
 #' 
-#' 
 #' @param model (Model) Pharmpy model to apply t distribution transformation to.
 #' @param list_of_etas (str, vector) Name/names of etas to transform. If NULL, all etas will be transformed (default).
 #'  
@@ -1790,6 +1775,7 @@ transform_etas_john_draper <- function(model, list_of_etas=NULL) {
 #' transform_etas_boxcox
 #' 
 #' transform_etas_john_draper
+#' 
 #' 
 #' @export
 transform_etas_tdist <- function(model, list_of_etas=NULL) {
@@ -1803,7 +1789,6 @@ transform_etas_tdist <- function(model, list_of_etas=NULL) {
 #' Unfix parameters
 #' 
 #' Unfix all listed parameters
-#' 
 #' 
 #' @param model (Model) Pharmpy model
 #' @param parameter_names (vector or str) one parameter name or a vector of parameter names
@@ -1819,6 +1804,7 @@ transform_etas_tdist <- function(model, list_of_etas=NULL) {
 #' 
 #' fix_parameters_to : Fixing and setting parameter initial estimates in the same function
 #' 
+#' 
 #' @export
 unfix_parameters <- function(model, parameter_names) {
     return(pharmpy$modeling$unfix_parameters(model, parameter_names))
@@ -1831,7 +1817,6 @@ unfix_parameters <- function(model, parameter_names) {
 #' Unix parameters to
 #' 
 #' Unfix all listed parameters to specified value/values
-#' 
 #' 
 #' @param model (Model) Pharmpy model
 #' @param parameter_names (vector or str) one parameter name or a vector of parameter names
@@ -1855,7 +1840,6 @@ unfix_parameters_to <- function(model, parameter_names, values) {
 #' its modelfit_results. If the model has used initial estimates for
 #' individual estimates these will also be updated. If initial estimates
 #' 
-#' 
 #' @param model (Model) Pharmpy model to update initial estimates
 #' @param force_individual_estimates (logical) Update initial individual estimates even if model din't use them previously.
 #'  
@@ -1876,7 +1860,6 @@ update_inits <- function(model, force_individual_estimates=FALSE) {
 #' Let the code of the underlying source language be updated to reflect
 #' changes in the model object.
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (Model) Reference to the same model object
@@ -1893,13 +1876,13 @@ update_source <- function(model) {
 #' @description
 #' Use thetas to estimate standard deviation of error
 #' 
-#' 
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (Model) Reference to the same model
 #' 
 #' @seealso
 #' set_weighted_error_model : Encode error model with one epsilon and weight
+#' 
 #' 
 #' @export
 use_thetas_for_error_stdev <- function(model) {
@@ -1911,7 +1894,6 @@ use_thetas_for_error_stdev <- function(model) {
 #' 
 #' @description
 #' Write model code to file
-#' 
 #' 
 #' @param model (Model) Pharmpy model
 #' @param path (str) Destination path
