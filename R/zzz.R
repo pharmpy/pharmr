@@ -1,5 +1,4 @@
 on_load_pharmpy <- function() {
-    message("Loading pharmpy")
     check_pharmpy(pharmpy$`__version__`)
 }
 
