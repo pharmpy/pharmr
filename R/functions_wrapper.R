@@ -107,10 +107,8 @@
 #' @param effect (str) Type of covariate effect. May be abbreviated covariate effect (see above) or custom.
 #' @param operation (str, optional) Whether the covariate effect should be added or multiplied (default).
 #'  
+#' @return (Model) Reference to the same model
 #' 
-#'  Model
-#'  Reference to the same model
-#'  
 #' 
 #' @export
 add_covariate_effect <- function(model, parameter, covariate, effect, operation='*') {
@@ -131,12 +129,10 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' @param method (str) estimation method to change to
 #' @param interaction (logical) whether to use interaction or not, default is true
 #' @param options (list) any additional tool specific options. Note that this removes old options
-#' @param idx (int) index of estimation step, default is NULL (adds step at the end)
+#' @param idx (integer) index of estimation step, default is NULL (adds step at the end)
 #'  
+#' @return (Model) Reference to the same model object
 #' 
-#'  Model
-#'  Reference to the same model object
-#'  
 #' @seealso
 #' set_estimation_step
 #' 
@@ -170,10 +166,8 @@ add_estimation_step <- function(model, method, interaction=TRUE, options=NULL, i
 #' @param operation (str, vector, optional) Whether the new IIV should be added or multiplied (default).
 #' @param eta_names (str, vector, optional) Custom name/names of new eta
 #'  
+#' @return (Model) Reference to the same model
 #' 
-#'  Model
-#'  Reference to the same model
-#'  
 #' @seealso
 #' add_iov
 #' 
@@ -196,10 +190,8 @@ add_iiv <- function(model, list_of_parameters, expression, operation='*', eta_na
 #' @param model (Model) Pharmpy model
 #' @param name (str) Name of individual/pk parameter
 #'  
+#' @return (Model) Reference to same model
 #' 
-#'  Model
-#'  Reference to same model
-#'  
 #' 
 #' @export
 add_individual_parameter <- function(model, name) {
@@ -222,10 +214,8 @@ add_individual_parameter <- function(model, name) {
 #' @param eta_names (str, vector) Custom names of new etas. Must be equal to the number of input etas times the number of
 #'  categories for occasion.
 #'  
+#' @return (Model) Reference to the same model
 #' 
-#'  Model
-#'  Reference to the same model
-#'  
 #' @seealso
 #' add_iiv
 #' 
@@ -264,10 +254,8 @@ add_iov <- function(model, occ, list_of_parameters=NULL, eta_names=NULL) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (Model) Reference to same model
 #' 
-#'  Model
-#'  Reference to same model
-#'  
 #' @seealso
 #' set_peripheral_compartment
 #' 
@@ -289,10 +277,8 @@ add_peripheral_compartment <- function(model) {
 #' @param sd (logical) Calculate shrinkage on the standard deviation scale (default is to calculate on the
 #'  variance scale)
 #'  
+#' @return (Series) Shrinkage for each eta
 #' 
-#'  Series
-#'  Shrinkage for each eta
-#'  
 #' @seealso
 #' calculate_individual_shrinkage
 #' 
@@ -321,12 +307,10 @@ calculate_eta_shrinkage <- function(model, sd=FALSE) {
 #' @param model (Model) A previously estimated model
 #' @param exprs (str, sympy expression or iterable of str or sympy expressions) Expressions or equations for parameters of interest. If equations are used
 #'  the names of the left hand sides will be used as the names of the parameters.
-#' @param rng (Generator or int) Random number generator or int seed
+#' @param rng (Generator or integer) Random number generator or integer seed
 #'  
+#' @return (data.frame) A DataFrame of statistics indexed on parameter and covariate value.
 #' 
-#'  pd.DataFrame
-#'  A DataFrame of statistics indexed on parameter and covariate value.
-#'  
 #' 
 #' @export
 calculate_individual_parameter_statistics <- function(model, exprs, rng=NULL) {
@@ -344,10 +328,8 @@ calculate_individual_parameter_statistics <- function(model, exprs, rng=NULL) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (DataFrame) Shrinkage for each eta and individual
 #' 
-#'  DataFrame
-#'  Shrinkage for each eta and individual
-#'  
 #' @seealso
 #' calculate_eta_shrinkage
 #' 
@@ -368,12 +350,10 @@ calculate_individual_shrinkage <- function(model) {
 #' 
 #' 
 #' @param model (Model) A previously estimated model
-#' @param rng (Generator or int) Random number generator or seed
+#' @param rng (Generator or integer) Random number generator or seed
 #'  
+#' @return (data.frame) A DataFrame of statistics indexed on parameter and covariate value.
 #' 
-#'  pd.DataFrame
-#'  A DataFrame of statistics indexed on parameter and covariate value.
-#'  
 #' @seealso
 #' calculate_individual_parameter_statistics : Calculation of statistics for arbitrary parameters
 #' 
@@ -392,10 +372,8 @@ calculate_pk_parameters_statistics <- function(model, rng=NULL) {
 #' @param model (Model) Model to convert
 #' @param to_format (str) Name of format to convert into. Currently supported 'nlmixr'
 #'  
+#' @return (Model) New model object with new underlying model format
 #' 
-#'  Model
-#'  New model object with new underlying model format
-#'  
 #' 
 #' @export
 convert_model <- function(model, to_format) {
@@ -412,10 +390,8 @@ convert_model <- function(model, to_format) {
 #' @param model (Model) Pharmpy model
 #' @param name (str) Optional new name of model
 #'  
+#' @return (Model) A copy of the input model
 #' 
-#'  Model
-#'  A copy of the input model
-#'  
 #' 
 #' @export
 copy_model <- function(model, name=NULL) {
@@ -438,10 +414,8 @@ copy_model <- function(model, name=NULL) {
 #' @param rvs (vector) Sequence of etas or names of etas to combine. If NULL, all etas that are IIVs and
 #'  non-fixed will be used (full block). NULL is default.
 #'  
+#' @return (Model) Reference to the same model
 #' 
-#'  Model
-#'  Reference to the same model
-#'  
 #' @seealso
 #' split_joint_distribution : split etas into separate distributions
 #' 
@@ -461,9 +435,8 @@ create_joint_distribution <- function(model, rvs=NULL) {
 #'  kwargs
 #'  Arguments to pass to tool specific create results function
 #'  
+#' @return (Results object for tool) 
 #' 
-#'  Results object for tool
-#'  
 #' @seealso
 #' read_results
 #' 
@@ -482,11 +455,11 @@ create_results <- function(path) {
 #' This function can be used to create a default new random number generator.
 #' 
 #' 
-#' @param seed (int or rng) Seed for the random number generator or NULL (default) for a randomized seed. If seed
+#' @param seed (integer or rng) Seed for the random number generator or NULL (default) for a randomized seed. If seed
 #'  is generator it will be passed through.
 #'  
+#' @return (Generator : Initialized numpy random number generator object) 
 #' 
-#' @return Generator (Initialized numpy random number generator object) 
 #' 
 #' @export
 create_rng <- function(seed) {
@@ -508,10 +481,8 @@ create_rng <- function(seed) {
 #' @param model (Model) Pharmpy model
 #' @param expression (str or sympy expression) Expression to evaluate
 #'  
+#' @return (pd.Series) A series of one evaluated value for each data record
 #' 
-#'  pd.Series
-#'  A series of one evaluated value for each data record
-#'  
 #' 
 #' @export
 evaluate_expression <- function(model, expression) {
@@ -527,10 +498,8 @@ evaluate_expression <- function(model, expression) {
 #' 
 #' @param models (vector) List of models or one single model
 #'  
+#' @return (Model) Reference to same model
 #' 
-#'  Model
-#'  Reference to same model
-#'  
 #' @seealso
 #' run_tool
 #' 
@@ -551,10 +520,8 @@ fit <- function(models) {
 #' @param model (Model) Pharmpy model
 #' @param parameter_names (vector or str) one parameter name or a vector of parameter names
 #'  
+#' @return (Model) Reference to the same model object
 #' 
-#'  Model
-#'  Reference to the same model object
-#'  
 #' @seealso
 #' fix_parameters_to : Fixing and setting parameter initial estimates in the same function
 #' 
@@ -580,12 +547,10 @@ fix_parameters <- function(model, parameter_names) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param parameter_names (vector or str) one parameter name or a vector of parameter names
-#' @param values (vector or float) one value or a vector of values (must be equal to number of parameter_names)
+#' @param values (vector or numeric) one value or a vector of values (must be equal to number of parameter_names)
 #'  
+#' @return (Model) Reference to the same model object
 #' 
-#'  Model
-#'  Reference to the same model object
-#'  
 #' @seealso
 #' fix_parameters : Fix parameters
 #' 
@@ -613,10 +578,8 @@ fix_parameters_to <- function(model, parameter_names, values) {
 #' @param model (Model) Pharmpy model
 #' @param strings (logical) Return strings instead of symbols? FALSE (default) will give symbols
 #'  
+#' @return (vector) Covariate symbols or names
 #' 
-#'  vector
-#'  Covariate symbols or names
-#'  
 #' 
 #' @export
 get_model_covariates <- function(model, strings=FALSE) {
@@ -632,10 +595,8 @@ get_model_covariates <- function(model, strings=FALSE) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (integer) Number of individuals in the model dataset
 #' 
-#'  int
-#'  Number of individuals in the model dataset
-#'  
 #' @note
 #' For NONMEM models this is the number of individuals of the active dataset, i.e. after filteringof IGNORE and ACCEPT and removal of individuals with no observations.
 #' @seealso
@@ -659,10 +620,8 @@ get_number_of_individuals <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (integer) Number of observations in the model dataset
 #' 
-#'  int
-#'  Number of observations in the model dataset
-#'  
 #' @note
 #' For NONMEM models this is the number of observations of the active dataset, i.e. after filteringof IGNORE and ACCEPT and removal of individuals with no observations.
 #' @seealso
@@ -686,10 +645,8 @@ get_number_of_observations <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (pd.Series) Number of observations in the model dataset
 #' 
-#'  pd.Series
-#'  Number of observations in the model dataset
-#'  
 #' @note
 #' For NONMEM models this is the individuals and number of observations of the active dataset, i.e.after filtering of IGNORE and ACCEPT and removal of individuals with no observations.
 #' @seealso
@@ -713,10 +670,8 @@ get_number_of_observations_per_individual <- function(model) {
 #' 
 #' @param model (Model) The model to check
 #'  
+#' @return (logical) TRUE if the model has an additive error model and FALSE otherwise
 #' 
-#'  logical
-#'  TRUE if the model has an additive error model and FALSE otherwise
-#'  
 #' @seealso
 #' has_proportional_error_model : Check if a model has a proportional error model
 #' 
@@ -736,10 +691,8 @@ has_additive_error_model <- function(model) {
 #' 
 #' @param model (Model) The model to check
 #'  
+#' @return (logical) TRUE if the model has a combined error model and FALSE otherwise
 #' 
-#'  logical
-#'  TRUE if the model has a combined error model and FALSE otherwise
-#'  
 #' @seealso
 #' has_additive_error_model : Check if a model has an additive error model
 #' 
@@ -759,10 +712,8 @@ has_combined_error_model <- function(model) {
 #' 
 #' @param model (Model) The model to check
 #'  
+#' @return (logical) TRUE if the model has a proportional error model and FALSE otherwise
 #' 
-#'  logical
-#'  TRUE if the model has a proportional error model and FALSE otherwise
-#'  
 #' @seealso
 #' has_additive_error_model : Check if a model has an additive error model
 #' 
@@ -784,10 +735,8 @@ has_proportional_error_model <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (Model) Reference to same model
 #' 
-#'  Model
-#'  Reference to same model
-#'  
 #' 
 #' @export
 has_zero_order_absorption <- function(model) {
@@ -805,10 +754,8 @@ has_zero_order_absorption <- function(model) {
 #' 
 #' @param name (str) Name of the model. Currently available model is "pheno"
 #'  
+#' @return (Model) Loaded model object
 #' 
-#'  Model
-#'  Loaded model object
-#'  
 #' 
 #' @export
 load_example_model <- function(name) {
@@ -824,12 +771,8 @@ load_example_model <- function(name) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (pd.Dataframe) Dataframe over the individuals with a `dofv` column containing the raw predicted delta-OFV and an `influential` column with a logicalean to tell whether the individual is influential or not.
 #' 
-#'  pd.Dataframe
-#'  Dataframe over the individuals with a `dofv` column containing the raw predicted
-#'  delta-OFV and an `influential` column with a logicalean to tell whether the individual is
-#'  influential or not.
-#'  
 #' @seealso
 #' predict_influential_outliers
 #' 
@@ -849,11 +792,8 @@ predict_influential_individuals <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (pd.Dataframe) Dataframe over the individuals with a `outliers` and `dofv` columns containing the raw predictions and `influential`, `outlier` and `influential_outlier` logicalean columns.
 #' 
-#'  pd.Dataframe
-#'  Dataframe over the individuals with a `outliers` and `dofv` columns containing the raw
-#'  predictions and `influential`, `outlier` and `influential_outlier` logicalean columns.
-#'  
 #' @seealso
 #' predict_influential_individuals
 #' 
@@ -875,12 +815,8 @@ predict_influential_outliers <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (pd.Dataframe) Dataframe over the individuals with a `residual` column containing the raw predicted residuals and a `outlier` column with a logicalean to tell whether the individual is an outlier or not.
 #' 
-#'  pd.Dataframe
-#'  Dataframe over the individuals with a `residual` column containing the raw predicted
-#'  residuals and a `outlier` column with a logicalean to tell whether the individual is
-#'  an outlier or not.
-#'  
 #' @seealso
 #' predict_influential_individuals
 #' 
@@ -900,10 +836,8 @@ predict_outliers <- function(model) {
 #' 
 #' @param path (str or Path) Path to model
 #'  
+#' @return (Model) Read model object
 #' 
-#'  Model
-#'  Read model object
-#'  
 #' @seealso
 #' read_model_from_string : Read model from string
 #' 
@@ -921,10 +855,8 @@ read_model <- function(path) {
 #' 
 #' @param code (str) Model code to read
 #'  
+#' @return (Model) Read model object
 #' 
-#'  Model
-#'  Read model object
-#'  
 #' @seealso
 #' read_model : Read model from file
 #' 
@@ -942,9 +874,8 @@ read_model_from_string <- function(code) {
 #' 
 #' @param path (str, Path) Path to results file
 #'  
+#' @return (Results object for tool) 
 #' 
-#'  Results object for tool
-#'  
 #' @seealso
 #' create_results
 #' 
@@ -962,10 +893,8 @@ read_results <- function(path) {
 #' 
 #' @param model (Model) Remove error model for this model
 #'  
+#' @return (Model) Reference to the same model object
 #' 
-#'  Model
-#'  Reference to the same model object
-#'  
 #' 
 #' @export
 remove_error_model <- function(model) {
@@ -980,12 +909,10 @@ remove_error_model <- function(model) {
 #' 
 #' 
 #' @param model (Model) Pharmpy model
-#' @param idx (int) index of estimation step to remove
+#' @param idx (integer) index of estimation step to remove
 #'  
+#' @return (Model) Reference to the same model object
 #' 
-#'  Model
-#'  Reference to the same model object
-#'  
 #' @seealso
 #' add_estimation_step
 #' 
@@ -1007,10 +934,8 @@ remove_estimation_step <- function(model, idx) {
 #' @param to_remove (str, vector) Name/names of etas and/or name/names of individual parameters to remove.
 #'  If NULL, all etas that are IIVs will be removed. NULL is default.
 #'  
+#' @return (Model) Reference to the same model
 #' 
-#'  Model
-#'  Reference to the same model
-#'  
 #' @seealso
 #' remove_iov
 #' 
@@ -1032,10 +957,8 @@ remove_iiv <- function(model, to_remove=NULL) {
 #' 
 #' @param model (Model) Pharmpy model to remove IOV from.
 #'  
+#' @return (Model) Reference to the same model
 #' 
-#'  Model
-#'  Reference to the same model
-#'  
 #' @seealso
 #' add_iiv
 #' 
@@ -1057,10 +980,8 @@ remove_iov <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (Model) Reference to same model
 #' 
-#'  Model
-#'  Reference to same model
-#'  
 #' @seealso
 #' set_transit_compartments
 #' 
@@ -1091,10 +1012,8 @@ remove_lag_time <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (Model) Reference to same model
 #' 
-#'  Model
-#'  Reference to same model
-#'  
 #' @seealso
 #' set_peripheral_compartment
 #' 
@@ -1118,9 +1037,8 @@ remove_peripheral_compartment <- function(model) {
 #'  kwargs
 #'  Arguments to pass to tool
 #'  
+#' @return (Results object for tool) 
 #' 
-#'  Results object for tool
-#'  
 #' 
 #' @export
 run_tool <- function(name) {
@@ -1136,12 +1054,11 @@ run_tool <- function(name) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param parameters (vector) A vector of a subset of individual parameters to sample. Default is NULL, which means all.
-#' @param samples_per_id (int) Number of samples per individual
-#' @param rng (rng or int) Random number generator or seed
+#' @param samples_per_id (integer) Number of samples per individual
+#' @param rng (rng or integer) Random number generator or seed
 #'  
+#' @return (data.frame : Pool of samples in a DataFrame) 
 #' 
-#'  pd.DataFrame : Pool of samples in a DataFrame
-#'  
 #' @seealso
 #' sample_parameters_from_covariance_matrix : Sample parameter vectors using the
 #' 
@@ -1166,16 +1083,14 @@ sample_individual_estimates <- function(model, parameters=NULL, samples_per_id=1
 #' @param model (Model) Input model
 #' @param modelfit_results (ModelfitResults) Alternative results object. Default is to use the one in model
 #' @param parameters (vector) Use to only sample a subset of the parameters. NULL means all
-#' @param force_posdef_samples (int) Set to how many iterations to do before forcing all samples to be positive definite. NULL is
+#' @param force_posdef_samples (integer) Set to how many iterations to do before forcing all samples to be positive definite. NULL is
 #'  default and means never and 0 means always
 #' @param force_posdef_covmatrix (logical) Set to TRUE to force the input covariance matrix to be positive definite
-#' @param n (int) Number of samples
+#' @param n (integer) Number of samples
 #' @param rng (Generator) Random number generator
 #'  
+#' @return (DataFrame) A dataframe with one sample per row
 #' 
-#'  DataFrame
-#'  A dataframe with one sample per row
-#'  
 #' @seealso
 #' sample_parameters_uniformly : Sample parameter vectors using uniform distribution
 #' 
@@ -1197,16 +1112,15 @@ sample_parameters_from_covariance_matrix <- function(model, modelfit_results=NUL
 #' 
 #' 
 #' @param model (Model) Pharmpy model
-#' @param fraction (float) Fraction of estimate value to use for distribution bounds
+#' @param fraction (numeric) Fraction of estimate value to use for distribution bounds
 #' @param parameters (pd.Series) Names of parameters to use. Default is to use all parameters in the model.
-#' @param force_posdef_samples (int) Number of samples to reject before forcing variability parameters to give
+#' @param force_posdef_samples (integer) Number of samples to reject before forcing variability parameters to give
 #'  positive definite covariance matrices.
-#' @param n (int) Number of samples
-#' @param rng (int or rng) Random number generator or seed
+#' @param n (integer) Number of samples
+#' @param rng (integer or rng) Random number generator or seed
 #'  
+#' @return (data.frame : samples) 
 #' 
-#'  pd.DataFrame : samples
-#'  
 #' @seealso
 #' sample_parameters_from_covariance_matrix : Sample parameter vectors using the
 #' 
@@ -1240,13 +1154,11 @@ sample_parameters_uniformly <- function(model, fraction=0.1, parameters=NULL, fo
 #' @param model (Model) Set error model for this model
 #' @param data_trans (str or expression) A data transformation expression or NULL (default) to use the transformation
 #'  specified by the model. Series expansion will be used for approximation.
-#' @param series_terms (int) Number of terms to use for the series expansion approximation for data
+#' @param series_terms (integer) Number of terms to use for the series expansion approximation for data
 #'  transformation.
 #'  
+#' @return (Model) Reference to the same model object
 #' 
-#'  Model
-#'  Reference to the same model object
-#'  
 #' @seealso
 #' set_proportional_error_model : Proportional error model
 #' 
@@ -1266,10 +1178,8 @@ set_additive_error_model <- function(model, data_trans=NULL, series_terms=2) {
 #' 
 #' @param model (Model) Model to set or change absorption rate
 #'  
+#' @return (Model) Reference to same model
 #' 
-#'  Model
-#'  Reference to same model
-#'  
 #' @seealso
 #' set_zero_order_absorption
 #' 
@@ -1302,10 +1212,8 @@ set_bolus_absorption <- function(model) {
 #' @param data_trans (str or expression) A data transformation expression or NULL (default) to use the transformation
 #'  specified by the model.
 #'  
+#' @return (Model) Reference to the same model
 #' 
-#'  Model
-#'  Reference to the same model
-#'  
 #' @seealso
 #' set_additive_error_model : Additive error model
 #' 
@@ -1325,10 +1233,8 @@ set_combined_error_model <- function(model, data_trans=NULL) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (Model) Reference to the same model
 #' 
-#'  Model
-#'  Reference to the same model
-#'  
 #' 
 #' @export
 set_dtbs_error_model <- function(model) {
@@ -1349,12 +1255,10 @@ set_dtbs_error_model <- function(model) {
 #' @param method (str) estimation method to change to
 #' @param interaction (logical) whether to use interaction or not, default is true
 #' @param options (list) any additional options. Note that this removes old options
-#' @param est_idx (int) index of estimation step, default is 0 (first estimation step)
+#' @param est_idx (integer) index of estimation step, default is 0 (first estimation step)
 #'  
+#' @return (Model) Reference to the same model object
 #' 
-#'  Model
-#'  Reference to the same model object
-#'  
 #' @seealso
 #' add_estimation_step
 #' 
@@ -1377,10 +1281,8 @@ set_estimation_step <- function(model, method, interaction=TRUE, options=list(),
 #' 
 #' @param model (Model) Model to set or change to use first order absorption rate
 #'  
+#' @return (Model) Reference to same model
 #' 
-#'  Model
-#'  Reference to same model
-#'  
 #' @seealso
 #' set_bolus_order_absorption
 #' 
@@ -1400,10 +1302,8 @@ set_first_order_absorption <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (Model) Reference to same model
 #' 
-#'  Model
-#'  Reference to same model
-#'  
 #' @seealso
 #' set_zero_order_elimination
 #' 
@@ -1430,10 +1330,8 @@ set_first_order_elimination <- function(model) {
 #'  should be created for each RUV. TRUE is default.
 #' @param eta_names (str, vector) Custom names of new etas. Must be equal to the number epsilons or 1 if same eta.
 #'  
+#' @return (Model) Reference to same model
 #' 
-#'  Model
-#'  Reference to same model
-#'  
 #' @seealso
 #' set_power_on_ruv
 #' 
@@ -1452,10 +1350,8 @@ set_iiv_on_ruv <- function(model, list_of_eps=NULL, same_eta=TRUE, eta_names=NUL
 #' @param model (Model) Pharmpy model
 #' @param inits (list) A list of parameter init for parameters to change
 #'  
+#' @return (Model) Reference to the same model object
 #' 
-#'  Model
-#'  Reference to the same model object
-#'  
 #' 
 #' @export
 set_initial_estimates <- function(model, inits) {
@@ -1474,10 +1370,8 @@ set_initial_estimates <- function(model, inits) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (Model) Reference to same model
 #' 
-#'  Model
-#'  Reference to same model
-#'  
 #' @seealso
 #' set_transit_compartments
 #' 
@@ -1499,10 +1393,8 @@ set_lag_time <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (Model) Reference to the same model
 #' 
-#'  Model
-#'  Reference to the same model
-#'  
 #' @seealso
 #' set_first_order_elimination
 #' 
@@ -1524,10 +1416,8 @@ set_michaelis_menten_elimination <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (Model) Reference to the same model
 #' 
-#'  Model
-#'  Reference to the same model
-#'  
 #' @seealso
 #' set_first_order_elimination
 #' 
@@ -1550,10 +1440,8 @@ set_mixed_mm_fo_elimination <- function(model) {
 #' @param model (Model) Pharmpy model
 #' @param new_name (str) New name of model
 #'  
+#' @return (Model) Reference to the same model object
 #' 
-#'  Model
-#'  Reference to the same model object
-#'  
 #' 
 #' @export
 set_name <- function(model, new_name) {
@@ -1588,10 +1476,8 @@ set_name <- function(model, new_name) {
 #' @param model (Model) Pharmpy model
 #' @param solver (str) Solver to use or NULL for no preference
 #'  
+#' @return (Model) Reference to same model
 #' 
-#'  Model
-#'  Reference to same model
-#'  
 #' 
 #' @export
 set_ode_solver <- function(model, solver) {
@@ -1606,12 +1492,10 @@ set_ode_solver <- function(model, solver) {
 #' 
 #' 
 #' @param model (Model) Pharmpy model
-#' @param n (int) Number of transit compartments
+#' @param n (integer) Number of transit compartments
 #'  
+#' @return (Model) Reference to same model
 #' 
-#'  Model
-#'  Reference to same model
-#'  
 #' @seealso
 #' add_peripheral_compartment
 #' 
@@ -1636,10 +1520,8 @@ set_peripheral_compartments <- function(model, n) {
 #' @param list_of_eps (str, vector) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
 #'  NULL is default.
 #'  
+#' @return (Model) Reference to the same model
 #' 
-#'  Model
-#'  Reference to the same model
-#'  
 #' @seealso
 #' set_iiv_on_ruv
 #' 
@@ -1669,10 +1551,8 @@ set_power_on_ruv <- function(model, list_of_eps=NULL) {
 #' @param data_trans (str or expression) A data transformation expression or NULL (default) to use the transformation
 #'  specified by the model.
 #'  
+#' @return (Model) Reference to the same model object
 #' 
-#'  Model
-#'  Reference to the same model object
-#'  
 #' @seealso
 #' set_additive_error_model : Additive error model
 #' 
@@ -1696,10 +1576,8 @@ set_proportional_error_model <- function(model, data_trans=NULL) {
 #' 
 #' @param model (Model) Model to set or change absorption rate
 #'  
+#' @return (Model) Reference to same model
 #' 
-#'  Model
-#'  Reference to same model
-#'  
 #' @seealso
 #' set_bolus_order_absorption
 #' 
@@ -1723,12 +1601,10 @@ set_seq_zo_fo_absorption <- function(model) {
 #' 
 #' 
 #' @param model (Model) Pharmpy model
-#' @param n (int) Number of transit compartments
+#' @param n (integer) Number of transit compartments
 #'  
+#' @return (Model) Reference to same model
 #' 
-#'  Model
-#'  Reference to same model
-#'  
 #' @seealso
 #' set_lag_time
 #' 
@@ -1746,10 +1622,8 @@ set_transit_compartments <- function(model, n) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (Model) Reference to the same model
 #' 
-#'  Model
-#'  Reference to the same model
-#'  
 #' @seealso
 #' use_thetas_for_error_stdev : Use thetas to estimate error
 #' 
@@ -1770,10 +1644,8 @@ set_weighted_error_model <- function(model) {
 #' 
 #' @param model (Model) Model to set or change to first order absorption rate
 #'  
+#' @return (Model) Reference to the same model
 #' 
-#'  Model
-#'  Reference to the same model
-#'  
 #' @seealso
 #' set_bolus_order_absorption
 #' 
@@ -1795,10 +1667,8 @@ set_zero_order_absorption <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (Model) Reference to same model
 #' 
-#'  Model
-#'  Reference to same model
-#'  
 #' @seealso
 #' set_first_order_elimination
 #' 
@@ -1820,10 +1690,8 @@ set_zero_order_elimination <- function(model) {
 #' @param rvs (str, vector) Name/names of etas to separate. If NULL, all etas that are IIVs and
 #'  non-fixed will become single. NULL is default.
 #'  
+#' @return (Model) Reference to the same model
 #' 
-#'  Model
-#'  Reference to the same model
-#'  
 #' @seealso
 #' create_joint_distribution : combine etas into a join distribution
 #' 
@@ -1844,10 +1712,8 @@ split_joint_distribution <- function(model, rvs=NULL) {
 #' 
 #' @param models (vector) List of models
 #'  
+#' @return (data.frame) A DataFrame of modelfit results, one row per model.
 #' 
-#'  pd.DataFrame
-#'  A DataFrame of modelfit results, one row per model.
-#'  
 #' 
 #' @export
 summarize_modelfit_results <- function(models) {
@@ -1866,10 +1732,8 @@ summarize_modelfit_results <- function(models) {
 #' @param model (Model) Pharmpy model to apply boxcox transformation to.
 #' @param list_of_etas (str, vector) Name/names of etas to transform. If NULL, all etas will be transformed (default).
 #'  
+#' @return (Model) Reference to the same model
 #' 
-#'  Model
-#'  Reference to the same model
-#'  
 #' @seealso
 #' transform_etas_tdist
 #' 
@@ -1896,10 +1760,8 @@ transform_etas_boxcox <- function(model, list_of_etas=NULL) {
 #' @param model (Model) Pharmpy model to apply John Draper transformation to.
 #' @param list_of_etas (str, vector) Name/names of etas to transform. If NULL, all etas will be transformed (default).
 #'  
+#' @return (Model) Reference to the same model
 #' 
-#'  Model
-#'  Reference to the same model
-#'  
 #' @seealso
 #' transform_etas_boxcox
 #' 
@@ -1922,10 +1784,8 @@ transform_etas_john_draper <- function(model, list_of_etas=NULL) {
 #' @param model (Model) Pharmpy model to apply t distribution transformation to.
 #' @param list_of_etas (str, vector) Name/names of etas to transform. If NULL, all etas will be transformed (default).
 #'  
+#' @return (Model) Reference to the same model
 #' 
-#'  Model
-#'  Reference to the same model
-#'  
 #' @seealso
 #' transform_etas_boxcox
 #' 
@@ -1948,10 +1808,8 @@ transform_etas_tdist <- function(model, list_of_etas=NULL) {
 #' @param model (Model) Pharmpy model
 #' @param parameter_names (vector or str) one parameter name or a vector of parameter names
 #'  
+#' @return (Model) Reference to the same model object
 #' 
-#'  Model
-#'  Reference to the same model object
-#'  
 #' @seealso
 #' unfix_paramaters_to : Unfixing parameters and setting a new initial estimate in the same
 #' 
@@ -1977,11 +1835,10 @@ unfix_parameters <- function(model, parameter_names) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param parameter_names (vector or str) one parameter name or a vector of parameter names
-#' @param values (vector or float) one value or a vector of values (must be equal to number of parameter_names)
+#' @param values (vector or numeric) one value or a vector of values (must be equal to number of parameter_names)
 #'  
+#' @return (Model) Reference to the same model object
 #' 
-#'  Model
-#'  Reference to the same model object
 #' 
 #' @export
 unfix_parameters_to <- function(model, parameter_names, values) {
@@ -2002,10 +1859,8 @@ unfix_parameters_to <- function(model, parameter_names, values) {
 #' @param model (Model) Pharmpy model to update initial estimates
 #' @param force_individual_estimates (logical) Update initial individual estimates even if model din't use them previously.
 #'  
+#' @return (Model) Reference to the same model
 #' 
-#'  Model
-#'  Reference to the same model
-#'  
 #' 
 #' @export
 update_inits <- function(model, force_individual_estimates=FALSE) {
@@ -2024,10 +1879,8 @@ update_inits <- function(model, force_individual_estimates=FALSE) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (Model) Reference to the same model object
 #' 
-#'  Model
-#'  Reference to the same model object
-#'  
 #' 
 #' @export
 update_source <- function(model) {
@@ -2043,10 +1896,8 @@ update_source <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
+#' @return (Model) Reference to the same model
 #' 
-#'  Model
-#'  Reference to the same model
-#'  
 #' @seealso
 #' set_weighted_error_model : Encode error model with one epsilon and weight
 #' 
@@ -2066,10 +1917,8 @@ use_thetas_for_error_stdev <- function(model) {
 #' @param path (str) Destination path
 #' @param force (logical) Force overwrite, default is TRUE
 #'  
+#' @return (Model) Reference to the same model object
 #' 
-#'  Model
-#'  Reference to the same model object
-#'  
 #' 
 #' @export
 write_model <- function(model, path='', force=TRUE) {

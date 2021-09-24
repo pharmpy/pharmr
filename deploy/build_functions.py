@@ -71,9 +71,9 @@ def create_r_doc(func):
         doc_str += f'{py_to_r_str(row)}\n'
 
     if 'params' in doc_dict.keys():
-        doc_str += create_r_params_or_returns(doc_dict['params'], 'param')
+        doc_str += create_r_params(doc_dict['params'])
     if 'returns' in doc_dict.keys():
-        doc_str += create_r_params_or_returns(doc_dict['returns'], 'return')
+        doc_str += create_r_returns(doc_dict['returns']) + '\n\n'
     if 'notes' in doc_dict.keys():
         doc_str += '@note\n'
         doc_str += ''.join(doc_dict['notes']) + '\n'
@@ -89,15 +89,26 @@ def create_r_doc(func):
     return r_doc 
 
 
-def create_r_params_or_returns(doc_list, doc_type):
+def create_r_params(doc_list):
     doc_str = '\n'
     for row in doc_list:
         type_declare_pattern = re.compile(r'([\w0-9]+) : ([\w0-9]+)')
         if type_declare_pattern.match(row):
             type_declare = row.split(' : ')
-            doc_str += f'@{doc_type} {type_declare[0]} ({py_to_r_str(type_declare[1])})'
+            doc_str += f'@param {type_declare[0]} ({py_to_r_str(type_declare[1])})'
         else:
             doc_str += f' {py_to_r_str(row)}\n'
+    return doc_str
+
+
+def create_r_returns(doc_list):
+    doc_list_trim = list(filter(None, doc_list))
+    type_py = doc_list_trim[0]
+    type_r = py_to_r_str(type_py)
+
+    doc_str = f'@return ({type_r}) '
+    doc_str += ' '.join(py_to_r_str(row) for row in doc_list_trim[1:])
+
     return doc_str
 
 
@@ -166,7 +177,10 @@ def py_to_r_str(arg):
                     r'\\min': 'min',
                     r'\\max': 'max',
                     r'\\epsilon': 'epsilon',
-                    r'\[([0-9]+)\]_*': r'(\1)'
+                    r'\[([0-9]+)\]_*': r'(\1)',
+                    'pd.DataFrame': 'data.frame',
+                    r'\bint\b': 'integer',
+                    'float': 'numeric'
                     }
 
     arg_sub = arg
