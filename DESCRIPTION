@@ -2,7 +2,7 @@ Package: pharmr
 Encoding: UTF-8
 Version: 0.31.4
 Date: 2021-09-24
-Title: A Wrapper for the 'Pharmpy' 'Pharmacometrics' Library
+Title: Interface to the 'Pharmpy' 'Pharmacometrics' Library
 Authors@R: c(
   person("Rikard", "Nordgren", role=c("aut", "cre", "cph"), email="rikard.nordgren@farmaci.uu.se"),
   person("Stella", "Belin", role=c("aut", "cph"), email="stella.belin@farmaci.uu.se"),
@@ -28,7 +28,7 @@ Suggests:
     magrittr,
     here
 NeedsCompilation: no
-Description: An R wrapper for the 'Pharmpy' 'pharmacometrics' library via the 'reticulate package'. The 'Pharmpy' documentation was automatically generated from 'Pharmpy' version 0.31.3.
+Description: Interface to the 'Pharmpy' 'pharmacometrics' library. The 'Reticulate' package is used to interface Python from R.
 Config/reticulate:
   list(
     packages = list(
