@@ -1019,7 +1019,7 @@ plot_iofv_vs_iofv <- function(model, other) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (pd.Dataframe) Dataframe over the individuals with a `dofv` column containing the raw predicted delta-OFV and an `influential` column with a logicalean to tell whether the individual is influential or not.
+#' @return (pd.Dataframe) Dataframe over the individuals with a `dofv` column containing the raw predicted delta-OFV and an `influential` column with a boolean to tell whether the individual is influential or not.
 #' 
 #' @seealso
 #' predict_influential_outliers
@@ -1042,7 +1042,7 @@ predict_influential_individuals <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (pd.Dataframe) Dataframe over the individuals with a `outliers` and `dofv` columns containing the raw predictions and `influential`, `outlier` and `influential_outlier` logicalean columns.
+#' @return (pd.Dataframe) Dataframe over the individuals with a `outliers` and `dofv` columns containing the raw predictions and `influential`, `outlier` and `influential_outlier` boolean columns.
 #' 
 #' @seealso
 #' predict_influential_individuals
@@ -1067,7 +1067,7 @@ predict_influential_outliers <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (pd.Dataframe) Dataframe over the individuals with a `residual` column containing the raw predicted residuals and a `outlier` column with a logicalean to tell whether the individual is an outlier or not.
+#' @return (pd.Dataframe) Dataframe over the individuals with a `residual` column containing the raw predicted residuals and a `outlier` column with a boolean to tell whether the individual is an outlier or not.
 #' 
 #' @examples
 #' \dontrun{

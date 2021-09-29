@@ -224,27 +224,30 @@ def py_to_r_arg(arg):
 
 
 def py_to_r_str(arg, example=False):
-    py_to_r_dict = {'None': 'NULL',
-                    'True': 'TRUE',
-                    'False': 'FALSE',
-                    r'\blist\b': 'vector',
-                    r'\bdict\b': 'list',
-                    'dictionary': 'list',
-                    'bool': 'logical',
-                    r'\\mathsf': '',
-                    r'\\cdot': '*',
-                    r'\\text': '',
-                    r'\\frac': 'frac',
-                    r'\\log': 'log',
-                    r'\\exp': 'exp',
-                    r'\\min': 'min',
-                    r'\\max': 'max',
-                    r'\\epsilon': 'epsilon',
-                    'pd.DataFrame': 'data.frame',
-                    'pd.Series': 'data.frame',
-                    r'\bint\b': 'integer',
-                    'float': 'numeric'
-                    }
+    args = {'None': 'NULL',
+            'True': 'TRUE',
+            'False': 'FALSE'}
+
+    types = {r'\bint\b': 'integer',
+             'float': 'numeric',
+             r'\bbool\b': 'logical',
+             r'\blist\b': 'vector',
+             r'\bdict\b': 'list',
+             'dictionary': 'list',
+             'pd.DataFrame': 'data.frame',
+             'pd.Series': 'data.frame'}
+
+    latex = {r'\\mathsf': '',
+             r'\\cdot': '*',
+             r'\\text': '',
+             r'\\frac': 'frac',
+             r'\\log': 'log',
+             r'\\exp': 'exp',
+             r'\\min': 'min',
+             r'\\max': 'max',
+             r'\\epsilon': 'epsilon'}
+
+    py_to_r_dict = {**args, **types, **latex}
 
     if not example:
         py_to_r_dict = {**py_to_r_dict, **{r'\[([0-9]+)\]_*': r'(\1)'}}
