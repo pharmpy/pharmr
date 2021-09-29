@@ -133,7 +133,7 @@ def create_r_example(doc_list):
     doc_code = [row for row in doc_list if row.startswith('>>>') or re.match(r'^...\s+[$\w\d]', row)]
     doc_code = [row for row in doc_code if ' import ' not in row]
 
-    doc_code_r = '@examples\n'
+    doc_code_r = ''
     for row in doc_code:
         # Check for rows that starts with ... or >>>
         row_r = re.sub(pattern_start, '', row)
@@ -164,7 +164,7 @@ def create_r_example(doc_list):
         row_r = re.sub(pattern_doctest, '', row_r)
         doc_code_r += row_r + '\n'
 
-    return doc_code_r
+    return '@examples\n\\dontrun{\n' + doc_code_r + '}'
 
 
 def split_doc_to_subtypes(doc_str):

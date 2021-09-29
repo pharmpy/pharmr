@@ -109,10 +109,11 @@
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' add_covariate_effect(model, "CL", "APGR", "exp")
 #' model$statements$full_expression_from_odes("CL")
-#' 
+#' }
 #' 
 #' @export
 add_covariate_effect <- function(model, parameter, covariate, effect, operation='*') {
@@ -138,13 +139,14 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' @return (Model) Reference to the same model object
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' opts <- list('NITER'=1000, 'ISAMPLE'=100, 'EONLY'=1)
 #' add_estimation_step(model, "IMP", options=opts)
 #' ests <- model$estimation_steps
 #' len(ests)
 #' ests[2]
-#' 
+#' }
 #' @seealso
 #' set_estimation_step
 #' 
@@ -182,11 +184,12 @@ add_estimation_step <- function(model, method, interaction=TRUE, options=NULL, i
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' remove_iiv(model, "CL")
 #' add_iiv(model, "CL", "add")
 #' model$statements$find_assignment("CL")
-#' 
+#' }
 #' @seealso
 #' add_iov
 #' 
@@ -213,10 +216,11 @@ add_iiv <- function(model, list_of_parameters, expression, operation='*', eta_na
 #' @return (Model) Reference to same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' add_individual_parameter(model, "KA")
 #' model$statements$find_assignment("KA")
-#' 
+#' }
 #' 
 #' @export
 add_individual_parameter <- function(model, name) {
@@ -242,10 +246,11 @@ add_individual_parameter <- function(model, name) {
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' add_iov(model, "TIME", "CL")
 #' model$statements$find_assignment("CL")
-#' 
+#' }
 #' @seealso
 #' add_iiv
 #' 
@@ -288,10 +293,11 @@ add_iov <- function(model, occ, list_of_parameters=NULL, eta_names=NULL) {
 #' @return (Model) Reference to same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' add_peripheral_compartment(model)
 #' model$statements$ode_system
-#' 
+#' }
 #' @seealso
 #' set_peripheral_compartment
 #' 
@@ -317,10 +323,11 @@ add_peripheral_compartment <- function(model) {
 #' @return (Series) Shrinkage for each eta
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' calculate_eta_shrinkage(model)
 #' calculate_eta_shrinkage(model, sd=TRUE)
-#' 
+#' }
 #' @seealso
 #' calculate_individual_shrinkage
 #' 
@@ -355,12 +362,13 @@ calculate_eta_shrinkage <- function(model, sd=FALSE) {
 #' @return (data.frame) A DataFrame of statistics indexed on parameter and covariate value.
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' rng <- create_rng(23)
 #' calculate_individual_parameter_statistics(model, "K=CL/V", rng=rng)
 #' K         p5          0.004234  0.000001  0.001138
 #' p95         0.004910  0.000001  0.001263
-#' 
+#' }
 #' 
 #' @export
 calculate_individual_parameter_statistics <- function(model, exprs, rng=NULL) {
@@ -382,6 +390,7 @@ calculate_individual_parameter_statistics <- function(model, exprs, rng=NULL) {
 #' @return (DataFrame) Shrinkage for each eta and individual
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' calculate_individual_shrinkage(model)
 #' 1   0.847789  0.256473
@@ -443,7 +452,7 @@ calculate_individual_parameter_statistics <- function(model, exprs, rng=NULL) {
 #' 57  0.813382  0.263372
 #' 58  0.727295  0.232867
 #' 59  0.738777  0.224742
-#' 
+#' }
 #' @seealso
 #' calculate_eta_shrinkage
 #' 
@@ -470,12 +479,13 @@ calculate_individual_shrinkage <- function(model) {
 #' @return (data.frame) A DataFrame of statistics indexed on parameter and covariate value.
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' rng <- create_rng(23)
 #' calculate_pk_parameters_statistics(model, rng=rng)
 #' k_e       p5          0.004234  0.000001  0.001138
 #' p95         0.004910  0.000001  0.001263
-#' 
+#' }
 #' @seealso
 #' calculate_individual_parameter_statistics : Calculation of statistics for arbitrary parameters
 #' 
@@ -499,9 +509,10 @@ calculate_pk_parameters_statistics <- function(model, rng=NULL) {
 #' @return (Model) New model object with new underlying model format
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' converted_model <- convert_model(model, "nlmixr")
-#' 
+#' }
 #' 
 #' @export
 convert_model <- function(model, to_format) {
@@ -521,9 +532,10 @@ convert_model <- function(model, to_format) {
 #' @return (Model) A copy of the input model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' model_copy <- copy_model(model, "pheno2")
-#' 
+#' }
 #' 
 #' @export
 copy_model <- function(model, name=NULL) {
@@ -549,11 +561,12 @@ copy_model <- function(model, name=NULL) {
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$random_variables$etas
 #' create_joint_distribution(model, c('ETA(1)', 'ETA(2)'))
 #' model$random_variables$etas
-#' 
+#' }
 #' @seealso
 #' split_joint_distribution : split etas into separate distributions
 #' 
@@ -577,8 +590,9 @@ create_joint_distribution <- function(model, rvs=NULL) {
 #' @return (Results object for tool) 
 #' 
 #' @examples
+#' \dontrun{
 #' res <- create_results("frem_dir1")
-#' 
+#' }
 #' @seealso
 #' read_results
 #' 
@@ -604,9 +618,10 @@ create_results <- function(path) {
 #' @return (Generator) Initialized numpy random number generator object
 #' 
 #' @examples
+#' \dontrun{
 #' rng <- create_rng(23)
 #' rng$standard_normal()
-#' 
+#' }
 #' 
 #' @export
 create_rng <- function(seed) {
@@ -631,6 +646,7 @@ create_rng <- function(seed) {
 #' @return (data.frame) A series of one evaluated value for each data record
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' evaluate_expression(model, "TVCL*1000")
 #' 0      6.573770
@@ -643,7 +659,7 @@ create_rng <- function(seed) {
 #' 741    5.165105
 #' 742    5.165105
 #' 743    5.165105
-#' 
+#' }
 #' 
 #' @export
 evaluate_expression <- function(model, expression) {
@@ -663,9 +679,10 @@ evaluate_expression <- function(model, expression) {
 #' @return (Model) Reference to same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' fit(model)
-#' 
+#' }
 #' @seealso
 #' run_tool
 #' 
@@ -690,11 +707,12 @@ fit <- function(models) {
 #' @return (Model) Reference to the same model object
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$parameters['THETA(1)']
 #' fix_parameters(model, 'THETA(1)')
 #' model$parameters['THETA(1)']
-#' 
+#' }
 #' @seealso
 #' fix_parameters_to : Fixing and setting parameter initial estimates in the same function
 #' 
@@ -726,11 +744,12 @@ fix_parameters <- function(model, parameter_names) {
 #' @return (Model) Reference to the same model object
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$parameters['THETA(1)']
 #' fix_parameters_to(model, 'THETA(1)', 0.5)
 #' model$parameters['THETA(1)']
-#' 
+#' }
 #' @seealso
 #' fix_parameters : Fix parameters
 #' 
@@ -762,10 +781,11 @@ fix_parameters_to <- function(model, parameter_names, values) {
 #' @return (vector) Covariate symbols or names
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' get_model_covariates(model)
 #' get_model_covariates(model, strings=TRUE)
-#' 
+#' }
 #' 
 #' @export
 get_model_covariates <- function(model, strings=FALSE) {
@@ -784,9 +804,10 @@ get_model_covariates <- function(model, strings=FALSE) {
 #' @return (integer) Number of individuals in the model dataset
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' get_number_of_individuals(model)
-#' 
+#' }
 #' @note
 #' For NONMEM models this is the number of individuals of the active dataset, i.e. after filteringof IGNORE and ACCEPT and removal of individuals with no observations.
 #' 
@@ -815,9 +836,10 @@ get_number_of_individuals <- function(model) {
 #' @return (integer) Number of observations in the model dataset
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' get_number_of_observations(model)
-#' 
+#' }
 #' @note
 #' For NONMEM models this is the number of observations of the active dataset, i.e. after filteringof IGNORE and ACCEPT and removal of individuals with no observations.
 #' 
@@ -846,6 +868,7 @@ get_number_of_observations <- function(model) {
 #' @return (data.frame) Number of observations in the model dataset
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' get_number_of_observations_per_individual(model)
 #' 1     2
@@ -907,7 +930,7 @@ get_number_of_observations <- function(model) {
 #' 57    2
 #' 58    3
 #' 59    3
-#' 
+#' }
 #' @note
 #' For NONMEM models this is the individuals and number of observations of the active dataset, i.e.after filtering of IGNORE and ACCEPT and removal of individuals with no observations.
 #' 
@@ -937,6 +960,7 @@ get_number_of_observations_per_individual <- function(model) {
 #' @return (data.frame) Observations indexed over ID and TIME
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' get_observations(model)
 #' ID  TIME
@@ -944,7 +968,7 @@ get_number_of_observations_per_individual <- function(model) {
 #' 2   2.0       9.7
 #' 58  47.5     27.9
 #' 59  1.8      22.6
-#' 
+#' }
 #' @seealso
 #' get_number_of_observations
 #' 
@@ -969,9 +993,10 @@ get_observations <- function(model) {
 #' @return (logical) TRUE if the model has an additive error model and FALSE otherwise
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' has_additive_error_model(model)
-#' 
+#' }
 #' @seealso
 #' has_proportional_error_model : Check if a model has a proportional error model
 #' 
@@ -995,9 +1020,10 @@ has_additive_error_model <- function(model) {
 #' @return (logical) TRUE if the model has a combined error model and FALSE otherwise
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' has_combined_error_model(model)
-#' 
+#' }
 #' @seealso
 #' has_additive_error_model : Check if a model has an additive error model
 #' 
@@ -1021,9 +1047,10 @@ has_combined_error_model <- function(model) {
 #' @return (logical) TRUE if the model has a proportional error model and FALSE otherwise
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' has_proportional_error_model(model)
-#' 
+#' }
 #' @seealso
 #' has_additive_error_model : Check if a model has an additive error model
 #' 
@@ -1049,9 +1076,10 @@ has_proportional_error_model <- function(model) {
 #' @return (Model) Reference to same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' has_zero_order_absorption(model)
-#' 
+#' }
 #' 
 #' @export
 has_zero_order_absorption <- function(model) {
@@ -1072,9 +1100,10 @@ has_zero_order_absorption <- function(model) {
 #' @return (Model) Loaded model object
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' print(model$statements)
-#' 
+#' }
 #' 
 #' @export
 load_example_model <- function(name) {
@@ -1179,6 +1208,7 @@ predict_influential_outliers <- function(model) {
 #' @return (pd.Dataframe) Dataframe over the individuals with a `residual` column containing the raw predicted residuals and a `outlier` column with a logicalean to tell whether the individual is an outlier or not.
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' predict_outliers(model)
 #' 2   1.723895    FALSE
@@ -1205,7 +1235,7 @@ predict_influential_outliers <- function(model) {
 #' 53  0.579177    FALSE
 #' 54  0.892111    FALSE
 #' 55  1.943623    FALSE
-#' 
+#' }
 #' @seealso
 #' predict_influential_individuals
 #' 
@@ -1230,8 +1260,9 @@ predict_outliers <- function(model) {
 #' @return (Model) Read model object
 #' 
 #' @examples
+#' \dontrun{
 #' read_model("/home/run1$mod")
-#' 
+#' }
 #' @seealso
 #' read_model_from_string : Read model from string
 #' 
@@ -1253,6 +1284,7 @@ read_model <- function(path) {
 #' @return (Model) Read model object
 #' 
 #' @examples
+#' \dontrun{
 #' s <- '''$PROBLEM
 #' $INPUT ID DV TIME
 #' $DATA file$csv
@@ -1263,7 +1295,7 @@ read_model <- function(path) {
 #' $SIGMA 1
 #' $ESTIMATION METHOD=1'''
 #' read_model_from_string(s)
-#' 
+#' }
 #' @seealso
 #' read_model : Read model from file
 #' 
@@ -1285,8 +1317,9 @@ read_model_from_string <- function(code) {
 #' @return (Results object for tool) 
 #' 
 #' @examples
+#' \dontrun{
 #' res <- read_resuts("results$json")
-#' 
+#' }
 #' @seealso
 #' create_results
 #' 
@@ -1308,11 +1341,12 @@ read_results <- function(path) {
 #' @return (Model) Reference to the same model object
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$statements$find_assignment("Y")
 #' remove_error_model(model)
 #' model$statements$find_assignment("Y")
-#' 
+#' }
 #' 
 #' @export
 remove_error_model <- function(model) {
@@ -1332,13 +1366,14 @@ remove_error_model <- function(model) {
 #' @return (Model) Reference to the same model object
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' opts <- list('NITER'=1000, 'ISAMPLE'=100, 'EONLY'=1)
 #' add_estimation_step(model, "IMP", options=opts)
 #' remove_estimation_step(model, 1)
 #' ests <- model$estimation_steps
 #' len(ests)
-#' 
+#' }
 #' @seealso
 #' add_estimation_step
 #' 
@@ -1364,13 +1399,14 @@ remove_estimation_step <- function(model, idx) {
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' remove_iiv(model)
 #' model$statements$find_assignment("CL")
 #' model <- load_example_model("pheno")
 #' remove_iiv(model, "V")
 #' model$statements$find_assignment("V")
-#' 
+#' }
 #' @seealso
 #' remove_iov
 #' 
@@ -1396,9 +1432,10 @@ remove_iiv <- function(model, to_remove=NULL) {
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' remove_iov(model)
-#' 
+#' }
 #' @seealso
 #' add_iiv
 #' 
@@ -1424,9 +1461,10 @@ remove_iov <- function(model) {
 #' @return (Model) Reference to same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' remove_lag_time(model)
-#' 
+#' }
 #' @seealso
 #' set_transit_compartments
 #' 
@@ -1461,11 +1499,12 @@ remove_lag_time <- function(model) {
 #' @return (Model) Reference to same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' set_peripheral_compartments(model, 2)
 #' remove_peripheral_compartment(model)
 #' model$statements$ode_system
-#' 
+#' }
 #' @seealso
 #' set_peripheral_compartment
 #' 
@@ -1493,9 +1532,10 @@ remove_peripheral_compartment <- function(model) {
 #' @return (Results object for tool) 
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' res <- run_tool("resmod", model)
-#' 
+#' }
 #' 
 #' @export
 run_tool <- function(name) {
@@ -1517,10 +1557,11 @@ run_tool <- function(name) {
 #' @return (data.frame) Pool of samples in a DataFrame
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' rng <- create_rng(23)
 #' sample_individual_estimates(model, samples_per_id=2, rng=rng)
-#' 
+#' }
 #' @seealso
 #' sample_parameters_from_covariance_matrix : Sample parameter vectors using the
 #' 
@@ -1556,10 +1597,11 @@ sample_individual_estimates <- function(model, parameters=NULL, samples_per_id=1
 #' @return (data.frame) A dataframe with one sample per row
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' rng <- create_rng(23)
 #' sample_parameters_from_covariance_matrix(model, n=3, rng=rng)
-#' 
+#' }
 #' @seealso
 #' sample_parameters_uniformly : Sample parameter vectors using uniform distribution
 #' 
@@ -1593,10 +1635,11 @@ sample_parameters_from_covariance_matrix <- function(model, modelfit_results=NUL
 #' @return (data.frame) samples
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' rng <- create_rng(23)
 #' sample_parameters_uniformly(model, n=3, rng=rng)
-#' 
+#' }
 #' @seealso
 #' sample_parameters_from_covariance_matrix : Sample parameter vectors using the
 #' 
@@ -1638,6 +1681,7 @@ sample_parameters_uniformly <- function(model, fraction=0.1, parameters=NULL, fo
 #' @return (Model) Reference to the same model object
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$statements$find_assignment("Y")
 #' set_additive_error_model(model)
@@ -1646,7 +1690,7 @@ sample_parameters_uniformly <- function(model, fraction=0.1, parameters=NULL, fo
 #' model$statements$find_assignment("Y")
 #' set_additive_error_model(model, data_trans="log(Y)")
 #' model$statements$find_assignment("Y")
-#' 
+#' }
 #' @seealso
 #' set_proportional_error_model : Proportional error model
 #' 
@@ -1670,10 +1714,11 @@ set_additive_error_model <- function(model, data_trans=NULL, series_terms=2) {
 #' @return (Model) Reference to same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' set_bolus_absorption(model)
 #' model$statements$ode_system
-#' 
+#' }
 #' @seealso
 #' set_zero_order_absorption
 #' 
@@ -1710,13 +1755,14 @@ set_bolus_absorption <- function(model) {
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- remove_error_model(load_example_model("pheno"))
 #' set_combined_error_model(model)
 #' model$statements$find_assignment("Y")
 #' model <- remove_error_model(load_example_model("pheno"))
 #' set_combined_error_model(model, data_trans="log(Y)")
 #' model$statements$find_assignment("Y")
-#' 
+#' }
 #' @seealso
 #' set_additive_error_model : Additive error model
 #' 
@@ -1740,9 +1786,10 @@ set_combined_error_model <- function(model, data_trans=NULL) {
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' set_dtbs_error_model(model)
-#' 
+#' }
 #' 
 #' @export
 set_dtbs_error_model <- function(model) {
@@ -1768,11 +1815,12 @@ set_dtbs_error_model <- function(model) {
 #' @return (Model) Reference to the same model object
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' opts <- list('NITER'=1000, 'ISAMPLE'=100, 'EONLY'=1)
 #' set_estimation_step(model, "IMP", options=opts)
 #' model$estimation_steps[1]
-#' 
+#' }
 #' @seealso
 #' add_estimation_step
 #' 
@@ -1799,10 +1847,11 @@ set_estimation_step <- function(model, method, interaction=TRUE, options=NULL, e
 #' @return (Model) Reference to same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' set_first_order_absorption(model)
 #' model$statements$ode_system
-#' 
+#' }
 #' @seealso
 #' set_bolus_order_absorption
 #' 
@@ -1826,10 +1875,11 @@ set_first_order_absorption <- function(model) {
 #' @return (Model) Reference to same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' set_first_order_elimination(model)
 #' model$statements$ode_system
-#' 
+#' }
 #' @seealso
 #' set_zero_order_elimination
 #' 
@@ -1860,10 +1910,11 @@ set_first_order_elimination <- function(model) {
 #' @return (Model) Reference to same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' set_iiv_on_ruv(model)
 #' model$statements$find_assignment("Y")
-#' 
+#' }
 #' @seealso
 #' set_power_on_ruv
 #' 
@@ -1886,10 +1937,11 @@ set_iiv_on_ruv <- function(model, list_of_eps=NULL, same_eta=TRUE, eta_names=NUL
 #' @return (Model) Reference to the same model object
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' set_initial_estimates(model, list('THETA(1)'=2))
 #' model$parameters['THETA(1)']
-#' 
+#' }
 #' 
 #' @export
 set_initial_estimates <- function(model, inits) {
@@ -1911,9 +1963,10 @@ set_initial_estimates <- function(model, inits) {
 #' @return (Model) Reference to same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' set_lag_time(model)
-#' 
+#' }
 #' @seealso
 #' set_transit_compartments
 #' 
@@ -1939,10 +1992,11 @@ set_lag_time <- function(model) {
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' set_michaelis_menten_elimination(model)
 #' model$statements$ode_system
-#' 
+#' }
 #' @seealso
 #' set_first_order_elimination
 #' 
@@ -1968,10 +2022,11 @@ set_michaelis_menten_elimination <- function(model) {
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' set_mixed_mm_fo_elimination(model)
 #' model$statements$ode_system
-#' 
+#' }
 #' @seealso
 #' set_first_order_elimination
 #' 
@@ -1998,11 +2053,12 @@ set_mixed_mm_fo_elimination <- function(model) {
 #' @return (Model) Reference to the same model object
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$name
 #' set_name(model, "run2")
 #' model$name
-#' 
+#' }
 #' 
 #' @export
 set_name <- function(model, new_name) {
@@ -2040,9 +2096,10 @@ set_name <- function(model, new_name) {
 #' @return (Model) Reference to same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' set_ode_solver(model, 'LSODA')
-#' 
+#' }
 #' 
 #' @export
 set_ode_solver <- function(model, solver) {
@@ -2062,10 +2119,11 @@ set_ode_solver <- function(model, solver) {
 #' @return (Model) Reference to same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' set_peripheral_compartments(model, 2)
 #' model$statements$ode_system
-#' 
+#' }
 #' @seealso
 #' add_peripheral_compartment
 #' 
@@ -2094,10 +2152,11 @@ set_peripheral_compartments <- function(model, n) {
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' set_power_on_ruv(model)
 #' model$statements$find_assignment("Y")
-#' 
+#' }
 #' @seealso
 #' set_iiv_on_ruv
 #' 
@@ -2131,13 +2190,14 @@ set_power_on_ruv <- function(model, list_of_eps=NULL) {
 #' @return (Model) Reference to the same model object
 #' 
 #' @examples
+#' \dontrun{
 #' model <- remove_error_model(load_example_model("pheno"))
 #' set_proportional_error_model(model)
 #' model$statements$find_assignment("Y")
 #' model <- remove_error_model(load_example_model("pheno"))
 #' set_proportional_error_model(model, data_trans="log(Y)")
 #' model$statements$find_assignment("Y")
-#' 
+#' }
 #' @seealso
 #' set_additive_error_model : Additive error model
 #' 
@@ -2165,10 +2225,11 @@ set_proportional_error_model <- function(model, data_trans=NULL) {
 #' @return (Model) Reference to same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' set_seq_zo_fo_absorption(model)
 #' model$statements$ode_system
-#' 
+#' }
 #' @seealso
 #' set_bolus_order_absorption
 #' 
@@ -2198,10 +2259,11 @@ set_seq_zo_fo_absorption <- function(model) {
 #' @return (Model) Reference to same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' set_transit_compartments(model, 3)
 #' model$statements$ode_system
-#' 
+#' }
 #' @seealso
 #' set_lag_time
 #' 
@@ -2223,9 +2285,10 @@ set_transit_compartments <- function(model, n) {
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' set_weighted_error_model(model)
-#' 
+#' }
 #' @seealso
 #' use_thetas_for_error_stdev : Use thetas to estimate error
 #' 
@@ -2250,10 +2313,11 @@ set_weighted_error_model <- function(model) {
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' set_zero_order_absorption(model)
 #' model$statements$ode_system
-#' 
+#' }
 #' @seealso
 #' set_bolus_order_absorption
 #' 
@@ -2279,10 +2343,11 @@ set_zero_order_absorption <- function(model) {
 #' @return (Model) Reference to same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' set_zero_order_elimination(model)
 #' model$statements$ode_system
-#' 
+#' }
 #' @seealso
 #' set_first_order_elimination
 #' 
@@ -2308,12 +2373,13 @@ set_zero_order_elimination <- function(model) {
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' create_joint_distribution(model, c('ETA(1)', 'ETA(2)'))
 #' model$random_variables$etas
 #' split_joint_distribution(model, c('ETA(1)', 'ETA(2)'))
 #' model$random_variables$etas
-#' 
+#' }
 #' @seealso
 #' create_joint_distribution : combine etas into a join distribution
 #' 
@@ -2338,9 +2404,10 @@ split_joint_distribution <- function(model, rvs=NULL) {
 #' @return (data.frame) A DataFrame of modelfit results, one row per model.
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' summarize_modelfit_results(c(model))
-#' 
+#' }
 #' 
 #' @export
 summarize_modelfit_results <- function(models) {
@@ -2363,10 +2430,11 @@ summarize_modelfit_results <- function(models) {
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' transform_etas_boxcox(model, c("ETA(1)"))
 #' model$statements$full_expression_from_odes("CL")
-#' 
+#' }
 #' @seealso
 #' transform_etas_tdist
 #' 
@@ -2397,10 +2465,11 @@ transform_etas_boxcox <- function(model, list_of_etas=NULL) {
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' transform_etas_john_draper(model, c("ETA(1)"))
 #' model$statements$full_expression_from_odes("CL")
-#' 
+#' }
 #' @seealso
 #' transform_etas_boxcox
 #' 
@@ -2427,10 +2496,11 @@ transform_etas_john_draper <- function(model, list_of_etas=NULL) {
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' transform_etas_tdist(model, c("ETA(1)"))
 #' model$statements$full_expression_from_odes("CL")
-#' 
+#' }
 #' @seealso
 #' transform_etas_boxcox
 #' 
@@ -2457,12 +2527,13 @@ transform_etas_tdist <- function(model, list_of_etas=NULL) {
 #' @return (Model) Reference to the same model object
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' fix_parameters(model, c('THETA(1)', 'THETA(2)', 'THETA(3)'))
 #' model$parameters$fix
 #' unfix_parameters(model, 'THETA(1)')
 #' model$parameters$fix
-#' 
+#' }
 #' @seealso
 #' unfix_paramaters_to : Unfixing parameters and setting a new initial estimate in the same
 #' 
@@ -2494,13 +2565,14 @@ unfix_parameters <- function(model, parameter_names) {
 #' @return (Model) Reference to the same model object
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' fix_parameters(model, c('THETA(1)', 'THETA(2)', 'THETA(3)'))
 #' model$parameters$fix
 #' unfix_parameters_to(model, 'THETA(1)', 0.5)
 #' model$parameters$fix
 #' model$parameters['THETA(1)']
-#' 
+#' }
 #' 
 #' @export
 unfix_parameters_to <- function(model, parameter_names, values) {
@@ -2524,11 +2596,12 @@ unfix_parameters_to <- function(model, parameter_names, values) {
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$parameters$inits
 #' update_inits(model)
 #' model$parameters$inits
-#' 
+#' }
 #' 
 #' @export
 update_inits <- function(model, force_individual_estimates=FALSE) {
@@ -2550,11 +2623,12 @@ update_inits <- function(model, force_individual_estimates=FALSE) {
 #' @return (Model) Reference to the same model object
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' fix_parameters(model, c('THETA(1)'))
 #' update_source(model)
 #' print(str(model).splitlines()c(22))
-#' 
+#' }
 #' 
 #' @export
 update_source <- function(model) {
@@ -2573,10 +2647,11 @@ update_source <- function(model) {
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' use_thetas_for_error_stdev(model)
 #' model$statements$find_assignment("Y")
-#' 
+#' }
 #' @seealso
 #' set_weighted_error_model : Encode error model with one epsilon and weight
 #' 
@@ -2600,9 +2675,10 @@ use_thetas_for_error_stdev <- function(model) {
 #' @return (Model) Reference to the same model object
 #' 
 #' @examples
+#' \dontrun{
 #' model <- load_example_model("pheno")
 #' write_model(model)
-#' 
+#' }
 #' 
 #' @export
 write_model <- function(model, path='', force=TRUE) {
