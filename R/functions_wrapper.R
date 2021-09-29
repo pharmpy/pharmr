@@ -981,8 +981,7 @@ load_example_model <- function(name) {
 #' 
 #' @param model (Model) Previously run Pharmpy model.
 #' @param predictions (vector) A vector of names of predictions to plot. NULL for all available
-#'  individuals: vector
-#'  A vector of individuals to include. NULL for all individuals
+#' @param individuals (vector) A vector of individuals to include. NULL for all individuals
 #'  
 #' @return (alt.Chart) Plot
 #' 
