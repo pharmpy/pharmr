@@ -74,6 +74,8 @@ def create_r_doc(func):
         doc_str += create_r_params(doc_dict['params'])
     if 'returns' in doc_dict.keys():
         doc_str += create_r_returns(doc_dict['returns']) + '\n\n'
+    if 'examples' in doc_dict.keys():
+        doc_str += create_r_example(doc_dict['examples']) + '\n'
     if 'notes' in doc_dict.keys():
         doc_str += '@note\n'
         doc_str += ''.join(doc_dict['notes']) + '\n\n'
@@ -112,6 +114,39 @@ def create_r_returns(doc_list):
     return doc_str
 
 
+def create_r_example(doc_list):
+    doc_code = [row for row in doc_list if row.startswith('>>>') or re.match(r'^...\s+[$\w\d]', row)]
+    doc_code = [row for row in doc_code if ' import ' not in row]
+
+    doc_code_r = '@examples\n'
+    for row in doc_code:
+        # Check for rows that starts with ... or >>>
+        row_r = re.sub(r'>>> |^\.\.\. ', '', row)
+        row_r = py_to_r_str(row_r, example=True)
+        row_r = re.sub(' = ', ' <- ', row_r)
+
+        # Substitute . to $, e.g. model.parameters -> model$parameters
+        row_r = re.sub(r'([A-Za-z]\d*)\.([A-Za-z]\d*)', r'\1$\2', row_r)
+
+        # Check that row doesn't use index
+        if not re.search(r'\w\[', row_r):
+            # Substitute [] to c(), e.g. ['THETA(1)'] -> c('THETA(1)')
+            row_r = re.sub(r'\[([\'\"\w(),\s]+)]', r'c(\1)', row_r)
+
+        # Check if row contains python dict
+        dict_py = re.search(r'{(([\'\"]*[\w\d]+[\'\"]*: [\'\"]*[\w\d]+\'*,*\s*)+)}', row_r)
+        if dict_py:
+            dict_r = f'list({re.sub(": ", "=", dict_py.group(1))})'
+            # Substitute {} to list(), e.g. {'EONLY': 1} -> list('EONLY'=1)
+            row_r = re.sub(r'\{' + f'{dict_py.group(1)}' + '}', dict_r, row_r)
+
+        # Remove doctest comments
+        row_r = re.sub(r'\s+# doctest:.*', '', row_r)
+        doc_code_r += row_r + '\n'
+
+    return doc_code_r
+
+
 def split_doc_to_subtypes(doc_str):
     doc_split = doc_str.split('\n')
 
@@ -119,8 +154,8 @@ def split_doc_to_subtypes(doc_str):
                   'Returns': 'returns',
                   'Return': 'returns',
                   'Results': 'returns',
-                  'Example': 'example',
-                  'Examples': 'example',
+                  'Example': 'examples',
+                  'Examples': 'examples',
                   'Notes': 'notes',
                   'See also': 'see_also',
                   'See Also': 'see_also'}
@@ -136,7 +171,7 @@ def split_doc_to_subtypes(doc_str):
             doc_dict[doc_type_current] = []
             continue
 
-        if not row.startswith('--') and doc_type_current != 'example':
+        if not row.startswith('--'):
             doc_dict[doc_type_current].append(row.strip())
 
     return doc_dict
@@ -157,7 +192,7 @@ def py_to_r_arg(arg):
             return arg
 
 
-def py_to_r_str(arg):
+def py_to_r_str(arg, example=False):
     py_to_r_dict = {'None': 'NULL',
                     'True': 'TRUE',
                     'False': 'FALSE',
@@ -174,11 +209,13 @@ def py_to_r_str(arg):
                     r'\\min': 'min',
                     r'\\max': 'max',
                     r'\\epsilon': 'epsilon',
-                    r'\[([0-9]+)\]_*': r'(\1)',
                     'pd.DataFrame': 'data.frame',
                     r'\bint\b': 'integer',
                     'float': 'numeric'
                     }
+
+    if not example:
+        py_to_r_dict = {**py_to_r_dict, **{r'\[([0-9]+)\]_*': r'(\1)'}}
 
     arg_sub = arg
     for key, value in py_to_r_dict.items():

@@ -108,6 +108,11 @@
 #'  
 #' @return (Model) Reference to the same model
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' add_covariate_effect(model, "CL", "APGR", "exp")
+#' model$statements$full_expression_from_odes("CL")
+#' 
 #' 
 #' @export
 add_covariate_effect <- function(model, parameter, covariate, effect, operation='*') {
@@ -130,6 +135,14 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' @param idx (integer) index of estimation step, default is NULL (adds step at the end)
 #'  
 #' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' opts <- list('NITER'=1000, 'ISAMPLE'=100, 'EONLY'=1)
+#' add_estimation_step(model, "IMP", options=opts)
+#' ests <- model$estimation_steps
+#' len(ests)
+#' ests[1]
 #' 
 #' @seealso
 #' set_estimation_step
@@ -166,6 +179,12 @@ add_estimation_step <- function(model, method, interaction=TRUE, options=NULL, i
 #'  
 #' @return (Model) Reference to the same model
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' remove_iiv(model, "CL")
+#' add_iiv(model, "CL", "add")
+#' model$statements$find_assignment("CL")
+#' 
 #' @seealso
 #' add_iov
 #' 
@@ -190,6 +209,11 @@ add_iiv <- function(model, list_of_parameters, expression, operation='*', eta_na
 #'  
 #' @return (Model) Reference to same model
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' add_individual_parameter(model, "KA")
+#' model$statements$find_assignment("KA")
+#' 
 #' 
 #' @export
 add_individual_parameter <- function(model, name) {
@@ -212,6 +236,11 @@ add_individual_parameter <- function(model, name) {
 #'  categories for occasion.
 #'  
 #' @return (Model) Reference to the same model
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' add_iov(model, "TIME", "CL")
+#' model$statements$find_assignment("CL")
 #' 
 #' @seealso
 #' add_iiv
@@ -253,6 +282,11 @@ add_iov <- function(model, occ, list_of_parameters=NULL, eta_names=NULL) {
 #'  
 #' @return (Model) Reference to same model
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' add_peripheral_compartment(model)
+#' model$statements$ode_system
+#' 
 #' @seealso
 #' set_peripheral_compartment
 #' 
@@ -275,6 +309,11 @@ add_peripheral_compartment <- function(model) {
 #'  variance scale)
 #'  
 #' @return (Series) Shrinkage for each eta
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' calculate_eta_shrinkage(model)
+#' calculate_eta_shrinkage(model, sd=TRUE)
 #' 
 #' @seealso
 #' calculate_individual_shrinkage
@@ -308,6 +347,13 @@ calculate_eta_shrinkage <- function(model, sd=FALSE) {
 #'  
 #' @return (data.frame) A DataFrame of statistics indexed on parameter and covariate value.
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' rng <- create_rng(23)
+#' calculate_individual_parameter_statistics(model, "K=CL/V", rng=rng)
+#' K         p5          0.004234  0.000001  0.001138
+#' p95         0.004910  0.000001  0.001263
+#' 
 #' 
 #' @export
 calculate_individual_parameter_statistics <- function(model, exprs, rng=NULL) {
@@ -325,6 +371,69 @@ calculate_individual_parameter_statistics <- function(model, exprs, rng=NULL) {
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (DataFrame) Shrinkage for each eta and individual
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' calculate_individual_shrinkage(model)
+#' 1   0.847789  0.256473
+#' 2   0.796643  0.210669
+#' 3   0.755025  0.226957
+#' 4   0.764541  0.216405
+#' 5   0.816192  0.203974
+#' 6   0.778108  0.210992
+#' 7   0.659420  0.236875
+#' 8   0.668551  0.240097
+#' 9   0.260056  0.200374
+#' 10  0.725190  0.226563
+#' 11  0.972110  0.421852
+#' 12  0.249640  0.254119
+#' 13  0.730294  0.364932
+#' 14  0.165785  0.194464
+#' 15  0.813399  0.313554
+#' 16  0.797328  0.213211
+#' 17  0.769059  0.278079
+#' 18  0.098506  0.176778
+#' 19  0.749022  0.235386
+#' 20  0.742181  0.222932
+#' 21  0.317956  0.264473
+#' 22  0.943950  0.232732
+#' 23  0.707183  0.259077
+#' 24  0.553787  0.247717
+#' 25  0.826349  0.114302
+#' 26  0.854777  0.341384
+#' 27  0.820829  0.263235
+#' 28  0.999942  0.319986
+#' 29  0.967084  0.432760
+#' 30  0.404773  0.325215
+#' 31  0.999980  0.318421
+#' 32  0.925283  0.167667
+#' 33  0.913706  0.242106
+#' 34  0.875554  0.249197
+#' 35  0.849135  0.294294
+#' 36  0.172206  0.246422
+#' 37  0.747380  0.278340
+#' 38  0.187440  0.231249
+#' 39  0.237805  0.254485
+#' 40  0.999925  0.189793
+#' 41  0.941906  0.170998
+#' 42  0.923801  0.244046
+#' 43  0.999928  0.320403
+#' 44  0.237637  0.260453
+#' 45  0.869540  0.194503
+#' 46  0.999949  0.319750
+#' 47  0.983782  0.393234
+#' 48  0.698267  0.169337
+#' 49  0.776674  0.214962
+#' 50  0.688847  0.192608
+#' 51  0.822213  0.202534
+#' 52  0.511489  0.273601
+#' 53  0.964757  0.223448
+#' 54  0.762153  0.181648
+#' 55  0.965657  0.435741
+#' 56  0.995278  0.354798
+#' 57  0.813382  0.263372
+#' 58  0.727295  0.232867
+#' 59  0.738777  0.224742
 #' 
 #' @seealso
 #' calculate_eta_shrinkage
@@ -350,6 +459,13 @@ calculate_individual_shrinkage <- function(model) {
 #'  
 #' @return (data.frame) A DataFrame of statistics indexed on parameter and covariate value.
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' rng <- create_rng(23)
+#' calculate_pk_parameters_statistics(model, rng=rng)
+#' k_e       p5          0.004234  0.000001  0.001138
+#' p95         0.004910  0.000001  0.001263
+#' 
 #' @seealso
 #' calculate_individual_parameter_statistics : Calculation of statistics for arbitrary parameters
 #' 
@@ -370,6 +486,10 @@ calculate_pk_parameters_statistics <- function(model, rng=NULL) {
 #'  
 #' @return (Model) New model object with new underlying model format
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' converted_model <- convert_model(model, "nlmixr")
+#' 
 #' 
 #' @export
 convert_model <- function(model, to_format) {
@@ -386,6 +506,10 @@ convert_model <- function(model, to_format) {
 #' @param name (str) Optional new name of model
 #'  
 #' @return (Model) A copy of the input model
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' model_copy <- copy_model(model, "pheno2")
 #' 
 #' 
 #' @export
@@ -410,6 +534,12 @@ copy_model <- function(model, name=NULL) {
 #'  
 #' @return (Model) Reference to the same model
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' model$random_variables$etas
+#' create_joint_distribution(model, c('ETA(1)', 'ETA(2)'))
+#' model$random_variables$etas
+#' 
 #' @seealso
 #' split_joint_distribution : split etas into separate distributions
 #' 
@@ -430,6 +560,9 @@ create_joint_distribution <- function(model, rvs=NULL) {
 #'  Arguments to pass to tool specific create results function
 #'  
 #' @return (Results object for tool) 
+#' 
+#' @examples
+#' res <- create_results("frem_dir1")
 #' 
 #' @seealso
 #' read_results
@@ -452,7 +585,11 @@ create_results <- function(path) {
 #' @param seed (integer or rng) Seed for the random number generator or NULL (default) for a randomized seed. If seed
 #'  is generator it will be passed through.
 #'  
-#' @return (Generator : Initialized numpy random number generator object) 
+#' @return (Generator) Initialized numpy random number generator object
+#' 
+#' @examples
+#' rng <- create_rng(23)
+#' rng$standard_normal()
 #' 
 #' 
 #' @export
@@ -476,6 +613,20 @@ create_rng <- function(seed) {
 #'  
 #' @return (pd.Series) A series of one evaluated value for each data record
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' evaluate_expression(model, "TVCL*1000")
+#' 0      6.573770
+#' 1      6.573770
+#' 2      6.573770
+#' 3      6.573770
+#' 4      6.573770
+#' 739    5.165105
+#' 740    5.165105
+#' 741    5.165105
+#' 742    5.165105
+#' 743    5.165105
+#' 
 #' 
 #' @export
 evaluate_expression <- function(model, expression) {
@@ -491,6 +642,10 @@ evaluate_expression <- function(model, expression) {
 #' @param models (vector) List of models or one single model
 #'  
 #' @return (Model) Reference to same model
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' fit(model)
 #' 
 #' @seealso
 #' run_tool
@@ -513,6 +668,12 @@ fit <- function(models) {
 #' @param parameter_names (vector or str) one parameter name or a vector of parameter names
 #'  
 #' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' model$parameters['THETA(1)']
+#' fix_parameters(model, 'THETA(1)')
+#' model$parameters['THETA(1)']
 #' 
 #' @seealso
 #' fix_parameters_to : Fixing and setting parameter initial estimates in the same function
@@ -543,6 +704,12 @@ fix_parameters <- function(model, parameter_names) {
 #'  
 #' @return (Model) Reference to the same model object
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' model$parameters['THETA(1)']
+#' fix_parameters_to(model, 'THETA(1)', 0.5)
+#' model$parameters['THETA(1)']
+#' 
 #' @seealso
 #' fix_parameters : Fix parameters
 #' 
@@ -572,6 +739,11 @@ fix_parameters_to <- function(model, parameter_names, values) {
 #'  
 #' @return (vector) Covariate symbols or names
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' get_model_covariates(model)
+#' get_model_covariates(model, strings=TRUE)
+#' 
 #' 
 #' @export
 get_model_covariates <- function(model, strings=FALSE) {
@@ -587,6 +759,10 @@ get_model_covariates <- function(model, strings=FALSE) {
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (integer) Number of individuals in the model dataset
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' get_number_of_individuals(model)
 #' 
 #' @note
 #' For NONMEM models this is the number of individuals of the active dataset, i.e. after filteringof IGNORE and ACCEPT and removal of individuals with no observations.
@@ -614,6 +790,10 @@ get_number_of_individuals <- function(model) {
 #'  
 #' @return (integer) Number of observations in the model dataset
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' get_number_of_observations(model)
+#' 
 #' @note
 #' For NONMEM models this is the number of observations of the active dataset, i.e. after filteringof IGNORE and ACCEPT and removal of individuals with no observations.
 #' 
@@ -640,6 +820,69 @@ get_number_of_observations <- function(model) {
 #'  
 #' @return (pd.Series) Number of observations in the model dataset
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' get_number_of_observations_per_individual(model)
+#' 1     2
+#' 2     3
+#' 3     3
+#' 4     3
+#' 5     3
+#' 6     3
+#' 7     3
+#' 8     3
+#' 9     4
+#' 10    3
+#' 11    1
+#' 12    3
+#' 13    2
+#' 14    4
+#' 15    2
+#' 16    3
+#' 17    3
+#' 18    4
+#' 19    3
+#' 20    3
+#' 21    3
+#' 22    2
+#' 23    3
+#' 24    3
+#' 25    6
+#' 26    2
+#' 27    2
+#' 28    1
+#' 29    1
+#' 30    2
+#' 31    1
+#' 32    3
+#' 33    2
+#' 34    2
+#' 35    2
+#' 36    3
+#' 37    2
+#' 38    4
+#' 39    3
+#' 40    2
+#' 41    3
+#' 42    2
+#' 43    1
+#' 44    3
+#' 45    3
+#' 46    1
+#' 47    1
+#' 48    5
+#' 49    3
+#' 50    4
+#' 51    3
+#' 52    3
+#' 53    2
+#' 54    4
+#' 55    1
+#' 56    1
+#' 57    2
+#' 58    3
+#' 59    3
+#' 
 #' @note
 #' For NONMEM models this is the individuals and number of observations of the active dataset, i.e.after filtering of IGNORE and ACCEPT and removal of individuals with no observations.
 #' 
@@ -657,6 +900,36 @@ get_number_of_observations_per_individual <- function(model) {
 }
 
 #' @title
+#' get_observations
+#' 
+#' @description
+#' Get observations from dataset
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (pd.Series) Observations indexed over ID and TIME
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' get_observations(model)
+#' ID  TIME
+#' 1   2.0      17.3
+#' 2   2.0       9.7
+#' 58  47.5     27.9
+#' 59  1.8      22.6
+#' 
+#' @seealso
+#' get_number_of_observations
+#' 
+#' get_number_of_observations_per_individual
+#' 
+#' 
+#' @export
+get_observations <- function(model) {
+    return(pharmpy$modeling$get_observations(model))
+}
+
+#' @title
 #' has_additive_error_model
 #' 
 #' @description
@@ -665,6 +938,10 @@ get_number_of_observations_per_individual <- function(model) {
 #' @param model (Model) The model to check
 #'  
 #' @return (logical) TRUE if the model has an additive error model and FALSE otherwise
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' has_additive_error_model(model)
 #' 
 #' @seealso
 #' has_proportional_error_model : Check if a model has a proportional error model
@@ -687,6 +964,10 @@ has_additive_error_model <- function(model) {
 #'  
 #' @return (logical) TRUE if the model has a combined error model and FALSE otherwise
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' has_combined_error_model(model)
+#' 
 #' @seealso
 #' has_additive_error_model : Check if a model has an additive error model
 #' 
@@ -707,6 +988,10 @@ has_combined_error_model <- function(model) {
 #' @param model (Model) The model to check
 #'  
 #' @return (logical) TRUE if the model has a proportional error model and FALSE otherwise
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' has_proportional_error_model(model)
 #' 
 #' @seealso
 #' has_additive_error_model : Check if a model has an additive error model
@@ -731,6 +1016,10 @@ has_proportional_error_model <- function(model) {
 #'  
 #' @return (Model) Reference to same model
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' has_zero_order_absorption(model)
+#' 
 #' 
 #' @export
 has_zero_order_absorption <- function(model) {
@@ -749,10 +1038,50 @@ has_zero_order_absorption <- function(model) {
 #'  
 #' @return (Model) Loaded model object
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' print(model$statements)
+#' 
 #' 
 #' @export
 load_example_model <- function(name) {
     return(pharmpy$modeling$load_example_model(name))
+}
+
+#' @title
+#' plot_individual_predictions
+#' 
+#' @description
+#' Plot DV and predictions grouped on individuals
+#' 
+#' @param model (Model) Previously run Pharmpy model.
+#' @param predictions (vector) A vector of names of predictions to plot. NULL for all available
+#'  individuals: vector
+#'  A vector of individuals to include. NULL for all individuals
+#'  
+#' @return (alt.Chart) Plot
+#' 
+#' 
+#' @export
+plot_individual_predictions <- function(model, predictions=NULL, individuals=NULL) {
+    return(pharmpy$modeling$plot_individual_predictions(model, predictions, individuals))
+}
+
+#' @title
+#' plot_iofv_vs_iofv
+#' 
+#' @description
+#' Plot individual OFV of two models against each other
+#' 
+#' @param model (Model) The first model
+#' @param other (Model) The second model
+#'  
+#' @return (alt.Chart) Scatterplot
+#' 
+#' 
+#' @export
+plot_iofv_vs_iofv <- function(model, other) {
+    return(pharmpy$modeling$plot_iofv_vs_iofv(model, other))
 }
 
 #' @title
@@ -809,6 +1138,34 @@ predict_influential_outliers <- function(model) {
 #'  
 #' @return (pd.Dataframe) Dataframe over the individuals with a `residual` column containing the raw predicted residuals and a `outlier` column with a logicalean to tell whether the individual is an outlier or not.
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' predict_outliers(model)
+#' 2   1.723895    FALSE
+#' 5   1.639485    FALSE
+#' 6   1.147173    FALSE
+#' 8   0.283858    FALSE
+#' 9   0.606595    FALSE
+#' 11  5.413732     TRUE
+#' 13  0.140510    FALSE
+#' 14  0.168691    FALSE
+#' 18  3.730850     TRUE
+#' 23  1.242479    FALSE
+#' 25  3.262130     TRUE
+#' 27  2.062735    FALSE
+#' 32  3.245315     TRUE
+#' 34  0.319238    FALSE
+#' 35  2.549845    FALSE
+#' 38  0.661809    FALSE
+#' 42  6.411962     TRUE
+#' 43  1.326782    FALSE
+#' 48  2.460449    FALSE
+#' 51  2.011316    FALSE
+#' 52  1.789271    FALSE
+#' 53  0.579177    FALSE
+#' 54  0.892111    FALSE
+#' 55  1.943623    FALSE
+#' 
 #' @seealso
 #' predict_influential_individuals
 #' 
@@ -830,6 +1187,9 @@ predict_outliers <- function(model) {
 #'  
 #' @return (Model) Read model object
 #' 
+#' @examples
+#' read_model("/home/run1$mod")
+#' 
 #' @seealso
 #' read_model_from_string : Read model from string
 #' 
@@ -848,6 +1208,18 @@ read_model <- function(path) {
 #' @param code (str) Model code to read
 #'  
 #' @return (Model) Read model object
+#' 
+#' @examples
+#' s <- '''$PROBLEM
+#' $INPUT ID DV TIME
+#' $DATA file$csv
+#' $PRED
+#' Y=THETA(1)+ETA(1)+ERR(1)
+#' $THETA 1
+#' $OMEGA 0.1
+#' $SIGMA 1
+#' $ESTIMATION METHOD=1'''
+#' read_model_from_string(s)
 #' 
 #' @seealso
 #' read_model : Read model from file
@@ -868,6 +1240,9 @@ read_model_from_string <- function(code) {
 #'  
 #' @return (Results object for tool) 
 #' 
+#' @examples
+#' res <- read_resuts("results$json")
+#' 
 #' @seealso
 #' create_results
 #' 
@@ -887,6 +1262,12 @@ read_results <- function(path) {
 #'  
 #' @return (Model) Reference to the same model object
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' model$statements$find_assignment("Y")
+#' remove_error_model(model)
+#' model$statements$find_assignment("Y")
+#' 
 #' 
 #' @export
 remove_error_model <- function(model) {
@@ -903,6 +1284,14 @@ remove_error_model <- function(model) {
 #' @param idx (integer) index of estimation step to remove
 #'  
 #' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' opts <- list('NITER'=1000, 'ISAMPLE'=100, 'EONLY'=1)
+#' add_estimation_step(model, "IMP", options=opts)
+#' remove_estimation_step(model, 1)
+#' ests <- model$estimation_steps
+#' len(ests)
 #' 
 #' @seealso
 #' add_estimation_step
@@ -927,6 +1316,14 @@ remove_estimation_step <- function(model, idx) {
 #'  
 #' @return (Model) Reference to the same model
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' remove_iiv(model)
+#' model$statements$find_assignment("CL")
+#' model <- load_example_model("pheno")
+#' remove_iiv(model, "V")
+#' model$statements$find_assignment("V")
+#' 
 #' @seealso
 #' remove_iov
 #' 
@@ -950,6 +1347,10 @@ remove_iiv <- function(model, to_remove=NULL) {
 #'  
 #' @return (Model) Reference to the same model
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' remove_iov(model)
+#' 
 #' @seealso
 #' add_iiv
 #' 
@@ -972,6 +1373,10 @@ remove_iov <- function(model) {
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (Model) Reference to same model
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' remove_lag_time(model)
 #' 
 #' @seealso
 #' set_transit_compartments
@@ -1005,6 +1410,12 @@ remove_lag_time <- function(model) {
 #'  
 #' @return (Model) Reference to same model
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' set_peripheral_compartments(model, 2)
+#' remove_peripheral_compartment(model)
+#' model$statements$ode_system
+#' 
 #' @seealso
 #' set_peripheral_compartment
 #' 
@@ -1030,6 +1441,10 @@ remove_peripheral_compartment <- function(model) {
 #'  
 #' @return (Results object for tool) 
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' res <- run_tool("resmod", model)
+#' 
 #' 
 #' @export
 run_tool <- function(name) {
@@ -1047,7 +1462,12 @@ run_tool <- function(name) {
 #' @param samples_per_id (integer) Number of samples per individual
 #' @param rng (rng or integer) Random number generator or seed
 #'  
-#' @return (data.frame : Pool of samples in a DataFrame) 
+#' @return (data.frame) Pool of samples in a DataFrame
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' rng <- create_rng(23)
+#' sample_individual_estimates(model, samples_per_id=2, rng=rng)
 #' 
 #' @seealso
 #' sample_parameters_from_covariance_matrix : Sample parameter vectors using the
@@ -1079,7 +1499,12 @@ sample_individual_estimates <- function(model, parameters=NULL, samples_per_id=1
 #' @param n (integer) Number of samples
 #' @param rng (Generator) Random number generator
 #'  
-#' @return (DataFrame) A dataframe with one sample per row
+#' @return (data.frame) A dataframe with one sample per row
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' rng <- create_rng(23)
+#' sample_parameters_from_covariance_matrix(model, n=3, rng=rng)
 #' 
 #' @seealso
 #' sample_parameters_uniformly : Sample parameter vectors using uniform distribution
@@ -1109,7 +1534,12 @@ sample_parameters_from_covariance_matrix <- function(model, modelfit_results=NUL
 #' @param n (integer) Number of samples
 #' @param rng (integer or rng) Random number generator or seed
 #'  
-#' @return (data.frame : samples) 
+#' @return (data.frame) samples
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' rng <- create_rng(23)
+#' sample_parameters_uniformly(model, n=3, rng=rng)
 #' 
 #' @seealso
 #' sample_parameters_from_covariance_matrix : Sample parameter vectors using the
@@ -1149,6 +1579,16 @@ sample_parameters_uniformly <- function(model, fraction=0.1, parameters=NULL, fo
 #'  
 #' @return (Model) Reference to the same model object
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' model$statements$find_assignment("Y")
+#' set_additive_error_model(model)
+#' model$statements$find_assignment("Y")
+#' model <- load_example_model("pheno")
+#' model$statements$find_assignment("Y")
+#' set_additive_error_model(model, data_trans="log(Y)")
+#' model$statements$find_assignment("Y")
+#' 
 #' @seealso
 #' set_proportional_error_model : Proportional error model
 #' 
@@ -1169,6 +1609,11 @@ set_additive_error_model <- function(model, data_trans=NULL, series_terms=2) {
 #' @param model (Model) Model to set or change absorption rate
 #'  
 #' @return (Model) Reference to same model
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' set_bolus_absorption(model)
+#' model$statements$ode_system
 #' 
 #' @seealso
 #' set_zero_order_absorption
@@ -1204,6 +1649,14 @@ set_bolus_absorption <- function(model) {
 #'  
 #' @return (Model) Reference to the same model
 #' 
+#' @examples
+#' model <- remove_error_model(load_example_model("pheno"))
+#' set_combined_error_model(model)
+#' model$statements$find_assignment("Y")
+#' model <- remove_error_model(load_example_model("pheno"))
+#' set_combined_error_model(model, data_trans="log(Y)")
+#' model$statements$find_assignment("Y")
+#' 
 #' @seealso
 #' set_additive_error_model : Additive error model
 #' 
@@ -1224,6 +1677,10 @@ set_combined_error_model <- function(model, data_trans=NULL) {
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (Model) Reference to the same model
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' set_dtbs_error_model(model)
 #' 
 #' 
 #' @export
@@ -1248,6 +1705,12 @@ set_dtbs_error_model <- function(model) {
 #'  
 #' @return (Model) Reference to the same model object
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' opts <- list('NITER'=1000, 'ISAMPLE'=100, 'EONLY'=1)
+#' set_estimation_step(model, "IMP", options=opts)
+#' model$estimation_steps[0]
+#' 
 #' @seealso
 #' add_estimation_step
 #' 
@@ -1255,7 +1718,7 @@ set_dtbs_error_model <- function(model) {
 #' 
 #' 
 #' @export
-set_estimation_step <- function(model, method, interaction=TRUE, options={}, est_idx=0) {
+set_estimation_step <- function(model, method, interaction=TRUE, options=NULL, est_idx=0) {
     return(pharmpy$modeling$set_estimation_step(model, method, interaction, options, est_idx))
 }
 
@@ -1271,6 +1734,11 @@ set_estimation_step <- function(model, method, interaction=TRUE, options={}, est
 #' @param model (Model) Model to set or change to use first order absorption rate
 #'  
 #' @return (Model) Reference to same model
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' set_first_order_absorption(model)
+#' model$statements$ode_system
 #' 
 #' @seealso
 #' set_bolus_order_absorption
@@ -1292,6 +1760,11 @@ set_first_order_absorption <- function(model) {
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (Model) Reference to same model
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' set_first_order_elimination(model)
+#' model$statements$ode_system
 #' 
 #' @seealso
 #' set_zero_order_elimination
@@ -1321,6 +1794,11 @@ set_first_order_elimination <- function(model) {
 #'  
 #' @return (Model) Reference to same model
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' set_iiv_on_ruv(model)
+#' model$statements$find_assignment("Y")
+#' 
 #' @seealso
 #' set_power_on_ruv
 #' 
@@ -1341,6 +1819,11 @@ set_iiv_on_ruv <- function(model, list_of_eps=NULL, same_eta=TRUE, eta_names=NUL
 #'  
 #' @return (Model) Reference to the same model object
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' set_initial_estimates(model, {'THETA(1)': 2})
+#' model$parameters['THETA(1)']
+#' 
 #' 
 #' @export
 set_initial_estimates <- function(model, inits) {
@@ -1359,6 +1842,10 @@ set_initial_estimates <- function(model, inits) {
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (Model) Reference to same model
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' set_lag_time(model)
 #' 
 #' @seealso
 #' set_transit_compartments
@@ -1383,6 +1870,11 @@ set_lag_time <- function(model) {
 #'  
 #' @return (Model) Reference to the same model
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' set_michaelis_menten_elimination(model)
+#' model$statements$ode_system
+#' 
 #' @seealso
 #' set_first_order_elimination
 #' 
@@ -1405,6 +1897,11 @@ set_michaelis_menten_elimination <- function(model) {
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (Model) Reference to the same model
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' set_mixed_mm_fo_elimination(model)
+#' model$statements$ode_system
 #' 
 #' @seealso
 #' set_first_order_elimination
@@ -1429,6 +1926,12 @@ set_mixed_mm_fo_elimination <- function(model) {
 #' @param new_name (str) New name of model
 #'  
 #' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' model$name
+#' set_name(model, "run2")
+#' model$name
 #' 
 #' 
 #' @export
@@ -1465,6 +1968,10 @@ set_name <- function(model, new_name) {
 #'  
 #' @return (Model) Reference to same model
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' set_ode_solver(model, 'LSODA')
+#' 
 #' 
 #' @export
 set_ode_solver <- function(model, solver) {
@@ -1481,6 +1988,11 @@ set_ode_solver <- function(model, solver) {
 #' @param n (integer) Number of transit compartments
 #'  
 #' @return (Model) Reference to same model
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' set_peripheral_compartments(model, 2)
+#' model$statements$ode_system
 #' 
 #' @seealso
 #' add_peripheral_compartment
@@ -1507,6 +2019,11 @@ set_peripheral_compartments <- function(model, n) {
 #'  NULL is default.
 #'  
 #' @return (Model) Reference to the same model
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' set_power_on_ruv(model)
+#' model$statements$find_assignment("Y")
 #' 
 #' @seealso
 #' set_iiv_on_ruv
@@ -1539,6 +2056,14 @@ set_power_on_ruv <- function(model, list_of_eps=NULL) {
 #'  
 #' @return (Model) Reference to the same model object
 #' 
+#' @examples
+#' model <- remove_error_model(load_example_model("pheno"))
+#' set_proportional_error_model(model)
+#' model$statements$find_assignment("Y")
+#' model <- remove_error_model(load_example_model("pheno"))
+#' set_proportional_error_model(model, data_trans="log(Y)")
+#' model$statements$find_assignment("Y")
+#' 
 #' @seealso
 #' set_additive_error_model : Additive error model
 #' 
@@ -1563,6 +2088,11 @@ set_proportional_error_model <- function(model, data_trans=NULL) {
 #' @param model (Model) Model to set or change absorption rate
 #'  
 #' @return (Model) Reference to same model
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' set_seq_zo_fo_absorption(model)
+#' model$statements$ode_system
 #' 
 #' @seealso
 #' set_bolus_order_absorption
@@ -1591,6 +2121,11 @@ set_seq_zo_fo_absorption <- function(model) {
 #'  
 #' @return (Model) Reference to same model
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' set_transit_compartments(model, 3)
+#' model$statements$ode_system
+#' 
 #' @seealso
 #' set_lag_time
 #' 
@@ -1609,6 +2144,10 @@ set_transit_compartments <- function(model, n) {
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (Model) Reference to the same model
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' set_weighted_error_model(model)
 #' 
 #' @seealso
 #' use_thetas_for_error_stdev : Use thetas to estimate error
@@ -1631,6 +2170,11 @@ set_weighted_error_model <- function(model) {
 #' @param model (Model) Model to set or change to first order absorption rate
 #'  
 #' @return (Model) Reference to the same model
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' set_zero_order_absorption(model)
+#' model$statements$ode_system
 #' 
 #' @seealso
 #' set_bolus_order_absorption
@@ -1655,6 +2199,11 @@ set_zero_order_absorption <- function(model) {
 #'  
 #' @return (Model) Reference to same model
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' set_zero_order_elimination(model)
+#' model$statements$ode_system
+#' 
 #' @seealso
 #' set_first_order_elimination
 #' 
@@ -1678,6 +2227,13 @@ set_zero_order_elimination <- function(model) {
 #'  
 #' @return (Model) Reference to the same model
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' create_joint_distribution(model, c('ETA(1)', 'ETA(2)'))
+#' model$random_variables$etas
+#' split_joint_distribution(model, c('ETA(1)', 'ETA(2)'))
+#' model$random_variables$etas
+#' 
 #' @seealso
 #' create_joint_distribution : combine etas into a join distribution
 #' 
@@ -1691,14 +2247,18 @@ split_joint_distribution <- function(model, rvs=NULL) {
 #' summarize_modelfit_results
 #' 
 #' @description
-#' Summarize results of multiple model runs
+#' Summarize results of model runs
 #' 
 #' Summarize different results after fitting a model, includes runtime, ofv,
 #' and parameter estimates (with errors).
 #' 
-#' @param models (vector) List of models
+#' @param models (vector, Model) List of models or single model
 #'  
 #' @return (data.frame) A DataFrame of modelfit results, one row per model.
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' summarize_modelfit_results(c(model))
 #' 
 #' 
 #' @export
@@ -1718,6 +2278,11 @@ summarize_modelfit_results <- function(models) {
 #' @param list_of_etas (str, vector) Name/names of etas to transform. If NULL, all etas will be transformed (default).
 #'  
 #' @return (Model) Reference to the same model
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' transform_etas_boxcox(model, c("ETA(1)"))
+#' model$statements$full_expression_from_odes("CL")
 #' 
 #' @seealso
 #' transform_etas_tdist
@@ -1747,6 +2312,11 @@ transform_etas_boxcox <- function(model, list_of_etas=NULL) {
 #'  
 #' @return (Model) Reference to the same model
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' transform_etas_john_draper(model, c("ETA(1)"))
+#' model$statements$full_expression_from_odes("CL")
+#' 
 #' @seealso
 #' transform_etas_boxcox
 #' 
@@ -1771,6 +2341,11 @@ transform_etas_john_draper <- function(model, list_of_etas=NULL) {
 #'  
 #' @return (Model) Reference to the same model
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' transform_etas_tdist(model, c("ETA(1)"))
+#' model$statements$full_expression_from_odes("CL")
+#' 
 #' @seealso
 #' transform_etas_boxcox
 #' 
@@ -1794,6 +2369,13 @@ transform_etas_tdist <- function(model, list_of_etas=NULL) {
 #' @param parameter_names (vector or str) one parameter name or a vector of parameter names
 #'  
 #' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' fix_parameters(model, c('THETA(1)', 'THETA(2)', 'THETA(3)'))
+#' model$parameters$fix
+#' unfix_parameters(model, 'THETA(1)')
+#' model$parameters$fix
 #' 
 #' @seealso
 #' unfix_paramaters_to : Unfixing parameters and setting a new initial estimate in the same
@@ -1824,6 +2406,14 @@ unfix_parameters <- function(model, parameter_names) {
 #'  
 #' @return (Model) Reference to the same model object
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' fix_parameters(model, c('THETA(1)', 'THETA(2)', 'THETA(3)'))
+#' model$parameters$fix
+#' unfix_parameters_to(model, 'THETA(1)', 0.5)
+#' model$parameters$fix
+#' model$parameters['THETA(1)']
+#' 
 #' 
 #' @export
 unfix_parameters_to <- function(model, parameter_names, values) {
@@ -1845,6 +2435,12 @@ unfix_parameters_to <- function(model, parameter_names, values) {
 #'  
 #' @return (Model) Reference to the same model
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' model$parameters$inits
+#' update_inits(model)
+#' model$parameters$inits
+#' 
 #' 
 #' @export
 update_inits <- function(model, force_individual_estimates=FALSE) {
@@ -1864,6 +2460,12 @@ update_inits <- function(model, force_individual_estimates=FALSE) {
 #'  
 #' @return (Model) Reference to the same model object
 #' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' fix_parameters(model, c('THETA(1)'))
+#' update_source(model)
+#' print(str(model).splitlines()c(22))
+#' 
 #' 
 #' @export
 update_source <- function(model) {
@@ -1879,6 +2481,11 @@ update_source <- function(model) {
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (Model) Reference to the same model
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' use_thetas_for_error_stdev(model)
+#' model$statements$find_assignment("Y")
 #' 
 #' @seealso
 #' set_weighted_error_model : Encode error model with one epsilon and weight
@@ -1900,6 +2507,10 @@ use_thetas_for_error_stdev <- function(model) {
 #' @param force (logical) Force overwrite, default is TRUE
 #'  
 #' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' model <- load_example_model("pheno")
+#' write_model(model)
 #' 
 #' 
 #' @export
