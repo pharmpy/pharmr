@@ -117,6 +117,7 @@ def create_r_returns(doc_list):
 def create_r_example(doc_list):
     pattern_start = re.compile(r'>>> |^\.\.\. ')
     pattern_methods = re.compile(r'([A-Za-z]\d*)\.([A-Za-z]\d*)')
+    pattern_list_idx = re.compile(r'\w\[(\d+)]')
     pattern_list = re.compile(r'\[([\'\"\w(),\s]+)]')
     pattern_dict = re.compile(r'{(([\'\"]*[\w\d()]+[\'\"]*: [\'\"]*[\w\d]+\'*,*\s*)+)}')
     pattern_doctest = re.compile(r'\s+# doctest:.*')
@@ -131,12 +132,17 @@ def create_r_example(doc_list):
         row_r = py_to_r_str(row_r, example=True)
         row_r = re.sub(' = ', ' <- ', row_r)
 
-        # Substitute . to $, e.g. model.parameters -> model$parameters
+        # Substitute any . to $, e.g. model.parameters -> model$parameters
         row_r = re.sub(pattern_methods, r'\1$\2', row_r)
 
-        # Check that row doesn't use index
-        if not re.search(r'\w\[', row_r):
-            # Substitute [] to c(), e.g. ['THETA(1)'] -> c('THETA(1)')
+        # Check if row has list subscript
+        if re.search(r'\w\[', row_r):
+            idx = re.search(pattern_list_idx, row_r)
+            if idx:
+                # Increase idx by 1, e.g. list[0] -> list[1]
+                row_r = re.sub(idx.group(1), f'{int(idx.group(1)) + 1}', row_r)
+        else:
+            # Substitute any [] to c(), e.g. ['THETA(1)'] -> c('THETA(1)')
             row_r = re.sub(pattern_list, r'c(\1)', row_r)
 
         # Check if row contains python dict

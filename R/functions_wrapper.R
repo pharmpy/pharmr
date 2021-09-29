@@ -142,7 +142,7 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' add_estimation_step(model, "IMP", options=opts)
 #' ests <- model$estimation_steps
 #' len(ests)
-#' ests[1]
+#' ests[2]
 #' 
 #' @seealso
 #' set_estimation_step
@@ -1709,7 +1709,7 @@ set_dtbs_error_model <- function(model) {
 #' model <- load_example_model("pheno")
 #' opts <- list('NITER'=1000, 'ISAMPLE'=100, 'EONLY'=1)
 #' set_estimation_step(model, "IMP", options=opts)
-#' model$estimation_steps[0]
+#' model$estimation_steps[1]
 #' 
 #' @seealso
 #' add_estimation_step
