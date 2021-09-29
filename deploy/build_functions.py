@@ -42,9 +42,17 @@ def create_r_func(func):
     func_args = ', '.join(arg_list)
     args_str = ', '.join(args)
 
-    r_func = f'{func_name} <- function({func_args}) {{\n' \
-             f'    return(pharmpy$modeling${func_name}({args_str}))\n' \
-             f'}}'
+    if 'pd.dataframe' in getdoc(func).lower() or 'pd.series' in getdoc(func).lower():
+        return f'{func_name} <- function({func_args}) {{\n' \
+               f'    df <- pharmpy$modeling${func_name}({args_str})\n' \
+               f'    df_reset <- df$reset_index()\n' \
+               f'    return(py_to_r(df_reset))\n' \
+               f'}}'
+    else:
+        r_func = f'{func_name} <- function({func_args}) {{\n' \
+                 f'    func_out <- pharmpy$modeling${func_name}({args_str})\n' \
+                 f'    return(py_to_r(func_out))\n' \
+                 f'}}'
 
     return r_func
 
@@ -222,6 +230,7 @@ def py_to_r_str(arg, example=False):
                     r'\\max': 'max',
                     r'\\epsilon': 'epsilon',
                     'pd.DataFrame': 'data.frame',
+                    'pd.Series': 'data.frame',
                     r'\bint\b': 'integer',
                     'float': 'numeric'
                     }

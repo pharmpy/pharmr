@@ -11,7 +11,9 @@ on_error_pharmpy <- function(e) {
 pharmpy <- NULL
 
 #' @import altair
+#' @importFrom reticulate py_to_r
 .onLoad <- function(libname, pkgname) {
-    pharmpy <<- reticulate::import("pharmpy", delay_load=list(on_load=on_load_pharmpy, 
-                                                              on_error=on_error_pharmpy))
+    pharmpy <<- reticulate::import("pharmpy", convert=FALSE,
+                                   delay_load=list(on_load=on_load_pharmpy,
+                                                   on_error=on_error_pharmpy))
 }

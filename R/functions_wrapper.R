@@ -116,7 +116,8 @@
 #' 
 #' @export
 add_covariate_effect <- function(model, parameter, covariate, effect, operation='*') {
-    return(pharmpy$modeling$add_covariate_effect(model, parameter, covariate, effect, operation))
+    func_out <- pharmpy$modeling$add_covariate_effect(model, parameter, covariate, effect, operation)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -152,7 +153,8 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' 
 #' @export
 add_estimation_step <- function(model, method, interaction=TRUE, options=NULL, idx=NULL) {
-    return(pharmpy$modeling$add_estimation_step(model, method, interaction, options, idx))
+    func_out <- pharmpy$modeling$add_estimation_step(model, method, interaction, options, idx)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -195,7 +197,8 @@ add_estimation_step <- function(model, method, interaction=TRUE, options=NULL, i
 #' 
 #' @export
 add_iiv <- function(model, list_of_parameters, expression, operation='*', eta_names=NULL) {
-    return(pharmpy$modeling$add_iiv(model, list_of_parameters, expression, operation, eta_names))
+    func_out <- pharmpy$modeling$add_iiv(model, list_of_parameters, expression, operation, eta_names)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -217,7 +220,8 @@ add_iiv <- function(model, list_of_parameters, expression, operation='*', eta_na
 #' 
 #' @export
 add_individual_parameter <- function(model, name) {
-    return(pharmpy$modeling$add_individual_parameter(model, name))
+    func_out <- pharmpy$modeling$add_individual_parameter(model, name)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -252,7 +256,8 @@ add_individual_parameter <- function(model, name) {
 #' 
 #' @export
 add_iov <- function(model, occ, list_of_parameters=NULL, eta_names=NULL) {
-    return(pharmpy$modeling$add_iov(model, occ, list_of_parameters, eta_names))
+    func_out <- pharmpy$modeling$add_iov(model, occ, list_of_parameters, eta_names)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -295,7 +300,8 @@ add_iov <- function(model, occ, list_of_parameters=NULL, eta_names=NULL) {
 #' 
 #' @export
 add_peripheral_compartment <- function(model) {
-    return(pharmpy$modeling$add_peripheral_compartment(model))
+    func_out <- pharmpy$modeling$add_peripheral_compartment(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -321,7 +327,8 @@ add_peripheral_compartment <- function(model) {
 #' 
 #' @export
 calculate_eta_shrinkage <- function(model, sd=FALSE) {
-    return(pharmpy$modeling$calculate_eta_shrinkage(model, sd))
+    func_out <- pharmpy$modeling$calculate_eta_shrinkage(model, sd)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -357,7 +364,9 @@ calculate_eta_shrinkage <- function(model, sd=FALSE) {
 #' 
 #' @export
 calculate_individual_parameter_statistics <- function(model, exprs, rng=NULL) {
-    return(pharmpy$modeling$calculate_individual_parameter_statistics(model, exprs, rng))
+    df <- pharmpy$modeling$calculate_individual_parameter_statistics(model, exprs, rng)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
 }
 
 #' @title
@@ -441,7 +450,8 @@ calculate_individual_parameter_statistics <- function(model, exprs, rng=NULL) {
 #' 
 #' @export
 calculate_individual_shrinkage <- function(model) {
-    return(pharmpy$modeling$calculate_individual_shrinkage(model))
+    func_out <- pharmpy$modeling$calculate_individual_shrinkage(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -472,7 +482,9 @@ calculate_individual_shrinkage <- function(model) {
 #' 
 #' @export
 calculate_pk_parameters_statistics <- function(model, rng=NULL) {
-    return(pharmpy$modeling$calculate_pk_parameters_statistics(model, rng))
+    df <- pharmpy$modeling$calculate_pk_parameters_statistics(model, rng)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
 }
 
 #' @title
@@ -493,7 +505,8 @@ calculate_pk_parameters_statistics <- function(model, rng=NULL) {
 #' 
 #' @export
 convert_model <- function(model, to_format) {
-    return(pharmpy$modeling$convert_model(model, to_format))
+    func_out <- pharmpy$modeling$convert_model(model, to_format)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -514,7 +527,8 @@ convert_model <- function(model, to_format) {
 #' 
 #' @export
 copy_model <- function(model, name=NULL) {
-    return(pharmpy$modeling$copy_model(model, name))
+    func_out <- pharmpy$modeling$copy_model(model, name)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -546,7 +560,8 @@ copy_model <- function(model, name=NULL) {
 #' 
 #' @export
 create_joint_distribution <- function(model, rvs=NULL) {
-    return(pharmpy$modeling$create_joint_distribution(model, rvs))
+    func_out <- pharmpy$modeling$create_joint_distribution(model, rvs)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -570,7 +585,8 @@ create_joint_distribution <- function(model, rvs=NULL) {
 #' 
 #' @export
 create_results <- function(path) {
-    return(pharmpy$modeling$create_results(path))
+    func_out <- pharmpy$modeling$create_results(path)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -594,7 +610,8 @@ create_results <- function(path) {
 #' 
 #' @export
 create_rng <- function(seed) {
-    return(pharmpy$modeling$create_rng(seed))
+    func_out <- pharmpy$modeling$create_rng(seed)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -611,7 +628,7 @@ create_rng <- function(seed) {
 #' @param model (Model) Pharmpy model
 #' @param expression (str or sympy expression) Expression to evaluate
 #'  
-#' @return (pd.Series) A series of one evaluated value for each data record
+#' @return (data.frame) A series of one evaluated value for each data record
 #' 
 #' @examples
 #' model <- load_example_model("pheno")
@@ -630,7 +647,9 @@ create_rng <- function(seed) {
 #' 
 #' @export
 evaluate_expression <- function(model, expression) {
-    return(pharmpy$modeling$evaluate_expression(model, expression))
+    df <- pharmpy$modeling$evaluate_expression(model, expression)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
 }
 
 #' @title
@@ -653,7 +672,8 @@ evaluate_expression <- function(model, expression) {
 #' 
 #' @export
 fit <- function(models) {
-    return(pharmpy$modeling$fit(models))
+    func_out <- pharmpy$modeling$fit(models)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -687,7 +707,8 @@ fit <- function(models) {
 #' 
 #' @export
 fix_parameters <- function(model, parameter_names) {
-    return(pharmpy$modeling$fix_parameters(model, parameter_names))
+    func_out <- pharmpy$modeling$fix_parameters(model, parameter_names)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -722,7 +743,8 @@ fix_parameters <- function(model, parameter_names) {
 #' 
 #' @export
 fix_parameters_to <- function(model, parameter_names, values) {
-    return(pharmpy$modeling$fix_parameters_to(model, parameter_names, values))
+    func_out <- pharmpy$modeling$fix_parameters_to(model, parameter_names, values)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -747,7 +769,8 @@ fix_parameters_to <- function(model, parameter_names, values) {
 #' 
 #' @export
 get_model_covariates <- function(model, strings=FALSE) {
-    return(pharmpy$modeling$get_model_covariates(model, strings))
+    func_out <- pharmpy$modeling$get_model_covariates(model, strings)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -777,7 +800,8 @@ get_model_covariates <- function(model, strings=FALSE) {
 #' 
 #' @export
 get_number_of_individuals <- function(model) {
-    return(pharmpy$modeling$get_number_of_individuals(model))
+    func_out <- pharmpy$modeling$get_number_of_individuals(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -807,7 +831,8 @@ get_number_of_individuals <- function(model) {
 #' 
 #' @export
 get_number_of_observations <- function(model) {
-    return(pharmpy$modeling$get_number_of_observations(model))
+    func_out <- pharmpy$modeling$get_number_of_observations(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -818,7 +843,7 @@ get_number_of_observations <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (pd.Series) Number of observations in the model dataset
+#' @return (data.frame) Number of observations in the model dataset
 #' 
 #' @examples
 #' model <- load_example_model("pheno")
@@ -896,7 +921,9 @@ get_number_of_observations <- function(model) {
 #' 
 #' @export
 get_number_of_observations_per_individual <- function(model) {
-    return(pharmpy$modeling$get_number_of_observations_per_individual(model))
+    df <- pharmpy$modeling$get_number_of_observations_per_individual(model)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
 }
 
 #' @title
@@ -907,7 +934,7 @@ get_number_of_observations_per_individual <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (pd.Series) Observations indexed over ID and TIME
+#' @return (data.frame) Observations indexed over ID and TIME
 #' 
 #' @examples
 #' model <- load_example_model("pheno")
@@ -926,7 +953,9 @@ get_number_of_observations_per_individual <- function(model) {
 #' 
 #' @export
 get_observations <- function(model) {
-    return(pharmpy$modeling$get_observations(model))
+    df <- pharmpy$modeling$get_observations(model)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
 }
 
 #' @title
@@ -951,7 +980,8 @@ get_observations <- function(model) {
 #' 
 #' @export
 has_additive_error_model <- function(model) {
-    return(pharmpy$modeling$has_additive_error_model(model))
+    func_out <- pharmpy$modeling$has_additive_error_model(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -976,7 +1006,8 @@ has_additive_error_model <- function(model) {
 #' 
 #' @export
 has_combined_error_model <- function(model) {
-    return(pharmpy$modeling$has_combined_error_model(model))
+    func_out <- pharmpy$modeling$has_combined_error_model(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1001,7 +1032,8 @@ has_combined_error_model <- function(model) {
 #' 
 #' @export
 has_proportional_error_model <- function(model) {
-    return(pharmpy$modeling$has_proportional_error_model(model))
+    func_out <- pharmpy$modeling$has_proportional_error_model(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1023,7 +1055,8 @@ has_proportional_error_model <- function(model) {
 #' 
 #' @export
 has_zero_order_absorption <- function(model) {
-    return(pharmpy$modeling$has_zero_order_absorption(model))
+    func_out <- pharmpy$modeling$has_zero_order_absorption(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1045,7 +1078,8 @@ has_zero_order_absorption <- function(model) {
 #' 
 #' @export
 load_example_model <- function(name) {
-    return(pharmpy$modeling$load_example_model(name))
+    func_out <- pharmpy$modeling$load_example_model(name)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1064,7 +1098,8 @@ load_example_model <- function(name) {
 #' 
 #' @export
 plot_individual_predictions <- function(model, predictions=NULL, individuals=NULL) {
-    return(pharmpy$modeling$plot_individual_predictions(model, predictions, individuals))
+    func_out <- pharmpy$modeling$plot_individual_predictions(model, predictions, individuals)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1081,7 +1116,8 @@ plot_individual_predictions <- function(model, predictions=NULL, individuals=NUL
 #' 
 #' @export
 plot_iofv_vs_iofv <- function(model, other) {
-    return(pharmpy$modeling$plot_iofv_vs_iofv(model, other))
+    func_out <- pharmpy$modeling$plot_iofv_vs_iofv(model, other)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1102,7 +1138,9 @@ plot_iofv_vs_iofv <- function(model, other) {
 #' 
 #' @export
 predict_influential_individuals <- function(model) {
-    return(pharmpy$modeling$predict_influential_individuals(model))
+    df <- pharmpy$modeling$predict_influential_individuals(model)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
 }
 
 #' @title
@@ -1123,7 +1161,9 @@ predict_influential_individuals <- function(model) {
 #' 
 #' @export
 predict_influential_outliers <- function(model) {
-    return(pharmpy$modeling$predict_influential_outliers(model))
+    df <- pharmpy$modeling$predict_influential_outliers(model)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
 }
 
 #' @title
@@ -1174,7 +1214,9 @@ predict_influential_outliers <- function(model) {
 #' 
 #' @export
 predict_outliers <- function(model) {
-    return(pharmpy$modeling$predict_outliers(model))
+    df <- pharmpy$modeling$predict_outliers(model)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
 }
 
 #' @title
@@ -1196,7 +1238,8 @@ predict_outliers <- function(model) {
 #' 
 #' @export
 read_model <- function(path) {
-    return(pharmpy$modeling$read_model(path))
+    func_out <- pharmpy$modeling$read_model(path)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1227,7 +1270,8 @@ read_model <- function(path) {
 #' 
 #' @export
 read_model_from_string <- function(code) {
-    return(pharmpy$modeling$read_model_from_string(code))
+    func_out <- pharmpy$modeling$read_model_from_string(code)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1249,7 +1293,8 @@ read_model_from_string <- function(code) {
 #' 
 #' @export
 read_results <- function(path) {
-    return(pharmpy$modeling$read_results(path))
+    func_out <- pharmpy$modeling$read_results(path)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1271,7 +1316,8 @@ read_results <- function(path) {
 #' 
 #' @export
 remove_error_model <- function(model) {
-    return(pharmpy$modeling$remove_error_model(model))
+    func_out <- pharmpy$modeling$remove_error_model(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1301,7 +1347,8 @@ remove_error_model <- function(model) {
 #' 
 #' @export
 remove_estimation_step <- function(model, idx) {
-    return(pharmpy$modeling$remove_estimation_step(model, idx))
+    func_out <- pharmpy$modeling$remove_estimation_step(model, idx)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1334,7 +1381,8 @@ remove_estimation_step <- function(model, idx) {
 #' 
 #' @export
 remove_iiv <- function(model, to_remove=NULL) {
-    return(pharmpy$modeling$remove_iiv(model, to_remove))
+    func_out <- pharmpy$modeling$remove_iiv(model, to_remove)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1361,7 +1409,8 @@ remove_iiv <- function(model, to_remove=NULL) {
 #' 
 #' @export
 remove_iov <- function(model) {
-    return(pharmpy$modeling$remove_iov(model))
+    func_out <- pharmpy$modeling$remove_iov(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1386,7 +1435,8 @@ remove_iov <- function(model) {
 #' 
 #' @export
 remove_lag_time <- function(model) {
-    return(pharmpy$modeling$remove_lag_time(model))
+    func_out <- pharmpy$modeling$remove_lag_time(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1424,7 +1474,8 @@ remove_lag_time <- function(model) {
 #' 
 #' @export
 remove_peripheral_compartment <- function(model) {
-    return(pharmpy$modeling$remove_peripheral_compartment(model))
+    func_out <- pharmpy$modeling$remove_peripheral_compartment(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1448,7 +1499,8 @@ remove_peripheral_compartment <- function(model) {
 #' 
 #' @export
 run_tool <- function(name) {
-    return(pharmpy$modeling$run_tool(name))
+    func_out <- pharmpy$modeling$run_tool(name)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1479,7 +1531,9 @@ run_tool <- function(name) {
 #' 
 #' @export
 sample_individual_estimates <- function(model, parameters=NULL, samples_per_id=100, rng=NULL) {
-    return(pharmpy$modeling$sample_individual_estimates(model, parameters, samples_per_id, rng))
+    df <- pharmpy$modeling$sample_individual_estimates(model, parameters, samples_per_id, rng)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
 }
 
 #' @title
@@ -1514,7 +1568,9 @@ sample_individual_estimates <- function(model, parameters=NULL, samples_per_id=1
 #' 
 #' @export
 sample_parameters_from_covariance_matrix <- function(model, modelfit_results=NULL, parameters=NULL, force_posdef_samples=NULL, force_posdef_covmatrix=FALSE, n=1, rng=NULL) {
-    return(pharmpy$modeling$sample_parameters_from_covariance_matrix(model, modelfit_results, parameters, force_posdef_samples, force_posdef_covmatrix, n, rng))
+    df <- pharmpy$modeling$sample_parameters_from_covariance_matrix(model, modelfit_results, parameters, force_posdef_samples, force_posdef_covmatrix, n, rng)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
 }
 
 #' @title
@@ -1528,7 +1584,7 @@ sample_parameters_from_covariance_matrix <- function(model, modelfit_results=NUL
 #' 
 #' @param model (Model) Pharmpy model
 #' @param fraction (numeric) Fraction of estimate value to use for distribution bounds
-#' @param parameters (pd.Series) Names of parameters to use. Default is to use all parameters in the model.
+#' @param parameters (data.frame) Names of parameters to use. Default is to use all parameters in the model.
 #' @param force_posdef_samples (integer) Number of samples to reject before forcing variability parameters to give
 #'  positive definite covariance matrices.
 #' @param n (integer) Number of samples
@@ -1551,7 +1607,9 @@ sample_parameters_from_covariance_matrix <- function(model, modelfit_results=NUL
 #' 
 #' @export
 sample_parameters_uniformly <- function(model, fraction=0.1, parameters=NULL, force_posdef_samples=NULL, n=1, rng=NULL) {
-    return(pharmpy$modeling$sample_parameters_uniformly(model, fraction, parameters, force_posdef_samples, n, rng))
+    df <- pharmpy$modeling$sample_parameters_uniformly(model, fraction, parameters, force_posdef_samples, n, rng)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
 }
 
 #' @title
@@ -1597,7 +1655,8 @@ sample_parameters_uniformly <- function(model, fraction=0.1, parameters=NULL, fo
 #' 
 #' @export
 set_additive_error_model <- function(model, data_trans=NULL, series_terms=2) {
-    return(pharmpy$modeling$set_additive_error_model(model, data_trans, series_terms))
+    func_out <- pharmpy$modeling$set_additive_error_model(model, data_trans, series_terms)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1623,7 +1682,8 @@ set_additive_error_model <- function(model, data_trans=NULL, series_terms=2) {
 #' 
 #' @export
 set_bolus_absorption <- function(model) {
-    return(pharmpy$modeling$set_bolus_absorption(model))
+    func_out <- pharmpy$modeling$set_bolus_absorption(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1665,7 +1725,8 @@ set_bolus_absorption <- function(model) {
 #' 
 #' @export
 set_combined_error_model <- function(model, data_trans=NULL) {
-    return(pharmpy$modeling$set_combined_error_model(model, data_trans))
+    func_out <- pharmpy$modeling$set_combined_error_model(model, data_trans)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1685,7 +1746,8 @@ set_combined_error_model <- function(model, data_trans=NULL) {
 #' 
 #' @export
 set_dtbs_error_model <- function(model) {
-    return(pharmpy$modeling$set_dtbs_error_model(model))
+    func_out <- pharmpy$modeling$set_dtbs_error_model(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1719,7 +1781,8 @@ set_dtbs_error_model <- function(model) {
 #' 
 #' @export
 set_estimation_step <- function(model, method, interaction=TRUE, options=NULL, est_idx=0) {
-    return(pharmpy$modeling$set_estimation_step(model, method, interaction, options, est_idx))
+    func_out <- pharmpy$modeling$set_estimation_step(model, method, interaction, options, est_idx)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1748,7 +1811,8 @@ set_estimation_step <- function(model, method, interaction=TRUE, options=NULL, e
 #' 
 #' @export
 set_first_order_absorption <- function(model) {
-    return(pharmpy$modeling$set_first_order_absorption(model))
+    func_out <- pharmpy$modeling$set_first_order_absorption(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1774,7 +1838,8 @@ set_first_order_absorption <- function(model) {
 #' 
 #' @export
 set_first_order_elimination <- function(model) {
-    return(pharmpy$modeling$set_first_order_elimination(model))
+    func_out <- pharmpy$modeling$set_first_order_elimination(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1805,7 +1870,8 @@ set_first_order_elimination <- function(model) {
 #' 
 #' @export
 set_iiv_on_ruv <- function(model, list_of_eps=NULL, same_eta=TRUE, eta_names=NULL) {
-    return(pharmpy$modeling$set_iiv_on_ruv(model, list_of_eps, same_eta, eta_names))
+    func_out <- pharmpy$modeling$set_iiv_on_ruv(model, list_of_eps, same_eta, eta_names)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1827,7 +1893,8 @@ set_iiv_on_ruv <- function(model, list_of_eps=NULL, same_eta=TRUE, eta_names=NUL
 #' 
 #' @export
 set_initial_estimates <- function(model, inits) {
-    return(pharmpy$modeling$set_initial_estimates(model, inits))
+    func_out <- pharmpy$modeling$set_initial_estimates(model, inits)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1855,7 +1922,8 @@ set_initial_estimates <- function(model, inits) {
 #' 
 #' @export
 set_lag_time <- function(model) {
-    return(pharmpy$modeling$set_lag_time(model))
+    func_out <- pharmpy$modeling$set_lag_time(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1883,7 +1951,8 @@ set_lag_time <- function(model) {
 #' 
 #' @export
 set_michaelis_menten_elimination <- function(model) {
-    return(pharmpy$modeling$set_michaelis_menten_elimination(model))
+    func_out <- pharmpy$modeling$set_michaelis_menten_elimination(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1913,7 +1982,8 @@ set_michaelis_menten_elimination <- function(model) {
 #' 
 #' @export
 set_mixed_mm_fo_elimination <- function(model) {
-    return(pharmpy$modeling$set_mixed_mm_fo_elimination(model))
+    func_out <- pharmpy$modeling$set_mixed_mm_fo_elimination(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1936,7 +2006,8 @@ set_mixed_mm_fo_elimination <- function(model) {
 #' 
 #' @export
 set_name <- function(model, new_name) {
-    return(pharmpy$modeling$set_name(model, new_name))
+    func_out <- pharmpy$modeling$set_name(model, new_name)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1975,7 +2046,8 @@ set_name <- function(model, new_name) {
 #' 
 #' @export
 set_ode_solver <- function(model, solver) {
-    return(pharmpy$modeling$set_ode_solver(model, solver))
+    func_out <- pharmpy$modeling$set_ode_solver(model, solver)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -2002,7 +2074,8 @@ set_ode_solver <- function(model, solver) {
 #' 
 #' @export
 set_peripheral_compartments <- function(model, n) {
-    return(pharmpy$modeling$set_peripheral_compartments(model, n))
+    func_out <- pharmpy$modeling$set_peripheral_compartments(model, n)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -2031,7 +2104,8 @@ set_peripheral_compartments <- function(model, n) {
 #' 
 #' @export
 set_power_on_ruv <- function(model, list_of_eps=NULL) {
-    return(pharmpy$modeling$set_power_on_ruv(model, list_of_eps))
+    func_out <- pharmpy$modeling$set_power_on_ruv(model, list_of_eps)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -2072,7 +2146,8 @@ set_power_on_ruv <- function(model, list_of_eps=NULL) {
 #' 
 #' @export
 set_proportional_error_model <- function(model, data_trans=NULL) {
-    return(pharmpy$modeling$set_proportional_error_model(model, data_trans))
+    func_out <- pharmpy$modeling$set_proportional_error_model(model, data_trans)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -2104,7 +2179,8 @@ set_proportional_error_model <- function(model, data_trans=NULL) {
 #' 
 #' @export
 set_seq_zo_fo_absorption <- function(model) {
-    return(pharmpy$modeling$set_seq_zo_fo_absorption(model))
+    func_out <- pharmpy$modeling$set_seq_zo_fo_absorption(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -2132,7 +2208,8 @@ set_seq_zo_fo_absorption <- function(model) {
 #' 
 #' @export
 set_transit_compartments <- function(model, n) {
-    return(pharmpy$modeling$set_transit_compartments(model, n))
+    func_out <- pharmpy$modeling$set_transit_compartments(model, n)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -2155,7 +2232,8 @@ set_transit_compartments <- function(model, n) {
 #' 
 #' @export
 set_weighted_error_model <- function(model) {
-    return(pharmpy$modeling$set_weighted_error_model(model))
+    func_out <- pharmpy$modeling$set_weighted_error_model(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -2184,7 +2262,8 @@ set_weighted_error_model <- function(model) {
 #' 
 #' @export
 set_zero_order_absorption <- function(model) {
-    return(pharmpy$modeling$set_zero_order_absorption(model))
+    func_out <- pharmpy$modeling$set_zero_order_absorption(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -2212,7 +2291,8 @@ set_zero_order_absorption <- function(model) {
 #' 
 #' @export
 set_zero_order_elimination <- function(model) {
-    return(pharmpy$modeling$set_zero_order_elimination(model))
+    func_out <- pharmpy$modeling$set_zero_order_elimination(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -2240,7 +2320,8 @@ set_zero_order_elimination <- function(model) {
 #' 
 #' @export
 split_joint_distribution <- function(model, rvs=NULL) {
-    return(pharmpy$modeling$split_joint_distribution(model, rvs))
+    func_out <- pharmpy$modeling$split_joint_distribution(model, rvs)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -2263,7 +2344,9 @@ split_joint_distribution <- function(model, rvs=NULL) {
 #' 
 #' @export
 summarize_modelfit_results <- function(models) {
-    return(pharmpy$modeling$summarize_modelfit_results(models))
+    df <- pharmpy$modeling$summarize_modelfit_results(models)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
 }
 
 #' @title
@@ -2292,7 +2375,8 @@ summarize_modelfit_results <- function(models) {
 #' 
 #' @export
 transform_etas_boxcox <- function(model, list_of_etas=NULL) {
-    return(pharmpy$modeling$transform_etas_boxcox(model, list_of_etas))
+    func_out <- pharmpy$modeling$transform_etas_boxcox(model, list_of_etas)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -2325,7 +2409,8 @@ transform_etas_boxcox <- function(model, list_of_etas=NULL) {
 #' 
 #' @export
 transform_etas_john_draper <- function(model, list_of_etas=NULL) {
-    return(pharmpy$modeling$transform_etas_john_draper(model, list_of_etas))
+    func_out <- pharmpy$modeling$transform_etas_john_draper(model, list_of_etas)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -2354,7 +2439,8 @@ transform_etas_john_draper <- function(model, list_of_etas=NULL) {
 #' 
 #' @export
 transform_etas_tdist <- function(model, list_of_etas=NULL) {
-    return(pharmpy$modeling$transform_etas_tdist(model, list_of_etas))
+    func_out <- pharmpy$modeling$transform_etas_tdist(model, list_of_etas)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -2389,7 +2475,8 @@ transform_etas_tdist <- function(model, list_of_etas=NULL) {
 #' 
 #' @export
 unfix_parameters <- function(model, parameter_names) {
-    return(pharmpy$modeling$unfix_parameters(model, parameter_names))
+    func_out <- pharmpy$modeling$unfix_parameters(model, parameter_names)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -2417,7 +2504,8 @@ unfix_parameters <- function(model, parameter_names) {
 #' 
 #' @export
 unfix_parameters_to <- function(model, parameter_names, values) {
-    return(pharmpy$modeling$unfix_parameters_to(model, parameter_names, values))
+    func_out <- pharmpy$modeling$unfix_parameters_to(model, parameter_names, values)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -2444,7 +2532,8 @@ unfix_parameters_to <- function(model, parameter_names, values) {
 #' 
 #' @export
 update_inits <- function(model, force_individual_estimates=FALSE) {
-    return(pharmpy$modeling$update_inits(model, force_individual_estimates))
+    func_out <- pharmpy$modeling$update_inits(model, force_individual_estimates)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -2469,7 +2558,8 @@ update_inits <- function(model, force_individual_estimates=FALSE) {
 #' 
 #' @export
 update_source <- function(model) {
-    return(pharmpy$modeling$update_source(model))
+    func_out <- pharmpy$modeling$update_source(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -2493,7 +2583,8 @@ update_source <- function(model) {
 #' 
 #' @export
 use_thetas_for_error_stdev <- function(model) {
-    return(pharmpy$modeling$use_thetas_for_error_stdev(model))
+    func_out <- pharmpy$modeling$use_thetas_for_error_stdev(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -2515,6 +2606,7 @@ use_thetas_for_error_stdev <- function(model) {
 #' 
 #' @export
 write_model <- function(model, path='', force=TRUE) {
-    return(pharmpy$modeling$write_model(model, path, force))
+    func_out <- pharmpy$modeling$write_model(model, path, force)
+    return(py_to_r(func_out))
 }
 
