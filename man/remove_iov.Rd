@@ -7,13 +7,19 @@
 remove_iov(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model to remove IOV from.
-
-Model
-Reference to the same model}
+\item{model}{(Model) Pharmpy model to remove IOV from.}
+}
+\value{
+(Model) Reference to the same model
 }
 \description{
 Removes all IOV etas
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+remove_iov(model)
+}
 }
 \seealso{
 add_iiv

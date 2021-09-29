@@ -9,16 +9,23 @@ set_transit_compartments(model, n)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{n}{(int) Number of transit compartments
-
-Model
-Reference to same model}
+\item{n}{(integer) Number of transit compartments}
+}
+\value{
+(Model) Reference to same model
 }
 \description{
 Set the number of transit compartments of model.
 
 Initial estimate for absorption rate is
 set the previous rate if available, otherwise it is set to the time of first observation/2.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+set_transit_compartments(model, 3)
+model$statements$ode_system
+}
 }
 \seealso{
 set_lag_time

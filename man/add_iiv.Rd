@@ -21,10 +21,10 @@ add_iiv(
 
 \item{operation}{(str, vector, optional) Whether the new IIV should be added or multiplied (default).}
 
-\item{eta_names}{(str, vector, optional) Custom name/names of new eta
-
-Model
-Reference to the same model}
+\item{eta_names}{(str, vector, optional) Custom name/names of new eta}
+}
+\value{
+(Model) Reference to the same model
 }
 \description{
 Adds IIVs to :class:\code{pharmpy.model}.
@@ -39,6 +39,14 @@ Effects that currently have templates are:
 
 For all except exponential the operation input is not needed. Otherwise user specified
 input is supported. Initial estimates for new etas are 0.09.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+remove_iiv(model, "CL")
+add_iiv(model, "CL", "add")
+model$statements$find_assignment("CL")
+}
 }
 \seealso{
 add_iov

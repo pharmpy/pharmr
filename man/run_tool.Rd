@@ -4,17 +4,23 @@
 \alias{run_tool}
 \title{run_tool}
 \usage{
-run_tool(name)
+run_tool(name, ...)
 }
 \arguments{
-\item{name}{(str) Name of tool to run
-args
-Arguments to pass to tool
-kwargs
-Arguments to pass to tool
+\item{name}{(str) Name of tool to run}
 
-Results object for tool}
+\item{...}{Arguments to pass to tool}
+}
+\value{
+(Results object for tool)
 }
 \description{
 Run tool workflow
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+res <- run_tool("resmod", model)
+}
+
 }

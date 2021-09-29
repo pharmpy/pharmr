@@ -7,14 +7,23 @@
 update_source(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model
-
-Model
-Reference to the same model object}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(Model) Reference to the same model object
 }
 \description{
 Update source
 
 Let the code of the underlying source language be updated to reflect
 changes in the model object.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+fix_parameters(model, c('THETA(1)'))
+update_source(model)
+print(str(model).splitlines()c(22))
+}
+
 }

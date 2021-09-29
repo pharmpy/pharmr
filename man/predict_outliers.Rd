@@ -7,17 +7,21 @@
 predict_outliers(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model
-
-pd.Dataframe
-Dataframe over the individuals with a \code{residual} column containing the raw predicted
-residuals and a \code{outlier} column with a logicalean to tell whether the individual is
-an outlier or not.}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(pd.Dataframe) Dataframe over the individuals with a \code{residual} column containing the raw predicted residuals and a \code{outlier} column with a boolean to tell whether the individual is an outlier or not.
 }
 \description{
 Predict outliers for a model using a machine learning model.
 
 See the :ref:\verb{simeval <Individual OFV summary>} documentation for a definition of the \code{residual}
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+predict_outliers(model)
+}
 }
 \seealso{
 predict_influential_individuals

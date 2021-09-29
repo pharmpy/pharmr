@@ -7,13 +7,18 @@
 read_model(path)
 }
 \arguments{
-\item{path}{(str or Path) Path to model
-
-Model
-Read model object}
+\item{path}{(str or Path) Path to model}
+}
+\value{
+(Model) Read model object
 }
 \description{
 Read model from file
+}
+\examples{
+\dontrun{
+read_model("/home/run1$mod")
+}
 }
 \seealso{
 read_model_from_string : Read model from string

@@ -7,16 +7,22 @@
 set_lag_time(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model
-
-Model
-Reference to same model}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(Model) Reference to same model
 }
 \description{
 Add lag time to the dose compartment of model.
 
 Initial estimate for lag time is set the
 previous lag time if available, otherwise it is set to the time of first observation/2.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+set_lag_time(model)
+}
 }
 \seealso{
 set_transit_compartments

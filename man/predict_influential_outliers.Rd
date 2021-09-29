@@ -7,11 +7,10 @@
 predict_influential_outliers(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model
-
-pd.Dataframe
-Dataframe over the individuals with a \code{outliers} and \code{dofv} columns containing the raw
-predictions and \code{influential}, \code{outlier} and \code{influential_outlier} logicalean columns.}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(pd.Dataframe) Dataframe over the individuals with a \code{outliers} and \code{dofv} columns containing the raw predictions and \code{influential}, \code{outlier} and \code{influential_outlier} boolean columns.
 }
 \description{
 Predict influential outliers for a model using a machine learning model.

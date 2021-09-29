@@ -7,13 +7,27 @@
 read_model_from_string(code)
 }
 \arguments{
-\item{code}{(str) Model code to read
-
-Model
-Read model object}
+\item{code}{(str) Model code to read}
+}
+\value{
+(Model) Read model object
 }
 \description{
 Read model from the model code in a string
+}
+\examples{
+\dontrun{
+s <- '''$PROBLEM
+$INPUT ID DV TIME
+$DATA file$csv
+$PRED
+Y=THETA(1)+ETA(1)+ERR(1)
+$THETA 1
+$OMEGA 0.1
+$SIGMA 1
+$ESTIMATION METHOD=1'''
+read_model_from_string(s)
+}
 }
 \seealso{
 read_model : Read model from file

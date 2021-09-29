@@ -7,13 +7,20 @@
 set_bolus_absorption(model)
 }
 \arguments{
-\item{model}{(Model) Model to set or change absorption rate
-
-Model
-Reference to same model}
+\item{model}{(Model) Model to set or change absorption rate}
+}
+\value{
+(Model) Reference to same model
 }
 \description{
 Set or change to bolus absorption rate.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+set_bolus_absorption(model)
+model$statements$ode_system
+}
 }
 \seealso{
 set_zero_order_absorption

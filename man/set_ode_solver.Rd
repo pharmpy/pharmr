@@ -9,10 +9,10 @@ set_ode_solver(model, solver)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{solver}{(str) Solver to use or NULL for no preference
-
-Model
-Reference to same model}
+\item{solver}{(str) Solver to use or NULL for no preference}
+}
+\value{
+(Model) Reference to same model
 }
 \description{
 Sets ODE solver to use for model
@@ -34,4 +34,11 @@ Recognized solvers and their corresponding NONMEM advans:
 +------------------------+------------------+
 | LSODI                  | ADVAN9           |
 +------------------------+------------------+
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+set_ode_solver(model, 'LSODA')
+}
+
 }

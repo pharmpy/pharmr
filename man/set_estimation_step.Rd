@@ -8,7 +8,7 @@ set_estimation_step(
   model,
   method,
   interaction = TRUE,
-  options = list(),
+  options = NULL,
   est_idx = 0
 )
 }
@@ -21,16 +21,24 @@ set_estimation_step(
 
 \item{options}{(list) any additional options. Note that this removes old options}
 
-\item{est_idx}{(int) index of estimation step, default is 0 (first estimation step)
-
-Model
-Reference to the same model object}
+\item{est_idx}{(integer) index of estimation step, default is 0 (first estimation step)}
+}
+\value{
+(Model) Reference to the same model object
 }
 \description{
 Set estimation step
 
 Sets estimation step for a model. Methods currently supported are:
 FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+opts <- list('NITER'=1000, 'ISAMPLE'=100, 'EONLY'=1)
+set_estimation_step(model, "IMP", options=opts)
+model$estimation_steps[1]
+}
 }
 \seealso{
 add_estimation_step

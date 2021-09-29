@@ -7,15 +7,22 @@
 create_rng(seed)
 }
 \arguments{
-\item{seed}{(int or rng) Seed for the random number generator or NULL (default) for a randomized seed. If seed
+\item{seed}{(integer or rng) Seed for the random number generator or NULL (default) for a randomized seed. If seed
 is generator it will be passed through.}
 }
 \value{
-Generator (Initialized numpy random number generator object)
+(Generator) Initialized numpy random number generator object
 }
 \description{
 Create a new random number generator
 
 Pharmpy functions that use random sampling take a random number generator or seed as input.
 This function can be used to create a default new random number generator.
+}
+\examples{
+\dontrun{
+rng <- create_rng(23)
+rng$standard_normal()
+}
+
 }

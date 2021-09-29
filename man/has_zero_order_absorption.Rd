@@ -7,13 +7,20 @@
 has_zero_order_absorption(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model
-
-Model
-Reference to same model}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(Model) Reference to same model
 }
 \description{
 Check if ode system describes a zero order absorption
 
 currently defined as having Infusion dose with rate not in dataset
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+has_zero_order_absorption(model)
+}
+
 }

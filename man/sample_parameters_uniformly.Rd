@@ -16,24 +16,32 @@ sample_parameters_uniformly(
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{fraction}{(float) Fraction of estimate value to use for distribution bounds}
+\item{fraction}{(numeric) Fraction of estimate value to use for distribution bounds}
 
-\item{parameters}{(pd.Series) Names of parameters to use. Default is to use all parameters in the model.}
+\item{parameters}{(data.frame) Names of parameters to use. Default is to use all parameters in the model.}
 
-\item{force_posdef_samples}{(int) Number of samples to reject before forcing variability parameters to give
+\item{force_posdef_samples}{(integer) Number of samples to reject before forcing variability parameters to give
 positive definite covariance matrices.}
 
-\item{n}{(int) Number of samples}
+\item{n}{(integer) Number of samples}
 
-\item{rng}{(int or rng) Random number generator or seed
-
-pd.DataFrame : samples}
+\item{rng}{(integer or rng) Random number generator or seed}
+}
+\value{
+(data.frame) samples
 }
 \description{
 Sample parameter vectors using uniform sampling
 
 Each parameter value will be randomly sampled from a uniform distribution
 with the bounds being estimate ± estimate * fraction.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+rng <- create_rng(23)
+sample_parameters_uniformly(model, n=3, rng=rng)
+}
 }
 \seealso{
 sample_parameters_from_covariance_matrix : Sample parameter vectors using the

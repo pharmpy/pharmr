@@ -10,13 +10,20 @@ calculate_eta_shrinkage(model, sd = FALSE)
 \item{model}{(Model) Pharmpy model}
 
 \item{sd}{(logical) Calculate shrinkage on the standard deviation scale (default is to calculate on the
-variance scale)
-
-Series
-Shrinkage for each eta}
+variance scale)}
+}
+\value{
+(Series) Shrinkage for each eta
 }
 \description{
 Calculate eta shrinkage for each eta
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+calculate_eta_shrinkage(model)
+calculate_eta_shrinkage(model, sd=TRUE)
+}
 }
 \seealso{
 calculate_individual_shrinkage

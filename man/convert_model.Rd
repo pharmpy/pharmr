@@ -9,11 +9,18 @@ convert_model(model, to_format)
 \arguments{
 \item{model}{(Model) Model to convert}
 
-\item{to_format}{(str) Name of format to convert into. Currently supported 'nlmixr'
-
-Model
-New model object with new underlying model format}
+\item{to_format}{(str) Name of format to convert into. Currently supported 'nlmixr'}
+}
+\value{
+(Model) New model object with new underlying model format
 }
 \description{
 Convert model to other format
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+converted_model <- convert_model(model, "nlmixr")
+}
+
 }

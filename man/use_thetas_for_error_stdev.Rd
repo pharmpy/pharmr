@@ -7,13 +7,20 @@
 use_thetas_for_error_stdev(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model
-
-Model
-Reference to the same model}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(Model) Reference to the same model
 }
 \description{
 Use thetas to estimate standard deviation of error
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+use_thetas_for_error_stdev(model)
+model$statements$find_assignment("Y")
+}
 }
 \seealso{
 set_weighted_error_model : Encode error model with one epsilon and weight

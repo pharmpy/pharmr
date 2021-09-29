@@ -10,16 +10,23 @@ set_power_on_ruv(model, list_of_eps = NULL)
 \item{model}{(Model) Pharmpy model to create block effect on.}
 
 \item{list_of_eps}{(str, vector) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
-NULL is default.
-
-Model
-Reference to the same model}
+NULL is default.}
+}
+\value{
+(Model) Reference to the same model
 }
 \description{
 Applies a power effect to provided epsilons.
 
 Initial estimates for new thetas are 1 if the error
 model is proportional, otherwise they are 0.1.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+set_power_on_ruv(model)
+model$statements$find_assignment("Y")
+}
 }
 \seealso{
 set_iiv_on_ruv

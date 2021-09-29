@@ -7,15 +7,22 @@
 set_mixed_mm_fo_elimination(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model
-
-Model
-Reference to the same model}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(Model) Reference to the same model
 }
 \description{
 Sets elimination to mixed Michaelis-Menten and first order.
 
 Initial estimate for CLMM is set to CL/2 and KM is set to :math:\code{2*max(DV)}.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+set_mixed_mm_fo_elimination(model)
+model$statements$ode_system
+}
 }
 \seealso{
 set_first_order_elimination

@@ -9,10 +9,10 @@ calculate_pk_parameters_statistics(model, rng = NULL)
 \arguments{
 \item{model}{(Model) A previously estimated model}
 
-\item{rng}{(Generator or int) Random number generator or seed
-
-pd.DataFrame
-A DataFrame of statistics indexed on parameter and covariate value.}
+\item{rng}{(Generator or integer) Random number generator or seed}
+}
+\value{
+(data.frame) A DataFrame of statistics indexed on parameter and covariate value.
 }
 \description{
 Calculate statistics for common pharmacokinetic parameters
@@ -20,6 +20,13 @@ Calculate statistics for common pharmacokinetic parameters
 Calculate the mean (expected value of the distribution), variance
 (variance of the distribution) and standard error for some individual
 pre-defined pharmacokinetic parameters.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+rng <- create_rng(23)
+calculate_pk_parameters_statistics(model, rng=rng)
+}
 }
 \seealso{
 calculate_individual_parameter_statistics : Calculation of statistics for arbitrary parameters

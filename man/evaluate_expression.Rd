@@ -9,10 +9,10 @@ evaluate_expression(model, expression)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{expression}{(str or sympy expression) Expression to evaluate
-
-pd.Series
-A series of one evaluated value for each data record}
+\item{expression}{(str or sympy expression) Expression to evaluate}
+}
+\value{
+(data.frame) A series of one evaluated value for each data record
 }
 \description{
 Evaluate expression using model
@@ -21,4 +21,11 @@ Calculate the value of expression for each data record.
 The expression can contain dataset columns, variables in model and
 population parameters. If the model has parameter estimates these
 will be used. Initial estimates will be used for non-estimated parameters.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+evaluate_expression(model, "TVCL*1000")
+}
+
 }

@@ -12,11 +12,11 @@ set_additive_error_model(model, data_trans = NULL, series_terms = 2)
 \item{data_trans}{(str or expression) A data transformation expression or NULL (default) to use the transformation
 specified by the model. Series expansion will be used for approximation.}
 
-\item{series_terms}{(int) Number of terms to use for the series expansion approximation for data
-transformation.
-
-Model
-Reference to the same model object}
+\item{series_terms}{(integer) Number of terms to use for the series expansion approximation for data
+transformation.}
+}
+\value{
+(Model) Reference to the same model object
 }
 \description{
 Set an additive error model. Initial estimate for new sigma is :math:\verb{(min(DV)/2)²}.
@@ -31,6 +31,18 @@ some examples.
 +------------------------+----------------------------------------+
 | :math:\code{log(y)}         | :math:\verb{log(f) + frac\{epsilon_1\}\{f\}} |
 +------------------------+----------------------------------------+
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+model$statements$find_assignment("Y")
+set_additive_error_model(model)
+model$statements$find_assignment("Y")
+model <- load_example_model("pheno")
+model$statements$find_assignment("Y")
+set_additive_error_model(model, data_trans="log(Y)")
+model$statements$find_assignment("Y")
+}
 }
 \seealso{
 set_proportional_error_model : Proportional error model

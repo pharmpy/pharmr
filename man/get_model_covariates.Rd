@@ -9,14 +9,22 @@ get_model_covariates(model, strings = FALSE)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{strings}{(logical) Return strings instead of symbols? FALSE (default) will give symbols
-
-vector
-Covariate symbols or names}
+\item{strings}{(logical) Return strings instead of symbols? FALSE (default) will give symbols}
+}
+\value{
+(vector) Covariate symbols or names
 }
 \description{
 List of covariates used in model
 
 A covariate in the model is here defined to be a data item
 affecting the model prediction excluding dosing items.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+get_model_covariates(model)
+get_model_covariates(model, strings=TRUE)
+}
+
 }

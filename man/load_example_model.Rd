@@ -7,13 +7,20 @@
 load_example_model(name)
 }
 \arguments{
-\item{name}{(str) Name of the model. Currently available model is "pheno"
-
-Model
-Loaded model object}
+\item{name}{(str) Name of the model. Currently available model is "pheno"}
+}
+\value{
+(Model) Loaded model object
 }
 \description{
 Load an example model
 
 Load an example model from models built into Pharmpy
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+print(model$statements)
+}
+
 }

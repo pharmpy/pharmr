@@ -7,13 +7,19 @@
 remove_lag_time(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model
-
-Model
-Reference to same model}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(Model) Reference to same model
 }
 \description{
 Remove lag time from the dose compartment of model.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+remove_lag_time(model)
+}
 }
 \seealso{
 set_transit_compartments

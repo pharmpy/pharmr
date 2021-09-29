@@ -10,13 +10,22 @@ split_joint_distribution(model, rvs = NULL)
 \item{model}{(Model) Pharmpy model}
 
 \item{rvs}{(str, vector) Name/names of etas to separate. If NULL, all etas that are IIVs and
-non-fixed will become single. NULL is default.
-
-Model
-Reference to the same model}
+non-fixed will become single. NULL is default.}
+}
+\value{
+(Model) Reference to the same model
 }
 \description{
 Splits etas following a joint distribution into separate distributions.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+create_joint_distribution(model, c('ETA(1)', 'ETA(2)'))
+model$random_variables$etas
+split_joint_distribution(model, c('ETA(1)', 'ETA(2)'))
+model$random_variables$etas
+}
 }
 \seealso{
 create_joint_distribution : combine etas into a join distribution

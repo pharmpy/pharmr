@@ -7,12 +7,18 @@
 read_results(path)
 }
 \arguments{
-\item{path}{(str, Path) Path to results file
-
-Results object for tool}
+\item{path}{(str, Path) Path to results file}
+}
+\value{
+(Results object for tool)
 }
 \description{
 Read results object from file
+}
+\examples{
+\dontrun{
+res <- read_resuts("results$json")
+}
 }
 \seealso{
 create_results

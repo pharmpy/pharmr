@@ -9,11 +9,19 @@ set_initial_estimates(model, inits)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{inits}{(list) A list of parameter init for parameters to change
-
-Model
-Reference to the same model object}
+\item{inits}{(list) A list of parameter init for parameters to change}
+}
+\value{
+(Model) Reference to the same model object
 }
 \description{
 Set initial estimates
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+set_initial_estimates(model, list('THETA(1)'=2))
+model$parameters['THETA(1)']
+}
+
 }

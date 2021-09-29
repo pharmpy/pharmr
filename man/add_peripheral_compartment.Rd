@@ -7,10 +7,10 @@
 add_peripheral_compartment(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model
-
-Model
-Reference to same model}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(Model) Reference to same model
 }
 \description{
 Add a peripheral distribution compartment to model
@@ -31,6 +31,13 @@ n
 2   :math:\verb{\{QP1\} = \{QP1' / 2\}}, :math:\verb{\{VP1\} = \{VP1'\}},
 :math:\verb{\{QP2\} = \{QP1' / 2\}} and :math:\verb{\{VP2\} = \{VP1'\}}
 ==  ===================================================
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+add_peripheral_compartment(model)
+model$statements$ode_system
+}
 }
 \seealso{
 set_peripheral_compartment

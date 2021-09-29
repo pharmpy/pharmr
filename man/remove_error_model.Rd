@@ -7,11 +7,20 @@
 remove_error_model(model)
 }
 \arguments{
-\item{model}{(Model) Remove error model for this model
-
-Model
-Reference to the same model object}
+\item{model}{(Model) Remove error model for this model}
+}
+\value{
+(Model) Reference to the same model object
 }
 \description{
 Remove error model.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+model$statements$find_assignment("Y")
+remove_error_model(model)
+model$statements$find_assignment("Y")
+}
+
 }

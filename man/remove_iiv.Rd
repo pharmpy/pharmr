@@ -10,13 +10,23 @@ remove_iiv(model, to_remove = NULL)
 \item{model}{(Model) Pharmpy model to create block effect on.}
 
 \item{to_remove}{(str, vector) Name/names of etas and/or name/names of individual parameters to remove.
-If NULL, all etas that are IIVs will be removed. NULL is default.
-
-Model
-Reference to the same model}
+If NULL, all etas that are IIVs will be removed. NULL is default.}
+}
+\value{
+(Model) Reference to the same model
 }
 \description{
 Removes all IIV etas given a vector with eta names and/or parameter names.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+remove_iiv(model)
+model$statements$find_assignment("CL")
+model <- load_example_model("pheno")
+remove_iiv(model, "V")
+model$statements$find_assignment("V")
+}
 }
 \seealso{
 remove_iov

@@ -9,15 +9,24 @@ unfix_parameters(model, parameter_names)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{parameter_names}{(vector or str) one parameter name or a vector of parameter names
-
-Model
-Reference to the same model object}
+\item{parameter_names}{(vector or str) one parameter name or a vector of parameter names}
+}
+\value{
+(Model) Reference to the same model object
 }
 \description{
 Unfix parameters
 
 Unfix all listed parameters
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+fix_parameters(model, c('THETA(1)', 'THETA(2)', 'THETA(3)'))
+model$parameters$fix
+unfix_parameters(model, 'THETA(1)')
+model$parameters$fix
+}
 }
 \seealso{
 unfix_paramaters_to : Unfixing parameters and setting a new initial estimate in the same

@@ -16,14 +16,22 @@ sample_individual_estimates(
 
 \item{parameters}{(vector) A vector of a subset of individual parameters to sample. Default is NULL, which means all.}
 
-\item{samples_per_id}{(int) Number of samples per individual}
+\item{samples_per_id}{(integer) Number of samples per individual}
 
-\item{rng}{(rng or int) Random number generator or seed
-
-pd.DataFrame : Pool of samples in a DataFrame}
+\item{rng}{(rng or integer) Random number generator or seed}
+}
+\value{
+(data.frame) Pool of samples in a DataFrame
 }
 \description{
 Sample individual estimates given their covariance.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+rng <- create_rng(23)
+sample_individual_estimates(model, samples_per_id=2, rng=rng)
+}
 }
 \seealso{
 sample_parameters_from_covariance_matrix : Sample parameter vectors using the

@@ -9,11 +9,18 @@ copy_model(model, name = NULL)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{name}{(str) Optional new name of model
-
-Model
-A copy of the input model}
+\item{name}{(str) Optional new name of model}
+}
+\value{
+(Model) A copy of the input model
 }
 \description{
 Copies model to a new model object
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+model_copy <- copy_model(model, "pheno2")
+}
+
 }

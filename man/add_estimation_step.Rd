@@ -21,16 +21,26 @@ add_estimation_step(
 
 \item{options}{(list) any additional tool specific options. Note that this removes old options}
 
-\item{idx}{(int) index of estimation step, default is NULL (adds step at the end)
-
-Model
-Reference to the same model object}
+\item{idx}{(integer) index of estimation step, default is NULL (adds step at the end)}
+}
+\value{
+(Model) Reference to the same model object
 }
 \description{
 Add estimation step
 
 Adds estimation step for a model in a given index. Methods currently supported are:
 FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+opts <- list('NITER'=1000, 'ISAMPLE'=100, 'EONLY'=1)
+add_estimation_step(model, "IMP", options=opts)
+ests <- model$estimation_steps
+len(ests)
+ests[2]
+}
 }
 \seealso{
 set_estimation_step

@@ -7,13 +7,19 @@
 set_weighted_error_model(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model
-
-Model
-Reference to the same model}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(Model) Reference to the same model
 }
 \description{
 Encode error model with one epsilon and W as weight
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+set_weighted_error_model(model)
+}
 }
 \seealso{
 use_thetas_for_error_stdev : Use thetas to estimate error

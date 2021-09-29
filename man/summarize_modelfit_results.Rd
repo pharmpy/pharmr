@@ -7,14 +7,21 @@
 summarize_modelfit_results(models)
 }
 \arguments{
-\item{models}{(vector) List of models
-
-pd.DataFrame
-A DataFrame of modelfit results, one row per model.}
+\item{models}{(vector, Model) List of models or single model}
+}
+\value{
+(data.frame) A DataFrame of modelfit results, one row per model.
 }
 \description{
-Summarize results of multiple model runs
+Summarize results of model runs
 
 Summarize different results after fitting a model, includes runtime, ofv,
 and parameter estimates (with errors).
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+summarize_modelfit_results(c(model))
+}
+
 }

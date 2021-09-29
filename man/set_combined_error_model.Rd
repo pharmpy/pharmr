@@ -10,10 +10,10 @@ set_combined_error_model(model, data_trans = NULL)
 \item{model}{(Model) Set error model for this model}
 
 \item{data_trans}{(str or expression) A data transformation expression or NULL (default) to use the transformation
-specified by the model.
-
-Model
-Reference to the same model}
+specified by the model.}
+}
+\value{
+(Model) Reference to the same model
 }
 \description{
 Set a combined error model. Initial estimates for new sigmas are :math:\verb{(min(DV)/2)²} for
@@ -28,6 +28,16 @@ The error function being applied depends on the data transformation.
 +------------------------+-----------------------------------------------------+
 | :math:\code{log(y)}         | :math:\verb{log(f) + epsilon_1 + frac\{epsilon_2\}\{f\}} |
 +------------------------+-----------------------------------------------------+
+}
+\examples{
+\dontrun{
+model <- remove_error_model(load_example_model("pheno"))
+set_combined_error_model(model)
+model$statements$find_assignment("Y")
+model <- remove_error_model(load_example_model("pheno"))
+set_combined_error_model(model, data_trans="log(Y)")
+model$statements$find_assignment("Y")
+}
 }
 \seealso{
 set_additive_error_model : Additive error model

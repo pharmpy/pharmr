@@ -7,15 +7,22 @@
 set_zero_order_elimination(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model
-
-Model
-Reference to same model}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(Model) Reference to same model
 }
 \description{
 Sets elimination to zero order.
 
 Initial estimate for KM is set to 1\% of smallest observation.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+set_zero_order_elimination(model)
+model$statements$ode_system
+}
 }
 \seealso{
 set_first_order_elimination

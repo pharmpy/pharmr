@@ -15,15 +15,22 @@ be chosen. NULL is default.}
 \item{same_eta}{(logical) Boolean of whether all RUVs from input should use the same new ETA or if one ETA
 should be created for each RUV. TRUE is default.}
 
-\item{eta_names}{(str, vector) Custom names of new etas. Must be equal to the number epsilons or 1 if same eta.
-
-Model
-Reference to same model}
+\item{eta_names}{(str, vector) Custom names of new etas. Must be equal to the number epsilons or 1 if same eta.}
+}
+\value{
+(Model) Reference to same model
 }
 \description{
 Multiplies epsilons with exponential (new) etas.
 
 Initial variance for new etas is 0.09.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+set_iiv_on_ruv(model)
+model$statements$find_assignment("Y")
+}
 }
 \seealso{
 set_power_on_ruv

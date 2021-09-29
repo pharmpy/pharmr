@@ -15,15 +15,22 @@ add_iov(model, occ, list_of_parameters = NULL, eta_names = NULL)
 names, or a mix of both.}
 
 \item{eta_names}{(str, vector) Custom names of new etas. Must be equal to the number of input etas times the number of
-categories for occasion.
-
-Model
-Reference to the same model}
+categories for occasion.}
+}
+\value{
+(Model) Reference to the same model
 }
 \description{
 Adds IOVs to :class:\code{pharmpy.model}.
 
 Initial estimate of new IOVs are 10\% of the IIV eta it is based on.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+add_iov(model, "TIME", "CL")
+model$statements$find_assignment("CL")
+}
 }
 \seealso{
 add_iiv

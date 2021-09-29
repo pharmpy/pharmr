@@ -7,16 +7,23 @@
 set_zero_order_absorption(model)
 }
 \arguments{
-\item{model}{(Model) Model to set or change to first order absorption rate
-
-Model
-Reference to the same model}
+\item{model}{(Model) Model to set or change to first order absorption rate}
+}
+\value{
+(Model) Reference to the same model
 }
 \description{
 Set or change to zero order absorption rate.
 
 Initial estimate for absorption rate is set
 the previous rate if available, otherwise it is set to the time of first observation/2.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+set_zero_order_absorption(model)
+model$statements$ode_system
+}
 }
 \seealso{
 set_bolus_order_absorption

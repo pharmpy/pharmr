@@ -7,12 +7,10 @@
 predict_influential_individuals(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model
-
-pd.Dataframe
-Dataframe over the individuals with a \code{dofv} column containing the raw predicted
-delta-OFV and an \code{influential} column with a logicalean to tell whether the individual is
-influential or not.}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(pd.Dataframe) Dataframe over the individuals with a \code{dofv} column containing the raw predicted delta-OFV and an \code{influential} column with a boolean to tell whether the individual is influential or not.
 }
 \description{
 Predict influential individuals for a model using a machine learning model.

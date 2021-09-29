@@ -15,10 +15,10 @@ add_covariate_effect(model, parameter, covariate, effect, operation = "*")
 
 \item{effect}{(str) Type of covariate effect. May be abbreviated covariate effect (see above) or custom.}
 
-\item{operation}{(str, optional) Whether the covariate effect should be added or multiplied (default).
-
-Model
-Reference to the same model}
+\item{operation}{(str, optional) Whether the covariate effect should be added or multiplied (default).}
+}
+\value{
+(Model) Reference to the same model
 }
 \description{
 Adds covariate effect to :class:\code{pharmpy.model}.
@@ -126,4 +126,12 @@ math::
 \item Upper: :math:\verb{100,000}
 \item Lower: :math:\code{-100}
 }
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+add_covariate_effect(model, "CL", "APGR", "exp")
+model$statements$full_expression_from_odes("CL")
+}
+
 }

@@ -11,15 +11,23 @@ fix_parameters_to(model, parameter_names, values)
 
 \item{parameter_names}{(vector or str) one parameter name or a vector of parameter names}
 
-\item{values}{(vector or float) one value or a vector of values (must be equal to number of parameter_names)
-
-Model
-Reference to the same model object}
+\item{values}{(vector or numeric) one value or a vector of values (must be equal to number of parameter_names)}
+}
+\value{
+(Model) Reference to the same model object
 }
 \description{
 Fix parameters to
 
 Fix all listed parameters to specified value/values
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+model$parameters['THETA(1)']
+fix_parameters_to(model, 'THETA(1)', 0.5)
+model$parameters['THETA(1)']
+}
 }
 \seealso{
 fix_parameters : Fix parameters

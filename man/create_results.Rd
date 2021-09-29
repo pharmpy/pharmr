@@ -4,17 +4,23 @@
 \alias{create_results}
 \title{create_results}
 \usage{
-create_results(path)
+create_results(path, ...)
 }
 \arguments{
-\item{path}{(str, Path) Path to run directory
-kwargs
-Arguments to pass to tool specific create results function
+\item{path}{(str, Path) Path to run directory}
 
-Results object for tool}
+\item{...}{Arguments to pass to tool specific create results function}
+}
+\value{
+(Results object for tool)
 }
 \description{
 Create/recalculate results object given path to run directory
+}
+\examples{
+\dontrun{
+res <- create_results("frem_dir1")
+}
 }
 \seealso{
 read_results

@@ -21,22 +21,29 @@ sample_parameters_from_covariance_matrix(
 
 \item{parameters}{(vector) Use to only sample a subset of the parameters. NULL means all}
 
-\item{force_posdef_samples}{(int) Set to how many iterations to do before forcing all samples to be positive definite. NULL is
+\item{force_posdef_samples}{(integer) Set to how many iterations to do before forcing all samples to be positive definite. NULL is
 default and means never and 0 means always}
 
 \item{force_posdef_covmatrix}{(logical) Set to TRUE to force the input covariance matrix to be positive definite}
 
-\item{n}{(int) Number of samples}
+\item{n}{(integer) Number of samples}
 
-\item{rng}{(Generator) Random number generator
-
-DataFrame
-A dataframe with one sample per row}
+\item{rng}{(Generator) Random number generator}
+}
+\value{
+(data.frame) A dataframe with one sample per row
 }
 \description{
 Sample parameter vectors using the covariance matrix
 
 If modelfit_results is not provided the results from the model will be used
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+rng <- create_rng(23)
+sample_parameters_from_covariance_matrix(model, n=3, rng=rng)
+}
 }
 \seealso{
 sample_parameters_uniformly : Sample parameter vectors using uniform distribution

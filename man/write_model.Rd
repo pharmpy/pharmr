@@ -11,11 +11,18 @@ write_model(model, path = "", force = TRUE)
 
 \item{path}{(str) Destination path}
 
-\item{force}{(logical) Force overwrite, default is TRUE
-
-Model
-Reference to the same model object}
+\item{force}{(logical) Force overwrite, default is TRUE}
+}
+\value{
+(Model) Reference to the same model object
 }
 \description{
 Write model code to file
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+write_model(model)
+}
+
 }

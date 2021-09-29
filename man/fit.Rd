@@ -7,13 +7,19 @@
 fit(models)
 }
 \arguments{
-\item{models}{(vector) List of models or one single model
-
-Model
-Reference to same model}
+\item{models}{(vector) List of models or one single model}
+}
+\value{
+(Model) Reference to same model
 }
 \description{
 Fit models.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+fit(model)
+}
 }
 \seealso{
 run_tool

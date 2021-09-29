@@ -7,16 +7,22 @@
 get_number_of_observations(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model
-
-int
-Number of observations in the model dataset}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(integer) Number of observations in the model dataset
 }
 \description{
 Retrieve the total number of observations in the model dataset
 }
 \note{
 For NONMEM models this is the number of observations of the active dataset, i.e. after filteringof IGNORE and ACCEPT and removal of individuals with no observations.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+get_number_of_observations(model)
+}
 }
 \seealso{
 get_number_of_individuals : Get the number of individuals in a dataset

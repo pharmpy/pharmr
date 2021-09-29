@@ -7,11 +7,18 @@
 set_dtbs_error_model(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model
-
-Model
-Reference to the same model}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(Model) Reference to the same model
 }
 \description{
 Dynamic transform both sides
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+set_dtbs_error_model(model)
+}
+
 }

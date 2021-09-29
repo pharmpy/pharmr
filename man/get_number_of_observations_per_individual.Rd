@@ -7,16 +7,22 @@
 get_number_of_observations_per_individual(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model
-
-pd.Series
-Number of observations in the model dataset}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(data.frame) Number of observations in the model dataset
 }
 \description{
 Number of observations for each individual
 }
 \note{
 For NONMEM models this is the individuals and number of observations of the active dataset, i.e.after filtering of IGNORE and ACCEPT and removal of individuals with no observations.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+get_number_of_observations_per_individual(model)
+}
 }
 \seealso{
 get_number_of_individuals : Get the number of individuals in a dataset

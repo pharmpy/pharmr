@@ -9,10 +9,10 @@ update_inits(model, force_individual_estimates = FALSE)
 \arguments{
 \item{model}{(Model) Pharmpy model to update initial estimates}
 
-\item{force_individual_estimates}{(logical) Update initial individual estimates even if model din't use them previously.
-
-Model
-Reference to the same model}
+\item{force_individual_estimates}{(logical) Update initial individual estimates even if model din't use them previously.}
+}
+\value{
+(Model) Reference to the same model
 }
 \description{
 Update initial parameter estimate for a model
@@ -20,4 +20,13 @@ Update initial parameter estimate for a model
 Updates initial estimates of population parameters for a model from
 its modelfit_results. If the model has used initial estimates for
 individual estimates these will also be updated. If initial estimates
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+model$parameters$inits
+update_inits(model)
+model$parameters$inits
+}
+
 }

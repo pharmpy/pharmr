@@ -11,13 +11,24 @@ unfix_parameters_to(model, parameter_names, values)
 
 \item{parameter_names}{(vector or str) one parameter name or a vector of parameter names}
 
-\item{values}{(vector or float) one value or a vector of values (must be equal to number of parameter_names)
-
-Model
-Reference to the same model object}
+\item{values}{(vector or numeric) one value or a vector of values (must be equal to number of parameter_names)}
+}
+\value{
+(Model) Reference to the same model object
 }
 \description{
 Unix parameters to
 
 Unfix all listed parameters to specified value/values
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+fix_parameters(model, c('THETA(1)', 'THETA(2)', 'THETA(3)'))
+model$parameters$fix
+unfix_parameters_to(model, 'THETA(1)', 0.5)
+model$parameters$fix
+model$parameters['THETA(1)']
+}
+
 }

@@ -7,10 +7,10 @@
 remove_peripheral_compartment(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model
-
-Model
-Reference to same model}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(Model) Reference to same model
 }
 \description{
 Remove a peripheral distribution compartment from model
@@ -25,6 +25,14 @@ n
 3   :math:\verb{\{QP1\} = (\{QP1'\} + \{QP2'\}) / 2},
 :math:\verb{\{VP1\} = \{VP1'\} + \{VP2'\}}
 ==  ===================================================
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+set_peripheral_compartments(model, 2)
+remove_peripheral_compartment(model)
+model$statements$ode_system
+}
 }
 \seealso{
 set_peripheral_compartment

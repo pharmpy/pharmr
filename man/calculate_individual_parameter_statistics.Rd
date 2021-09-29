@@ -12,10 +12,10 @@ calculate_individual_parameter_statistics(model, exprs, rng = NULL)
 \item{exprs}{(str, sympy expression or iterable of str or sympy expressions) Expressions or equations for parameters of interest. If equations are used
 the names of the left hand sides will be used as the names of the parameters.}
 
-\item{rng}{(Generator or int) Random number generator or int seed
-
-pd.DataFrame
-A DataFrame of statistics indexed on parameter and covariate value.}
+\item{rng}{(Generator or integer) Random number generator or integer seed}
+}
+\value{
+(data.frame) A DataFrame of statistics indexed on parameter and covariate value.
 }
 \description{
 Calculate statistics for individual parameters
@@ -29,4 +29,12 @@ cannot be used. If covariates are used in the expression the statistics
 of the parameter is calculated at the median value of each covariate as well
 as at the 5:th and 95:th percentiles. If no parameter uncertainty is available
 for the model the standard error will not be calculated.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+rng <- create_rng(23)
+calculate_individual_parameter_statistics(model, "K=CL/V", rng=rng)
+}
+
 }

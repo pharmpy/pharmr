@@ -9,11 +9,19 @@ add_individual_parameter(model, name)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{name}{(str) Name of individual/pk parameter
-
-Model
-Reference to same model}
+\item{name}{(str) Name of individual/pk parameter}
+}
+\value{
+(Model) Reference to same model
 }
 \description{
 Add an individual or pk parameter to a model
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+add_individual_parameter(model, "KA")
+model$statements$find_assignment("KA")
+}
+
 }
