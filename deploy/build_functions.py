@@ -29,6 +29,7 @@ def create_r_func(func):
     argspecs = getfullargspec(func)
     args = argspecs.args
     defaults = argspecs.defaults
+    varargs, varkw = argspecs.varargs, argspecs.varkw
 
     if defaults:
         if len(args) > len(defaults):
@@ -38,6 +39,9 @@ def create_r_func(func):
         arg_list = [(f'{arg}={default}' if default is not None else f'{arg}') for arg, default in args_defaults.items()]
     else:
         arg_list = args
+
+    if varargs or varkw:
+        arg_list += ['...']
 
     func_args = ', '.join(arg_list)
     args_str = ', '.join(args)
@@ -101,11 +105,18 @@ def create_r_doc(func):
 
 def create_r_params(doc_list):
     doc_str = ''
-    for row in doc_list:
+    skip = False
+    for i, row in enumerate(doc_list):
+        if skip:
+            skip = False
+            continue
         type_declare_pattern = re.compile(r'([\w0-9]+) : ([\w0-9]+)')
         if type_declare_pattern.match(row):
             type_declare = row.split(' : ')
             doc_str += f'@param {type_declare[0]} ({py_to_r_str(type_declare[1])})'
+        elif row == 'args' or row == 'kwargs':
+            doc_str += f'@param ... {doc_list[i+1]}\n'
+            skip = True
         else:
             doc_str += f' {py_to_r_str(row)}\n'
     return doc_str

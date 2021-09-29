@@ -584,8 +584,7 @@ create_joint_distribution <- function(model, rvs=NULL) {
 #' Create/recalculate results object given path to run directory
 #' 
 #' @param path (str, Path) Path to run directory
-#'  kwargs
-#'  Arguments to pass to tool specific create results function
+#' @param ... Arguments to pass to tool specific create results function
 #'  
 #' @return (Results object for tool) 
 #' 
@@ -598,8 +597,8 @@ create_joint_distribution <- function(model, rvs=NULL) {
 #' 
 #' 
 #' @export
-create_results <- function(path) {
-    func_out <- pharmpy$modeling$create_results(path)
+create_results <- function(path, ...) {
+    func_out <- pharmpy$modeling$create_results(path, ...)
     return(py_to_r(func_out))
 }
 
@@ -1524,10 +1523,8 @@ remove_peripheral_compartment <- function(model) {
 #' Run tool workflow
 #' 
 #' @param name (str) Name of tool to run
-#'  args
-#'  Arguments to pass to tool
-#'  kwargs
-#'  Arguments to pass to tool
+#' @param ... Arguments to pass to tool
+#' @param ... Arguments to pass to tool
 #'  
 #' @return (Results object for tool) 
 #' 
@@ -1538,8 +1535,8 @@ remove_peripheral_compartment <- function(model) {
 #' }
 #' 
 #' @export
-run_tool <- function(name) {
-    func_out <- pharmpy$modeling$run_tool(name)
+run_tool <- function(name, ...) {
+    func_out <- pharmpy$modeling$run_tool(name, ...)
     return(py_to_r(func_out))
 }
 
