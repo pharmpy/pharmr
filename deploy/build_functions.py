@@ -141,7 +141,7 @@ def create_r_example(doc_list):
     pattern_dict = re.compile(r'{(([\'\"]*[\w\d()]+[\'\"]*: [\'\"]*[\w\d]+\'*,*\s*)+)}')
     pattern_doctest = re.compile(r'\s+# doctest:.*')
 
-    doc_code = [row for row in doc_list if row.startswith('>>>') or re.match(r'^...\s+[$\w\d]', row)]
+    doc_code = [row for row in doc_list if row.startswith('>>>') or re.match(r'^\.\.\.\s+[$\w\d]', row)]
     doc_code = [row for row in doc_code if ' import ' not in row]
 
     doc_code_r = ''

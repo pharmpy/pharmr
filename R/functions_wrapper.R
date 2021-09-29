@@ -366,8 +366,6 @@ calculate_eta_shrinkage <- function(model, sd=FALSE) {
 #' model <- load_example_model("pheno")
 #' rng <- create_rng(23)
 #' calculate_individual_parameter_statistics(model, "K=CL/V", rng=rng)
-#' K         p5          0.004234  0.000001  0.001138
-#' p95         0.004910  0.000001  0.001263
 #' }
 #' 
 #' @export
@@ -393,65 +391,6 @@ calculate_individual_parameter_statistics <- function(model, exprs, rng=NULL) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' calculate_individual_shrinkage(model)
-#' 1   0.847789  0.256473
-#' 2   0.796643  0.210669
-#' 3   0.755025  0.226957
-#' 4   0.764541  0.216405
-#' 5   0.816192  0.203974
-#' 6   0.778108  0.210992
-#' 7   0.659420  0.236875
-#' 8   0.668551  0.240097
-#' 9   0.260056  0.200374
-#' 10  0.725190  0.226563
-#' 11  0.972110  0.421852
-#' 12  0.249640  0.254119
-#' 13  0.730294  0.364932
-#' 14  0.165785  0.194464
-#' 15  0.813399  0.313554
-#' 16  0.797328  0.213211
-#' 17  0.769059  0.278079
-#' 18  0.098506  0.176778
-#' 19  0.749022  0.235386
-#' 20  0.742181  0.222932
-#' 21  0.317956  0.264473
-#' 22  0.943950  0.232732
-#' 23  0.707183  0.259077
-#' 24  0.553787  0.247717
-#' 25  0.826349  0.114302
-#' 26  0.854777  0.341384
-#' 27  0.820829  0.263235
-#' 28  0.999942  0.319986
-#' 29  0.967084  0.432760
-#' 30  0.404773  0.325215
-#' 31  0.999980  0.318421
-#' 32  0.925283  0.167667
-#' 33  0.913706  0.242106
-#' 34  0.875554  0.249197
-#' 35  0.849135  0.294294
-#' 36  0.172206  0.246422
-#' 37  0.747380  0.278340
-#' 38  0.187440  0.231249
-#' 39  0.237805  0.254485
-#' 40  0.999925  0.189793
-#' 41  0.941906  0.170998
-#' 42  0.923801  0.244046
-#' 43  0.999928  0.320403
-#' 44  0.237637  0.260453
-#' 45  0.869540  0.194503
-#' 46  0.999949  0.319750
-#' 47  0.983782  0.393234
-#' 48  0.698267  0.169337
-#' 49  0.776674  0.214962
-#' 50  0.688847  0.192608
-#' 51  0.822213  0.202534
-#' 52  0.511489  0.273601
-#' 53  0.964757  0.223448
-#' 54  0.762153  0.181648
-#' 55  0.965657  0.435741
-#' 56  0.995278  0.354798
-#' 57  0.813382  0.263372
-#' 58  0.727295  0.232867
-#' 59  0.738777  0.224742
 #' }
 #' @seealso
 #' calculate_eta_shrinkage
@@ -483,8 +422,6 @@ calculate_individual_shrinkage <- function(model) {
 #' model <- load_example_model("pheno")
 #' rng <- create_rng(23)
 #' calculate_pk_parameters_statistics(model, rng=rng)
-#' k_e       p5          0.004234  0.000001  0.001138
-#' p95         0.004910  0.000001  0.001263
 #' }
 #' @seealso
 #' calculate_individual_parameter_statistics : Calculation of statistics for arbitrary parameters
@@ -648,16 +585,6 @@ create_rng <- function(seed) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' evaluate_expression(model, "TVCL*1000")
-#' 0      6.573770
-#' 1      6.573770
-#' 2      6.573770
-#' 3      6.573770
-#' 4      6.573770
-#' 739    5.165105
-#' 740    5.165105
-#' 741    5.165105
-#' 742    5.165105
-#' 743    5.165105
 #' }
 #' 
 #' @export
@@ -870,65 +797,6 @@ get_number_of_observations <- function(model) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' get_number_of_observations_per_individual(model)
-#' 1     2
-#' 2     3
-#' 3     3
-#' 4     3
-#' 5     3
-#' 6     3
-#' 7     3
-#' 8     3
-#' 9     4
-#' 10    3
-#' 11    1
-#' 12    3
-#' 13    2
-#' 14    4
-#' 15    2
-#' 16    3
-#' 17    3
-#' 18    4
-#' 19    3
-#' 20    3
-#' 21    3
-#' 22    2
-#' 23    3
-#' 24    3
-#' 25    6
-#' 26    2
-#' 27    2
-#' 28    1
-#' 29    1
-#' 30    2
-#' 31    1
-#' 32    3
-#' 33    2
-#' 34    2
-#' 35    2
-#' 36    3
-#' 37    2
-#' 38    4
-#' 39    3
-#' 40    2
-#' 41    3
-#' 42    2
-#' 43    1
-#' 44    3
-#' 45    3
-#' 46    1
-#' 47    1
-#' 48    5
-#' 49    3
-#' 50    4
-#' 51    3
-#' 52    3
-#' 53    2
-#' 54    4
-#' 55    1
-#' 56    1
-#' 57    2
-#' 58    3
-#' 59    3
 #' }
 #' @note
 #' For NONMEM models this is the individuals and number of observations of the active dataset, i.e.after filtering of IGNORE and ACCEPT and removal of individuals with no observations.
@@ -962,11 +830,6 @@ get_number_of_observations_per_individual <- function(model) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' get_observations(model)
-#' ID  TIME
-#' 1   2.0      17.3
-#' 2   2.0       9.7
-#' 58  47.5     27.9
-#' 59  1.8      22.6
 #' }
 #' @seealso
 #' get_number_of_observations
@@ -1210,30 +1073,6 @@ predict_influential_outliers <- function(model) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' predict_outliers(model)
-#' 2   1.723895    FALSE
-#' 5   1.639485    FALSE
-#' 6   1.147173    FALSE
-#' 8   0.283858    FALSE
-#' 9   0.606595    FALSE
-#' 11  5.413732     TRUE
-#' 13  0.140510    FALSE
-#' 14  0.168691    FALSE
-#' 18  3.730850     TRUE
-#' 23  1.242479    FALSE
-#' 25  3.262130     TRUE
-#' 27  2.062735    FALSE
-#' 32  3.245315     TRUE
-#' 34  0.319238    FALSE
-#' 35  2.549845    FALSE
-#' 38  0.661809    FALSE
-#' 42  6.411962     TRUE
-#' 43  1.326782    FALSE
-#' 48  2.460449    FALSE
-#' 51  2.011316    FALSE
-#' 52  1.789271    FALSE
-#' 53  0.579177    FALSE
-#' 54  0.892111    FALSE
-#' 55  1.943623    FALSE
 #' }
 #' @seealso
 #' predict_influential_individuals
