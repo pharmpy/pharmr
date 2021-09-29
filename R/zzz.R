@@ -1,5 +1,6 @@
 on_load_pharmpy <- function() {
-    check_pharmpy(pharmpy$`__version__`)
+    pharmpy_version <- py_to_r(pharmpy$`__version__`)
+    check_pharmpy(pharmpy_version)
 }
 
 on_error_pharmpy <- function(e) {
