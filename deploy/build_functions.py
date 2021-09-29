@@ -115,33 +115,39 @@ def create_r_returns(doc_list):
 
 
 def create_r_example(doc_list):
+    pattern_start = re.compile(r'>>> |^\.\.\. ')
+    pattern_methods = re.compile(r'([A-Za-z]\d*)\.([A-Za-z]\d*)')
+    pattern_list = re.compile(r'\[([\'\"\w(),\s]+)]')
+    pattern_dict = re.compile(r'{(([\'\"]*[\w\d()]+[\'\"]*: [\'\"]*[\w\d]+\'*,*\s*)+)}')
+    pattern_doctest = re.compile(r'\s+# doctest:.*')
+
     doc_code = [row for row in doc_list if row.startswith('>>>') or re.match(r'^...\s+[$\w\d]', row)]
     doc_code = [row for row in doc_code if ' import ' not in row]
 
     doc_code_r = '@examples\n'
     for row in doc_code:
         # Check for rows that starts with ... or >>>
-        row_r = re.sub(r'>>> |^\.\.\. ', '', row)
+        row_r = re.sub(pattern_start, '', row)
         row_r = py_to_r_str(row_r, example=True)
         row_r = re.sub(' = ', ' <- ', row_r)
 
         # Substitute . to $, e.g. model.parameters -> model$parameters
-        row_r = re.sub(r'([A-Za-z]\d*)\.([A-Za-z]\d*)', r'\1$\2', row_r)
+        row_r = re.sub(pattern_methods, r'\1$\2', row_r)
 
         # Check that row doesn't use index
         if not re.search(r'\w\[', row_r):
             # Substitute [] to c(), e.g. ['THETA(1)'] -> c('THETA(1)')
-            row_r = re.sub(r'\[([\'\"\w(),\s]+)]', r'c(\1)', row_r)
+            row_r = re.sub(pattern_list, r'c(\1)', row_r)
 
         # Check if row contains python dict
-        dict_py = re.search(r'{(([\'\"]*[\w\d]+[\'\"]*: [\'\"]*[\w\d]+\'*,*\s*)+)}', row_r)
+        dict_py = re.search(pattern_dict, row_r)
         if dict_py:
-            dict_r = f'list({re.sub(": ", "=", dict_py.group(1))})'
             # Substitute {} to list(), e.g. {'EONLY': 1} -> list('EONLY'=1)
-            row_r = re.sub(r'\{' + f'{dict_py.group(1)}' + '}', dict_r, row_r)
+            dict_r = f'list({dict_py.group(1).replace(": ", "=", )})'
+            row_r = row_r.replace('{' + f'{dict_py.group(1)}' + '}', dict_r)
 
         # Remove doctest comments
-        row_r = re.sub(r'\s+# doctest:.*', '', row_r)
+        row_r = re.sub(pattern_doctest, '', row_r)
         doc_code_r += row_r + '\n'
 
     return doc_code_r

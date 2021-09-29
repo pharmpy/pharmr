@@ -1821,7 +1821,7 @@ set_iiv_on_ruv <- function(model, list_of_eps=NULL, same_eta=TRUE, eta_names=NUL
 #' 
 #' @examples
 #' model <- load_example_model("pheno")
-#' set_initial_estimates(model, {'THETA(1)': 2})
+#' set_initial_estimates(model, list('THETA(1)'=2))
 #' model$parameters['THETA(1)']
 #' 
 #' 
