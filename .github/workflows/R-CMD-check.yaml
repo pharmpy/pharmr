@@ -79,11 +79,13 @@ jobs:
 
       - name: Install pharmpy/pharmr
         run: |
-          Rscript -e "remotes::install_github('rstudio/reticulate');
-                      reticulate::install_miniconda();
-                      reticulate::conda_create('r-reticulate');
-                      remotes::install_local();
-                      pharmr::install_pharmpy()"
+          remotes::install_github('rstudio/reticulate')
+          reticulate::install_miniconda()
+          reticulate::conda_create('r-reticulate')
+          remotes::install_local()
+          pharmr::install_pharmpy()
+        shell: Rscript {0}
+
 
       - name: Check (as cran)
         env:
