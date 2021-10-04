@@ -9,5 +9,5 @@
 #' 
 #' @export
 install_pharmpy <- function(envname='r-reticulate', method='auto') {
-    reticulate::py_install("pharmpy-core", pip=T)
+    reticulate::py_install("pharmpy-core", envname=envname, method=method, pip=FALSE)
 }
