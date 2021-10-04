@@ -4,8 +4,13 @@
 \alias{install_pharmpy}
 \title{Install Pharmpy}
 \usage{
-install_pharmpy()
+install_pharmpy(envname = "r-reticulate", method = "auto")
+}
+\arguments{
+\item{envname}{(str) name of environment. Default is r-reticulate}
+
+\item{method}{(str) type of environment type (virtualenv, conda). Default is auto (virtualenv is not available on Windows)}
 }
 \description{
-Install the pharmpy-core python package into the r-reticulate virtual environment
+Install the pharmpy-core python package into virtual environment.
 }
