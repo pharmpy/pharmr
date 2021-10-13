@@ -4,13 +4,7 @@
 \alias{set_estimation_step}
 \title{set_estimation_step}
 \usage{
-set_estimation_step(
-  model,
-  method,
-  interaction = TRUE,
-  options = NULL,
-  est_idx = 0
-)
+set_estimation_step(model, method, interaction = TRUE, options = NULL, idx = 0)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
@@ -19,9 +13,10 @@ set_estimation_step(
 
 \item{interaction}{(logical) whether to use interaction or not, default is true}
 
-\item{options}{(list) any additional options. Note that this removes old options}
+\item{options}{(list) any additional options. Note that this replaces old options (see
+append_estimation_step_options to keep old options)}
 
-\item{est_idx}{(integer) index of estimation step, default is 0 (first estimation step)}
+\item{idx}{(integer) index of estimation step, default is 0 (first estimation step)}
 }
 \value{
 (Model) Reference to the same model object
@@ -30,7 +25,7 @@ set_estimation_step(
 Set estimation step
 
 Sets estimation step for a model. Methods currently supported are:
-FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM
+FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM, BAYES
 }
 \examples{
 \dontrun{
@@ -44,4 +39,6 @@ model$estimation_steps[1]
 add_estimation_step
 
 remove_estimation_step
+
+append_estimation_step_options
 }

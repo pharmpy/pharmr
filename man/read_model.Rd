@@ -17,9 +17,11 @@ Read model from file
 }
 \examples{
 \dontrun{
-read_model("/home/run1$mod")
+model <- read_model("/home/run1$mod")
 }
 }
 \seealso{
+read_model_from_database : Read model from database
+
 read_model_from_string : Read model from string
 }

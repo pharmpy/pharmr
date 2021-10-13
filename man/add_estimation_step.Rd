@@ -19,7 +19,7 @@ add_estimation_step(
 
 \item{interaction}{(logical) whether to use interaction or not, default is true}
 
-\item{options}{(list) any additional tool specific options. Note that this removes old options}
+\item{options}{(list) any additional tool specific options}
 
 \item{idx}{(integer) index of estimation step, default is NULL (adds step at the end)}
 }
@@ -46,4 +46,6 @@ ests[2]
 set_estimation_step
 
 remove_estimation_step
+
+append_estimation_step_options
 }

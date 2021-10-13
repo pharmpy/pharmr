@@ -20,7 +20,7 @@ Load an example model from models built into Pharmpy
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-print(model$statements)
+model$statements
 }
 
 }

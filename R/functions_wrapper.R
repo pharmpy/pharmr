@@ -133,7 +133,7 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' @param model (Model) Pharmpy model
 #' @param method (str) estimation method to change to
 #' @param interaction (logical) whether to use interaction or not, default is true
-#' @param options (list) any additional tool specific options. Note that this removes old options
+#' @param options (list) any additional tool specific options
 #' @param idx (integer) index of estimation step, default is NULL (adds step at the end)
 #'  
 #' @return (Model) Reference to the same model object
@@ -151,6 +151,8 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' set_estimation_step
 #' 
 #' remove_estimation_step
+#' 
+#' append_estimation_step_options
 #' 
 #' 
 #' @export
@@ -311,6 +313,42 @@ add_peripheral_compartment <- function(model) {
 }
 
 #' @title
+#' append_estimation_step_options
+#' 
+#' @description
+#' Append estimation step options
+#' 
+#' Appends options to an existing estimation step.
+#' 
+#' @param model (Model) Pharmpy model
+#' @param options (list) any additional tool specific options
+#' @param idx (integer) index of estimation step
+#'  
+#' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' opts <- list('NITER'=1000, 'ISAMPLE'=100, 'EONLY'=1)
+#' append_estimation_step_options(model, options=opts, idx=0)
+#' est <- model$estimation_steps[1]
+#' len(est$options)
+#' }
+#' @seealso
+#' add_estimation_step
+#' 
+#' set_estimation_step
+#' 
+#' remove_estimation_step
+#' 
+#' 
+#' @export
+append_estimation_step_options <- function(model, options, idx) {
+    func_out <- pharmpy$modeling$append_estimation_step_options(model, options, idx)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' calculate_eta_shrinkage
 #' 
 #' @description
@@ -441,7 +479,7 @@ calculate_pk_parameters_statistics <- function(model, rng=NULL) {
 #' Convert model to other format
 #' 
 #' @param model (Model) Model to convert
-#' @param to_format (str) Name of format to convert into. Currently supported 'nlmixr'
+#' @param to_format (str) Name of format to convert into. Currently supported 'nlmixr' and 'nonmem'
 #'  
 #' @return (Model) New model object with new underlying model format
 #' 
@@ -964,7 +1002,7 @@ has_zero_order_absorption <- function(model) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' print(model$statements)
+#' model$statements
 #' }
 #' 
 #' @export
@@ -1087,6 +1125,29 @@ predict_outliers <- function(model) {
 }
 
 #' @title
+#' print_model_symbols
+#' 
+#' @description
+#' Print all symbols defined in a model
+#' 
+#' Symbols will be in one of the categories thetas, etas, omegas, epsilons, sigmas,
+#' variables and data columns
+#' 
+#' @param model (Model) Pharmpy model object
+#'  
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' print_model_symbols(model)
+#' }
+#' 
+#' @export
+print_model_symbols <- function(model) {
+    func_out <- pharmpy$modeling$print_model_symbols(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' read_model
 #' 
 #' @description
@@ -1098,15 +1159,44 @@ predict_outliers <- function(model) {
 #' 
 #' @examples
 #' \dontrun{
-#' read_model("/home/run1$mod")
+#' model <- read_model("/home/run1$mod")
 #' }
 #' @seealso
+#' read_model_from_database : Read model from database
+#' 
 #' read_model_from_string : Read model from string
 #' 
 #' 
 #' @export
 read_model <- function(path) {
     func_out <- pharmpy$modeling$read_model(path)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' read_model_from_database
+#' 
+#' @description
+#' Read model from model database
+#' 
+#' @param name (str) Name of model to use as lookup
+#' @param database (Database) Database to use. Will use default database if not specified.
+#'  
+#' @return (Model) Read model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- read_model_from_database("run1")
+#' }
+#' @seealso
+#' read_model : Read model from file
+#' 
+#' read_model_from_string : Read model from string
+#' 
+#' 
+#' @export
+read_model_from_database <- function(name, database=NULL) {
+    func_out <- pharmpy$modeling$read_model_from_database(name, database)
     return(py_to_r(func_out))
 }
 
@@ -1135,6 +1225,8 @@ read_model <- function(path) {
 #' }
 #' @seealso
 #' read_model : Read model from file
+#' 
+#' read_model_from_database : Read model from database
 #' 
 #' 
 #' @export
@@ -1215,6 +1307,8 @@ remove_error_model <- function(model) {
 #' add_estimation_step
 #' 
 #' set_estimation_step
+#' 
+#' append_estimation_step_options
 #' 
 #' 
 #' @export
@@ -1639,13 +1733,14 @@ set_dtbs_error_model <- function(model) {
 #' Set estimation step
 #' 
 #' Sets estimation step for a model. Methods currently supported are:
-#' FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM
+#' FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM, BAYES
 #' 
 #' @param model (Model) Pharmpy model
 #' @param method (str) estimation method to change to
 #' @param interaction (logical) whether to use interaction or not, default is true
-#' @param options (list) any additional options. Note that this removes old options
-#' @param est_idx (integer) index of estimation step, default is 0 (first estimation step)
+#' @param options (list) any additional options. Note that this replaces old options (see
+#'  append_estimation_step_options to keep old options)
+#' @param idx (integer) index of estimation step, default is 0 (first estimation step)
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -1661,10 +1756,12 @@ set_dtbs_error_model <- function(model) {
 #' 
 #' remove_estimation_step
 #' 
+#' append_estimation_step_options
+#' 
 #' 
 #' @export
-set_estimation_step <- function(model, method, interaction=TRUE, options=NULL, est_idx=0) {
-    func_out <- pharmpy$modeling$set_estimation_step(model, method, interaction, options, est_idx)
+set_estimation_step <- function(model, method, interaction=TRUE, options=NULL, idx=0) {
+    func_out <- pharmpy$modeling$set_estimation_step(model, method, interaction, options, idx)
     return(py_to_r(func_out))
 }
 
@@ -1983,6 +2080,7 @@ set_peripheral_compartments <- function(model, n) {
 #' @param model (Model) Pharmpy model to create block effect on.
 #' @param list_of_eps (str, vector) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
 #'  NULL is default.
+#' @param ipred (Symbol) Symbol to use as IPRED. Default is to autodetect expression for IPRED.
 #'  
 #' @return (Model) Reference to the same model
 #' 
@@ -1997,8 +2095,8 @@ set_peripheral_compartments <- function(model, n) {
 #' 
 #' 
 #' @export
-set_power_on_ruv <- function(model, list_of_eps=NULL) {
-    func_out <- pharmpy$modeling$set_power_on_ruv(model, list_of_eps)
+set_power_on_ruv <- function(model, list_of_eps=NULL, ipred=NULL) {
+    func_out <- pharmpy$modeling$set_power_on_ruv(model, list_of_eps, ipred)
     return(py_to_r(func_out))
 }
 

@@ -31,4 +31,6 @@ len(ests)
 add_estimation_step
 
 set_estimation_step
+
+append_estimation_step_options
 }

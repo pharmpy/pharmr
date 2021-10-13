@@ -31,4 +31,6 @@ read_model_from_string(s)
 }
 \seealso{
 read_model : Read model from file
+
+read_model_from_database : Read model from database
 }
