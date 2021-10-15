@@ -731,6 +731,28 @@ fix_parameters_to <- function(model, parameter_names, values) {
 }
 
 #' @title
+#' generate_model_code
+#' 
+#' @description
+#' Get the model code of the underlying model language
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (str) Model code
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' generate_model_code(model)
+#' }
+#' 
+#' @export
+generate_model_code <- function(model) {
+    func_out <- pharmpy$modeling$generate_model_code(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' get_model_covariates
 #' 
 #' @description
@@ -2539,33 +2561,6 @@ unfix_parameters_to <- function(model, parameter_names, values) {
 #' @export
 update_inits <- function(model, force_individual_estimates=FALSE) {
     func_out <- pharmpy$modeling$update_inits(model, force_individual_estimates)
-    return(py_to_r(func_out))
-}
-
-#' @title
-#' update_source
-#' 
-#' @description
-#' Update source
-#' 
-#' Let the code of the underlying source language be updated to reflect
-#' changes in the model object.
-#' 
-#' @param model (Model) Pharmpy model
-#'  
-#' @return (Model) Reference to the same model object
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' fix_parameters(model, c('THETA(1)'))
-#' update_source(model)
-#' print(str(model).splitlines()c(22))
-#' }
-#' 
-#' @export
-update_source <- function(model) {
-    func_out <- pharmpy$modeling$update_source(model)
     return(py_to_r(func_out))
 }
 
