@@ -49,9 +49,9 @@ jobs:
 
       - name: Install pharmpy/pharmr
         run: |
+          Sys.setenv(RETICULATE_MINICONDA_PYTHON_VERSION="3.9")
           remotes::install_github('rstudio/reticulate')
           reticulate::install_miniconda()
-          reticulate::conda_create('r-reticulate', python_version = '3.9')
           remotes::install_local()
           pharmr::install_pharmpy()
         shell: Rscript {0}
