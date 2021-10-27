@@ -1,3 +1,10 @@
+<!-- badges: start -->
+
+[![CRAN
+status](https://www.r-pkg.org/badges/version/pharmr)](https://cran.r-project.org/package=pharmr)
+[![R-CMD-check](https://github.com/pharmpy/pharmr/workflows/R-CMD-check/badge.svg)](https://github.com/pharmpy/pharmr/actions)
+<!-- badges: end -->
+
 # Pharmr
 
 Pharmr is an R wrapper to [**Pharmpy**](https://pharmpy.github.io/), a Python library for 
