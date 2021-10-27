@@ -23,12 +23,19 @@ remotes::install_github("pharmpy/pharmr", ref="main")
 pharmr::install_pharmpy()
 ```
 
-## Example
+## Using Pharmr
 
 A simple example of reading a model, performing a simple transformation, and run the model in NONMEM:
 
 ```R
-model <- read_model('run1.mod') %>%
+model <- load_example_model('pheno') %>%
   add_parameter('MAT') %>%
   fit()
+```
+
+Note: If you try to access data frames belonging to a Pharmpy object you need to reset the index. All functions available in Pharmr do this internally, it is only when you have data frames nested in objects (such as a model object) that you need to do this. An example:
+
+```R
+model <- load_example_model('pheno')
+residuals <- reset_index(model$modelfit_results$residuals)
 ```
