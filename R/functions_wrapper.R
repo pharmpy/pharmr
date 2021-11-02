@@ -132,17 +132,16 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' 
 #' @param model (Model) Pharmpy model
 #' @param method (str) estimation method to change to
-#' @param interaction (logical) whether to use interaction or not, default is true
-#' @param options (list) any additional tool specific options
 #' @param idx (integer) index of estimation step, default is NULL (adds step at the end)
+#' @param ... Arguments to pass to EstimationMethod (such as interaction, evaluation)
 #'  
 #' @return (Model) Reference to the same model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' opts <- list('NITER'=1000, 'ISAMPLE'=100, 'EONLY'=1)
-#' add_estimation_step(model, "IMP", options=opts)
+#' opts <- list('NITER'=1000, 'ISAMPLE'=100)
+#' add_estimation_step(model, "IMP", tool_options=opts)
 #' ests <- model$estimation_steps
 #' len(ests)
 #' ests[2]
@@ -156,8 +155,8 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' 
 #' 
 #' @export
-add_estimation_step <- function(model, method, interaction=TRUE, options=NULL, idx=NULL) {
-    func_out <- pharmpy$modeling$add_estimation_step(model, method, interaction, options, idx)
+add_estimation_step <- function(model, method, idx=NULL, ...) {
+    func_out <- pharmpy$modeling$add_estimation_step(model, method, idx)
     return(py_to_r(func_out))
 }
 
@@ -321,7 +320,7 @@ add_peripheral_compartment <- function(model) {
 #' Appends options to an existing estimation step.
 #' 
 #' @param model (Model) Pharmpy model
-#' @param options (list) any additional tool specific options
+#' @param tool_options (list) any additional tool specific options
 #' @param idx (integer) index of estimation step
 #'  
 #' @return (Model) Reference to the same model object
@@ -329,10 +328,10 @@ add_peripheral_compartment <- function(model) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' opts <- list('NITER'=1000, 'ISAMPLE'=100, 'EONLY'=1)
-#' append_estimation_step_options(model, options=opts, idx=0)
+#' opts <- list('NITER'=1000, 'ISAMPLE'=100)
+#' append_estimation_step_options(model, tool_options=opts, idx=0)
 #' est <- model$estimation_steps[1]
-#' len(est$options)
+#' len(est$tool_options)
 #' }
 #' @seealso
 #' add_estimation_step
@@ -343,8 +342,8 @@ add_peripheral_compartment <- function(model) {
 #' 
 #' 
 #' @export
-append_estimation_step_options <- function(model, options, idx) {
-    func_out <- pharmpy$modeling$append_estimation_step_options(model, options, idx)
+append_estimation_step_options <- function(model, tool_options, idx) {
+    func_out <- pharmpy$modeling$append_estimation_step_options(model, tool_options, idx)
     return(py_to_r(func_out))
 }
 
@@ -1319,9 +1318,7 @@ remove_error_model <- function(model) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' opts <- list('NITER'=1000, 'ISAMPLE'=100, 'EONLY'=1)
-#' add_estimation_step(model, "IMP", options=opts)
-#' remove_estimation_step(model, 1)
+#' remove_estimation_step(model, 0)
 #' ests <- model$estimation_steps
 #' len(ests)
 #' }
@@ -1759,18 +1756,16 @@ set_dtbs_error_model <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param method (str) estimation method to change to
-#' @param interaction (logical) whether to use interaction or not, default is true
-#' @param options (list) any additional options. Note that this replaces old options (see
-#'  append_estimation_step_options to keep old options)
 #' @param idx (integer) index of estimation step, default is 0 (first estimation step)
+#' @param ... Arguments to pass to EstimationMethod (such as interaction, evaluation)
 #'  
 #' @return (Model) Reference to the same model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' opts <- list('NITER'=1000, 'ISAMPLE'=100, 'EONLY'=1)
-#' set_estimation_step(model, "IMP", options=opts)
+#' opts <- list('NITER'=1000, 'ISAMPLE'=100)
+#' set_estimation_step(model, "IMP", evaluation=TRUE, tool_options=opts)
 #' model$estimation_steps[1]
 #' }
 #' @seealso
@@ -1782,8 +1777,8 @@ set_dtbs_error_model <- function(model) {
 #' 
 #' 
 #' @export
-set_estimation_step <- function(model, method, interaction=TRUE, options=NULL, idx=0) {
-    func_out <- pharmpy$modeling$set_estimation_step(model, method, interaction, options, idx)
+set_estimation_step <- function(model, method, idx=0, ...) {
+    func_out <- pharmpy$modeling$set_estimation_step(model, method, idx)
     return(py_to_r(func_out))
 }
 
@@ -2352,11 +2347,16 @@ split_joint_distribution <- function(model, rvs=NULL) {
 #' Summarize results of model runs
 #' 
 #' Summarize different results after fitting a model, includes runtime, ofv,
-#' and parameter estimates (with errors).
+#' and parameter estimates (with errors). If include_all_estimation_steps is FALSE,
+#' only the last estimation step will be included (note that in that case, the
+#' minimization_successful value will be referring to the last estimation step, if
+#' last step is evaluation it will go backwards until it finds an estimation step
+#' that wasn't an evaluation).
 #' 
 #' @param models (vector, Model) List of models or single model
+#' @param include_all_estimation_steps (logical) Whether to include all estimation steps, default is FALSE
 #'  
-#' @return (data.frame) A DataFrame of modelfit results, one row per model.
+#' @return (data.frame) A DataFrame of modelfit results with model name and estmation step as index.
 #' 
 #' @examples
 #' \dontrun{
@@ -2365,8 +2365,8 @@ split_joint_distribution <- function(model, rvs=NULL) {
 #' }
 #' 
 #' @export
-summarize_modelfit_results <- function(models) {
-    df <- pharmpy$modeling$summarize_modelfit_results(models)
+summarize_modelfit_results <- function(models, include_all_estimation_steps=FALSE) {
+    df <- pharmpy$modeling$summarize_modelfit_results(models, include_all_estimation_steps)
     df_reset <- df$reset_index()
     return(py_to_r(df_reset))
 }

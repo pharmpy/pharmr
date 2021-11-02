@@ -4,19 +4,16 @@
 \alias{set_estimation_step}
 \title{set_estimation_step}
 \usage{
-set_estimation_step(model, method, interaction = TRUE, options = NULL, idx = 0)
+set_estimation_step(model, method, idx = 0, ...)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{method}{(str) estimation method to change to}
 
-\item{interaction}{(logical) whether to use interaction or not, default is true}
-
-\item{options}{(list) any additional options. Note that this replaces old options (see
-append_estimation_step_options to keep old options)}
-
 \item{idx}{(integer) index of estimation step, default is 0 (first estimation step)}
+
+\item{...}{Arguments to pass to EstimationMethod (such as interaction, evaluation)}
 }
 \value{
 (Model) Reference to the same model object
@@ -30,8 +27,8 @@ FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM, BAYES
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-opts <- list('NITER'=1000, 'ISAMPLE'=100, 'EONLY'=1)
-set_estimation_step(model, "IMP", options=opts)
+opts <- list('NITER'=1000, 'ISAMPLE'=100)
+set_estimation_step(model, "IMP", evaluation=TRUE, tool_options=opts)
 model$estimation_steps[1]
 }
 }
