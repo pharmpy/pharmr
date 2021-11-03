@@ -28,23 +28,25 @@ def create_r_func(func):
     func_name = func.__name__
     argspecs = getfullargspec(func)
     args = argspecs.args
+    arg_names = [str(arg) for arg in args]
     defaults = argspecs.defaults
     varargs, varkw = argspecs.varargs, argspecs.varkw
 
     if defaults:
         if len(args) > len(defaults):
             defaults_new = [py_to_r_arg(d) for d in defaults]
-            defaults = [None for _ in range(len(args) - len(defaults_new))] + defaults_new
-        args_defaults = {arg: default for arg, default in zip(args, defaults)}
+            defaults = [None for _ in range(len(arg_names) - len(defaults_new))] + defaults_new
+        args_defaults = {arg: default for arg, default in zip(arg_names, defaults)}
         arg_list = [(f'{arg}={default}' if default is not None else f'{arg}') for arg, default in args_defaults.items()]
     else:
-        arg_list = args
+        arg_list = arg_names.copy()
 
     if varargs or varkw:
         arg_list += ['...']
+        arg_names += ['...']
 
     func_args = ', '.join(arg_list)
-    args_str = ', '.join(args)
+    args_str = ', '.join(arg_names)
 
     if 'pd.dataframe' in getdoc(func).lower() or 'pd.series' in getdoc(func).lower():
         return f'{func_name} <- function({func_args}) {{\n' \

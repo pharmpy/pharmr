@@ -156,7 +156,7 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' 
 #' @export
 add_estimation_step <- function(model, method, idx=NULL, ...) {
-    func_out <- pharmpy$modeling$add_estimation_step(model, method, idx)
+    func_out <- pharmpy$modeling$add_estimation_step(model, method, idx, ...)
     return(py_to_r(func_out))
 }
 
@@ -1778,7 +1778,7 @@ set_dtbs_error_model <- function(model) {
 #' 
 #' @export
 set_estimation_step <- function(model, method, idx=0, ...) {
-    func_out <- pharmpy$modeling$set_estimation_step(model, method, idx)
+    func_out <- pharmpy$modeling$set_estimation_step(model, method, idx, ...)
     return(py_to_r(func_out))
 }
 
