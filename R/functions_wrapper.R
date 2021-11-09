@@ -143,7 +143,7 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' opts <- list('NITER'=1000, 'ISAMPLE'=100)
 #' add_estimation_step(model, "IMP", tool_options=opts)
 #' ests <- model$estimation_steps
-#' len(ests)
+#' length(ests)
 #' ests[2]
 #' }
 #' @seealso
@@ -331,7 +331,7 @@ add_peripheral_compartment <- function(model) {
 #' opts <- list('NITER'=1000, 'ISAMPLE'=100)
 #' append_estimation_step_options(model, tool_options=opts, idx=0)
 #' est <- model$estimation_steps[1]
-#' len(est$tool_options)
+#' length(est$tool_options)
 #' }
 #' @seealso
 #' add_estimation_step
@@ -1320,7 +1320,7 @@ remove_error_model <- function(model) {
 #' model <- load_example_model("pheno")
 #' remove_estimation_step(model, 0)
 #' ests <- model$estimation_steps
-#' len(ests)
+#' length(ests)
 #' }
 #' @seealso
 #' add_estimation_step

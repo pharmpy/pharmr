@@ -173,6 +173,9 @@ def create_r_example(doc_list):
             dict_r = f'list({dict_py.group(1).replace(": ", "=", )})'
             row_r = row_r.replace('{' + f'{dict_py.group(1)}' + '}', dict_r)
 
+        # Replace len() with length()
+        row_r = row_r.replace(r'len(', 'length(')
+
         # Remove doctest comments
         row_r = re.sub(pattern_doctest, '', row_r)
         doc_code_r += row_r + '\n'
