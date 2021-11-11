@@ -4,10 +4,12 @@
 \alias{set_dtbs_error_model}
 \title{set_dtbs_error_model}
 \usage{
-set_dtbs_error_model(model)
+set_dtbs_error_model(model, fix_to_log = FALSE)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
+
+\item{fix_to_log}{(Boolean) Set to TRUE to fix lambda and zeta to 0, i.e. emulating log-transformed data}
 }
 \value{
 (Model) Reference to the same model

@@ -131,7 +131,7 @@ math::
 \dontrun{
 model <- load_example_model("pheno")
 add_covariate_effect(model, "CL", "APGR", "exp")
-model$statements$full_expression_from_odes("CL")
+model$statements$before_odes$full_expression("CL")
 }
 
 }

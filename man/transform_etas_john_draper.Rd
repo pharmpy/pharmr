@@ -27,7 +27,7 @@ Journal of the Royal Statistical Society. Series C (Applied Statistics),
 \dontrun{
 model <- load_example_model("pheno")
 transform_etas_john_draper(model, c("ETA(1)"))
-model$statements$full_expression_from_odes("CL")
+model$statements$before_odes$full_expression("CL")
 }
 }
 \seealso{

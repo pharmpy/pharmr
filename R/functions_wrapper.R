@@ -112,7 +112,7 @@
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' add_covariate_effect(model, "CL", "APGR", "exp")
-#' model$statements$full_expression_from_odes("CL")
+#' model$statements$before_odes$full_expression("CL")
 #' }
 #' 
 #' @export
@@ -1730,6 +1730,7 @@ set_combined_error_model <- function(model, data_trans=NULL) {
 #' Dynamic transform both sides
 #' 
 #' @param model (Model) Pharmpy model
+#' @param fix_to_log (Boolean) Set to TRUE to fix lambda and zeta to 0, i.e. emulating log-transformed data
 #'  
 #' @return (Model) Reference to the same model
 #' 
@@ -1740,8 +1741,8 @@ set_combined_error_model <- function(model, data_trans=NULL) {
 #' }
 #' 
 #' @export
-set_dtbs_error_model <- function(model) {
-    func_out <- pharmpy$modeling$set_dtbs_error_model(model)
+set_dtbs_error_model <- function(model, fix_to_log=FALSE) {
+    func_out <- pharmpy$modeling$set_dtbs_error_model(model, fix_to_log)
     return(py_to_r(func_out))
 }
 
@@ -2388,7 +2389,7 @@ summarize_modelfit_results <- function(models, include_all_estimation_steps=FALS
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' transform_etas_boxcox(model, c("ETA(1)"))
-#' model$statements$full_expression_from_odes("CL")
+#' model$statements$before_odes$full_expression("CL")
 #' }
 #' @seealso
 #' transform_etas_tdist
@@ -2423,7 +2424,7 @@ transform_etas_boxcox <- function(model, list_of_etas=NULL) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' transform_etas_john_draper(model, c("ETA(1)"))
-#' model$statements$full_expression_from_odes("CL")
+#' model$statements$before_odes$full_expression("CL")
 #' }
 #' @seealso
 #' transform_etas_boxcox
@@ -2454,7 +2455,7 @@ transform_etas_john_draper <- function(model, list_of_etas=NULL) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' transform_etas_tdist(model, c("ETA(1)"))
-#' model$statements$full_expression_from_odes("CL")
+#' model$statements$before_odes$full_expression("CL")
 #' }
 #' @seealso
 #' transform_etas_boxcox

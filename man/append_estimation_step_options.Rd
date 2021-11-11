@@ -27,7 +27,7 @@ model <- load_example_model("pheno")
 opts <- list('NITER'=1000, 'ISAMPLE'=100)
 append_estimation_step_options(model, tool_options=opts, idx=0)
 est <- model$estimation_steps[1]
-len(est$tool_options)
+length(est$tool_options)
 }
 }
 \seealso{

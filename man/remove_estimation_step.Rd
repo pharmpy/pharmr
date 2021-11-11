@@ -22,7 +22,7 @@ Remove estimation step
 model <- load_example_model("pheno")
 remove_estimation_step(model, 0)
 ests <- model$estimation_steps
-len(ests)
+length(ests)
 }
 }
 \seealso{

@@ -30,7 +30,7 @@ model <- load_example_model("pheno")
 opts <- list('NITER'=1000, 'ISAMPLE'=100)
 add_estimation_step(model, "IMP", tool_options=opts)
 ests <- model$estimation_steps
-len(ests)
+length(ests)
 ests[2]
 }
 }
