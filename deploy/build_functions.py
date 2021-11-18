@@ -100,9 +100,9 @@ def create_r_doc(func):
     r_doc = ''
     for row in doc_str.split('\n'):
         r_doc += f'#\' {row}\n'
-        
+
     r_doc += f'#\' @export'
-    return r_doc 
+    return r_doc
 
 
 def create_r_params(doc_list):
@@ -155,6 +155,10 @@ def create_r_example(doc_list):
 
         # Substitute any . to $, e.g. model.parameters -> model$parameters
         row_r = re.sub(pattern_methods, r'\1$\2', row_r)
+
+        # Substitute """ or ''' to " for mutliline strings
+        row_r = re.sub(r'"""', r'"', row_r)
+        row_r = re.sub(r"'''", r'"', row_r)
 
         # Check if row has list subscript
         if re.search(r'\w\[', row_r):
