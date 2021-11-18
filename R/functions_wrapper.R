@@ -1233,7 +1233,7 @@ read_model_from_database <- function(name, database=NULL) {
 #' 
 #' @examples
 #' \dontrun{
-#' s <- '''$PROBLEM
+#' s <- "$PROBLEM
 #' $INPUT ID DV TIME
 #' $DATA file$csv
 #' $PRED
@@ -1241,7 +1241,7 @@ read_model_from_database <- function(name, database=NULL) {
 #' $THETA 1
 #' $OMEGA 0.1
 #' $SIGMA 1
-#' $ESTIMATION METHOD=1'''
+#' $ESTIMATION METHOD=1"
 #' read_model_from_string(s)
 #' }
 #' @seealso
