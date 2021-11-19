@@ -17,7 +17,8 @@ function is also available via the `help`-function (or `?`).
 
 Pharmr uses the package [**reticulate**](https://rstudio.github.io/reticulate/) for calling 
 Python from R. When installing Pharmr, reticulate will give a prompt to set up the reticulate 
-environment. To use Python 3.9 in your environment run the following code before installing Pharmr:
+environment. In order to use Pharmr, you need to have Python 3.7-3.9. To make reticulate use 
+Python 3.9 in its environment, run the following: 
 
 ```R
 Sys.setenv(RETICULATE_MINICONDA_PYTHON_VERSION="3.9")
