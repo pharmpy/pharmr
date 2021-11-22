@@ -76,6 +76,11 @@ jobs:
           remotes::install_local(dependencies = TRUE, force=TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
+        
+      - name: Install reticulate (CRAN)
+        run: |
+          install.packages('reticulate')
+        shell: Rscript {0}
 
       - name: Install miniconda
         run: |
@@ -83,12 +88,10 @@ jobs:
           reticulate::install_miniconda()
         shell: Rscript {0}
 
-
       - name: Install pharmpy/pharmr
         run: |
           pharmr::install_pharmpy()
         shell: Rscript {0}
-
 
       - name: Check (as cran)
         env:
