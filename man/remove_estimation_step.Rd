@@ -9,7 +9,7 @@ remove_estimation_step(model, idx)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{idx}{(integer) index of estimation step to remove}
+\item{idx}{(integer) index of estimation step to remove (starting from 0)}
 }
 \value{
 (Model) Reference to the same model object

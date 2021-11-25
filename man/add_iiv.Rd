@@ -34,7 +34,7 @@ Effects that currently have templates are:
 \item Additive (\emph{add})
 \item Proportional (\emph{prop})
 \item Exponential (\emph{exp})
-\item Logit (\emph{logit})
+\item Logit (\emph{log})
 }
 
 For all except exponential the operation input is not needed. Otherwise user specified

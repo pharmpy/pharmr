@@ -24,5 +24,5 @@ remove_lag_time(model)
 \seealso{
 set_transit_compartments
 
-set_lag_time
+add_lag_time
 }

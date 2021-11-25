@@ -28,5 +28,5 @@ model$statements$ode_system
 }
 }
 \seealso{
-set_lag_time
+add_lag_time
 }

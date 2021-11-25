@@ -11,7 +11,7 @@ add_estimation_step(model, method, idx = NULL, ...)
 
 \item{method}{(str) estimation method to change to}
 
-\item{idx}{(integer) index of estimation step, default is NULL (adds step at the end)}
+\item{idx}{(integer) index of estimation step (starting from 0), default is NULL (adds step at the end)}
 
 \item{...}{Arguments to pass to EstimationMethod (such as interaction, evaluation)}
 }

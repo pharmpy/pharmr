@@ -132,7 +132,7 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' 
 #' @param model (Model) Pharmpy model
 #' @param method (str) estimation method to change to
-#' @param idx (integer) index of estimation step, default is NULL (adds step at the end)
+#' @param idx (integer) index of estimation step (starting from 0), default is NULL (adds step at the end)
 #' @param ... Arguments to pass to EstimationMethod (such as interaction, evaluation)
 #'  
 #' @return (Model) Reference to the same model object
@@ -171,7 +171,7 @@ add_estimation_step <- function(model, method, idx=NULL, ...) {
 #' * Additive (*add*)
 #' * Proportional (*prop*)
 #' * Exponential (*exp*)
-#' * Logit (*logit*)
+#' * Logit (*log*)
 #' 
 #' For all except exponential the operation input is not needed. Otherwise user specified
 #' input is supported. Initial estimates for new etas are 0.09.
@@ -267,6 +267,36 @@ add_iov <- function(model, occ, list_of_parameters=NULL, eta_names=NULL) {
 }
 
 #' @title
+#' add_lag_time
+#' 
+#' @description
+#' Add lag time to the dose compartment of model.
+#' 
+#' Initial estimate for lag time is set the
+#' previous lag time if available, otherwise it is set to the time of first observation/2.
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (Model) Reference to same model
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' add_lag_time(model)
+#' }
+#' @seealso
+#' set_transit_compartments
+#' 
+#' remove_lag_time
+#' 
+#' 
+#' @export
+add_lag_time <- function(model) {
+    func_out <- pharmpy$modeling$add_lag_time(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' add_peripheral_compartment
 #' 
 #' @description
@@ -321,7 +351,7 @@ add_peripheral_compartment <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param tool_options (list) any additional tool specific options
-#' @param idx (integer) index of estimation step
+#' @param idx (integer) index of estimation step (starting from 0)
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -1229,7 +1259,7 @@ read_model_from_database <- function(name, database=NULL) {
 #' 
 #' @param code (str) Model code to read
 #'  
-#' @return (Model) Read model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
@@ -1311,7 +1341,7 @@ remove_error_model <- function(model) {
 #' Remove estimation step
 #' 
 #' @param model (Model) Pharmpy model
-#' @param idx (integer) index of estimation step to remove
+#' @param idx (integer) index of estimation step to remove (starting from 0)
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -1418,7 +1448,7 @@ remove_iov <- function(model) {
 #' @seealso
 #' set_transit_compartments
 #' 
-#' set_lag_time
+#' add_lag_time
 #' 
 #' 
 #' @export
@@ -1900,36 +1930,6 @@ set_initial_estimates <- function(model, inits) {
 }
 
 #' @title
-#' set_lag_time
-#' 
-#' @description
-#' Add lag time to the dose compartment of model.
-#' 
-#' Initial estimate for lag time is set the
-#' previous lag time if available, otherwise it is set to the time of first observation/2.
-#' 
-#' @param model (Model) Pharmpy model
-#'  
-#' @return (Model) Reference to same model
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' set_lag_time(model)
-#' }
-#' @seealso
-#' set_transit_compartments
-#' 
-#' remove_lag_time
-#' 
-#' 
-#' @export
-set_lag_time <- function(model) {
-    func_out <- pharmpy$modeling$set_lag_time(model)
-    return(py_to_r(func_out))
-}
-
-#' @title
 #' set_michaelis_menten_elimination
 #' 
 #' @description
@@ -2216,7 +2216,7 @@ set_seq_zo_fo_absorption <- function(model) {
 #' model$statements$ode_system
 #' }
 #' @seealso
-#' set_lag_time
+#' add_lag_time
 #' 
 #' 
 #' @export

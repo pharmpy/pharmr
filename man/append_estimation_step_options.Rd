@@ -11,7 +11,7 @@ append_estimation_step_options(model, tool_options, idx)
 
 \item{tool_options}{(list) any additional tool specific options}
 
-\item{idx}{(integer) index of estimation step}
+\item{idx}{(integer) index of estimation step (starting from 0)}
 }
 \value{
 (Model) Reference to the same model object

@@ -10,7 +10,7 @@ read_model_from_string(code)
 \item{code}{(str) Model code to read}
 }
 \value{
-(Model) Read model object
+(Model) Pharmpy model object
 }
 \description{
 Read model from the model code in a string
