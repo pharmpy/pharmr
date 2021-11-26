@@ -4,10 +4,12 @@
 \alias{read_model_from_string}
 \title{read_model_from_string}
 \usage{
-read_model_from_string(code)
+read_model_from_string(code, path = NULL)
 }
 \arguments{
 \item{code}{(str) Model code to read}
+
+\item{path}{(Path or str) Specified to set the path for the created model}
 }
 \value{
 (Model) Pharmpy model object

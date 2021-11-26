@@ -1258,6 +1258,7 @@ read_model_from_database <- function(name, database=NULL) {
 #' Read model from the model code in a string
 #' 
 #' @param code (str) Model code to read
+#' @param path (Path or str) Specified to set the path for the created model
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -1281,8 +1282,8 @@ read_model_from_database <- function(name, database=NULL) {
 #' 
 #' 
 #' @export
-read_model_from_string <- function(code) {
-    func_out <- pharmpy$modeling$read_model_from_string(code)
+read_model_from_string <- function(code, path=NULL) {
+    func_out <- pharmpy$modeling$read_model_from_string(code, path)
     return(py_to_r(func_out))
 }
 
