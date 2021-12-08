@@ -782,6 +782,43 @@ generate_model_code <- function(model) {
 }
 
 #' @title
+#' get_config_path
+#' 
+#' @description
+#' Returns path to the user config path
+#' 
+#' @return (str) Path to user config
+#' 
+#' @examples
+#' \dontrun{
+#' get_config_path()
+#' }
+#' 
+#' @export
+get_config_path <- function() {
+    func_out <- pharmpy$modeling$get_config_path()
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' get_mdv
+#' 
+#' @description
+#' Get MDVs from dataset
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (data.frame) MDVs
+#' 
+#' 
+#' @export
+get_mdv <- function(model) {
+    df <- pharmpy$modeling$get_mdv(model)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
 #' get_model_covariates
 #' 
 #' @description
@@ -2148,7 +2185,7 @@ set_power_on_ruv <- function(model, list_of_eps=NULL, ipred=NULL) {
 #' model$statements$find_assignment("Y")
 #' model <- remove_error_model(load_example_model("pheno"))
 #' set_proportional_error_model(model, data_trans="log(Y)")
-#' model$statements$find_assignment("Y")
+#' model$statements$after_odes
 #' }
 #' @seealso
 #' set_additive_error_model : Additive error model
@@ -2545,7 +2582,8 @@ unfix_parameters_to <- function(model, parameter_names, values) {
 #' 
 #' Updates initial estimates of population parameters for a model from
 #' its modelfit_results. If the model has used initial estimates for
-#' individual estimates these will also be updated. If initial estimates
+#' individual estimates these will also be updated. If the new initial estimates
+#' are out of bounds or NaN this function will raise.
 #' 
 #' @param model (Model) Pharmpy model to update initial estimates
 #' @param force_individual_estimates (logical) Update initial individual estimates even if model din't use them previously.
@@ -2554,7 +2592,7 @@ unfix_parameters_to <- function(model, parameter_names, values) {
 #' 
 #' @examples
 #' \dontrun{
-#' model <- load_example_model("pheno")
+#' model <- load_example_model("pheno")   # This model was previously fitted to its data
 #' model$parameters$inits
 #' update_inits(model)
 #' model$parameters$inits

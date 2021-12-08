@@ -35,7 +35,7 @@ set_proportional_error_model(model)
 model$statements$find_assignment("Y")
 model <- remove_error_model(load_example_model("pheno"))
 set_proportional_error_model(model, data_trans="log(Y)")
-model$statements$find_assignment("Y")
+model$statements$after_odes
 }
 }
 \seealso{

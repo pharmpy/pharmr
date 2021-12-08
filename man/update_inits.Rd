@@ -19,11 +19,12 @@ Update initial parameter estimate for a model
 
 Updates initial estimates of population parameters for a model from
 its modelfit_results. If the model has used initial estimates for
-individual estimates these will also be updated. If initial estimates
+individual estimates these will also be updated. If the new initial estimates
+are out of bounds or NaN this function will raise.
 }
 \examples{
 \dontrun{
-model <- load_example_model("pheno")
+model <- load_example_model("pheno")   # This model was previously fitted to its data
 model$parameters$inits
 update_inits(model)
 model$parameters$inits
