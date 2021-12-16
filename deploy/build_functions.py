@@ -48,6 +48,8 @@ def create_r_func(func):
     func_args = ', '.join(arg_list)
     args_str = ', '.join(arg_names)
 
+    if not getdoc(func):
+        raise ValueError(f'No documentation available for {func_name}')
     if 'pd.dataframe' in getdoc(func).lower() or 'pd.series' in getdoc(func).lower():
         return f'{func_name} <- function({func_args}) {{\n' \
                f'    df <- pharmpy$modeling${func_name}({args_str})\n' \
