@@ -14,6 +14,8 @@ set_bolus_absorption(model)
 }
 \description{
 Set or change to bolus absorption rate.
+
+Currently lagtime together with bolus absorption is not supported.
 }
 \examples{
 \dontrun{

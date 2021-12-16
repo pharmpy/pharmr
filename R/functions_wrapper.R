@@ -1,4 +1,74 @@
 #' @title
+#' add_allometry
+#' 
+#' @description
+#' Add allometric scaling of parameters
+#' 
+#' Add an allometric function to each listed parameter. The function will be
+#' P=P*(X/Z)**T where P is the parameter, X the allometric_variable, Z the reference_value
+#' and T is a theta. Default is to automatically use clearance and volume parameters.
+#' 
+#' @param model (Model) Pharmpy model
+#' @param allometric_variable (str or Symbol) Variable to use for allometry (X above)
+#' @param reference_value (str, integer, numeric or expression) Reference value (Z above)
+#' @param parameters (vector) Parameters to use or NULL (default) for all available CL, Q and V parameters
+#' @param initials (vector) Initial estimates for the exponents. Default is to use 0.75 for CL and Qs and 1 for Vs
+#' @param lower_bounds (vector) Lower bounds for the exponents. Default is 0 for all parameters
+#' @param upper_bounds (vector) Upper bounds for the exponents. Default is 2 for all parameters
+#' @param fixed (logical) Whether the exponents should be fixed
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' add_allometry(model, allometric_variable='WGT')
+#' model$statements$before_odes
+#' }
+#' 
+#' @export
+add_allometry <- function(model, allometric_variable='WT', reference_value=70, parameters=NULL, initials=NULL, lower_bounds=NULL, upper_bounds=NULL, fixed=TRUE) {
+    func_out <- pharmpy$modeling$add_allometry(model, allometric_variable, reference_value, parameters, initials, lower_bounds, upper_bounds, fixed)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' add_covariance_step
+#' 
+#' @description
+#' Adds covariance step to the final estimation step
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' set_estimation_step(model, 'FOCE', cov=FALSE)
+#' add_covariance_step(model)
+#' ests <- model$estimation_steps
+#' ests[1]
+#' }
+#' @seealso
+#' add_estimation_step
+#' 
+#' set_estimation_step
+#' 
+#' remove_estimation_step
+#' 
+#' append_estimation_step_options
+#' 
+#' remove_covariance_step
+#' 
+#' 
+#' @export
+add_covariance_step <- function(model) {
+    func_out <- pharmpy$modeling$add_covariance_step(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' add_covariate_effect
 #' 
 #' @description
@@ -133,7 +203,7 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' @param model (Model) Pharmpy model
 #' @param method (str) estimation method to change to
 #' @param idx (integer) index of estimation step (starting from 0), default is NULL (adds step at the end)
-#' @param ... Arguments to pass to EstimationMethod (such as interaction, evaluation)
+#' @param ... Arguments to pass to EstimationStep (such as interaction, evaluation)
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -152,6 +222,10 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' remove_estimation_step
 #' 
 #' append_estimation_step_options
+#' 
+#' add_covariance_step
+#' 
+#' remove_covariance_step
 #' 
 #' 
 #' @export
@@ -369,6 +443,10 @@ add_peripheral_compartment <- function(model) {
 #' set_estimation_step
 #' 
 #' remove_estimation_step
+#' 
+#' add_covariance_step
+#' 
+#' remove_covariance_step
 #' 
 #' 
 #' @export
@@ -1349,6 +1427,41 @@ read_results <- function(path) {
 }
 
 #' @title
+#' remove_covariance_step
+#' 
+#' @description
+#' Removes covariance step to the final estimation step
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' remove_covariance_step(model)
+#' ests <- model$estimation_steps
+#' ests[1]
+#' }
+#' @seealso
+#' add_estimation_step
+#' 
+#' set_estimation_step
+#' 
+#' remove_estimation_step
+#' 
+#' append_estimation_step_options
+#' 
+#' add_covariance_step
+#' 
+#' 
+#' @export
+remove_covariance_step <- function(model) {
+    func_out <- pharmpy$modeling$remove_covariance_step(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' remove_error_model
 #' 
 #' @description
@@ -1396,6 +1509,10 @@ remove_error_model <- function(model) {
 #' set_estimation_step
 #' 
 #' append_estimation_step_options
+#' 
+#' add_covariance_step
+#' 
+#' remove_covariance_step
 #' 
 #' 
 #' @export
@@ -1532,6 +1649,64 @@ remove_lag_time <- function(model) {
 #' @export
 remove_peripheral_compartment <- function(model) {
     func_out <- pharmpy$modeling$remove_peripheral_compartment(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' run_amd
+#' 
+#' @description
+#' Run Automatic Model Development (AMD) tool
+#' 
+#' Runs structural modelsearch, IIV building, and resmod
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' run_amd(model)
+#' }
+#' @seealso
+#' run_iiv
+#' 
+#' run_tool
+#' 
+#' 
+#' @export
+run_amd <- function(model) {
+    func_out <- pharmpy$modeling$run_amd(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' run_iiv
+#' 
+#' @description
+#' Run IIV tool
+#' 
+#' Runs two IIV workflows: testing the number of etas and testing which block structure
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' run_iiv(model)
+#' }
+#' @seealso
+#' run_amd
+#' 
+#' run_tool
+#' 
+#' 
+#' @export
+run_iiv <- function(model) {
+    func_out <- pharmpy$modeling$run_iiv(model)
     return(py_to_r(func_out))
 }
 
@@ -1725,6 +1900,8 @@ set_additive_error_model <- function(model, data_trans=NULL, series_terms=2) {
 #' @description
 #' Set or change to bolus absorption rate.
 #' 
+#' Currently lagtime together with bolus absorption is not supported.
+#' 
 #' @param model (Model) Model to set or change absorption rate
 #'  
 #' @return (Model) Reference to same model
@@ -1826,7 +2003,7 @@ set_dtbs_error_model <- function(model, fix_to_log=FALSE) {
 #' @param model (Model) Pharmpy model
 #' @param method (str) estimation method to change to
 #' @param idx (integer) index of estimation step, default is 0 (first estimation step)
-#' @param ... Arguments to pass to EstimationMethod (such as interaction, evaluation)
+#' @param ... Arguments to pass to EstimationStep (such as interaction, evaluation)
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -1843,6 +2020,10 @@ set_dtbs_error_model <- function(model, fix_to_log=FALSE) {
 #' remove_estimation_step
 #' 
 #' append_estimation_step_options
+#' 
+#' add_covariance_step
+#' 
+#' remove_covariance_step
 #' 
 #' 
 #' @export
@@ -2136,6 +2317,7 @@ set_peripheral_compartments <- function(model, n) {
 #' @param model (Model) Pharmpy model to create block effect on.
 #' @param list_of_eps (str, vector) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
 #'  NULL is default.
+#' @param lower_limit (integer or NULL) Lower limit of power (theta). NULL for no limit.
 #' @param ipred (Symbol) Symbol to use as IPRED. Default is to autodetect expression for IPRED.
 #'  
 #' @return (Model) Reference to the same model
@@ -2151,8 +2333,8 @@ set_peripheral_compartments <- function(model, n) {
 #' 
 #' 
 #' @export
-set_power_on_ruv <- function(model, list_of_eps=NULL, ipred=NULL) {
-    func_out <- pharmpy$modeling$set_power_on_ruv(model, list_of_eps, ipred)
+set_power_on_ruv <- function(model, list_of_eps=NULL, lower_limit=0.01, ipred=NULL) {
+    func_out <- pharmpy$modeling$set_power_on_ruv(model, list_of_eps, lower_limit, ipred)
     return(py_to_r(func_out))
 }
 
@@ -2208,6 +2390,9 @@ set_proportional_error_model <- function(model, data_trans=NULL) {
 #' Initial estimate for
 #' absorption rate is set the previous rate if available, otherwise it is set to the time of
 #' first observation/2.
+#' 
+#' Currently lagtime together with sequential zero order first order absorption is not
+#' supported.
 #' 
 #' @param model (Model) Model to set or change absorption rate
 #'  

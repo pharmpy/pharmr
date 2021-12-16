@@ -36,4 +36,8 @@ add_estimation_step
 set_estimation_step
 
 remove_estimation_step
+
+add_covariance_step
+
+remove_covariance_step
 }

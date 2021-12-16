@@ -13,7 +13,7 @@ set_estimation_step(model, method, idx = 0, ...)
 
 \item{idx}{(integer) index of estimation step, default is 0 (first estimation step)}
 
-\item{...}{Arguments to pass to EstimationMethod (such as interaction, evaluation)}
+\item{...}{Arguments to pass to EstimationStep (such as interaction, evaluation)}
 }
 \value{
 (Model) Reference to the same model object
@@ -38,4 +38,8 @@ add_estimation_step
 remove_estimation_step
 
 append_estimation_step_options
+
+add_covariance_step
+
+remove_covariance_step
 }

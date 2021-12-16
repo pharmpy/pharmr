@@ -4,13 +4,15 @@
 \alias{set_power_on_ruv}
 \title{set_power_on_ruv}
 \usage{
-set_power_on_ruv(model, list_of_eps = NULL, ipred = NULL)
+set_power_on_ruv(model, list_of_eps = NULL, lower_limit = 0.01, ipred = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model to create block effect on.}
 
 \item{list_of_eps}{(str, vector) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
 NULL is default.}
+
+\item{lower_limit}{(integer or NULL) Lower limit of power (theta). NULL for no limit.}
 
 \item{ipred}{(Symbol) Symbol to use as IPRED. Default is to autodetect expression for IPRED.}
 }
