@@ -22,7 +22,7 @@ get_observations(model)
 }
 }
 \seealso{
-get_number_of_observations
+get_number_of_observations : get the number of observations
 
-get_number_of_observations_per_individual
+get_number_of_observations_per_individual : get the number of observations per individual
 }

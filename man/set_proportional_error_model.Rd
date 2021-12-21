@@ -4,13 +4,15 @@
 \alias{set_proportional_error_model}
 \title{set_proportional_error_model}
 \usage{
-set_proportional_error_model(model, data_trans = NULL)
+set_proportional_error_model(model, data_trans = NULL, zero_protection = FALSE)
 }
 \arguments{
 \item{model}{(Model) Set error model for this model}
 
 \item{data_trans}{(str or expression) A data transformation expression or NULL (default) to use the transformation
 specified by the model.}
+
+\item{zero_protection}{(logical) Set to TRUE to add code protecting from IPRED=0}
 }
 \value{
 (Model) Reference to the same model object
@@ -34,7 +36,7 @@ model <- remove_error_model(load_example_model("pheno"))
 set_proportional_error_model(model)
 model$statements$find_assignment("Y")
 model <- remove_error_model(load_example_model("pheno"))
-set_proportional_error_model(model, data_trans="log(Y)")
+set_proportional_error_model(model, data_trans="log(Y)", zero_protection=TRUE)
 model$statements$after_odes
 }
 }

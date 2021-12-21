@@ -860,6 +860,31 @@ generate_model_code <- function(model) {
 }
 
 #' @title
+#' get_baselines
+#' 
+#' @description
+#' Baselines for each subject.
+#' 
+#' Baseline is taken to be the first row even if that has a missing value.
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (data.frame) Dataset with the baselines
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' get_baselines(model)
+#' }
+#' 
+#' @export
+get_baselines <- function(model) {
+    df <- pharmpy$modeling$get_baselines(model)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
 #' get_config_path
 #' 
 #' @description
@@ -875,6 +900,84 @@ generate_model_code <- function(model) {
 #' @export
 get_config_path <- function() {
     func_out <- pharmpy$modeling$get_config_path()
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' get_covariate_baselines
+#' 
+#' @description
+#' Return a dataframe with baselines of all covariates for each id.
+#' 
+#' Baseline is taken to be the first row even if that has a missing value.
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (data.frame) covariate baselines
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model$datainfo$set_column_type(c("WGT", "APGR"), "covariate")
+#' get_covariate_baselines(model)
+#' }
+#' @seealso
+#' get_baselines : baselines for all data columns
+#' 
+#' 
+#' 
+#' 
+#' @export
+get_covariate_baselines <- function(model) {
+    df <- pharmpy$modeling$get_covariate_baselines(model)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
+#' get_doses
+#' 
+#' @description
+#' Get a series of all doses
+#' 
+#' Indexed with ID and TIME
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (data.frame) doses
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' get_doses(model)
+#' }
+#' 
+#' @export
+get_doses <- function(model) {
+    df <- pharmpy$modeling$get_doses(model)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
+#' get_ids
+#' 
+#' @description
+#' Retrieve a vector of all subject ids of the dataset
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (vector) All subject ids
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' get_ids(model)
+#' }
+#' 
+#' @export
+get_ids <- function(model) {
+    func_out <- pharmpy$modeling$get_ids(model)
     return(py_to_r(func_out))
 }
 
@@ -1036,9 +1139,9 @@ get_number_of_observations_per_individual <- function(model) {
 #' get_observations(model)
 #' }
 #' @seealso
-#' get_number_of_observations
+#' get_number_of_observations : get the number of observations
 #' 
-#' get_number_of_observations_per_individual
+#' get_number_of_observations_per_individual : get the number of observations per individual
 #' 
 #' 
 #' @export
@@ -1150,6 +1253,33 @@ has_proportional_error_model <- function(model) {
 #' @export
 has_zero_order_absorption <- function(model) {
     func_out <- pharmpy$modeling$has_zero_order_absorption(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' list_time_varying_covariates
+#' 
+#' @description
+#' Return a vector of names of all time varying covariates
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (vector) Names of all time varying covariates
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' list_time_varying_covariates(model)
+#' }
+#' @seealso
+#' get_covariate_baselines : get baselines for all covariates
+#' 
+#' 
+#' 
+#' 
+#' @export
+list_time_varying_covariates <- function(model) {
+    func_out <- pharmpy$modeling$list_time_varying_covariates(model)
     return(py_to_r(func_out))
 }
 
@@ -2357,6 +2487,7 @@ set_power_on_ruv <- function(model, list_of_eps=NULL, lower_limit=0.01, ipred=NU
 #' @param model (Model) Set error model for this model
 #' @param data_trans (str or expression) A data transformation expression or NULL (default) to use the transformation
 #'  specified by the model.
+#' @param zero_protection (logical) Set to TRUE to add code protecting from IPRED=0
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -2366,7 +2497,7 @@ set_power_on_ruv <- function(model, list_of_eps=NULL, lower_limit=0.01, ipred=NU
 #' set_proportional_error_model(model)
 #' model$statements$find_assignment("Y")
 #' model <- remove_error_model(load_example_model("pheno"))
-#' set_proportional_error_model(model, data_trans="log(Y)")
+#' set_proportional_error_model(model, data_trans="log(Y)", zero_protection=TRUE)
 #' model$statements$after_odes
 #' }
 #' @seealso
@@ -2376,8 +2507,8 @@ set_power_on_ruv <- function(model, list_of_eps=NULL, lower_limit=0.01, ipred=NU
 #' 
 #' 
 #' @export
-set_proportional_error_model <- function(model, data_trans=NULL) {
-    func_out <- pharmpy$modeling$set_proportional_error_model(model, data_trans)
+set_proportional_error_model <- function(model, data_trans=NULL, zero_protection=FALSE) {
+    func_out <- pharmpy$modeling$set_proportional_error_model(model, data_trans, zero_protection)
     return(py_to_r(func_out))
 }
 
