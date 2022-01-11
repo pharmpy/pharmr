@@ -416,6 +416,28 @@ add_peripheral_compartment <- function(model) {
 }
 
 #' @title
+#' add_time_after_dose
+#' 
+#' @description
+#' Calculate and add a TAD column to the dataset"
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' add_time_after_dose(model)
+#' }
+#' 
+#' @export
+add_time_after_dose <- function(model) {
+    func_out <- pharmpy$modeling$add_time_after_dose(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' append_estimation_step_options
 #' 
 #' @description
@@ -452,6 +474,60 @@ add_peripheral_compartment <- function(model) {
 #' @export
 append_estimation_step_options <- function(model, tool_options, idx) {
     func_out <- pharmpy$modeling$append_estimation_step_options(model, tool_options, idx)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' calculate_epsilon_gradient_expression
+#' 
+#' @description
+#' Calculate the symbolic expression for the epsilon gradient
+#' 
+#' This function currently only support models without ODE systems
+#' 
+#' @param model (Model) Pharmpy model object
+#'  
+#' @return (Expression) Symbolic expression
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno_linear")
+#' calculate_epsilon_gradient_expression(model)
+#' }
+#' @seealso
+#' calculate_eta_gradient_expression : Eta gradient
+#' 
+#' 
+#' @export
+calculate_epsilon_gradient_expression <- function(model) {
+    func_out <- pharmpy$modeling$calculate_epsilon_gradient_expression(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' calculate_eta_gradient_expression
+#' 
+#' @description
+#' Calculate the symbolic expression for the eta gradient
+#' 
+#' This function currently only support models without ODE systems
+#' 
+#' @param model (Model) Pharmpy model object
+#'  
+#' @return (Expression) Symbolic expression
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno_linear")
+#' calculate_eta_gradient_expression(model)
+#' }
+#' @seealso
+#' calculate_epsilon_gradient_expression : Epsilon gradient
+#' 
+#' 
+#' @export
+calculate_eta_gradient_expression <- function(model) {
+    func_out <- pharmpy$modeling$calculate_eta_gradient_expression(model)
     return(py_to_r(func_out))
 }
 
@@ -711,6 +787,82 @@ create_rng <- function(seed) {
 }
 
 #' @title
+#' evaluate_epsilon_gradient
+#' 
+#' @description
+#' Evaluate the numeric epsilon gradient
+#' 
+#' The gradient is evaluated at the current model parameter values
+#' or optionally at the given parameter values.
+#' The gradient is done for each data record in the model dataset
+#' or optionally using the dataset argument.
+#' The gradient is done at the current eta values
+#' or optionally at the given eta values.
+#' 
+#' This function currently only support models without ODE systems
+#' 
+#' @param model (Model) Pharmpy model
+#' @param etas (list) Optional list of eta values
+#' @param parameters (list) Optional list of parameters and values
+#' @param dataset (data.frame) Optional dataset
+#'  
+#' @return (data.frame) Gradient
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno_linear")
+#' evaluate_epsilon_gradient(model)
+#' }
+#' @seealso
+#' evaluate_eta_gradient : Evaluate the eta gradient
+#' 
+#' 
+#' @export
+evaluate_epsilon_gradient <- function(model, etas=NULL, parameters=NULL, dataset=NULL) {
+    df <- pharmpy$modeling$evaluate_epsilon_gradient(model, etas, parameters, dataset)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
+#' evaluate_eta_gradient
+#' 
+#' @description
+#' Evaluate the numeric eta gradient
+#' 
+#' The gradient is evaluated at the current model parameter values
+#' or optionally at the given parameter values.
+#' The gradient is done for each data record in the model dataset
+#' or optionally using the dataset argument.
+#' The gradient is done at the current eta values
+#' or optionally at the given eta values.
+#' 
+#' This function currently only support models without ODE systems
+#' 
+#' @param model (Model) Pharmpy model
+#' @param etas (list) Optional list of eta values
+#' @param parameters (list) Optional list of parameters and values
+#' @param dataset (data.frame) Optional dataset
+#'  
+#' @return (data.frame) Gradient
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno_linear")
+#' evaluate_eta_gradient(model)
+#' }
+#' @seealso
+#' evaluate_epsilon_gradient : Evaluate the epsilon gradient
+#' 
+#' 
+#' @export
+evaluate_eta_gradient <- function(model, etas=NULL, parameters=NULL, dataset=NULL) {
+    df <- pharmpy$modeling$evaluate_eta_gradient(model, etas, parameters, dataset)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
 #' evaluate_expression
 #' 
 #' @description
@@ -735,6 +887,111 @@ create_rng <- function(seed) {
 #' @export
 evaluate_expression <- function(model, expression) {
     df <- pharmpy$modeling$evaluate_expression(model, expression)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
+#' evaluate_individual_prediction
+#' 
+#' @description
+#' Evaluate the numeric individual prediction
+#' 
+#' The prediction is evaluated at the current model parameter values
+#' or optionally at the given parameter values.
+#' The evaluation is done for each data record in the model dataset
+#' or optionally using the dataset argument.
+#' The evaluation is done at the current eta values
+#' or optionally at the given eta values.
+#' 
+#' This function currently only support models without ODE systems
+#' 
+#' @param model (Model) Pharmpy model
+#' @param etas (list) Optional list of eta values
+#' @param parameters (list) Optional list of parameters and values
+#' @param dataset (data.frame) Optional dataset
+#'  
+#' @return (data.frame) Individual predictions
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno_linear")
+#' evaluate_individual_prediction(model)
+#' }
+#' @seealso
+#' evaluate_population_prediction : Evaluate the population prediction
+#' 
+#' 
+#' @export
+evaluate_individual_prediction <- function(model, etas=NULL, parameters=NULL, dataset=NULL) {
+    df <- pharmpy$modeling$evaluate_individual_prediction(model, etas, parameters, dataset)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
+#' evaluate_population_prediction
+#' 
+#' @description
+#' Evaluate the numeric population prediction
+#' 
+#' The prediction is evaluated at the current model parameter values
+#' or optionally at the given parameter values.
+#' The evaluation is done for each data record in the model dataset
+#' or optionally using the dataset argument.
+#' 
+#' This function currently only support models without ODE systems
+#' 
+#' @param model (Model) Pharmpy model
+#' @param parameters (list) Optional list of parameters and values
+#' @param dataset (data.frame) Optional dataset
+#'  
+#' @return (data.frame) Population predictions
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno_linear")
+#' evaluate_population_prediction(model)
+#' }
+#' @seealso
+#' evaluate_individual_prediction : Evaluate the individual prediction
+#' 
+#' 
+#' @export
+evaluate_population_prediction <- function(model, parameters=NULL, dataset=NULL) {
+    df <- pharmpy$modeling$evaluate_population_prediction(model, parameters, dataset)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
+#' evaluate_weighted_residuals
+#' 
+#' @description
+#' Evaluate the weighted residuals
+#' 
+#' The residuals is evaluated at the current model parameter values
+#' or optionally at the given parameter values.
+#' The residuals is done for each data record in the model dataset
+#' or optionally using the dataset argument.
+#' 
+#' This function currently only support models without ODE systems
+#' 
+#' @param model (Model) Pharmpy model
+#' @param parameters (list) Optional list of parameters and values
+#' @param dataset (data.frame) Optional dataset
+#'  
+#' @return (data.frame) WRES
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno_linear")
+#' evaluate_weighted_residuals(model)
+#' }
+#' 
+#' @export
+evaluate_weighted_residuals <- function(model, parameters=NULL, dataset=NULL) {
+    df <- pharmpy$modeling$evaluate_weighted_residuals(model, parameters, dataset)
     df_reset <- df$reset_index()
     return(py_to_r(df_reset))
 }
@@ -885,6 +1142,31 @@ get_baselines <- function(model) {
 }
 
 #' @title
+#' get_concentration_parameters_from_data
+#' 
+#' @description
+#' Create a dataframe with concentration parameters
+#' 
+#' Note that all values are directly calculated from the dataset
+#' 
+#' @param model (Model) Pharmpy model object
+#'  
+#' @return (data.frame) Concentration parameters
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' get_concentration_parameters_from_data(model)
+#' }
+#' 
+#' @export
+get_concentration_parameters_from_data <- function(model) {
+    df <- pharmpy$modeling$get_concentration_parameters_from_data(model)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
 #' get_config_path
 #' 
 #' @description
@@ -918,7 +1200,7 @@ get_config_path <- function() {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' model$datainfo$set_column_type(c("WGT", "APGR"), "covariate")
+#' model$datainfo[["WGT", "APGR"]].types <- "covariate"
 #' get_covariate_baselines(model)
 #' }
 #' @seealso
@@ -930,6 +1212,29 @@ get_config_path <- function() {
 #' @export
 get_covariate_baselines <- function(model) {
     df <- pharmpy$modeling$get_covariate_baselines(model)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
+#' get_doseid
+#' 
+#' @description
+#' Get a DOSEID series from the dataset with an id of each dose period starting from 1
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (data.frame) DOSEIDs
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' get_doseid(model)
+#' }
+#' 
+#' @export
+get_doseid <- function(model) {
+    df <- pharmpy$modeling$get_doseid(model)
     df_reset <- df$reset_index()
     return(py_to_r(df_reset))
 }
@@ -978,6 +1283,33 @@ get_doses <- function(model) {
 #' @export
 get_ids <- function(model) {
     func_out <- pharmpy$modeling$get_ids(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' get_individual_prediction_expression
+#' 
+#' @description
+#' Get the full symbolic expression for the modelled individual prediction
+#' 
+#' This function currently only support models without ODE systems
+#' 
+#' @param model (Model) Pharmpy model object
+#'  
+#' @return (Expression) Symbolic expression
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno_linear")
+#' get_individual_prediction_expression(model)
+#' }
+#' @seealso
+#' get_population_prediction_expression : Get full symbolic epression for the population prediction
+#' 
+#' 
+#' @export
+get_individual_prediction_expression <- function(model) {
+    func_out <- pharmpy$modeling$get_individual_prediction_expression(model)
     return(py_to_r(func_out))
 }
 
@@ -1124,6 +1456,31 @@ get_number_of_observations_per_individual <- function(model) {
 }
 
 #' @title
+#' get_observation_expression
+#' 
+#' @description
+#' Get the full symbolic expression for the observation according to the model
+#' 
+#' This function currently only support models without ODE systems
+#' 
+#' @param model (Model) Pharmpy model object
+#'  
+#' @return (Expression) Symbolic expression
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno_linear")
+#' expr <- get_observation_expression(model)
+#' sympy$pprint(expr)
+#' }
+#' 
+#' @export
+get_observation_expression <- function(model) {
+    func_out <- pharmpy$modeling$get_observation_expression(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' get_observations
 #' 
 #' @description
@@ -1149,6 +1506,62 @@ get_observations <- function(model) {
     df <- pharmpy$modeling$get_observations(model)
     df_reset <- df$reset_index()
     return(py_to_r(df_reset))
+}
+
+#' @title
+#' get_population_prediction_expression
+#' 
+#' @description
+#' Get the full symbolic expression for the modelled population prediction
+#' 
+#' This function currently only support models without ODE systems
+#' 
+#' @param model (Model) Pharmpy model object
+#'  
+#' @return (Expression) Symbolic expression
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno_linear")
+#' get_population_prediction_expression(model)
+#' }
+#' @seealso
+#' get_individual_prediction_expression : Get full symbolic epression for the individual prediction
+#' 
+#' 
+#' @export
+get_population_prediction_expression <- function(model) {
+    func_out <- pharmpy$modeling$get_population_prediction_expression(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' get_unit_of
+#' 
+#' @description
+#' Derive the physical unit of a variable in the model
+#' 
+#' Unit information for the dataset needs to be available.
+#' The variable can be defined in the code, a dataset olumn, a parameter
+#' or a random variable.
+#' 
+#' @param model (Model) Pharmpy model object
+#' @param variable (str or Symbol) Find physical unit of this variable
+#'  
+#' @return (unit expression) A sympy physics.units expression
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' get_unit_of(model, "Y")
+#' get_unit_of(model, "V")
+#' get_unit_of(model, "WGT")
+#' }
+#' 
+#' @export
+get_unit_of <- function(model, variable) {
+    func_out <- pharmpy$modeling$get_unit_of(model, variable)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1291,7 +1704,7 @@ list_time_varying_covariates <- function(model) {
 #' 
 #' Load an example model from models built into Pharmpy
 #' 
-#' @param name (str) Name of the model. Currently available model is "pheno"
+#' @param name (str) Name of the model. Currently available models are "pheno" and "pheno_linear"
 #'  
 #' @return (Model) Loaded model object
 #' 
@@ -1305,6 +1718,26 @@ list_time_varying_covariates <- function(model) {
 load_example_model <- function(name) {
     func_out <- pharmpy$modeling$load_example_model(name)
     return(py_to_r(func_out))
+}
+
+#' @title
+#' omit_data
+#' 
+#' @description
+#' Iterate over omissions of a certain group in a dataset. One group is omitted at a time.
+#' 
+#' @param dataset_or_model (data.frame or Model) Dataset or model for which to omit records
+#' @param group (str) Name of the column to use for grouping
+#' @param name_pattern (str) Name to use for generated datasets. A number starting from 1 will be put in the placeholder.
+#'  
+#' @return (iterator) Iterator yielding tuples of models/dataframes and the omited group
+#' 
+#' 
+#' @export
+omit_data <- function(dataset_or_model, group, name_pattern='omitted_{}') {
+    df <- pharmpy$modeling$omit_data(dataset_or_model, group, name_pattern)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
 }
 
 #' @title
@@ -1780,6 +2213,43 @@ remove_lag_time <- function(model) {
 remove_peripheral_compartment <- function(model) {
     func_out <- pharmpy$modeling$remove_peripheral_compartment(model)
     return(py_to_r(func_out))
+}
+
+#' @title
+#' resample_data
+#' 
+#' @description
+#' Iterate over resamples of a dataset.
+#' 
+#' The dataset will be grouped on the group column then groups will be selected
+#' randomly with or without replacement to form a new dataset.
+#' The groups will be renumbered from 1 and upwards to keep them separated in the new
+#' dataset.
+#' 
+#' @param dataset_or_model (data.frame or Model) Dataset or Model to use
+#' @param group (str) Name of column to group by
+#' @param resamples (integer) Number of resamples (iterations) to make
+#' @param stratify (str) Name of column to use for stratification.
+#'  The values in the stratification column must be equal within a group so that the group
+#'  can be uniquely determined. A ValueError exception will be raised otherwise.
+#' @param sample_size (integer) The number of groups that should be sampled. The default is
+#'  the number of groups. If using stratification the default is to sample using the
+#'  proportion of the stratas in the dataset. A list of specific sample sizes
+#'  for each strata can also be supplied.
+#' @param replace (logical) A boolean controlling whether sampling should be done with or
+#'  without replacement
+#' @param name_pattern (str) Name to use for generated datasets. A number starting from 1 will
+#'  be put in the placeholder.
+#' @param name (str) Option to name pattern in case of only one resample
+#'  
+#' @return (iterator) An iterator yielding tuples of a resampled DataFrame and a vector of resampled groups in order
+#' 
+#' 
+#' @export
+resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, sample_size=NULL, replace=FALSE, name_pattern='resample_{}', name=NULL) {
+    df <- pharmpy$modeling$resample_data(dataset_or_model, group, resamples, stratify, sample_size, replace, name_pattern, name)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
 }
 
 #' @title
@@ -2943,6 +3413,30 @@ update_inits <- function(model, force_individual_estimates=FALSE) {
 #' @export
 use_thetas_for_error_stdev <- function(model) {
     func_out <- pharmpy$modeling$use_thetas_for_error_stdev(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' write_csv
+#' 
+#' @description
+#' Write dataset to a csv file
+#' 
+#' @param model (Model) Model whose dataset to write to file
+#' @param path (Path) Destination path. Default is to use original path with .csv suffix.
+#' @param force (logical) Overwrite file with same path. Default is FALSE.
+#'  
+#' @return (Path) path to the written file.
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' write_csv(model, path="newdataset$csv")
+#' }
+#' 
+#' @export
+write_csv <- function(model, path=NULL, force=FALSE) {
+    func_out <- pharmpy$modeling$write_csv(model, path, force)
     return(py_to_r(func_out))
 }
 

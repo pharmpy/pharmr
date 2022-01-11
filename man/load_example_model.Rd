@@ -7,7 +7,7 @@
 load_example_model(name)
 }
 \arguments{
-\item{name}{(str) Name of the model. Currently available model is "pheno"}
+\item{name}{(str) Name of the model. Currently available models are "pheno" and "pheno_linear"}
 }
 \value{
 (Model) Loaded model object
