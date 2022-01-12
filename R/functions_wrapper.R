@@ -478,6 +478,35 @@ append_estimation_step_options <- function(model, tool_options, idx) {
 }
 
 #' @title
+#' bump_model_number
+#' 
+#' @description
+#' If the model name ends in a number increase it
+#' 
+#' If path is set increase the number until no file exists
+#' with the same name in path.
+#' If model name does not end in a number do nothing.
+#' 
+#' @param model (Model) Pharmpy model object
+#' @param path (Path in which to find next unique number) Default is to not look for files.
+#'  
+#' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model$name <- "run2"
+#' bump_model_number(model)
+#' model$name
+#' }
+#' 
+#' @export
+bump_model_number <- function(model, path=NULL) {
+    func_out <- pharmpy$modeling$bump_model_number(model, path)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' calculate_epsilon_gradient_expression
 #' 
 #' @description
