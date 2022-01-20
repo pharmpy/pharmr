@@ -690,8 +690,10 @@ calculate_pk_parameters_statistics <- function(model, rng=NULL) {
 #' @description
 #' Convert model to other format
 #' 
+#' Note that the operation is not done inplace.
+#' 
 #' @param model (Model) Model to convert
-#' @param to_format (str) Name of format to convert into. Currently supported 'nlmixr' and 'nonmem'
+#' @param to_format (str) Name of format to convert into. Currently supported 'generic', 'nlmixr' and 'nonmem'
 #'  
 #' @return (Model) New model object with new underlying model format
 #' 
@@ -812,6 +814,33 @@ create_results <- function(path, ...) {
 #' @export
 create_rng <- function(seed) {
     func_out <- pharmpy$modeling$create_rng(seed)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' create_symbol
+#' 
+#' @description
+#' Create a new unique variable symbol given a model
+#' 
+#' @param model (Model) Pharmpy model object
+#' @param stem (str) First part of the new variable name
+#' @param force_numbering (logical) Forces addition of number to name even if variable does not exist, e.g.
+#'  COVEFF --> COVEFF1
+#'  
+#' @return (Symbol) Created symbol with unique name
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' create_symbol(model, "TEMP")
+#' create_symbol(model, "TEMP", force_numbering=TRUE)
+#' create_symbol(model, "CL")
+#' }
+#' 
+#' @export
+create_symbol <- function(model, stem, force_numbering=FALSE) {
+    func_out <- pharmpy$modeling$create_symbol(model, stem, force_numbering)
     return(py_to_r(func_out))
 }
 
@@ -1750,6 +1779,33 @@ load_example_model <- function(name) {
 }
 
 #' @title
+#' mu_reference_model
+#' 
+#' @description
+#' Convert model to use mu-referencing
+#' 
+#' Mu-referencing an eta is to separately define its actual mu (mean) parameter.
+#' For example: :math:`CL = \theta_1 e^{\eta_1}` with :math:`\eta_1` following a zero-mean
+#' normal distribution would give :math:`\mu_1 = log{\theta_1}` and
+#' :math:`CL = e^{\mu_1 + \eta_1}`
+#' 
+#' @param model (Model) Pharmpy model object
+#'  
+#' @return (Model) Reference to same object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' mu_reference_model(model).statements$before_odes
+#' }
+#' 
+#' @export
+mu_reference_model <- function(model) {
+    func_out <- pharmpy$modeling$mu_reference_model(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' omit_data
 #' 
 #' @description
@@ -2241,6 +2297,23 @@ remove_lag_time <- function(model) {
 #' @export
 remove_peripheral_compartment <- function(model) {
     func_out <- pharmpy$modeling$remove_peripheral_compartment(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' remove_unused_parameters_and_rvs
+#' 
+#' @description
+#' Remove any parameters and rvs that are not used in the model statements
+#' 
+#' @param model (Model) Pharmpy model object
+#'  
+#' @return (Model) Reference to same model object
+#' 
+#' 
+#' @export
+remove_unused_parameters_and_rvs <- function(model) {
+    func_out <- pharmpy$modeling$remove_unused_parameters_and_rvs(model)
     return(py_to_r(func_out))
 }
 
@@ -3049,6 +3122,31 @@ set_seq_zo_fo_absorption <- function(model) {
 }
 
 #' @title
+#' set_time_varying_error_model
+#' 
+#' @description
+#' Set a time varying error model per time cutoff
+#' 
+#' @param model (Model) Pharmpy model
+#' @param cutoff (numeric) A value at the given quantile over idv column
+#' @param idv (str) Time or time after dose, default is Time
+#'  
+#' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' set_time_varying_error_model(model, cutoff=1.0)
+#' model$statements$find_assignment("Y")
+#' }
+#' 
+#' @export
+set_time_varying_error_model <- function(model, cutoff, idv='TIME') {
+    func_out <- pharmpy$modeling$set_time_varying_error_model(model, cutoff, idv)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' set_transit_compartments
 #' 
 #' @description
@@ -3059,6 +3157,7 @@ set_seq_zo_fo_absorption <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param n (integer) Number of transit compartments
+#' @param keep_depot (logical) FALSE to convert depot compartment into a transit compartment
 #'  
 #' @return (Model) Reference to same model
 #' 
@@ -3073,8 +3172,8 @@ set_seq_zo_fo_absorption <- function(model) {
 #' 
 #' 
 #' @export
-set_transit_compartments <- function(model, n) {
-    func_out <- pharmpy$modeling$set_transit_compartments(model, n)
+set_transit_compartments <- function(model, n, keep_depot=TRUE) {
+    func_out <- pharmpy$modeling$set_transit_compartments(model, n, keep_depot)
     return(py_to_r(func_out))
 }
 
@@ -3161,6 +3260,31 @@ set_zero_order_absorption <- function(model) {
 #' @export
 set_zero_order_elimination <- function(model) {
     func_out <- pharmpy$modeling$set_zero_order_elimination(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' simplify_expression
+#' 
+#' @description
+#' Simplify expression given constraints in model
+#' 
+#' @param model (Model) Pharmpy model object
+#' @param expr (Expression) Expression to simplify
+#'  
+#' @return (Expression) Simplified expression
+#' 
+#' @examples
+#' \dontrun{
+#' conf$parameter_names <- c('comment', 'basic')
+#' model <- load_example_model("pheno")
+#' simplify_expression(model, "Abs(PTVCL)")
+#' conf$parameter_names <- c('basic')
+#' }
+#' 
+#' @export
+simplify_expression <- function(model, expr) {
+    func_out <- pharmpy$modeling$simplify_expression(model, expr)
     return(py_to_r(func_out))
 }
 

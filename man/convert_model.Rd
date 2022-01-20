@@ -9,13 +9,15 @@ convert_model(model, to_format)
 \arguments{
 \item{model}{(Model) Model to convert}
 
-\item{to_format}{(str) Name of format to convert into. Currently supported 'nlmixr' and 'nonmem'}
+\item{to_format}{(str) Name of format to convert into. Currently supported 'generic', 'nlmixr' and 'nonmem'}
 }
 \value{
 (Model) New model object with new underlying model format
 }
 \description{
 Convert model to other format
+
+Note that the operation is not done inplace.
 }
 \examples{
 \dontrun{

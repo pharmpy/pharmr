@@ -4,12 +4,14 @@
 \alias{set_transit_compartments}
 \title{set_transit_compartments}
 \usage{
-set_transit_compartments(model, n)
+set_transit_compartments(model, n, keep_depot = TRUE)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{n}{(integer) Number of transit compartments}
+
+\item{keep_depot}{(logical) FALSE to convert depot compartment into a transit compartment}
 }
 \value{
 (Model) Reference to same model
