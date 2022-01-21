@@ -1060,7 +1060,8 @@ evaluate_weighted_residuals <- function(model, parameters=NULL, dataset=NULL) {
 #' @description
 #' Fit models.
 #' 
-#' @param models (vector) List of models or one single model
+#' @param models (vector) List of models or_ one single model
+#' @param tool (str) Estimation tool to use. NULL to use default
 #'  
 #' @return (Model) Reference to same model
 #' 
@@ -1074,8 +1075,8 @@ evaluate_weighted_residuals <- function(model, parameters=NULL, dataset=NULL) {
 #' 
 #' 
 #' @export
-fit <- function(models) {
-    func_out <- pharmpy$modeling$fit(models)
+fit <- function(models, tool=NULL) {
+    func_out <- pharmpy$modeling$fit(models, tool)
     return(py_to_r(func_out))
 }
 
