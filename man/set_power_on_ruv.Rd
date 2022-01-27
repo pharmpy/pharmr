@@ -4,7 +4,13 @@
 \alias{set_power_on_ruv}
 \title{set_power_on_ruv}
 \usage{
-set_power_on_ruv(model, list_of_eps = NULL, lower_limit = 0.01, ipred = NULL)
+set_power_on_ruv(
+  model,
+  list_of_eps = NULL,
+  lower_limit = 0.01,
+  ipred = NULL,
+  zero_protection = FALSE
+)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model to create block effect on.}
@@ -15,6 +21,8 @@ NULL is default.}
 \item{lower_limit}{(integer or NULL) Lower limit of power (theta). NULL for no limit.}
 
 \item{ipred}{(Symbol) Symbol to use as IPRED. Default is to autodetect expression for IPRED.}
+
+\item{zero_protection}{(logical) Set to TRUE to add code protecting from IPRED=0}
 }
 \value{
 (Model) Reference to the same model

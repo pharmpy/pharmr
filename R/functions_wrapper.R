@@ -507,6 +507,23 @@ bump_model_number <- function(model, path=NULL) {
 }
 
 #' @title
+#' calculate_aic
+#' 
+#' @description
+#' Calculate final AIC for model assuming the OFV to be -2LL
+#' 
+#' @param model (Model) Pharmpy model object
+#'  
+#' @return (numeric) AIC of model fit
+#' 
+#' 
+#' @export
+calculate_aic <- function(model) {
+    func_out <- pharmpy$modeling$calculate_aic(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' calculate_epsilon_gradient_expression
 #' 
 #' @description
@@ -1678,6 +1695,85 @@ has_combined_error_model <- function(model) {
 }
 
 #' @title
+#' has_first_order_elimination
+#' 
+#' @description
+#' Check if the model describes first order elimination
+#' 
+#' This function relies on heuristics and will not be able to detect all
+#' possible ways of coding the first order elimination.
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (logical) TRUE if model has describes first order elimination
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' has_first_order_elimination(model)
+#' }
+#' 
+#' @export
+has_first_order_elimination <- function(model) {
+    func_out <- pharmpy$modeling$has_first_order_elimination(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' has_michaelis_menten_elimination
+#' 
+#' @description
+#' Check if the model describes Michaelis-Menten elimination
+#' 
+#' This function relies on heuristics and will not be able to detect all
+#' possible ways of coding the Michalis-Menten elimination.
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (logical) TRUE if model has describes Michaelis-Menten elimination
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' has_michaelis_menten_elimination(model)
+#' set_michaelis_menten_elimination(model)
+#' has_michaelis_menten_elimination(model)
+#' }
+#' 
+#' @export
+has_michaelis_menten_elimination <- function(model) {
+    func_out <- pharmpy$modeling$has_michaelis_menten_elimination(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' has_mixed_mm_fo_elimination
+#' 
+#' @description
+#' Check if the model describes mixed Michaelis-Menten and first order elimination
+#' 
+#' This function relies on heuristics and will not be able to detect all
+#' possible ways of coding the mixed Michalis-Menten and first order elimination.
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (logical) TRUE if model has describes Michaelis-Menten elimination
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' has_mixed_mm_fo_elimination(model)
+#' set_mixed_mm_fo_elimination(model)
+#' has_mixed_mm_fo_elimination(model)
+#' }
+#' 
+#' @export
+has_mixed_mm_fo_elimination <- function(model) {
+    func_out <- pharmpy$modeling$has_mixed_mm_fo_elimination(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' has_proportional_error_model
 #' 
 #' @description
@@ -1725,6 +1821,33 @@ has_proportional_error_model <- function(model) {
 #' @export
 has_zero_order_absorption <- function(model) {
     func_out <- pharmpy$modeling$has_zero_order_absorption(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' has_zero_order_elimination
+#' 
+#' @description
+#' Check if the model describes zero-order elimination
+#' 
+#' This function relies on heuristics and will not be able to detect all
+#' possible ways of coding the zero-order elimination.
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (logical) TRUE if model has describes zero order elimination
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' has_zero_order_elimination(model)
+#' set_zero_order_elimination(model)
+#' has_zero_order_elimination(model)
+#' }
+#' 
+#' @export
+has_zero_order_elimination <- function(model) {
+    func_out <- pharmpy$modeling$has_zero_order_elimination(model)
     return(py_to_r(func_out))
 }
 
@@ -1937,6 +2060,26 @@ predict_outliers <- function(model) {
     df <- pharmpy$modeling$predict_outliers(model)
     df_reset <- df$reset_index()
     return(py_to_r(df_reset))
+}
+
+#' @title
+#' print_model_code
+#' 
+#' @description
+#' Print the model code of the underlying model language
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' print_model_code(model)
+#' }
+#' 
+#' @export
+print_model_code <- function(model) {
+    func_out <- pharmpy$modeling$print_model_code(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -3022,6 +3165,7 @@ set_peripheral_compartments <- function(model, n) {
 #'  NULL is default.
 #' @param lower_limit (integer or NULL) Lower limit of power (theta). NULL for no limit.
 #' @param ipred (Symbol) Symbol to use as IPRED. Default is to autodetect expression for IPRED.
+#' @param zero_protection (logical) Set to TRUE to add code protecting from IPRED=0
 #'  
 #' @return (Model) Reference to the same model
 #' 
@@ -3036,8 +3180,8 @@ set_peripheral_compartments <- function(model, n) {
 #' 
 #' 
 #' @export
-set_power_on_ruv <- function(model, list_of_eps=NULL, lower_limit=0.01, ipred=NULL) {
-    func_out <- pharmpy$modeling$set_power_on_ruv(model, list_of_eps, lower_limit, ipred)
+set_power_on_ruv <- function(model, list_of_eps=NULL, lower_limit=0.01, ipred=NULL, zero_protection=FALSE) {
+    func_out <- pharmpy$modeling$set_power_on_ruv(model, list_of_eps, lower_limit, ipred, zero_protection)
     return(py_to_r(func_out))
 }
 
