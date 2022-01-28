@@ -61,6 +61,8 @@ add_allometry <- function(model, allometric_variable='WT', reference_value=70, p
 #' 
 #' remove_covariance_step
 #' 
+#' set_evaluation_step
+#' 
 #' 
 #' @export
 add_covariance_step <- function(model) {
@@ -226,6 +228,8 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' add_covariance_step
 #' 
 #' remove_covariance_step
+#' 
+#' set_evaluation_step
 #' 
 #' 
 #' @export
@@ -469,6 +473,8 @@ add_time_after_dose <- function(model) {
 #' add_covariance_step
 #' 
 #' remove_covariance_step
+#' 
+#' set_evaluation_step
 #' 
 #' 
 #' @export
@@ -858,6 +864,67 @@ create_rng <- function(seed) {
 #' @export
 create_symbol <- function(model, stem, force_numbering=FALSE) {
     func_out <- pharmpy$modeling$create_symbol(model, stem, force_numbering)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' drop_columns
+#' 
+#' @description
+#' Drop columns from the dataset or mark as dropped
+#' 
+#' @param model (Model) Pharmpy model object
+#' @param column_names (vector or str) List of column names or one column name to drop or mark as dropped
+#' @param mark (logical) Default is to remove column from dataset set this to TRUE to only mark as dropped
+#'  
+#' @return (Model) Reference to same model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' drop_columns(model, c('WGT', 'APGR'))
+#' vector(model$dataset$columns)
+#' }
+#' @seealso
+#' drop_dropped_columns : Drop all columns marked as drop
+#' 
+#' undrop_columns : Undrop columns of model
+#' 
+#' 
+#' @export
+drop_columns <- function(model, column_names, mark=FALSE) {
+    func_out <- pharmpy$modeling$drop_columns(model, column_names, mark)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' drop_dropped_columns
+#' 
+#' @description
+#' Drop columns marked as dropped from the dataset
+#' 
+#' NM-TRAN date columns will not be dropped by this function
+#' even if marked as dropped.
+#' Columns not specified in the datainfo ($INPUT for NONMEM)
+#' will also be dropped from the dataset.
+#' 
+#' @param model (Model) Pharmpy model object
+#'  
+#' @return (Model) Reference to same model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' drop_dropped_columns(model)
+#' vector(model$dataset$columns)
+#' }
+#' @seealso
+#' drop_columns : Drop specific columns or mark them as drop
+#' 
+#' 
+#' @export
+drop_dropped_columns <- function(model) {
+    func_out <- pharmpy$modeling$drop_dropped_columns(model)
     return(py_to_r(func_out))
 }
 
@@ -2246,6 +2313,8 @@ read_results <- function(path) {
 #' 
 #' add_covariance_step
 #' 
+#' set_evaluation_step
+#' 
 #' 
 #' @export
 remove_covariance_step <- function(model) {
@@ -2305,6 +2374,8 @@ remove_error_model <- function(model) {
 #' add_covariance_step
 #' 
 #' remove_covariance_step
+#' 
+#' set_evaluation_step
 #' 
 #' 
 #' @export
@@ -2871,10 +2942,52 @@ set_dtbs_error_model <- function(model, fix_to_log=FALSE) {
 #' 
 #' remove_covariance_step
 #' 
+#' set_evaluation_step
+#' 
 #' 
 #' @export
 set_estimation_step <- function(model, method, idx=0, ...) {
     func_out <- pharmpy$modeling$set_estimation_step(model, method, idx, ...)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' set_evaluation_step
+#' 
+#' @description
+#' Set estimation step
+#' 
+#' Sets estimation step for a model. Methods currently supported are:
+#' FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM, BAYES
+#' 
+#' @param model (Model) Pharmpy model
+#' @param idx (integer) index of estimation step, default is -1 (last estimation step)
+#'  
+#' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' set_evaluation_step(model)
+#' model$estimation_steps[1]
+#' }
+#' @seealso
+#' set_estimation_step
+#' 
+#' add_estimation_step
+#' 
+#' remove_estimation_step
+#' 
+#' append_estimation_step_options
+#' 
+#' add_covariance_step
+#' 
+#' remove_covariance_step
+#' 
+#' 
+#' @export
+set_evaluation_step <- function(model, idx=-1) {
+    func_out <- pharmpy$modeling$set_evaluation_step(model, idx)
     return(py_to_r(func_out))
 }
 
@@ -3588,6 +3701,58 @@ transform_etas_john_draper <- function(model, list_of_etas=NULL) {
 #' @export
 transform_etas_tdist <- function(model, list_of_etas=NULL) {
     func_out <- pharmpy$modeling$transform_etas_tdist(model, list_of_etas)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' translate_nmtran_time
+#' 
+#' @description
+#' Translate NM-TRAN TIME and DATE column into one TIME column
+#' 
+#' If dataset of model have special NM-TRAN TIME and DATE columns these
+#' will be translated into one single time column with time in hours.
+#' 
+#' Warnings
+#' Use this function with caution. For example reset events are currently not taken into account.
+#' 
+#' @param model (Model) Pharmpy model object
+#'  
+#' @return (Model) Reference to the same model object
+#' 
+#' 
+#' @export
+translate_nmtran_time <- function(model) {
+    func_out <- pharmpy$modeling$translate_nmtran_time(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' undrop_columns
+#' 
+#' @description
+#' Undrop columns of model
+#' 
+#' @param model (Model) Pharmpy model object
+#' @param column_names (vector or str) List of column names or one column name to undrop
+#'  
+#' @return (Model) Reference to same model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' drop_columns(model, c('WGT', 'APGR'), mark=TRUE)
+#' undrop_columns(model, 'WGT')
+#' }
+#' @seealso
+#' drop_dropped_columns : Drop all columns marked as drop
+#' 
+#' drop_columns : Drop or mark columns as dropped
+#' 
+#' 
+#' @export
+undrop_columns <- function(model, column_names) {
+    func_out <- pharmpy$modeling$undrop_columns(model, column_names)
     return(py_to_r(func_out))
 }
 

@@ -44,4 +44,6 @@ append_estimation_step_options
 add_covariance_step
 
 remove_covariance_step
+
+set_evaluation_step
 }
