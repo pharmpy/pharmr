@@ -14,4 +14,6 @@ calculate_aic(model)
 }
 \description{
 Calculate final AIC for model assuming the OFV to be -2LL
+
+AIC = OFV + 2*n_estimated_parameters
 }

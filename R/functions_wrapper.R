@@ -518,6 +518,8 @@ bump_model_number <- function(model, path=NULL) {
 #' @description
 #' Calculate final AIC for model assuming the OFV to be -2LL
 #' 
+#' AIC = OFV + 2*n_estimated_parameters
+#' 
 #' @param model (Model) Pharmpy model object
 #'  
 #' @return (numeric) AIC of model fit
@@ -527,6 +529,187 @@ bump_model_number <- function(model, path=NULL) {
 calculate_aic <- function(model) {
     func_out <- pharmpy$modeling$calculate_aic(model)
     return(py_to_r(func_out))
+}
+
+#' @title
+#' calculate_bic
+#' 
+#' @description
+#' Calculate final BIC value assuming the OFV to be -2LL
+#' 
+#' BIC = OFV + n_estimated_parameters * log(n_observations)
+#' 
+#' @param model (Model) Pharmpy model object
+#'  
+#' @return (numeric) BIC of model fit
+#' 
+#' 
+#' @export
+calculate_bic <- function(model) {
+    func_out <- pharmpy$modeling$calculate_bic(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' calculate_corr_from_cov
+#' 
+#' @description
+#' Calculate correlation matrix from a covariance matrix
+#' 
+#' @param cov (data.frame) Covariance matrix
+#'  
+#' @return (data.frame) Correlation matrix
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' cov <- model$modelfit_results$covariance_matrix
+#' cov
+#' calculate_corr_from_cov(cov)
+#' }
+#' @seealso
+#' calculate_se_from_cov : Standard errors from covariance matrix
+#' 
+#' calculate_se_from_inf : Standard errors from information matrix
+#' 
+#' calculate_cov_from_inf : Covariance matrix from information matrix
+#' 
+#' calculate_cov_from_corrse : Covariance matrix from correlation matrix and standard errors
+#' 
+#' calculate_inf_from_cov : Information matrix from covariance matrix
+#' 
+#' calculate_inf_from_corrse : Information matrix from correlation matrix and standard errors
+#' 
+#' calculate_corr_from_inf : Correlation matrix from information matrix
+#' 
+#' 
+#' @export
+calculate_corr_from_cov <- function(cov) {
+    df <- pharmpy$modeling$calculate_corr_from_cov(cov)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
+#' calculate_corr_from_inf
+#' 
+#' @description
+#' Calculate correlation matrix from an information matrix
+#' 
+#' @param information_matrix (data.frame) Information matrix
+#'  
+#' @return (data.frame) Correlation matrix
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' inf <- model$modelfit_results$information_matrix
+#' inf
+#' calculate_corr_from_inf(inf)
+#' }
+#' @seealso
+#' calculate_se_from_cov : Standard errors from covariance matrix
+#' 
+#' calculate_se_from_inf : Standard errors from information matrix
+#' 
+#' calculate_corr_from_cov : Correlation matrix from covariance matrix
+#' 
+#' calculate_cov_from_inf : Covariance matrix from information matrix
+#' 
+#' calculate_cov_from_corrse : Covariance matrix from correlation matrix and standard errors
+#' 
+#' calculate_inf_from_cov : Information matrix from covariance matrix
+#' 
+#' calculate_inf_from_corrse : Information matrix from correlation matrix and standard errors
+#' 
+#' 
+#' @export
+calculate_corr_from_inf <- function(information_matrix) {
+    df <- pharmpy$modeling$calculate_corr_from_inf(information_matrix)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
+#' calculate_cov_from_corrse
+#' 
+#' @description
+#' Calculate covariance matrix from a correlation matrix and standard errors
+#' 
+#' @param corr (data.frame) Correlation matrix
+#' @param se (data.frame) Standard errors
+#'  
+#' @return (data.frame) Covariance matrix
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' corr <- model$modelfit_results$correlation_matrix
+#' se <- model$modelfit_results$standard_errors
+#' corr
+#' calculate_cov_from_corrse(corr, se)
+#' }
+#' @seealso
+#' calculate_se_from_cov : Standard errors from covariance matrix
+#' 
+#' calculate_se_from_inf : Standard errors from information matrix
+#' 
+#' calculate_corr_from_cov : Correlation matrix from covariance matrix
+#' 
+#' calculate_cov_from_inf : Covariance matrix from information matrix
+#' 
+#' calculate_inf_from_cov : Information matrix from covariance matrix
+#' 
+#' calculate_inf_from_corrse : Information matrix from correlation matrix and standard errors
+#' 
+#' calculate_corr_from_inf : Correlation matrix from information matrix
+#' 
+#' 
+#' @export
+calculate_cov_from_corrse <- function(corr, se) {
+    df <- pharmpy$modeling$calculate_cov_from_corrse(corr, se)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
+#' calculate_cov_from_inf
+#' 
+#' @description
+#' Calculate covariance matrix from an information matrix
+#' 
+#' @param information_matrix (data.frame) Information matrix
+#'  
+#' @return (data.frame) Covariance matrix
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' inf <- model$modelfit_results$information_matrix
+#' inf
+#' calculate_cov_from_inf(inf)
+#' }
+#' @seealso
+#' calculate_se_from_cov : Standard errors from covariance matrix
+#' 
+#' calculate_se_from_inf : Standard errors from information matrix
+#' 
+#' calculate_corr_from_cov : Correlation matrix from covariance matrix
+#' 
+#' calculate_cov_from_corrse : Covariance matrix from correlation matrix and standard errors
+#' 
+#' calculate_inf_from_cov : Information matrix from covariance matrix
+#' 
+#' calculate_inf_from_corrse : Information matrix from correlation matrix and standard errors
+#' 
+#' calculate_corr_from_inf : Correlation matrix from information matrix
+#' 
+#' 
+#' @export
+calculate_cov_from_inf <- function(information_matrix) {
+    df <- pharmpy$modeling$calculate_cov_from_inf(information_matrix)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
 }
 
 #' @title
@@ -676,6 +859,88 @@ calculate_individual_shrinkage <- function(model) {
 }
 
 #' @title
+#' calculate_inf_from_corrse
+#' 
+#' @description
+#' Calculate information matrix from a correlation matrix and standard errors
+#' 
+#' @param corr (data.frame) Correlation matrix
+#' @param se (data.frame) Standard errors
+#'  
+#' @return (data.frame) Information matrix
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' corr <- model$modelfit_results$correlation_matrix
+#' se <- model$modelfit_results$standard_errors
+#' corr
+#' calculate_inf_from_corrse(corr, se)
+#' }
+#' @seealso
+#' calculate_se_from_cov : Standard errors from covariance matrix
+#' 
+#' calculate_se_from_inf : Standard errors from information matrix
+#' 
+#' calculate_corr_from_cov : Correlation matrix from covariance matrix
+#' 
+#' calculate_cov_from_inf : Covariance matrix from information matrix
+#' 
+#' calculate_cov_from_corrse : Covariance matrix from correlation matrix and standard errors
+#' 
+#' calculate_inf_from_cov : Information matrix from covariance matrix
+#' 
+#' calculate_corr_from_inf : Correlation matrix from information matrix
+#' 
+#' 
+#' @export
+calculate_inf_from_corrse <- function(corr, se) {
+    df <- pharmpy$modeling$calculate_inf_from_corrse(corr, se)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
+#' calculate_inf_from_cov
+#' 
+#' @description
+#' Calculate information matrix from a covariance matrix
+#' 
+#' @param cov (data.frame) Covariance matrix
+#'  
+#' @return (data.frame) Information matrix
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' cov <- model$modelfit_results$covariance_matrix
+#' cov
+#' calculate_inf_from_cov(cov)
+#' }
+#' @seealso
+#' calculate_se_from_cov : Standard errors from covariance matrix
+#' 
+#' calculate_se_from_inf : Standard errors from information matrix
+#' 
+#' calculate_corr_from_cov : Correlation matrix from covariance matrix
+#' 
+#' calculate_cov_from_inf : Covariance matrix from information matrix
+#' 
+#' calculate_cov_from_corrse : Covariance matrix from correlation matrix and standard errors
+#' 
+#' calculate_inf_from_corrse : Information matrix from correlation matrix and standard errors
+#' 
+#' calculate_corr_from_inf : Correlation matrix from information matrix
+#' 
+#' 
+#' @export
+calculate_inf_from_cov <- function(cov) {
+    df <- pharmpy$modeling$calculate_inf_from_cov(cov)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
 #' calculate_pk_parameters_statistics
 #' 
 #' @description
@@ -703,6 +968,137 @@ calculate_individual_shrinkage <- function(model) {
 #' @export
 calculate_pk_parameters_statistics <- function(model, rng=NULL) {
     df <- pharmpy$modeling$calculate_pk_parameters_statistics(model, rng)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
+#' calculate_se_from_cov
+#' 
+#' @description
+#' Calculate standard errors from a covariance matrix
+#' 
+#' @param cov (data.frame) Input covariance matrix
+#'  
+#' @return (data.frame) Standard errors
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' cov <- model$modelfit_results$covariance_matrix
+#' cov
+#' calculate_se_from_cov(cov)
+#' }
+#' @seealso
+#' calculate_se_from_inf : Standard errors from information matrix
+#' 
+#' calculate_corr_from_cov : Correlation matrix from covariance matrix
+#' 
+#' calculate_cov_from_inf : Covariance matrix from information matrix
+#' 
+#' calculate_cov_from_corrse : Covariance matrix from correlation matrix and standard errors
+#' 
+#' calculate_inf_from_cov : Information matrix from covariance matrix
+#' 
+#' calculate_inf_from_corrse : Information matrix from correlation matrix and standard errors
+#' 
+#' calculate_corr_from_inf : Correlation matrix from information matrix
+#' 
+#' 
+#' @export
+calculate_se_from_cov <- function(cov) {
+    df <- pharmpy$modeling$calculate_se_from_cov(cov)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
+#' calculate_se_from_inf
+#' 
+#' @description
+#' Calculate standard errors from an information matrix
+#' 
+#' @param information_matrix (data.frame) Input information matrix
+#'  
+#' @return (data.frame) Standard errors
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' inf <- model$modelfit_results$information_matrix
+#' inf
+#' calculate_se_from_inf(inf)
+#' }
+#' @seealso
+#' calculate_se_from_cov : Standard errors from covariance matrix
+#' 
+#' calculate_corr_from_cov : Correlation matrix from covariance matrix
+#' 
+#' calculate_cov_from_inf : Covariance matrix from information matrix
+#' 
+#' calculate_cov_from_corrse : Covariance matrix from correlation matrix and standard errors
+#' 
+#' calculate_inf_from_cov : Information matrix from covariance matrix
+#' 
+#' calculate_inf_from_corrse : Information matrix from correlation matrix and standard errors
+#' 
+#' calculate_corr_from_inf : Correlation matrix from information matrix
+#' 
+#' 
+#' @export
+calculate_se_from_inf <- function(information_matrix) {
+    df <- pharmpy$modeling$calculate_se_from_inf(information_matrix)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
+#' check_high_correlations
+#' 
+#' @description
+#' Check for highly correlated parameter estimates
+#' 
+#' @param model (Model) Pharmpy model object
+#' @param limit (numeric) Lower limit for a high correlation
+#'  
+#' @return (data.frame) Correlation values indexed on pairs of parameters for (absolute) correlations above limit
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' check_high_correlations(model, limit=0.3)
+#' }
+#' 
+#' @export
+check_high_correlations <- function(model, limit=0.9) {
+    df <- pharmpy$modeling$check_high_correlations(model, limit)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
+#' check_parameters_near_bounds
+#' 
+#' @description
+#' Check if any estimated parameter value is close to its bounds
+#' 
+#' @param model (Model) Pharmpy model object
+#' @param values (data.frame) Series of values with index a subset of parameter names.
+#'  Default is to use all parameter estimates
+#' @param zero_limit (number) maximum distance to 0 bounds
+#' @param significant_digits (integer) maximum distance to non-zero bounds in number of significant digits
+#'  
+#' @return (data.frame) Logical Series with same index as values
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' check_parameters_near_bounds(model)
+#' }
+#' 
+#' @export
+check_parameters_near_bounds <- function(model, values=NULL, zero_limit=0.001, significant_digits=2) {
+    df <- pharmpy$modeling$check_parameters_near_bounds(model, values, zero_limit, significant_digits)
     df_reset <- df$reset_index()
     return(py_to_r(df_reset))
 }
@@ -786,6 +1182,23 @@ copy_model <- function(model, name=NULL) {
 #' @export
 create_joint_distribution <- function(model, rvs=NULL) {
     func_out <- pharmpy$modeling$create_joint_distribution(model, rvs)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' create_report
+#' 
+#' @description
+#' Create standard report for results
+#' 
+#' The report will be an html created at specified path.
+#' 
+#' @param results (Results) Results for which to create report
+#' @param path (Path) Path to report file
+#' 
+#' @export
+create_report <- function(results, path) {
+    func_out <- pharmpy$modeling$create_report(results, path)
     return(py_to_r(func_out))
 }
 
@@ -2578,6 +2991,7 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' Runs structural modelsearch, IIV building, and resmod
 #' 
 #' @param model (Model) Pharmpy model
+#' @param mfl (str) MFL for search space for structural model
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -2593,8 +3007,8 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' 
 #' 
 #' @export
-run_amd <- function(model) {
-    func_out <- pharmpy$modeling$run_amd(model)
+run_amd <- function(model, mfl='LAGTIME();PERIPHERALS(1)') {
+    func_out <- pharmpy$modeling$run_amd(model, mfl)
     return(py_to_r(func_out))
 }
 

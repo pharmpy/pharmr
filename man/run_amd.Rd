@@ -4,10 +4,12 @@
 \alias{run_amd}
 \title{run_amd}
 \usage{
-run_amd(model)
+run_amd(model, mfl = "LAGTIME();PERIPHERALS(1)")
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
+
+\item{mfl}{(str) MFL for search space for structural model}
 }
 \value{
 (Model) Reference to the same model object
