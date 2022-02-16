@@ -4,12 +4,14 @@
 \alias{run_amd}
 \title{run_amd}
 \usage{
-run_amd(model, mfl = "LAGTIME();PERIPHERALS(1)")
+run_amd(model, mfl = NULL, lloq = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{mfl}{(str) MFL for search space for structural model}
+
+\item{lloq}{(numeric) Lower limit of quantification. LOQ data will be removed.}
 }
 \value{
 (Model) Reference to the same model object

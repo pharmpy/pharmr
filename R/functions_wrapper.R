@@ -2543,6 +2543,20 @@ predict_outliers <- function(model) {
 }
 
 #' @title
+#' print_fit_summary
+#' 
+#' @description
+#' Print a summary of the model fit
+#' 
+#' @param model (Model) Pharmpy model object
+#' 
+#' @export
+print_fit_summary <- function(model) {
+    func_out <- pharmpy$modeling$print_fit_summary(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' print_model_code
 #' 
 #' @description
@@ -2889,6 +2903,33 @@ remove_lag_time <- function(model) {
 }
 
 #' @title
+#' remove_loq_data
+#' 
+#' @description
+#' Remove loq data records from the dataset
+#' 
+#' Does nothing if none of the limits is specified.
+#' 
+#' @param model (Model) Pharmpy model object
+#' @param lloq (numeric) Lower limit of quantification. Default not specified.
+#' @param uloq (numeric) Upper limit of quantification. Default not specified.
+#'  
+#' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' remove_loq_data(model, lloq=10, uloq=40)
+#' length(model$dataset)
+#' }
+#' 
+#' @export
+remove_loq_data <- function(model, lloq=NULL, uloq=NULL) {
+    func_out <- pharmpy$modeling$remove_loq_data(model, lloq, uloq)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' remove_peripheral_compartment
 #' 
 #' @description
@@ -2992,6 +3033,7 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' 
 #' @param model (Model) Pharmpy model
 #' @param mfl (str) MFL for search space for structural model
+#' @param lloq (numeric) Lower limit of quantification. LOQ data will be removed.
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -3007,8 +3049,8 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' 
 #' 
 #' @export
-run_amd <- function(model, mfl='LAGTIME();PERIPHERALS(1)') {
-    func_out <- pharmpy$modeling$run_amd(model, mfl)
+run_amd <- function(model, mfl=NULL, lloq=NULL) {
+    func_out <- pharmpy$modeling$run_amd(model, mfl, lloq)
     return(py_to_r(func_out))
 }
 
@@ -3616,21 +3658,25 @@ set_name <- function(model, new_name) {
 #' 
 #' Recognized solvers and their corresponding NONMEM advans:
 #' 
-#' +------------------------+------------------+
-#' | Solver                 | NONMEM ADVAN     |
-#' +========================+==================+
-#' | CVODES                 | ADVAN14          |
-#' +------------------------+------------------+
-#' | DGEAR                  | ADVAN8           |
-#' +------------------------+------------------+
-#' | DVERK                  | ADVAN6           |
-#' +------------------------+------------------+
-#' | IDA                    | ADVAN15          |
-#' +------------------------+------------------+
-#' | LSODA                  | ADVAN13          |
-#' +------------------------+------------------+
-#' | LSODI                  | ADVAN9           |
-#' +------------------------+------------------+
+#' +----------------------------+------------------+
+#' | Solver                     | NONMEM ADVAN     |
+#' +============================+==================+
+#' | CVODES                     | ADVAN14          |
+#' +----------------------------+------------------+
+#' | DGEAR                      | ADVAN8           |
+#' +----------------------------+------------------+
+#' | DVERK                      | ADVAN6           |
+#' +----------------------------+------------------+
+#' | IDA                        | ADVAN15          |
+#' +----------------------------+------------------+
+#' | GL (general linear)        | ADVAN5           |
+#' +----------------------------+------------------+
+#' | GL_REAL (real eigenvalues) | ADVAN7           |
+#' +----------------------------+------------------+
+#' | LSODA                      | ADVAN13          |
+#' +----------------------------+------------------+
+#' | LSODI                      | ADVAN9           |
+#' +----------------------------+------------------+
 #' 
 #' @param model (Model) Pharmpy model
 #' @param solver (str) Solver to use or NULL for no preference
@@ -4338,6 +4384,25 @@ write_csv <- function(model, path=NULL, force=FALSE) {
 #' @export
 write_model <- function(model, path='', force=TRUE) {
     func_out <- pharmpy$modeling$write_model(model, path, force)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' write_results
+#' 
+#' @description
+#' Write results object to json (or csv) file
+#' 
+#' Note that the csv-file cannot be read into a results object again.
+#' 
+#' @param results (Results) Pharmpy results object
+#' @param path (Path) Path to results file
+#' @param lzma (logical) TRUE for lzma compression. Not applicable to csv file
+#' @param csv (logical) Save as csv file
+#' 
+#' @export
+write_results <- function(results, path, lzma=FALSE, csv=FALSE) {
+    func_out <- pharmpy$modeling$write_results(results, path, lzma, csv)
     return(py_to_r(func_out))
 }
 
