@@ -4,10 +4,12 @@
 \alias{calculate_bic}
 \title{calculate_bic}
 \usage{
-calculate_bic(model)
+calculate_bic(model, type = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model object}
+
+\item{type}{(str) Type of BIC to calculate. Default is the mixed effects.}
 }
 \value{
 (numeric) BIC of model fit
@@ -15,5 +17,23 @@ calculate_bic(model)
 \description{
 Calculate final BIC value assuming the OFV to be -2LL
 
-BIC = OFV + n_estimated_parameters * log(n_observations)
+Different variations of the BIC can be calculated:
+\itemize{
+\item | mixed (default)
+| BIC = OFV + n_random_parameters * log(n_individuals) +
+|       n_fixed_parameters * log(n_observations)
+\item | fixed
+| BIC = OFV + n_estimated_parameters * log(n_observations)
+\item | random
+| BIC = OFV + n_estimated_parameters * log(n_individals)
+}
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+calculate_bic(model)
+calculate_bic(model, type='fixed')
+calculate_bic(model, type='random')
+}
+
 }

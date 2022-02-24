@@ -4,10 +4,25 @@
 \alias{run_iiv}
 \title{run_iiv}
 \usage{
-run_iiv(model)
+run_iiv(
+  model,
+  add_iivs = FALSE,
+  iiv_as_fullblock = FALSE,
+  rankfunc = "ofv",
+  cutoff = NULL
+)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
+
+\item{add_iivs}{(logical) Whether to add IIV on structural parameters. Default is FALSE}
+
+\item{iiv_as_fullblock}{(logical) Whether added etas should be as a fullblock. Default is FALSE}
+
+\item{rankfunc}{(str) Which ranking function should be used (OFV, AIC, BIC). Default is OFV}
+
+\item{cutoff}{(numeric) Cutoff for which value of the ranking function that is considered significant. Default
+is 3.84}
 }
 \value{
 (Model) Reference to the same model object

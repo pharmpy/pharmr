@@ -537,16 +537,32 @@ calculate_aic <- function(model) {
 #' @description
 #' Calculate final BIC value assuming the OFV to be -2LL
 #' 
-#' BIC = OFV + n_estimated_parameters * log(n_observations)
+#' Different variations of the BIC can be calculated:
+#' 
+#' * | mixed (default)
+#' | BIC = OFV + n_random_parameters * log(n_individuals) +
+#' |       n_fixed_parameters * log(n_observations)
+#' * | fixed
+#' | BIC = OFV + n_estimated_parameters * log(n_observations)
+#' * | random
+#' | BIC = OFV + n_estimated_parameters * log(n_individals)
 #' 
 #' @param model (Model) Pharmpy model object
+#' @param type (str) Type of BIC to calculate. Default is the mixed effects.
 #'  
 #' @return (numeric) BIC of model fit
 #' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' calculate_bic(model)
+#' calculate_bic(model, type='fixed')
+#' calculate_bic(model, type='random')
+#' }
 #' 
 #' @export
-calculate_bic <- function(model) {
-    func_out <- pharmpy$modeling$calculate_bic(model)
+calculate_bic <- function(model, type=NULL) {
+    func_out <- pharmpy$modeling$calculate_bic(model, type)
     return(py_to_r(func_out))
 }
 
@@ -3034,6 +3050,7 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' @param model (Model) Pharmpy model
 #' @param mfl (str) MFL for search space for structural model
 #' @param lloq (numeric) Lower limit of quantification. LOQ data will be removed.
+#' @param order (vector) Runorder of components
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -3049,8 +3066,8 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' 
 #' 
 #' @export
-run_amd <- function(model, mfl=NULL, lloq=NULL) {
-    func_out <- pharmpy$modeling$run_amd(model, mfl, lloq)
+run_amd <- function(model, mfl=NULL, lloq=NULL, order=NULL) {
+    func_out <- pharmpy$modeling$run_amd(model, mfl, lloq, order)
     return(py_to_r(func_out))
 }
 
@@ -3063,6 +3080,11 @@ run_amd <- function(model, mfl=NULL, lloq=NULL) {
 #' Runs two IIV workflows: testing the number of etas and testing which block structure
 #' 
 #' @param model (Model) Pharmpy model
+#' @param add_iivs (logical) Whether to add IIV on structural parameters. Default is FALSE
+#' @param iiv_as_fullblock (logical) Whether added etas should be as a fullblock. Default is FALSE
+#' @param rankfunc (str) Which ranking function should be used (OFV, AIC, BIC). Default is OFV
+#' @param cutoff (numeric) Cutoff for which value of the ranking function that is considered significant. Default
+#'  is 3.84
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -3078,8 +3100,8 @@ run_amd <- function(model, mfl=NULL, lloq=NULL) {
 #' 
 #' 
 #' @export
-run_iiv <- function(model) {
-    func_out <- pharmpy$modeling$run_iiv(model)
+run_iiv <- function(model, add_iivs=FALSE, iiv_as_fullblock=FALSE, rankfunc='ofv', cutoff=NULL) {
+    func_out <- pharmpy$modeling$run_iiv(model, add_iivs, iiv_as_fullblock, rankfunc, cutoff)
     return(py_to_r(func_out))
 }
 

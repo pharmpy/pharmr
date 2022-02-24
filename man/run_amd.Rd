@@ -4,7 +4,7 @@
 \alias{run_amd}
 \title{run_amd}
 \usage{
-run_amd(model, mfl = NULL, lloq = NULL)
+run_amd(model, mfl = NULL, lloq = NULL, order = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
@@ -12,6 +12,8 @@ run_amd(model, mfl = NULL, lloq = NULL)
 \item{mfl}{(str) MFL for search space for structural model}
 
 \item{lloq}{(numeric) Lower limit of quantification. LOQ data will be removed.}
+
+\item{order}{(vector) Runorder of components}
 }
 \value{
 (Model) Reference to the same model object
