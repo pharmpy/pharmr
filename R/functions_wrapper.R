@@ -3051,6 +3051,8 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' @param mfl (str) MFL for search space for structural model
 #' @param lloq (numeric) Lower limit of quantification. LOQ data will be removed.
 #' @param order (vector) Runorder of components
+#' @param categorical (vector) List of categorical covariates
+#' @param continuous (vector) List of continuouts covariates
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -3066,8 +3068,8 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' 
 #' 
 #' @export
-run_amd <- function(model, mfl=NULL, lloq=NULL, order=NULL) {
-    func_out <- pharmpy$modeling$run_amd(model, mfl, lloq, order)
+run_amd <- function(model, mfl=NULL, lloq=NULL, order=NULL, categorical=NULL, continuous=NULL) {
+    func_out <- pharmpy$modeling$run_amd(model, mfl, lloq, order, categorical, continuous)
     return(py_to_r(func_out))
 }
 
@@ -3085,6 +3087,7 @@ run_amd <- function(model, mfl=NULL, lloq=NULL, order=NULL) {
 #' @param rankfunc (str) Which ranking function should be used (OFV, AIC, BIC). Default is OFV
 #' @param cutoff (numeric) Cutoff for which value of the ranking function that is considered significant. Default
 #'  is 3.84
+#' @param path (Path) Path of rundirectory
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -3100,8 +3103,8 @@ run_amd <- function(model, mfl=NULL, lloq=NULL, order=NULL) {
 #' 
 #' 
 #' @export
-run_iiv <- function(model, add_iivs=FALSE, iiv_as_fullblock=FALSE, rankfunc='ofv', cutoff=NULL) {
-    func_out <- pharmpy$modeling$run_iiv(model, add_iivs, iiv_as_fullblock, rankfunc, cutoff)
+run_iiv <- function(model, add_iivs=FALSE, iiv_as_fullblock=FALSE, rankfunc='ofv', cutoff=NULL, path=NULL) {
+    func_out <- pharmpy$modeling$run_iiv(model, add_iivs, iiv_as_fullblock, rankfunc, cutoff, path)
     return(py_to_r(func_out))
 }
 

@@ -4,7 +4,14 @@
 \alias{run_amd}
 \title{run_amd}
 \usage{
-run_amd(model, mfl = NULL, lloq = NULL, order = NULL)
+run_amd(
+  model,
+  mfl = NULL,
+  lloq = NULL,
+  order = NULL,
+  categorical = NULL,
+  continuous = NULL
+)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
@@ -14,6 +21,10 @@ run_amd(model, mfl = NULL, lloq = NULL, order = NULL)
 \item{lloq}{(numeric) Lower limit of quantification. LOQ data will be removed.}
 
 \item{order}{(vector) Runorder of components}
+
+\item{categorical}{(vector) List of categorical covariates}
+
+\item{continuous}{(vector) List of continuouts covariates}
 }
 \value{
 (Model) Reference to the same model object

@@ -9,7 +9,8 @@ run_iiv(
   add_iivs = FALSE,
   iiv_as_fullblock = FALSE,
   rankfunc = "ofv",
-  cutoff = NULL
+  cutoff = NULL,
+  path = NULL
 )
 }
 \arguments{
@@ -23,6 +24,8 @@ run_iiv(
 
 \item{cutoff}{(numeric) Cutoff for which value of the ranking function that is considered significant. Default
 is 3.84}
+
+\item{path}{(Path) Path of rundirectory}
 }
 \value{
 (Model) Reference to the same model object
