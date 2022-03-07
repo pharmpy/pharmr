@@ -4,16 +4,19 @@
 \alias{remove_iov}
 \title{remove_iov}
 \usage{
-remove_iov(model)
+remove_iov(model, to_remove = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model to remove IOV from.}
+
+\item{to_remove}{(str, vector) Name/names of IOV etas to remove, e.g. 'ETA_IOV_11'.
+If NULL, all etas that are IOVs will be removed. NULL is default.}
 }
 \value{
 (Model) Reference to the same model
 }
 \description{
-Removes all IOV etas
+Removes all IOV etas given a vector with eta names.
 }
 \examples{
 \dontrun{

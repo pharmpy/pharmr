@@ -521,13 +521,14 @@ bump_model_number <- function(model, path=NULL) {
 #' AIC = OFV + 2*n_estimated_parameters
 #' 
 #' @param model (Model) Pharmpy model object
+#' @param modelfit_results (ModelfitResults) Alternative results object. Default is to use the one in model
 #'  
 #' @return (numeric) AIC of model fit
 #' 
 #' 
 #' @export
-calculate_aic <- function(model) {
-    func_out <- pharmpy$modeling$calculate_aic(model)
+calculate_aic <- function(model, modelfit_results=NULL) {
+    func_out <- pharmpy$modeling$calculate_aic(model, modelfit_results)
     return(py_to_r(func_out))
 }
 
@@ -549,6 +550,7 @@ calculate_aic <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model object
 #' @param type (str) Type of BIC to calculate. Default is the mixed effects.
+#' @param modelfit_results (ModelfitResults) Alternative results object. Default is to use the one in model
 #'  
 #' @return (numeric) BIC of model fit
 #' 
@@ -561,8 +563,8 @@ calculate_aic <- function(model) {
 #' }
 #' 
 #' @export
-calculate_bic <- function(model, type=NULL) {
-    func_out <- pharmpy$modeling$calculate_bic(model, type)
+calculate_bic <- function(model, type=NULL, modelfit_results=NULL) {
+    func_out <- pharmpy$modeling$calculate_bic(model, type, modelfit_results)
     return(py_to_r(func_out))
 }
 
@@ -1064,6 +1066,26 @@ calculate_se_from_cov <- function(cov) {
 #' @export
 calculate_se_from_inf <- function(information_matrix) {
     df <- pharmpy$modeling$calculate_se_from_inf(information_matrix)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
+#' check_dataset
+#' 
+#' @description
+#' Check dataset for consistency across a set of rules
+#' 
+#' @param model (Model) Pharmpy model object
+#' @param dataframe (Bool) TRUE to return a DataFrame instead of printing to the console
+#' @param verbose (Bool) Print out all rules checked if TRUE else print only failed rules
+#'  
+#' @return (data.frame) Only returns a DataFrame is dataframe=TRUE
+#' 
+#' 
+#' @export
+check_dataset <- function(model, dataframe=FALSE, verbose=FALSE) {
+    df <- pharmpy$modeling$check_dataset(model, dataframe, verbose)
     df_reset <- df$reset_index()
     return(py_to_r(df_reset))
 }
@@ -2866,10 +2888,11 @@ remove_iiv <- function(model, to_remove=NULL) {
 #' remove_iov
 #' 
 #' @description
-#' Removes all IOV etas
+#' Removes all IOV etas given a vector with eta names.
 #' 
 #' @param model (Model) Pharmpy model to remove IOV from.
-#'  
+#' @param to_remove (str, vector) Name/names of IOV etas to remove, e.g. 'ETA_IOV_11'.
+#'  If NULL, all etas that are IOVs will be removed. NULL is default.
 #' @return (Model) Reference to the same model
 #' 
 #' @examples
@@ -2886,8 +2909,8 @@ remove_iiv <- function(model, to_remove=NULL) {
 #' 
 #' 
 #' @export
-remove_iov <- function(model) {
-    func_out <- pharmpy$modeling$remove_iov(model)
+remove_iov <- function(model, to_remove=NULL) {
+    func_out <- pharmpy$modeling$remove_iov(model, to_remove)
     return(py_to_r(func_out))
 }
 

@@ -4,12 +4,14 @@
 \alias{calculate_bic}
 \title{calculate_bic}
 \usage{
-calculate_bic(model, type = NULL)
+calculate_bic(model, type = NULL, modelfit_results = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model object}
 
 \item{type}{(str) Type of BIC to calculate. Default is the mixed effects.}
+
+\item{modelfit_results}{(ModelfitResults) Alternative results object. Default is to use the one in model}
 }
 \value{
 (numeric) BIC of model fit

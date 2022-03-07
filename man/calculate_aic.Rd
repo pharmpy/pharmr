@@ -4,10 +4,12 @@
 \alias{calculate_aic}
 \title{calculate_aic}
 \usage{
-calculate_aic(model)
+calculate_aic(model, modelfit_results = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model object}
+
+\item{modelfit_results}{(ModelfitResults) Alternative results object. Default is to use the one in model}
 }
 \value{
 (numeric) AIC of model fit
