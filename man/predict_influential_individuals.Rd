@@ -4,10 +4,12 @@
 \alias{predict_influential_individuals}
 \title{predict_influential_individuals}
 \usage{
-predict_influential_individuals(model)
+predict_influential_individuals(model, cutoff = 3.84)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
+
+\item{cutoff}{(numeric) Cutoff threshold for a dofv signalling an influential individual}
 }
 \value{
 (pd.Dataframe) Dataframe over the individuals with a \code{dofv} column containing the raw predicted delta-OFV and an \code{influential} column with a boolean to tell whether the individual is influential or not.

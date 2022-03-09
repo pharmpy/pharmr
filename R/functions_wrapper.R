@@ -547,6 +547,8 @@ calculate_aic <- function(model, modelfit_results=NULL) {
 #' | BIC = OFV + n_estimated_parameters * log(n_observations)
 #' * | random
 #' | BIC = OFV + n_estimated_parameters * log(n_individals)
+#' * | iiv
+#' | BIC = OFV + n_estimated_iiv_omega_parameters * log(n_individals)
 #' 
 #' @param model (Model) Pharmpy model object
 #' @param type (str) Type of BIC to calculate. Default is the mixed effects.
@@ -560,6 +562,7 @@ calculate_aic <- function(model, modelfit_results=NULL) {
 #' calculate_bic(model)
 #' calculate_bic(model, type='fixed')
 #' calculate_bic(model, type='random')
+#' calculate_bic(model, type='iiv')
 #' }
 #' 
 #' @export
@@ -2511,6 +2514,7 @@ plot_iofv_vs_iofv <- function(model, other) {
 #' Predict influential individuals for a model using a machine learning model.
 #' 
 #' @param model (Model) Pharmpy model
+#' @param cutoff (numeric) Cutoff threshold for a dofv signalling an influential individual
 #'  
 #' @return (pd.Dataframe) Dataframe over the individuals with a `dofv` column containing the raw predicted delta-OFV and an `influential` column with a boolean to tell whether the individual is influential or not.
 #' 
@@ -2521,8 +2525,8 @@ plot_iofv_vs_iofv <- function(model, other) {
 #' 
 #' 
 #' @export
-predict_influential_individuals <- function(model) {
-    df <- pharmpy$modeling$predict_influential_individuals(model)
+predict_influential_individuals <- function(model, cutoff=3.84) {
+    df <- pharmpy$modeling$predict_influential_individuals(model, cutoff)
     df_reset <- df$reset_index()
     return(py_to_r(df_reset))
 }
@@ -2534,6 +2538,8 @@ predict_influential_individuals <- function(model) {
 #' Predict influential outliers for a model using a machine learning model.
 #' 
 #' @param model (Model) Pharmpy model
+#' @param outlier_cutoff (numeric) Cutoff threshold for a residual singalling an outlier
+#' @param influential_cutoff (numeric) Cutoff threshold for a dofv signalling an influential individual
 #'  
 #' @return (pd.Dataframe) Dataframe over the individuals with a `outliers` and `dofv` columns containing the raw predictions and `influential`, `outlier` and `influential_outlier` boolean columns.
 #' 
@@ -2544,8 +2550,8 @@ predict_influential_individuals <- function(model) {
 #' 
 #' 
 #' @export
-predict_influential_outliers <- function(model) {
-    df <- pharmpy$modeling$predict_influential_outliers(model)
+predict_influential_outliers <- function(model, outlier_cutoff=3, influential_cutoff=3.84) {
+    df <- pharmpy$modeling$predict_influential_outliers(model, outlier_cutoff, influential_cutoff)
     df_reset <- df$reset_index()
     return(py_to_r(df_reset))
 }
@@ -2559,6 +2565,7 @@ predict_influential_outliers <- function(model) {
 #' See the :ref:`simeval <Individual OFV summary>` documentation for a definition of the `residual`
 #' 
 #' @param model (Model) Pharmpy model
+#' @param cutoff (numeric) Cutoff threshold for a residual singalling an outlier
 #'  
 #' @return (pd.Dataframe) Dataframe over the individuals with a `residual` column containing the raw predicted residuals and a `outlier` column with a boolean to tell whether the individual is an outlier or not.
 #' 
@@ -2574,8 +2581,8 @@ predict_influential_outliers <- function(model) {
 #' 
 #' 
 #' @export
-predict_outliers <- function(model) {
-    df <- pharmpy$modeling$predict_outliers(model)
+predict_outliers <- function(model, cutoff=3.0) {
+    df <- pharmpy$modeling$predict_outliers(model, cutoff)
     df_reset <- df$reset_index()
     return(py_to_r(df_reset))
 }

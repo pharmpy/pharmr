@@ -28,6 +28,8 @@ Different variations of the BIC can be calculated:
 | BIC = OFV + n_estimated_parameters * log(n_observations)
 \item | random
 | BIC = OFV + n_estimated_parameters * log(n_individals)
+\item | iiv
+| BIC = OFV + n_estimated_iiv_omega_parameters * log(n_individals)
 }
 }
 \examples{
@@ -36,6 +38,7 @@ model <- load_example_model("pheno")
 calculate_bic(model)
 calculate_bic(model, type='fixed')
 calculate_bic(model, type='random')
+calculate_bic(model, type='iiv')
 }
 
 }
