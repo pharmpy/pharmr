@@ -47,14 +47,20 @@ jobs:
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
 
-      - name: Install pharmpy/pharmr
+      - name: Install pharmr
         run: |
           Sys.setenv(RETICULATE_MINICONDA_PYTHON_VERSION="3.9")
           remotes::install_github('rstudio/reticulate')
           reticulate::install_miniconda()
           remotes::install_local()
-          pharmr::install_pharmpy()
         shell: Rscript {0}
+        
+      - name: Install pharmpy
+        run: |
+          git clone https://github.com/pharmpy/pharmpy.git
+          git checkout tags/"$(git rev-list --tags --max-count=1)"
+          conda activate r-reticulate
+          python setup.py install
 
       - name: Install deploy dependencies
         run: |
@@ -62,7 +68,7 @@ jobs:
           install.packages("tidyverse")
           install.packages("devtools")
         shell: Rscript {0}
-
+        
       - name: Update DESCRIPTION and documentation
         run: |
           cd deploy
