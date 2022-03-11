@@ -57,8 +57,10 @@ jobs:
       - name: Clone pharmpy
         run: |
           git clone https://github.com/pharmpy/pharmpy.git
+          cd pharmpy
           git checkout "$(git rev-list --tags --max-count=1)"
           conda init bash
+          cd ..
           
       - name: Intall Pharmpy
         run: |
