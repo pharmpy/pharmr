@@ -41,16 +41,6 @@ jobs:
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
 
-      - uses: actions/checkout@v2
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.10
-      - name: Add conda to system path
-        run: |
-          # $CONDA is an environment variable pointing to the root of the miniconda directory
-          echo $CONDA/bin >> $GITHUB_PATH
-
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
@@ -59,11 +49,16 @@ jobs:
 
       - name: Install pharmr
         run: |
-          Sys.setenv(RETICULATE_MINICONDA_PYTHON_VERSION="3.9")
           remotes::install_github('rstudio/reticulate')
           reticulate::install_miniconda()
           remotes::install_local()
         shell: Rscript {0}
+        
+      - name: Add conda to system path
+        run: |
+          # $CONDA is an environment variable pointing to the root of the miniconda directory
+          echo $CONDA/bin >> $GITHUB_PATH
+
         
       - name: Install pharmpy
         run: |
