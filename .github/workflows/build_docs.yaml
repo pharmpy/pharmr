@@ -59,7 +59,7 @@ jobs:
           git clone https://github.com/pharmpy/pharmpy.git
           cd pharmpy
           git checkout "$(git rev-list --tags --max-count=1)"
-          /usr/share/miniconda/bin/conda activate r-reticulate
+          $CONDA/bin/activate r-reticulate
           python setup.py install
           cd ..
 
