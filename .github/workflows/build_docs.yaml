@@ -54,17 +54,12 @@ jobs:
           remotes::install_local()
         shell: Rscript {0}
         
-      - name: Add conda to system path
-        run: |
-          # $CONDA is an environment variable pointing to the root of the miniconda directory
-          echo $CONDA/bin >> $GITHUB_PATH
-
-        
       - name: Install pharmpy
         run: |
           git clone https://github.com/pharmpy/pharmpy.git
           cd pharmpy
           git checkout "$(git rev-list --tags --max-count=1)"
+          conda init bash
           conda activate r-reticulate
           python setup.py install
           cd ..
