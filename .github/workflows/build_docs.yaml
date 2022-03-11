@@ -58,7 +58,8 @@ jobs:
       - name: Install pharmpy
         run: |
           git clone https://github.com/pharmpy/pharmpy.git
-          git checkout tags/"$(git rev-list --tags --max-count=1)"
+          git rev-list --tags --max-count=1 
+          git checkout "$(git rev-list --tags --max-count=1)"
           conda activate r-reticulate
           python setup.py install
 
