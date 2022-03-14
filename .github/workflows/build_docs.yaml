@@ -12,7 +12,35 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Debug print
+        run: |
+          pwd
+          ls
+    
+      - name: Checkout pharmr
+        uses: actions/checkout@v3
+        with:
+          path: pharmr_repo
+
+      - name: Checkout pharmpy
+        uses: actions/checkout@v3
+        with:
+          repository: pharmpy/pharmpy
+          path: pharmpy_repo
+
+      - name: Debug print
+        run: |
+          pwd
+          ls
+
+      - name: Set up pharmpy release version
+        run: |
+          pwd
+          ls
+          cd pharmpy_repo
+          ls
+          git checkout "$(git rev-list --tags --max-count=1)"
+          cd ..
 
       - uses: r-lib/actions/setup-r@v1
         with:
@@ -53,21 +81,6 @@ jobs:
           reticulate::install_miniconda()
           remotes::install_local()
         shell: Rscript {0}
-
-      - name: Checkout pharmpy
-        uses: actions/checkout@v2
-        with:
-          repository: pharmpy/pharmpy
-          path: pharmpy
-        
-      - name: Set up pharmpy release version
-        run: |
-          pwd
-          ls
-          cd pharmpy
-          ls
-          git checkout "$(git rev-list --tags --max-count=1)"
-          cd ..
 
       - name: Install pharmpy
         run: |
