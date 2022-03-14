@@ -36,8 +36,8 @@ jobs:
       - name: Set up pharmpy release version
         run: |
           cd pharmpy_repo
-          echo "git status"
-          git status
+          echo "git origin"
+          git remote show origin
           echo "release"
           git rev-list --tags --max-count=1
           git checkout "$(git rev-list --tags --max-count=1)"
