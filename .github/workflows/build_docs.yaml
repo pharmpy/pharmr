@@ -53,15 +53,23 @@ jobs:
           reticulate::install_miniconda()
           remotes::install_local()
         shell: Rscript {0}
+
+      - name: Checkout pharmpy
+        uses: actions/checkout@v2
+        with:
+          repository: pharmpy/pharmpy
+          path: pharmpy
         
-      - name: Clone pharmpy
+      - name: Set up pharmpy release version
         run: |
-          git clone https://github.com/pharmpy/pharmpy.git
           cd pharmpy
           git checkout "$(git rev-list --tags --max-count=1)"
-          source ~/.local/share/r-miniconda/envs/r-reticulate/bin/activate
-          python setup.py install
           cd ..
+
+      - name: Install pharmpy
+        run: |
+          system("python pharmpy/setup.py install")
+        shell: Rscript {0}
 
       - name: Install deploy dependencies
         run: |
