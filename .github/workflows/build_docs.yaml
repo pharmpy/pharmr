@@ -39,6 +39,7 @@ jobs:
           ls
           cd pharmpy_repo
           ls
+          git rev-list --tags --max-count=1
           git checkout "$(git rev-list --tags --max-count=1)"
           cd ..
 
