@@ -13,6 +13,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        path: pharmr
+
 
       - uses: r-lib/actions/setup-r@v1
         with:
@@ -80,7 +82,7 @@ jobs:
         
       - name: Update DESCRIPTION and documentation
         run: |
-          cd deploy
+          cd pharmr/deploy
           Rscript update_description.R
           Rscript document_pharmpy.R
           cd ..
