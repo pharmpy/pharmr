@@ -13,7 +13,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        path: pharmr
+        with:
+          path: pharmr
 
 
       - uses: r-lib/actions/setup-r@v1
