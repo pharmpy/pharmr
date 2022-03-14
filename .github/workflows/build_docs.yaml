@@ -13,21 +13,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        with:
-          path: main
 
       - uses: r-lib/actions/setup-r@v1
         with:
           r-version: 'release'
 
       - uses: r-lib/actions/setup-pandoc@v1
-
-      - name: Change to pharmr
-        run: |
-          pwd
-          ls
-          cd main
-          ls
 
       - name: Query dependencies
         run: |
@@ -71,10 +62,12 @@ jobs:
         
       - name: Set up pharmpy release version
         run: |
+          pwd
           ls
-          cd ../pharmpy
+          cd pharmpy
+          ls
           git checkout "$(git rev-list --tags --max-count=1)"
-          cd ../pharmr
+          cd ..
 
       - name: Install pharmpy
         run: |
