@@ -22,6 +22,13 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v1
 
+      - name: Change to pharmr
+        run: |
+          pwd
+          ls
+          cd main
+          ls
+
       - name: Query dependencies
         run: |
           install.packages('remotes')
@@ -43,13 +50,6 @@ jobs:
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
 
-      - name: Change to pharmr
-        run: |
-          pwd
-          ls
-          cd pharmr
-          ls
-          
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
