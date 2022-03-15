@@ -39,7 +39,7 @@ jobs:
           echo "git origin"
           git remote show origin
           echo "release"
-          git remote -v
+          git fetch
           git describe --tags --abbrev=0
           git checkout "$(git rev-list --tags --max-count=1 src/)"
           cd ..
