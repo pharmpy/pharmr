@@ -27,7 +27,7 @@ jobs:
         run: |
           cd pharmpy_repo
           git fetch
-          git checkout -b "$(git rev-list --tags --max-count=1)"
+          git checkout -b release_latest "$(git rev-list --tags --max-count=1)"
           git branch -v
           cd ..
 
@@ -39,8 +39,9 @@ jobs:
 
       - name: Query dependencies
         run: |
+          setwd("~/pharmr_repo")
           system("pwd")
-          systen("ls")
+          system("ls")
           install.packages('remotes')
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
