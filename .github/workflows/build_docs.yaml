@@ -53,6 +53,7 @@ jobs:
           restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
 
       - name: Install system dependencies
+        working-directory: pharmr_repo
         run: |
           while read -r cmd
           do
@@ -64,18 +65,20 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
+          remotes::install_github('rstudio/reticulate')
+          reticulate::install_miniconda()
         shell: Rscript {0}
 
       - name: Install pharmr
+        working-directory: pharmr_repo
         run: |
-          remotes::install_github('rstudio/reticulate')
-          reticulate::install_miniconda()
           remotes::install_local()
         shell: Rscript {0}
 
       - name: Install pharmpy
         working-directory: pharmpy_repo
         run: |
+          reticulate::py_discover_config()
           system("python pharmpy/setup.py install")
         shell: Rscript {0}
 
