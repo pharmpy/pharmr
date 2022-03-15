@@ -17,20 +17,6 @@ jobs:
         with:
           path: pharmr_repo
 
-      - name: Checkout pharmpy
-        uses: actions/checkout@v3
-        with:
-          repository: pharmpy/pharmpy
-          path: pharmpy_repo
-
-      - name: Set up pharmpy release version
-        run: |
-          cd pharmpy_repo
-          git fetch
-          git checkout -b release_latest "$(git rev-list --tags --max-count=1)"
-          git branch -v
-          cd ..
-
       - uses: r-lib/actions/setup-r@v1
         with:
           r-version: 'release'
@@ -76,12 +62,9 @@ jobs:
         shell: Rscript {0}
 
       - name: Install pharmpy
-        working-directory: pharmpy_repo
+        working-directory: pharmr_repo
         run: |
-          system("pwd")
-          system("ls")
-          reticulate::py_discover_config()
-          system("python setup.py install")
+          pharmr::install_pharmpy()
         shell: Rscript {0}
 
       - name: Install deploy dependencies
@@ -98,6 +81,7 @@ jobs:
           Rscript document_pharmpy.R
 
       - name: Check
+        working-directory: pharmr_repo
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: |
@@ -113,6 +97,7 @@ jobs:
           path: check
 
       - name: Add changes to DESCRIPTION and documentation
+        working-directory: pharmr_repo
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -123,6 +108,7 @@ jobs:
           git status
 
       - name: Check if any files have been staged
+        working-directory: pharmr_repo
         run: |
           if [[ "$(git diff --name-only --cached | wc -c)" != "0" ]]; then
             echo "has_been_updated=true" >> $GITHUB_ENV
@@ -132,6 +118,7 @@ jobs:
 
       - name: Commit changes
         if: ${{ env.has_been_updated == 'true' }}
+        working-directory: pharmr_repo
         run: |
           echo "Committing changes"
           git config --local user.name "github-actions[bot]"
@@ -139,6 +126,7 @@ jobs:
           git commit -m "Update DESCRIPTION/documentation"
 
       - name: Push changes
+        working-directory: pharmr_repo
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
