@@ -78,8 +78,10 @@ jobs:
       - name: Install pharmpy
         working-directory: pharmpy_repo
         run: |
+          system("pwd")
+          system("ls")
           reticulate::py_discover_config()
-          system("python pharmpy/setup.py install")
+          system("python setup.py install")
         shell: Rscript {0}
 
       - name: Install deploy dependencies
