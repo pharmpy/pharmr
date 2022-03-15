@@ -28,7 +28,8 @@ jobs:
           cd pharmpy_repo
           git fetch
           git checkout -b "$(git rev-list --tags --max-count=1)"
-          cd ..
+          git log -1
+          cd ../pharmr_repo
 
       - uses: r-lib/actions/setup-r@v1
         with:
