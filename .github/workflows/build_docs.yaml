@@ -27,7 +27,7 @@ jobs:
         run: |
           cd pharmpy_repo
           git fetch
-          git describe --tags --abbrev=0
+          git describe --tags
           cd ..
 
       - uses: r-lib/actions/setup-r@v1
