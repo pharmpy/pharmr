@@ -12,11 +12,6 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - name: Debug print
-        run: |
-          pwd
-          ls
-    
       - name: Checkout pharmr
         uses: actions/checkout@v3
         with:
@@ -28,19 +23,11 @@ jobs:
           repository: pharmpy/pharmpy
           path: pharmpy_repo
 
-      - name: Debug print
-        run: |
-          pwd
-          ls
-
       - name: Set up pharmpy release version
         run: |
           cd pharmpy_repo
-          echo "git origin"
-          git remote show origin
-          echo "release"
           git fetch
-          git checkout "$(git describe --tags --abbrev=0)"
+          git describe --tags --abbrev=0
           cd ..
 
       - uses: r-lib/actions/setup-r@v1
