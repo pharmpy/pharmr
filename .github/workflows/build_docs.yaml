@@ -60,6 +60,7 @@ jobs:
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
 
       - name: Install dependencies
+        working-directory: pharmr_repo
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
@@ -73,6 +74,7 @@ jobs:
         shell: Rscript {0}
 
       - name: Install pharmpy
+        working-directory: pharmpy_repo
         run: |
           system("python pharmpy/setup.py install")
         shell: Rscript {0}
@@ -85,11 +87,10 @@ jobs:
         shell: Rscript {0}
         
       - name: Update DESCRIPTION and documentation
+        working-directory: pharmr_repo/deploy
         run: |
-          cd pharmr/deploy
           Rscript update_description.R
           Rscript document_pharmpy.R
-          cd ..
 
       - name: Check
         env:
