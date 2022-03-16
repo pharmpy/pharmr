@@ -4,12 +4,19 @@
 \alias{update_inits}
 \title{update_inits}
 \usage{
-update_inits(model, force_individual_estimates = FALSE)
+update_inits(
+  model,
+  force_individual_estimates = FALSE,
+  move_est_close_to_bounds = FALSE
+)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model to update initial estimates}
 
 \item{force_individual_estimates}{(logical) Update initial individual estimates even if model din't use them previously.}
+
+\item{move_est_close_to_bounds}{(logical) Move estimates that are close to bounds. If correlation >0.99 the correlation will
+be set to 0.9, if variance is <0.001 the variance will be set to 0.01.}
 }
 \value{
 (Model) Reference to the same model

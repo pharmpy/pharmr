@@ -4351,6 +4351,8 @@ unfix_parameters_to <- function(model, parameter_names, values) {
 #' 
 #' @param model (Model) Pharmpy model to update initial estimates
 #' @param force_individual_estimates (logical) Update initial individual estimates even if model din't use them previously.
+#' @param move_est_close_to_bounds (logical) Move estimates that are close to bounds. If correlation >0.99 the correlation will
+#'  be set to 0.9, if variance is <0.001 the variance will be set to 0.01.
 #'  
 #' @return (Model) Reference to the same model
 #' 
@@ -4363,8 +4365,8 @@ unfix_parameters_to <- function(model, parameter_names, values) {
 #' }
 #' 
 #' @export
-update_inits <- function(model, force_individual_estimates=FALSE) {
-    func_out <- pharmpy$modeling$update_inits(model, force_individual_estimates)
+update_inits <- function(model, force_individual_estimates=FALSE, move_est_close_to_bounds=FALSE) {
+    func_out <- pharmpy$modeling$update_inits(model, force_individual_estimates, move_est_close_to_bounds)
     return(py_to_r(func_out))
 }
 
