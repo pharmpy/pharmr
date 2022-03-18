@@ -14,6 +14,9 @@ get_doseid(model)
 }
 \description{
 Get a DOSEID series from the dataset with an id of each dose period starting from 1
+
+If a a dose and observation exist at the same time point the observation will be counted
+towards the previous dose.
 }
 \examples{
 \dontrun{
