@@ -5,7 +5,11 @@
 \title{run_amd}
 \usage{
 run_amd(
-  model,
+  dataset_path,
+  modeltype = "pk_oral",
+  cl_init = 0.01,
+  vc_init = 1,
+  mat_init = 0.1,
   mfl = NULL,
   lloq = NULL,
   order = NULL,
@@ -14,7 +18,15 @@ run_amd(
 )
 }
 \arguments{
-\item{model}{(Model) Pharmpy model}
+\item{dataset_path}{(Model) Path to a dataset}
+
+\item{modeltype}{(str) Type of model to build. Either 'pk_oral' or 'pk_iv'}
+
+\item{cl_init}{(numeric) Initial estimate for the population clearance}
+
+\item{vc_init}{(numeric) Initial estimate for the central compartment population volume}
+
+\item{mat_init}{(numeric) Initial estimate for the mean absorption time (not for iv models)}
 
 \item{mfl}{(str) MFL for search space for structural model}
 
