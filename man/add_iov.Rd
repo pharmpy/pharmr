@@ -35,6 +35,8 @@ model$statements$find_assignment("CL")
 \seealso{
 add_iiv
 
+add_pk_iiv
+
 remove_iiv
 
 remove_iov

@@ -270,6 +270,8 @@ add_estimation_step <- function(model, method, idx=NULL, ...) {
 #' model$statements$find_assignment("CL")
 #' }
 #' @seealso
+#' add_pk_iiv
+#' 
 #' add_iov
 #' 
 #' remove_iiv
@@ -332,6 +334,8 @@ add_individual_parameter <- function(model, name) {
 #' }
 #' @seealso
 #' add_iiv
+#' 
+#' add_pk_iiv
 #' 
 #' remove_iiv
 #' 
@@ -416,6 +420,42 @@ add_lag_time <- function(model) {
 #' @export
 add_peripheral_compartment <- function(model) {
     func_out <- pharmpy$modeling$add_peripheral_compartment(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' add_pk_iiv
+#' 
+#' @description
+#' Adds IIVs to all PK parameters in :class:`pharmpy.model`.
+#' 
+#' Will add exponential IIVs to all parameters that are included in the ODE.
+#' 
+#' @param model (Model) Pharmpy model to add new IIVs to.
+#'  
+#' @return (Model) Reference to the same model
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' set_first_order_absorption(model)
+#' model$statements$find_assignment("MAT")
+#' add_pk_iiv(model)
+#' model$statements$find_assignment("MAT")
+#' }
+#' @seealso
+#' add_iiv
+#' 
+#' add_iov
+#' 
+#' remove_iiv
+#' 
+#' remove_iov
+#' 
+#' 
+#' @export
+add_pk_iiv <- function(model) {
+    func_out <- pharmpy$modeling$add_pk_iiv(model)
     return(py_to_r(func_out))
 }
 
@@ -2887,6 +2927,8 @@ remove_estimation_step <- function(model, idx) {
 #' 
 #' add_iov
 #' 
+#' add_pk_iiv
+#' 
 #' 
 #' @export
 remove_iiv <- function(model, to_remove=NULL) {
@@ -2916,6 +2958,8 @@ remove_iiv <- function(model, to_remove=NULL) {
 #' add_iov
 #' 
 #' remove_iiv
+#' 
+#' add_pk_iiv
 #' 
 #' 
 #' @export
