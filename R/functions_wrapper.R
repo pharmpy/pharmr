@@ -1633,6 +1633,24 @@ evaluate_weighted_residuals <- function(model, parameters=NULL, dataset=NULL) {
 }
 
 #' @title
+#' expand_additional_doses
+#' 
+#' @description
+#' Expand additional doses into separate dose records
+#' 
+#' @param model (Model) Pharmpy model object
+#' @param flag (logical) TRUE to add a boolean EXPANDED column to mark added records
+#'  
+#' @return (Model) Reference to the same model object
+#' 
+#' 
+#' @export
+expand_additional_doses <- function(model, flag=FALSE) {
+    func_out <- pharmpy$modeling$expand_additional_doses(model, flag)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' fit
 #' 
 #' @description
