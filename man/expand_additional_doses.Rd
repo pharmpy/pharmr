@@ -9,7 +9,9 @@ expand_additional_doses(model, flag = FALSE)
 \arguments{
 \item{model}{(Model) Pharmpy model object}
 
-\item{flag}{(logical) TRUE to add a boolean EXPANDED column to mark added records}
+\item{flag}{(logical) TRUE to add a boolean EXPANDED column to mark added records. In this case all
+columns in the original dataset will be kept. Care needs to be taken to handle
+the new dataset.}
 }
 \value{
 (Model) Reference to the same model object

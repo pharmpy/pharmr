@@ -1639,7 +1639,9 @@ evaluate_weighted_residuals <- function(model, parameters=NULL, dataset=NULL) {
 #' Expand additional doses into separate dose records
 #' 
 #' @param model (Model) Pharmpy model object
-#' @param flag (logical) TRUE to add a boolean EXPANDED column to mark added records
+#' @param flag (logical) TRUE to add a boolean EXPANDED column to mark added records. In this case all
+#'  columns in the original dataset will be kept. Care needs to be taken to handle
+#'  the new dataset.
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -4158,6 +4160,35 @@ simplify_expression <- function(model, expr) {
 split_joint_distribution <- function(model, rvs=NULL) {
     func_out <- pharmpy$modeling$split_joint_distribution(model, rvs)
     return(py_to_r(func_out))
+}
+
+#' @title
+#' summarize_individuals
+#' 
+#' @description
+#' Creates a summary dataframe keyed by model-individual pairs for an input
+#' vector of models.
+#' 
+#' @param models (vector of Models) Input models
+#'  
+#' @return (data.frame | NULL) The summary as a dataframe
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' fit(model)
+#' results <- run_tool(
+#'     model=model,
+#'     mfl='ABSORPTION(ZO);PERIPHERALS(c(1, 2))',
+#'     algorithm='reduced_stepwise'
+#' summarize_individuals([results$start_model, *results$models])
+#' }
+#' 
+#' @export
+summarize_individuals <- function(models) {
+    df <- pharmpy$modeling$summarize_individuals(models)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
 }
 
 #' @title
