@@ -2708,6 +2708,24 @@ print_model_symbols <- function(model) {
 }
 
 #' @title
+#' read_dataset_from_datainfo
+#' 
+#' @description
+#' Read a dataset given a datainfo object or path to a datainfo file
+#' 
+#' @param datainfo (DataInfo | Path | str) A datainfo object or a path to a datainfo object
+#'  
+#' @return (data.frame) The dataset
+#' 
+#' 
+#' @export
+read_dataset_from_datainfo <- function(datainfo) {
+    df <- pharmpy$modeling$read_dataset_from_datainfo(datainfo)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
 #' read_model
 #' 
 #' @description
