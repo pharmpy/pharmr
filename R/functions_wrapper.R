@@ -4151,6 +4151,33 @@ simplify_expression <- function(model, expr) {
 }
 
 #' @title
+#' solve_ode_system
+#' 
+#' @description
+#' Replace ODE system with analytical solution if possible
+#' 
+#' Warnings
+#' This function can currently only handle the most simple of ODE systems.
+#' 
+#' @param model (Model) Pharmpy model object
+#'  
+#' @return (Model) Reference to the same pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model$statements$ode_system
+#' solve_ode_system(model)
+#' model$statements$ode_system
+#' }
+#' 
+#' @export
+solve_ode_system <- function(model) {
+    func_out <- pharmpy$modeling$solve_ode_system(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' split_joint_distribution
 #' 
 #' @description
