@@ -9,6 +9,7 @@ add_iiv(
   list_of_parameters,
   expression,
   operation = "*",
+  initial_estimate = 0.09,
   eta_names = NULL
 )
 }
@@ -20,6 +21,8 @@ add_iiv(
 \item{expression}{(str, vector) Effect/effects on eta. Either abbreviated (see above) or custom.}
 
 \item{operation}{(str, vector, optional) Whether the new IIV should be added or multiplied (default).}
+
+\item{initial_estimate}{(numeric) Value of initial estimate of parameter. Default is 0.09}
 
 \item{eta_names}{(str, vector, optional) Custom name/names of new eta}
 }

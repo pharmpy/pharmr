@@ -4,21 +4,12 @@
 \alias{run_iiv}
 \title{run_iiv}
 \usage{
-run_iiv(
-  model,
-  add_iivs = FALSE,
-  iiv_as_fullblock = FALSE,
-  rankfunc = "ofv",
-  cutoff = NULL,
-  path = NULL
-)
+run_iiv(model, iiv_strategy = 0, rankfunc = "ofv", cutoff = NULL, path = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{add_iivs}{(logical) Whether to add IIV on structural parameters. Default is FALSE}
-
-\item{iiv_as_fullblock}{(logical) Whether added etas should be as a fullblock. Default is FALSE}
+\item{iiv_strategy}{(integer) How IIVs should be added to start model. Default is 0 (no added IIVs)}
 
 \item{rankfunc}{(str) Which ranking function should be used (OFV, AIC, BIC). Default is OFV}
 

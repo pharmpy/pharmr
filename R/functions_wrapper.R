@@ -258,6 +258,7 @@ add_estimation_step <- function(model, method, idx=NULL, ...) {
 #' @param list_of_parameters (str, vector) Name/names of parameter to add new IIVs to.
 #' @param expression (str, vector) Effect/effects on eta. Either abbreviated (see above) or custom.
 #' @param operation (str, vector, optional) Whether the new IIV should be added or multiplied (default).
+#' @param initial_estimate (numeric) Value of initial estimate of parameter. Default is 0.09
 #' @param eta_names (str, vector, optional) Custom name/names of new eta
 #'  
 #' @return (Model) Reference to the same model
@@ -280,8 +281,8 @@ add_estimation_step <- function(model, method, idx=NULL, ...) {
 #' 
 #' 
 #' @export
-add_iiv <- function(model, list_of_parameters, expression, operation='*', eta_names=NULL) {
-    func_out <- pharmpy$modeling$add_iiv(model, list_of_parameters, expression, operation, eta_names)
+add_iiv <- function(model, list_of_parameters, expression, operation='*', initial_estimate=0.09, eta_names=NULL) {
+    func_out <- pharmpy$modeling$add_iiv(model, list_of_parameters, expression, operation, initial_estimate, eta_names)
     return(py_to_r(func_out))
 }
 
@@ -432,6 +433,7 @@ add_peripheral_compartment <- function(model) {
 #' Will add exponential IIVs to all parameters that are included in the ODE.
 #' 
 #' @param model (Model) Pharmpy model to add new IIVs to.
+#' @param initial_estimate (numeric) Value of initial estimate of parameter. Default is 0.09
 #'  
 #' @return (Model) Reference to the same model
 #' 
@@ -454,8 +456,8 @@ add_peripheral_compartment <- function(model) {
 #' 
 #' 
 #' @export
-add_pk_iiv <- function(model) {
-    func_out <- pharmpy$modeling$add_pk_iiv(model)
+add_pk_iiv <- function(model, initial_estimate=0.09) {
+    func_out <- pharmpy$modeling$add_pk_iiv(model, initial_estimate)
     return(py_to_r(func_out))
 }
 
@@ -3201,8 +3203,7 @@ run_amd <- function(dataset_path, modeltype='pk_oral', cl_init=0.01, vc_init=1, 
 #' Runs two IIV workflows: testing the number of etas and testing which block structure
 #' 
 #' @param model (Model) Pharmpy model
-#' @param add_iivs (logical) Whether to add IIV on structural parameters. Default is FALSE
-#' @param iiv_as_fullblock (logical) Whether added etas should be as a fullblock. Default is FALSE
+#' @param iiv_strategy (integer) How IIVs should be added to start model. Default is 0 (no added IIVs)
 #' @param rankfunc (str) Which ranking function should be used (OFV, AIC, BIC). Default is OFV
 #' @param cutoff (numeric) Cutoff for which value of the ranking function that is considered significant. Default
 #'  is 3.84
@@ -3222,8 +3223,8 @@ run_amd <- function(dataset_path, modeltype='pk_oral', cl_init=0.01, vc_init=1, 
 #' 
 #' 
 #' @export
-run_iiv <- function(model, add_iivs=FALSE, iiv_as_fullblock=FALSE, rankfunc='ofv', cutoff=NULL, path=NULL) {
-    func_out <- pharmpy$modeling$run_iiv(model, add_iivs, iiv_as_fullblock, rankfunc, cutoff, path)
+run_iiv <- function(model, iiv_strategy=0, rankfunc='ofv', cutoff=NULL, path=NULL) {
+    func_out <- pharmpy$modeling$run_iiv(model, iiv_strategy, rankfunc, cutoff, path)
     return(py_to_r(func_out))
 }
 

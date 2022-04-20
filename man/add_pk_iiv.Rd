@@ -4,10 +4,12 @@
 \alias{add_pk_iiv}
 \title{add_pk_iiv}
 \usage{
-add_pk_iiv(model)
+add_pk_iiv(model, initial_estimate = 0.09)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model to add new IIVs to.}
+
+\item{initial_estimate}{(numeric) Value of initial estimate of parameter. Default is 0.09}
 }
 \value{
 (Model) Reference to the same model
