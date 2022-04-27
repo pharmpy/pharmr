@@ -208,7 +208,7 @@ def split_doc_to_subtypes(doc_str):
     doc_dict[doc_type_current] = []
 
     for row in doc_split:
-        if row in doc_titles.keys():
+        if row in doc_titles.keys() and doc_titles[row] not in doc_dict.keys():
             doc_type_current = doc_titles[row]
             doc_dict[doc_type_current] = []
             continue
