@@ -10,7 +10,7 @@ read_results(path)
 \item{path}{(str, Path) Path to results file}
 }
 \value{
-(Results object for tool)
+(Results) Results object for tool
 }
 \description{
 Read results object from file

@@ -12,7 +12,7 @@ run_tool(name, ...)
 \item{...}{Arguments to pass to tool}
 }
 \value{
-(Results object for tool)
+(Results) Results object for tool
 }
 \description{
 Run tool workflow

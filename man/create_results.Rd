@@ -12,7 +12,7 @@ create_results(path, ...)
 \item{...}{Arguments to pass to tool specific create results function}
 }
 \value{
-(Results object for tool)
+(Results) Results object for tool
 }
 \description{
 Create/recalculate results object given path to run directory

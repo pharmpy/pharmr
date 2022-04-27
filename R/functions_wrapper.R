@@ -1294,7 +1294,7 @@ create_report <- function(results, path) {
 #' @param path (str, Path) Path to run directory
 #' @param ... Arguments to pass to tool specific create results function
 #'  
-#' @return (Results object for tool) 
+#' @return (Results) Results object for tool
 #' 
 #' @examples
 #' \dontrun{
@@ -2171,6 +2171,33 @@ get_observations <- function(model) {
 }
 
 #' @title
+#' get_omegas
+#' 
+#' @description
+#' Get all omegas (variability parameters) of a model
+#' 
+#' @param model (Model) Pharmpy model object
+#'  
+#' @return (Parameters) A copy of all omega parameters
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' get_omegas(model)
+#' }
+#' @seealso
+#' get_thetas : Get theta parameters
+#' 
+#' get_sigmas : Get sigma parameters
+#' 
+#' 
+#' @export
+get_omegas <- function(model) {
+    func_out <- pharmpy$modeling$get_omegas(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' get_population_prediction_expression
 #' 
 #' @description
@@ -2194,6 +2221,60 @@ get_observations <- function(model) {
 #' @export
 get_population_prediction_expression <- function(model) {
     func_out <- pharmpy$modeling$get_population_prediction_expression(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' get_sigmas
+#' 
+#' @description
+#' Get all sigmas (residual error variability parameters) of a model
+#' 
+#' @param model (Model) Pharmpy model object
+#'  
+#' @return (Parameters) A copy of all sigma parameters
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' get_sigmas(model)
+#' }
+#' @seealso
+#' get_thetas : Get theta parameters
+#' 
+#' get_omegas : Get omega parameters
+#' 
+#' 
+#' @export
+get_sigmas <- function(model) {
+    func_out <- pharmpy$modeling$get_sigmas(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' get_thetas
+#' 
+#' @description
+#' Get all thetas (structural parameters) of a model
+#' 
+#' @param model (Model) Pharmpy model object
+#'  
+#' @return (Parameters) A copy of all theta parameters
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' get_thetas(model)
+#' }
+#' @seealso
+#' get_omegas : Get omega parameters
+#' 
+#' get_sigmas : Get sigma parameters
+#' 
+#' 
+#' @export
+get_thetas <- function(model) {
+    func_out <- pharmpy$modeling$get_thetas(model)
     return(py_to_r(func_out))
 }
 
@@ -2824,7 +2905,7 @@ read_model_from_string <- function(code, path=NULL) {
 #' 
 #' @param path (str, Path) Path to results file
 #'  
-#' @return (Results object for tool) 
+#' @return (Results) Results object for tool
 #' 
 #' @examples
 #' \dontrun{
@@ -3238,7 +3319,7 @@ run_iiv <- function(model, iiv_strategy=0, rankfunc='ofv', cutoff=NULL, path=NUL
 #' @param ... Arguments to pass to tool
 #' @param ... Arguments to pass to tool
 #'  
-#' @return (Results object for tool) 
+#' @return (Results) Results object for tool
 #' 
 #' @examples
 #' \dontrun{
@@ -3813,10 +3894,6 @@ set_name <- function(model, new_name) {
 #' | DVERK                      | ADVAN6           |
 #' +----------------------------+------------------+
 #' | IDA                        | ADVAN15          |
-#' +----------------------------+------------------+
-#' | GL (general linear)        | ADVAN5           |
-#' +----------------------------+------------------+
-#' | GL_REAL (real eigenvalues) | ADVAN7           |
 #' +----------------------------+------------------+
 #' | LSODA                      | ADVAN13          |
 #' +----------------------------+------------------+
