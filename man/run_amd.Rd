@@ -10,7 +10,7 @@ run_amd(
   cl_init = 0.01,
   vc_init = 1,
   mat_init = 0.1,
-  mfl = NULL,
+  search_space = NULL,
   lloq = NULL,
   order = NULL,
   categorical = NULL,
@@ -28,7 +28,7 @@ run_amd(
 
 \item{mat_init}{(numeric) Initial estimate for the mean absorption time (not for iv models)}
 
-\item{mfl}{(str) MFL for search space for structural model}
+\item{search_space}{(str) MFL for search space for structural model}
 
 \item{lloq}{(numeric) Lower limit of quantification. LOQ data will be removed.}
 

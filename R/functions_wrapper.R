@@ -3250,7 +3250,7 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' @param cl_init (numeric) Initial estimate for the population clearance
 #' @param vc_init (numeric) Initial estimate for the central compartment population volume
 #' @param mat_init (numeric) Initial estimate for the mean absorption time (not for iv models)
-#' @param mfl (str) MFL for search space for structural model
+#' @param search_space (str) MFL for search space for structural model
 #' @param lloq (numeric) Lower limit of quantification. LOQ data will be removed.
 #' @param order (vector) Runorder of components
 #' @param categorical (vector) List of categorical covariates
@@ -3270,8 +3270,8 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' 
 #' 
 #' @export
-run_amd <- function(dataset_path, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_init=0.1, mfl=NULL, lloq=NULL, order=NULL, categorical=NULL, continuous=NULL) {
-    func_out <- pharmpy$modeling$run_amd(dataset_path, modeltype, cl_init, vc_init, mat_init, mfl, lloq, order, categorical, continuous)
+run_amd <- function(dataset_path, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_init=0.1, search_space=NULL, lloq=NULL, order=NULL, categorical=NULL, continuous=NULL) {
+    func_out <- pharmpy$modeling$run_amd(dataset_path, modeltype, cl_init, vc_init, mat_init, search_space, lloq, order, categorical, continuous)
     return(py_to_r(func_out))
 }
 
