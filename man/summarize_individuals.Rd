@@ -15,6 +15,22 @@ summarize_individuals(models)
 \description{
 Creates a summary dataframe keyed by model-individual pairs for an input
 vector of models.
+
+Content of the various columns:
+
++-------------------------+----------------------------------------------------------------------+
+| Column                  | Description                                                          |
++=========================+======================================================================+
+| \code{outlier_count}       | Number of observations with CWRES > 5                                |
++-------------------------+----------------------------------------------------------------------+
+| \code{ofv}                 | Individual OFV                                                       |
++-------------------------+----------------------------------------------------------------------+
+| \code{dofv_vs_parent}      | Difference in individual OFV between this model and its parent model |
++-------------------------+----------------------------------------------------------------------+
+| \code{predicted_dofv}      | Predicted dOFV if this individual was excluded                       |
++-------------------------+----------------------------------------------------------------------+
+| \code{predicted_residual}  | Predicted residual                                                   |
++-------------------------+----------------------------------------------------------------------+
 }
 \examples{
 \dontrun{

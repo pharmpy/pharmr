@@ -1004,6 +1004,36 @@ calculate_inf_from_cov <- function(cov) {
 }
 
 #' @title
+#' calculate_parameters_from_ucp
+#' 
+#' @description
+#' Scale parameter values from ucp to normal scale
+#' 
+#' @param model (Model) Pharmpy model
+#' @param scale (UCPSCale) A parameter scale
+#' @param ucps (data.frame or list) Series of parameter values
+#'  
+#' @return (data.frame) Parameters on the normal scale
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' scale <- calculate_ucp_scale(model)
+#' values <- {'THETA(1)': 0.1, 'THETA(2)': 0.1, 'THETA(3)': 0.1, 'OMEGA(1,1)': 0.1, 'OMEGA(2,2)': 0.1, 'SIGMA(1,1)': 0.1}
+#' calculate_parameters_from_ucp(model, scale, values)
+#' }
+#' @seealso
+#' calculate_ucp_scale : Calculate the scale for conversion from ucps
+#' 
+#' 
+#' @export
+calculate_parameters_from_ucp <- function(model, scale, ucps) {
+    df <- pharmpy$modeling$calculate_parameters_from_ucp(model, scale, ucps)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
 #' calculate_pk_parameters_statistics
 #' 
 #' @description
@@ -1113,6 +1143,36 @@ calculate_se_from_inf <- function(information_matrix) {
     df <- pharmpy$modeling$calculate_se_from_inf(information_matrix)
     df_reset <- df$reset_index()
     return(py_to_r(df_reset))
+}
+
+#' @title
+#' calculate_ucp_scale
+#' 
+#' @description
+#' Calculate a scale for unconstrained parameters for a model
+#' 
+#' The UCPScale object can be used to calculate unconstrained parameters
+#' back into the normal parameter space.
+#' 
+#' @param model (Model) Model for which to calculate an ucp scale
+#'  
+#' @return (UCPScale) A scale object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' scale <- calculate_ucp_scale(model)
+#' }
+#' @seealso
+#' calculate_parameters_from_ucp : Calculate parameters from ucp:s
+#' 
+#' 
+#' 
+#' 
+#' @export
+calculate_ucp_scale <- function(model) {
+    func_out <- pharmpy$modeling$calculate_ucp_scale(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -1660,7 +1720,7 @@ expand_additional_doses <- function(model, flag=FALSE) {
 #' @description
 #' Fit models.
 #' 
-#' @param models (vector) List of models or_ one single model
+#' @param models (vector) List of models or one single model
 #' @param tool (str) Estimation tool to use. NULL to use default
 #'  
 #' @return (Model) Reference to same model
@@ -3276,36 +3336,57 @@ run_amd <- function(dataset_path, modeltype='pk_oral', cl_init=0.01, vc_init=1, 
 }
 
 #' @title
-#' run_iiv
+#' run_iivsearch
 #' 
 #' @description
-#' Run IIV tool
+#' Run IIVsearch tool. For more details, see :ref:`iivsearch`.
 #' 
-#' Runs two IIV workflows: testing the number of etas and testing which block structure
-#' 
-#' @param model (Model) Pharmpy model
+#' @param algorithm (str) Which algorithm to run (brute_force, brute_force_no_of_etas, brute_force_block_structure)
 #' @param iiv_strategy (integer) How IIVs should be added to start model. Default is 0 (no added IIVs)
-#' @param rankfunc (str) Which ranking function should be used (OFV, AIC, BIC). Default is OFV
+#' @param rankfunc (str) Which ranking function should be used (OFV, AIC, BIC). Default is BIC
 #' @param cutoff (numeric) Cutoff for which value of the ranking function that is considered significant. Default
-#'  is 3.84
-#' @param path (Path) Path of rundirectory
+#'  is NULL (all models will be ranked)
+#' @param model (Model) Pharmpy model
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (IIVResults) IIVsearch tool result object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' run_iiv(model)
+#' run_iivsearch('brute_force', model=model)
 #' }
-#' @seealso
-#' run_amd
-#' 
-#' run_tool
-#' 
 #' 
 #' @export
-run_iiv <- function(model, iiv_strategy=0, rankfunc='ofv', cutoff=NULL, path=NULL) {
-    func_out <- pharmpy$modeling$run_iiv(model, iiv_strategy, rankfunc, cutoff, path)
+run_iivsearch <- function(algorithm, iiv_strategy=0, rankfunc='bic', cutoff=NULL, model=NULL) {
+    func_out <- pharmpy$modeling$run_iivsearch(algorithm, iiv_strategy, rankfunc, cutoff, model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' run_modelsearch
+#' 
+#' @description
+#' Run Modelsearch tool. For more details, see :ref:`modelsearch`.
+#' 
+#' @param search_space (str) Search space to test
+#' @param algorithm (str) Algorithm to use (e.g. exhaustive)
+#' @param iiv_strategy (integer) If/how IIV should be added to candidate models. Default is 0 (no IIVs added)
+#' @param rankfunc (str) Which ranking function should be used (OFV, AIC, BIC). Default is BIC
+#' @param cutoff (numeric) Cutoff for which value of the ranking function that is considered significant. Default
+#'  is NULL (all models will be ranked)
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (ModelSearchResults) Modelsearch tool result object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' run_modelsearch('ABSORPTION(ZO);PERIPHERALS(1)', 'exhaustive', model=model)
+#' }
+#' 
+#' @export
+run_modelsearch <- function(search_space, algorithm, iiv_strategy=0, rankfunc='bic', cutoff=NULL, model=NULL) {
+    func_out <- pharmpy$modeling$run_modelsearch(search_space, algorithm, iiv_strategy, rankfunc, cutoff, model)
     return(py_to_r(func_out))
 }
 
@@ -4292,6 +4373,22 @@ split_joint_distribution <- function(model, rvs=NULL) {
 #' Creates a summary dataframe keyed by model-individual pairs for an input
 #' vector of models.
 #' 
+#' Content of the various columns:
+#' 
+#' +-------------------------+----------------------------------------------------------------------+
+#' | Column                  | Description                                                          |
+#' +=========================+======================================================================+
+#' | ``outlier_count``       | Number of observations with CWRES > 5                                |
+#' +-------------------------+----------------------------------------------------------------------+
+#' | ``ofv``                 | Individual OFV                                                       |
+#' +-------------------------+----------------------------------------------------------------------+
+#' | ``dofv_vs_parent``      | Difference in individual OFV between this model and its parent model |
+#' +-------------------------+----------------------------------------------------------------------+
+#' | ``predicted_dofv``      | Predicted dOFV if this individual was excluded                       |
+#' +-------------------------+----------------------------------------------------------------------+
+#' | ``predicted_residual``  | Predicted residual                                                   |
+#' +-------------------------+----------------------------------------------------------------------+
+#' 
 #' @param models (vector of Models) Input models
 #'  
 #' @return (data.frame | NULL) The summary as a dataframe
@@ -4310,6 +4407,45 @@ split_joint_distribution <- function(model, rvs=NULL) {
 #' @export
 summarize_individuals <- function(models) {
     df <- pharmpy$modeling$summarize_individuals(models)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
+#' summarize_individuals_count_table
+#' 
+#' @description
+#' Create a count table for individual data
+#' 
+#' Content of the various columns:
+#' 
+#' +-------------------------+---------------------------------------------------------------------------------+
+#' | Column                  | Description                                                                     |
+#' +=========================+=================================================================================+
+#' | ``inf_selection``       | Number of subjects influential on model selection.                              |
+#' |                         | :math:`||dOFV_i|  - |OFV_{parent} - OFV|| > 3.84`                               |
+#' +-------------------------+---------------------------------------------------------------------------------+
+#' | ``inf_params``          | Number of subjects influential on parameters. predicted_dofv > 3.84             |
+#' +-------------------------+---------------------------------------------------------------------------------+
+#' | ``out_obs``             | Number of subjects having at least one outlying observation                     |
+#' +-------------------------+---------------------------------------------------------------------------------+
+#' | ``out_ind``             | Number of outlying subjects. predicted_residual > 3.0                           |
+#' +-------------------------+---------------------------------------------------------------------------------+
+#' | ``inf_outlier``         | Number of subjects both influential by any criteria and outlier by any criteria |
+#' +-------------------------+---------------------------------------------------------------------------------+
+#' 
+#' @param models (vector of models) List of models to summarize.
+#' @param df (data.frame) Output from a previous call to summarize_individuals.
+#'  
+#' @return (data.frame) Table with one row per model.
+#' 
+#' @seealso
+#' summarize_individuals : Get raw individual data
+#' 
+#' 
+#' @export
+summarize_individuals_count_table <- function(models, df) {
+    df <- pharmpy$modeling$summarize_individuals_count_table(models, df)
     df_reset <- df$reset_index()
     return(py_to_r(df_reset))
 }
