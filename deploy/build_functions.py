@@ -1,4 +1,4 @@
-from inspect import getdoc, getfullargspec, getmembers, isfunction
+from inspect import getdoc, getfullargspec, getmembers, isfunction, getsourcefile
 import os
 from pathlib import Path
 import re
@@ -9,8 +9,9 @@ import pharmpy.modeling
 def create_functions():
     modeling_functions = getmembers(pharmpy.modeling, isfunction)
     full_str = ''
-
-    for _, func in modeling_functions:
+    for name, func in modeling_functions:
+        if name not in pharmpy.modeling.__all__:
+            continue
         r_func = create_r_func(func)
         r_doc = create_r_doc(func)
         full_str += f'{r_doc}\n{r_func}\n\n'
