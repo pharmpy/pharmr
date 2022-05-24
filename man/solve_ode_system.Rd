@@ -23,7 +23,6 @@ This function can currently only handle the most simple of ODE systems.
 model <- load_example_model("pheno")
 model$statements$ode_system
 solve_ode_system(model)
-model$statements$ode_system
 }
 
 }

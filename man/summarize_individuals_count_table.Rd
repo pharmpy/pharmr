@@ -19,20 +19,21 @@ Create a count table for individual data
 
 Content of the various columns:
 
-+-------------------------+---------------------------------------------------------------------------------+
-| Column                  | Description                                                                     |
-+=========================+=================================================================================+
-| \code{inf_selection}       | Number of subjects influential on model selection.                              |
-|                         | :math:\verb{||dOFV_i|  - |OFV_\{parent\} - OFV|| > 3.84}                               |
-+-------------------------+---------------------------------------------------------------------------------+
-| \code{inf_params}          | Number of subjects influential on parameters. predicted_dofv > 3.84             |
-+-------------------------+---------------------------------------------------------------------------------+
-| \code{out_obs}             | Number of subjects having at least one outlying observation                     |
-+-------------------------+---------------------------------------------------------------------------------+
-| \code{out_ind}             | Number of outlying subjects. predicted_residual > 3.0                           |
-+-------------------------+---------------------------------------------------------------------------------+
-| \code{inf_outlier}         | Number of subjects both influential by any criteria and outlier by any criteria |
-+-------------------------+---------------------------------------------------------------------------------+
++-------------------------+------------------------------------------------------------------------------------------------+
+| Column                  | Description                                                                                    |
++=========================+================================================================================================+
+| \code{inf_selection}       | Number of subjects influential on model selection.                                             |
+|                         | :math:\verb{\\mathrm\{OFV\}_\{parent\} - \\mathrm\{OFV\} > 3.84 \\veebar}                                    |
+|                         | :math:\verb{\\mathrm\{OFV\}_\{parent\} - \\mathrm\{iOFV\}_\{parent\} - (\\mathrm\{OFV\} - \\mathrm\{iOFV\}) > 3.84} |
++-------------------------+------------------------------------------------------------------------------------------------+
+| \code{inf_params}          | Number of subjects influential on parameters. predicted_dofv > 3.84                            |
++-------------------------+------------------------------------------------------------------------------------------------+
+| \code{out_obs}             | Number of subjects having at least one outlying observation (CWRES > 5)                        |
++-------------------------+------------------------------------------------------------------------------------------------+
+| \code{out_ind}             | Number of outlying subjects. predicted_residual > 3.0                                          |
++-------------------------+------------------------------------------------------------------------------------------------+
+| \code{inf_outlier}         | Number of subjects both influential by any criteria and outlier by any criteria                |
++-------------------------+------------------------------------------------------------------------------------------------+
 }
 \seealso{
 summarize_individuals : Get raw individual data

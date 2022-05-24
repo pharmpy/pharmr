@@ -1715,6 +1715,50 @@ expand_additional_doses <- function(model, flag=FALSE) {
 }
 
 #' @title
+#' find_clearance_parameters
+#' 
+#' @description
+#' Find clearance parameters in model
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (vector) A vector of clearance parameters
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' find_clearance_parameters(model)
+#' }
+#' 
+#' @export
+find_clearance_parameters <- function(model) {
+    func_out <- pharmpy$modeling$find_clearance_parameters(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' find_volume_parameters
+#' 
+#' @description
+#' Find volume parameters in model
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (vector) A vector of volume parameters
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' find_volume_parameters(model)
+#' }
+#' 
+#' @export
+find_volume_parameters <- function(model) {
+    func_out <- pharmpy$modeling$find_volume_parameters(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' fit
 #' 
 #' @description
@@ -4327,7 +4371,6 @@ simplify_expression <- function(model, expr) {
 #' model <- load_example_model("pheno")
 #' model$statements$ode_system
 #' solve_ode_system(model)
-#' model$statements$ode_system
 #' }
 #' 
 #' @export
@@ -4419,20 +4462,21 @@ summarize_individuals <- function(models) {
 #' 
 #' Content of the various columns:
 #' 
-#' +-------------------------+---------------------------------------------------------------------------------+
-#' | Column                  | Description                                                                     |
-#' +=========================+=================================================================================+
-#' | ``inf_selection``       | Number of subjects influential on model selection.                              |
-#' |                         | :math:`||dOFV_i|  - |OFV_{parent} - OFV|| > 3.84`                               |
-#' +-------------------------+---------------------------------------------------------------------------------+
-#' | ``inf_params``          | Number of subjects influential on parameters. predicted_dofv > 3.84             |
-#' +-------------------------+---------------------------------------------------------------------------------+
-#' | ``out_obs``             | Number of subjects having at least one outlying observation                     |
-#' +-------------------------+---------------------------------------------------------------------------------+
-#' | ``out_ind``             | Number of outlying subjects. predicted_residual > 3.0                           |
-#' +-------------------------+---------------------------------------------------------------------------------+
-#' | ``inf_outlier``         | Number of subjects both influential by any criteria and outlier by any criteria |
-#' +-------------------------+---------------------------------------------------------------------------------+
+#' +-------------------------+------------------------------------------------------------------------------------------------+
+#' | Column                  | Description                                                                                    |
+#' +=========================+================================================================================================+
+#' | ``inf_selection``       | Number of subjects influential on model selection.                                             |
+#' |                         | :math:`\mathrm{OFV}_{parent} - \mathrm{OFV} > 3.84 \veebar`                                    |
+#' |                         | :math:`\mathrm{OFV}_{parent} - \mathrm{iOFV}_{parent} - (\mathrm{OFV} - \mathrm{iOFV}) > 3.84` |
+#' +-------------------------+------------------------------------------------------------------------------------------------+
+#' | ``inf_params``          | Number of subjects influential on parameters. predicted_dofv > 3.84                            |
+#' +-------------------------+------------------------------------------------------------------------------------------------+
+#' | ``out_obs``             | Number of subjects having at least one outlying observation (CWRES > 5)                        |
+#' +-------------------------+------------------------------------------------------------------------------------------------+
+#' | ``out_ind``             | Number of outlying subjects. predicted_residual > 3.0                                          |
+#' +-------------------------+------------------------------------------------------------------------------------------------+
+#' | ``inf_outlier``         | Number of subjects both influential by any criteria and outlier by any criteria                |
+#' +-------------------------+------------------------------------------------------------------------------------------------+
 #' 
 #' @param models (vector of models) List of models to summarize.
 #' @param df (data.frame) Output from a previous call to summarize_individuals.
