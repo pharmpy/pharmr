@@ -16,7 +16,7 @@ Authors@R: c(
   )
 Maintainer: Rikard Nordgren <rikard.nordgren@farmaci.uu.se>
 Depends:
-    R (>= 3.3.0),
+    R (>= 3.6.0),
     altair (>= 4.0.0)
 SystemRequirements:
     Python (>= 3.7.0)
@@ -26,7 +26,8 @@ Imports:
 Suggests:
     testthat,
     magrittr,
-    here
+    here,
+    knitr
 NeedsCompilation: no
 Description: Interface to the 'Pharmpy' 'pharmacometrics' library. The 'Reticulate' package is used to interface Python from R.
 Config/reticulate:
