@@ -12,5 +12,5 @@ install_pharmpy(envname = "r-reticulate", method = "auto")
 \item{method}{(str) type of environment type (virtualenv, conda). Default is auto (virtualenv is not available on Windows)}
 }
 \description{
-Install the pharmpy-core python package into virtual environment.
+Install the pharmpy-core python package into virtual environment. Uses the same Pharmpy version as pharmr.
 }
