@@ -324,6 +324,10 @@ add_individual_parameter <- function(model, name) {
 #'  names, or a mix of both.
 #' @param eta_names (str, vector) Custom names of new etas. Must be equal to the number of input etas times the number of
 #'  categories for occasion.
+#' @param distribution (str) The distribution that should be used for the new etas. Options are
+#'  'disjoint' for disjoint normal distributions, 'joint' for joint normal
+#'  distribution, 'explicit' for an explicit mix of joint and disjoint
+#'  distributions, and 'same-as-iiv' for copying the distribution of IIV etas.
 #'  
 #' @return (Model) Reference to the same model
 #' 
@@ -344,8 +348,8 @@ add_individual_parameter <- function(model, name) {
 #' 
 #' 
 #' @export
-add_iov <- function(model, occ, list_of_parameters=NULL, eta_names=NULL) {
-    func_out <- pharmpy$modeling$add_iov(model, occ, list_of_parameters, eta_names)
+add_iov <- function(model, occ, list_of_parameters=NULL, eta_names=NULL, distribution='disjoint') {
+    func_out <- pharmpy$modeling$add_iov(model, occ, list_of_parameters, eta_names, distribution)
     return(py_to_r(func_out))
 }
 
@@ -458,6 +462,34 @@ add_peripheral_compartment <- function(model) {
 #' @export
 add_pk_iiv <- function(model, initial_estimate=0.09) {
     func_out <- pharmpy$modeling$add_pk_iiv(model, initial_estimate)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' add_population_parameter
+#' 
+#' @description
+#' Add a new population parameter to the model
+#' 
+#' @param model (Model) Pharmpy model
+#' @param name (str) Name of the new parameter
+#' @param init (numeric) Initial estimate of the new parameter
+#' @param lower (numeric) Lower bound of the new parameter
+#' @param upper (numeric) Upper bound of the new parameter
+#' @param fix (logical) Should the new parameter be fixed?
+#'  
+#' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' add_population_parameter(model, 'POP_KA', 2)
+#' model$parameters
+#' }
+#' 
+#' @export
+add_population_parameter <- function(model, name, init, lower=NULL, upper=NULL, fix=FALSE) {
+    func_out <- pharmpy$modeling$add_population_parameter(model, name, init, lower, upper, fix)
     return(py_to_r(func_out))
 }
 
@@ -1247,6 +1279,40 @@ check_parameters_near_bounds <- function(model, values=NULL, zero_limit=0.001, s
 }
 
 #' @title
+#' cleanup_model
+#' 
+#' @description
+#' Perform various cleanups of a model
+#' 
+#' This is what is currently done
+#' 
+#' * Make model statements declarative, i.e. only one assignment per symbol
+#' * Inline all assignments of one symbol, e.g. X = Y
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#'  Result
+#'  Model
+#'  Reference to the same model
+#'  
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model$statements
+#' cleanup_model(model)
+#' model$statements
+#' }
+#' @note
+#' When creating NONMEM code from the cleaned model Pharmpy might need toadd certain assignments to make it in line with what NONMEM requires.
+#' 
+#' 
+#' @export
+cleanup_model <- function(model) {
+    func_out <- pharmpy$modeling$cleanup_model(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' convert_model
 #' 
 #' @description
@@ -1391,7 +1457,7 @@ create_results <- function(path, ...) {
 #' }
 #' 
 #' @export
-create_rng <- function(seed) {
+create_rng <- function(seed=NULL) {
     func_out <- pharmpy$modeling$create_rng(seed)
     return(py_to_r(func_out))
 }
@@ -1785,6 +1851,46 @@ fit <- function(models, tool=NULL) {
 }
 
 #' @title
+#' fix_or_unfix_parameters
+#' 
+#' @description
+#' Fix or unfix parameters
+#' 
+#' Set fixedness of parameters to specified values
+#' 
+#' @param model (Model) Pharmpy model
+#' @param parameters (list) Set fix/unfix for these parameters
+#'  
+#' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model$parameters['THETA(1)']
+#' fix_or_unfix_parameters(model, list('THETA(1)'=TRUE))
+#' model$parameters['THETA(1)']
+#' }
+#' @seealso
+#' fix_parameters : Fix parameters
+#' 
+#' unfix_paramaters : Unfixing parameters
+#' 
+#' fix_paramaters_to : Fixing parameters and setting a new initial estimate in the same
+#' 
+#' function
+#' 
+#' unfix_paramaters_to : Unfixing parameters and setting a new initial estimate in the same
+#' 
+#' function
+#' 
+#' 
+#' @export
+fix_or_unfix_parameters <- function(model, parameters) {
+    func_out <- pharmpy$modeling$fix_or_unfix_parameters(model, parameters)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' fix_parameters
 #' 
 #' @description
@@ -1805,6 +1911,8 @@ fit <- function(models, tool=NULL) {
 #' model$parameters['THETA(1)']
 #' }
 #' @seealso
+#' fix_or_unfix_parameters : Fix or unfix parameters (given boolean)
+#' 
 #' fix_parameters_to : Fixing and setting parameter initial estimates in the same function
 #' 
 #' unfix_paramaters : Unfixing parameters
@@ -1829,8 +1937,7 @@ fix_parameters <- function(model, parameter_names) {
 #' Fix all listed parameters to specified value/values
 #' 
 #' @param model (Model) Pharmpy model
-#' @param parameter_names (vector or str) one parameter name or a vector of parameter names
-#' @param values (vector or numeric) one value or a vector of values (must be equal to number of parameter_names)
+#' @param inits (list) Inits for all parameters to fix and set init
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -1838,11 +1945,13 @@ fix_parameters <- function(model, parameter_names) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$parameters['THETA(1)']
-#' fix_parameters_to(model, 'THETA(1)', 0.5)
+#' fix_parameters_to(model, {'THETA(1)': 0.5})
 #' model$parameters['THETA(1)']
 #' }
 #' @seealso
 #' fix_parameters : Fix parameters
+#' 
+#' fix_or_unfix_parameters : Fix or unfix parameters (given boolean)
 #' 
 #' unfix_paramaters : Unfixing parameters
 #' 
@@ -1852,8 +1961,8 @@ fix_parameters <- function(model, parameter_names) {
 #' 
 #' 
 #' @export
-fix_parameters_to <- function(model, parameter_names, values) {
-    func_out <- pharmpy$modeling$fix_parameters_to(model, parameter_names, values)
+fix_parameters_to <- function(model, inits) {
+    func_out <- pharmpy$modeling$fix_parameters_to(model, inits)
     return(py_to_r(func_out))
 }
 
@@ -1902,6 +2011,23 @@ get_baselines <- function(model) {
     df <- pharmpy$modeling$get_baselines(model)
     df_reset <- df$reset_index()
     return(py_to_r(df_reset))
+}
+
+#' @title
+#' get_bioavailability
+#' 
+#' @description
+#' Get bioavailability of doses for all compartments
+#' 
+#' @param model (Pharmpy model) 
+#'  Result
+#'  list
+#'  Dictionary from compartment name to bioavailability expression
+#' 
+#' @export
+get_bioavailability <- function(model) {
+    func_out <- pharmpy$modeling$get_bioavailability(model)
+    return(py_to_r(func_out))
 }
 
 #' @title
@@ -2076,6 +2202,23 @@ get_ids <- function(model) {
 #' @export
 get_individual_prediction_expression <- function(model) {
     func_out <- pharmpy$modeling$get_individual_prediction_expression(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' get_lag_times
+#' 
+#' @description
+#' Get lag times for all compartments
+#' 
+#' @param model (Pharmpy model) 
+#'  Result
+#'  list
+#'  Dictionary from compartment name to lag time expression
+#' 
+#' @export
+get_lag_times <- function(model) {
+    func_out <- pharmpy$modeling$get_lag_times(model)
     return(py_to_r(func_out))
 }
 
@@ -2412,6 +2555,33 @@ get_unit_of <- function(model, variable) {
 }
 
 #' @title
+#' greekify_model
+#' 
+#' @description
+#' Convert to using greek letters for all population parameters
+#' 
+#' @param model (Model) Pharmpy model
+#' @param named_subscripts (logical) Use previous parameter names as subscripts. Default is to use integer subscripts
+#'  
+#'  Result
+#'  Model
+#'  Reference to the same model
+#'  
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model$statements
+#' greekify_model(cleanup_model(model))
+#' model$statements
+#' }
+#' 
+#' @export
+greekify_model <- function(model, named_subscripts=FALSE) {
+    func_out <- pharmpy$modeling$greekify_model(model, named_subscripts)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' has_additive_error_model
 #' 
 #' @description
@@ -2670,6 +2840,32 @@ list_time_varying_covariates <- function(model) {
 #' @export
 load_example_model <- function(name) {
     func_out <- pharmpy$modeling$load_example_model(name)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' make_declarative
+#' 
+#' @description
+#' Make the model statments declarative
+#' 
+#' Each symbol will only be declared once.
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (Model) Reference to the same model
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model$statements$before_odes
+#' make_declarative(model)
+#' model$statements$before_odes
+#' }
+#' 
+#' @export
+make_declarative <- function(model) {
+    func_out <- pharmpy$modeling$make_declarative(model)
     return(py_to_r(func_out))
 }
 
@@ -3305,6 +3501,26 @@ remove_unused_parameters_and_rvs <- function(model) {
 }
 
 #' @title
+#' rename_symbols
+#' 
+#' @description
+#' Rename symbols in the model
+#' 
+#' Make sure that no name clash occur.
+#' 
+#' @param model (Model) Pharmpy model object
+#' @param new_names (list) From old name or symbol to new name or symbol
+#'  
+#' @return (Model) Reference to same model object
+#' 
+#' 
+#' @export
+rename_symbols <- function(model, new_names) {
+    func_out <- pharmpy$modeling$rename_symbols(model, new_names)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' resample_data
 #' 
 #' @description
@@ -3342,6 +3558,35 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 }
 
 #' @title
+#' run_allometry
+#' 
+#' @description
+#' Run allometry tool. For more details, see :ref:`allometry`.
+#' 
+#' @param model (Model) Pharmpy model
+#' @param allometric_variable (str) Name of the variable to use for allometric scaling (default is WT)
+#' @param reference_value (numeric) Reference value for the allometric variable (default is 70)
+#' @param parameters (vector) Parameters to apply scaling to (default is all CL, Q and V parameters)
+#' @param initials (vector) Initial estimates for the exponents. (default is to use 0.75 for CL and Qs and 1 for Vs)
+#' @param lower_bounds (vector) Lower bounds for the exponents. (default is 0 for all parameters)
+#' @param upper_bounds (vector) Upper bounds for the exponents. (default is 2 for all parameters)
+#' @param fixed (logical) Should the exponents be fixed or not. (default TRUE)
+#'  
+#' @return (AllometryResults) Allometry tool result object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' run_allometry(model=model, allometric_variable='WGT')
+#' }
+#' 
+#' @export
+run_allometry <- function(model=NULL, allometric_variable='WT', reference_value=70, parameters=NULL, initials=NULL, lower_bounds=NULL, upper_bounds=NULL, fixed=TRUE) {
+    func_out <- pharmpy$modeling$run_allometry(model, allometric_variable, reference_value, parameters, initials, lower_bounds, upper_bounds, fixed)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' run_amd
 #' 
 #' @description
@@ -3349,7 +3594,7 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' 
 #' Runs structural modelsearch, IIV building, and resmod
 #' 
-#' @param dataset_path (Model) Path to a dataset
+#' @param input (Model) Read model object/Path to a dataset
 #' @param modeltype (str) Type of model to build. Either 'pk_oral' or 'pk_iv'
 #' @param cl_init (numeric) Initial estimate for the population clearance
 #' @param vc_init (numeric) Initial estimate for the central compartment population volume
@@ -3359,6 +3604,8 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' @param order (vector) Runorder of components
 #' @param categorical (vector) List of categorical covariates
 #' @param continuous (vector) List of continuouts covariates
+#' @param allometric_variable (str or Symbol) Variable to use for allometry
+#' @param occasion (str) Name of occasion column
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -3374,8 +3621,8 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' 
 #' 
 #' @export
-run_amd <- function(dataset_path, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_init=0.1, search_space=NULL, lloq=NULL, order=NULL, categorical=NULL, continuous=NULL) {
-    func_out <- pharmpy$modeling$run_amd(dataset_path, modeltype, cl_init, vc_init, mat_init, search_space, lloq, order, categorical, continuous)
+run_amd <- function(input, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_init=0.1, search_space=NULL, lloq=NULL, order=NULL, categorical=NULL, continuous=NULL, allometric_variable=NULL, occasion=NULL) {
+    func_out <- pharmpy$modeling$run_amd(input, modeltype, cl_init, vc_init, mat_init, search_space, lloq, order, categorical, continuous, allometric_variable, occasion)
     return(py_to_r(func_out))
 }
 
@@ -3386,7 +3633,8 @@ run_amd <- function(dataset_path, modeltype='pk_oral', cl_init=0.01, vc_init=1, 
 #' Run IIVsearch tool. For more details, see :ref:`iivsearch`.
 #' 
 #' @param algorithm (str) Which algorithm to run (brute_force, brute_force_no_of_etas, brute_force_block_structure)
-#' @param iiv_strategy (integer) How IIVs should be added to start model. Default is 0 (no added IIVs)
+#' @param iiv_strategy (str) If/how IIV should be added to start model. Possible strategies are 'no_add', 'diagonal', or
+#'  'fullblock'. Default is 'no_add'
 #' @param rankfunc (str) Which ranking function should be used (OFV, AIC, BIC). Default is BIC
 #' @param cutoff (numeric) Cutoff for which value of the ranking function that is considered significant. Default
 #'  is NULL (all models will be ranked)
@@ -3401,7 +3649,7 @@ run_amd <- function(dataset_path, modeltype='pk_oral', cl_init=0.01, vc_init=1, 
 #' }
 #' 
 #' @export
-run_iivsearch <- function(algorithm, iiv_strategy=0, rankfunc='bic', cutoff=NULL, model=NULL) {
+run_iivsearch <- function(algorithm, iiv_strategy='no_add', rankfunc='bic', cutoff=NULL, model=NULL) {
     func_out <- pharmpy$modeling$run_iivsearch(algorithm, iiv_strategy, rankfunc, cutoff, model)
     return(py_to_r(func_out))
 }
@@ -3414,7 +3662,8 @@ run_iivsearch <- function(algorithm, iiv_strategy=0, rankfunc='bic', cutoff=NULL
 #' 
 #' @param search_space (str) Search space to test
 #' @param algorithm (str) Algorithm to use (e.g. exhaustive)
-#' @param iiv_strategy (integer) If/how IIV should be added to candidate models. Default is 0 (no IIVs added)
+#' @param iiv_strategy (str) If/how IIV should be added to candidate models. Possible strategies are 'no_add',
+#'  'diagonal', 'fullblock', or 'absorption_delay'. Default is 'no_add'
 #' @param rankfunc (str) Which ranking function should be used (OFV, AIC, BIC). Default is BIC
 #' @param cutoff (numeric) Cutoff for which value of the ranking function that is considered significant. Default
 #'  is NULL (all models will be ranked)
@@ -3429,8 +3678,33 @@ run_iivsearch <- function(algorithm, iiv_strategy=0, rankfunc='bic', cutoff=NULL
 #' }
 #' 
 #' @export
-run_modelsearch <- function(search_space, algorithm, iiv_strategy=0, rankfunc='bic', cutoff=NULL, model=NULL) {
+run_modelsearch <- function(search_space, algorithm, iiv_strategy='no_add', rankfunc='bic', cutoff=NULL, model=NULL) {
     func_out <- pharmpy$modeling$run_modelsearch(search_space, algorithm, iiv_strategy, rankfunc, cutoff, model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' run_resmod
+#' 
+#' @description
+#' Run the resmod tool. For more details, see :ref:`resmod`.
+#' 
+#' @param model (Model) Pharmpy model
+#' @param groups (integer) The number of bins to use for the time varying models
+#' @param p_value (numeric) The p-value to use for the likelihood ratio test
+#' @param skip (vector) A vector of models to not attempt.
+#'  
+#' @return (ResmodResults) Resmod tool result object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' run_resmod(model=model)
+#' }
+#' 
+#' @export
+run_resmod <- function(model=NULL, groups=4, p_value=0.05, skip=NULL) {
+    func_out <- pharmpy$modeling$run_resmod(model, groups, p_value, skip)
     return(py_to_r(func_out))
 }
 
@@ -3907,10 +4181,44 @@ set_iiv_on_ruv <- function(model, list_of_eps=NULL, same_eta=TRUE, eta_names=NUL
 #' set_initial_estimates(model, list('THETA(1)'=2))
 #' model$parameters['THETA(1)']
 #' }
+#' @seealso
+#' fix_parameters_to : Fixing and setting parameter initial estimates in the same function
+#' 
+#' unfix_paramaters_to : Unfixing parameters and setting a new initial estimate in the same
+#' 
 #' 
 #' @export
 set_initial_estimates <- function(model, inits) {
     func_out <- pharmpy$modeling$set_initial_estimates(model, inits)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' set_lower_bounds
+#' 
+#' @description
+#' Set parameter lower bounds
+#' 
+#' @param model (Model) Pharmpy model
+#' @param bounds (list) A list of parameter bounds for parameters to change
+#'  
+#' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' set_lower_bounds(model, {'THETA(1)': -10})
+#' model$parameters['THETA(1)']
+#' }
+#' @seealso
+#' set_upper_bounds : Set parameter upper bounds
+#' 
+#' unconstrain_parameters : Remove all constraints of parameters
+#' 
+#' 
+#' @export
+set_lower_bounds <- function(model, bounds) {
+    func_out <- pharmpy$modeling$set_lower_bounds(model, bounds)
     return(py_to_r(func_out))
 }
 
@@ -4243,6 +4551,35 @@ set_transit_compartments <- function(model, n, keep_depot=TRUE) {
 }
 
 #' @title
+#' set_upper_bounds
+#' 
+#' @description
+#' Set parameter upper bounds
+#' 
+#' @param model (Model) Pharmpy model
+#' @param bounds (list) A list of parameter bounds for parameters to change
+#'  
+#' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' set_upper_bounds(model, list('THETA(1)'=10))
+#' model$parameters['THETA(1)']
+#' }
+#' @seealso
+#' set_lower_bounds : Set parameter lower bounds
+#' 
+#' unconstrain_parameters : Remove all constraints of parameters
+#' 
+#' 
+#' @export
+set_upper_bounds <- function(model, bounds) {
+    func_out <- pharmpy$modeling$set_upper_bounds(model, bounds)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' set_weighted_error_model
 #' 
 #' @description
@@ -4410,6 +4747,31 @@ split_joint_distribution <- function(model, rvs=NULL) {
 }
 
 #' @title
+#' summarize_errors
+#' 
+#' @description
+#' Summarize errors and warnings from one or multiple model runs.
+#' 
+#' Summarize the errors and warnings found after running the model/models.
+#' 
+#' @param models (vector, Model) List of models or single model
+#'  
+#' @return (data.frame) A DataFrame of errors with model name, category (error or warning), and an integer as index, an empty DataFrame if there were no errors or warnings found.
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' summarize_errors(model)
+#' }
+#' 
+#' @export
+summarize_errors <- function(models) {
+    df <- pharmpy$modeling$summarize_errors(models)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
 #' summarize_individuals
 #' 
 #' @description
@@ -4488,7 +4850,7 @@ summarize_individuals <- function(models) {
 #' 
 #' 
 #' @export
-summarize_individuals_count_table <- function(models, df) {
+summarize_individuals_count_table <- function(models=NULL, df=NULL) {
     df <- pharmpy$modeling$summarize_individuals_count_table(models, df)
     df_reset <- df$reset_index()
     return(py_to_r(df_reset))
@@ -4515,7 +4877,7 @@ summarize_individuals_count_table <- function(models, df) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' summarize_modelfit_results(c(model))
+#' summarize_modelfit_results(model)
 #' }
 #' 
 #' @export
@@ -4646,6 +5008,38 @@ translate_nmtran_time <- function(model) {
 }
 
 #' @title
+#' unconstrain_parameters
+#' 
+#' @description
+#' Remove all constraints from parameters
+#' 
+#' @param model (Model) Pharmpy model
+#' @param parameter_names (vector) Remove all constraints for the listed parameters
+#'  
+#' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model$parameters['THETA(1)']
+#' unconstrain_parameters(model, c('THETA(1)'))
+#' model$parameters['THETA(1)']
+#' }
+#' @seealso
+#' set_lower_bounds : Set parameter lower bounds
+#' 
+#' set_upper_bounds : Set parameter upper bounds
+#' 
+#' unfix_parameters : Unfix parameters
+#' 
+#' 
+#' @export
+unconstrain_parameters <- function(model, parameter_names) {
+    func_out <- pharmpy$modeling$unconstrain_parameters(model, parameter_names)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' undrop_columns
 #' 
 #' @description
@@ -4702,7 +5096,11 @@ undrop_columns <- function(model, column_names) {
 #' 
 #' fix_parameters : Fix parameters
 #' 
+#' fix_or_unfix_parameters : Fix or unfix parameters (given boolean)
+#' 
 #' fix_parameters_to : Fixing and setting parameter initial estimates in the same function
+#' 
+#' unconstrain_parameters : Remove all constraints of parameters
 #' 
 #' 
 #' @export
@@ -4715,13 +5113,12 @@ unfix_parameters <- function(model, parameter_names) {
 #' unfix_parameters_to
 #' 
 #' @description
-#' Unix parameters to
+#' Unfix parameters to
 #' 
 #' Unfix all listed parameters to specified value/values
 #' 
 #' @param model (Model) Pharmpy model
-#' @param parameter_names (vector or str) one parameter name or a vector of parameter names
-#' @param values (vector or numeric) one value or a vector of values (must be equal to number of parameter_names)
+#' @param inits (list) Inits for all parameters to unfix and change init
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -4730,14 +5127,25 @@ unfix_parameters <- function(model, parameter_names) {
 #' model <- load_example_model("pheno")
 #' fix_parameters(model, c('THETA(1)', 'THETA(2)', 'THETA(3)'))
 #' model$parameters$fix
-#' unfix_parameters_to(model, 'THETA(1)', 0.5)
+#' unfix_parameters_to(model, {'THETA(1)': 0.5})
 #' model$parameters$fix
 #' model$parameters['THETA(1)']
 #' }
+#' @seealso
+#' fix_parameters : Fix parameters
+#' 
+#' fix_or_unfix_parameters : Fix or unfix parameters (given boolean)
+#' 
+#' unfix_paramaters : Unfixing parameters
+#' 
+#' fix_paramaters_to : Fixing parameters and setting a new initial estimate in the same
+#' 
+#' function
+#' 
 #' 
 #' @export
-unfix_parameters_to <- function(model, parameter_names, values) {
-    func_out <- pharmpy$modeling$unfix_parameters_to(model, parameter_names, values)
+unfix_parameters_to <- function(model, inits) {
+    func_out <- pharmpy$modeling$unfix_parameters_to(model, inits)
     return(py_to_r(func_out))
 }
 

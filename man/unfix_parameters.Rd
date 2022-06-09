@@ -35,5 +35,9 @@ function
 
 fix_parameters : Fix parameters
 
+fix_or_unfix_parameters : Fix or unfix parameters (given boolean)
+
 fix_parameters_to : Fixing and setting parameter initial estimates in the same function
+
+unconstrain_parameters : Remove all constraints of parameters
 }

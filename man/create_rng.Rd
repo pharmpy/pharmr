@@ -4,7 +4,7 @@
 \alias{create_rng}
 \title{create_rng}
 \usage{
-create_rng(seed)
+create_rng(seed = NULL)
 }
 \arguments{
 \item{seed}{(integer or rng) Seed for the random number generator or NULL (default) for a randomized seed. If seed

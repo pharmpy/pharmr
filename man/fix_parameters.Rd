@@ -28,6 +28,8 @@ model$parameters['THETA(1)']
 }
 }
 \seealso{
+fix_or_unfix_parameters : Fix or unfix parameters (given boolean)
+
 fix_parameters_to : Fixing and setting parameter initial estimates in the same function
 
 unfix_paramaters : Unfixing parameters

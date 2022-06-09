@@ -6,7 +6,7 @@
 \usage{
 run_iivsearch(
   algorithm,
-  iiv_strategy = 0,
+  iiv_strategy = "no_add",
   rankfunc = "bic",
   cutoff = NULL,
   model = NULL
@@ -15,7 +15,8 @@ run_iivsearch(
 \arguments{
 \item{algorithm}{(str) Which algorithm to run (brute_force, brute_force_no_of_etas, brute_force_block_structure)}
 
-\item{iiv_strategy}{(integer) How IIVs should be added to start model. Default is 0 (no added IIVs)}
+\item{iiv_strategy}{(str) If/how IIV should be added to start model. Possible strategies are 'no_add', 'diagonal', or
+'fullblock'. Default is 'no_add'}
 
 \item{rankfunc}{(str) Which ranking function should be used (OFV, AIC, BIC). Default is BIC}
 

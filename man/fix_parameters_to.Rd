@@ -4,14 +4,12 @@
 \alias{fix_parameters_to}
 \title{fix_parameters_to}
 \usage{
-fix_parameters_to(model, parameter_names, values)
+fix_parameters_to(model, inits)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{parameter_names}{(vector or str) one parameter name or a vector of parameter names}
-
-\item{values}{(vector or numeric) one value or a vector of values (must be equal to number of parameter_names)}
+\item{inits}{(list) Inits for all parameters to fix and set init}
 }
 \value{
 (Model) Reference to the same model object
@@ -25,12 +23,14 @@ Fix all listed parameters to specified value/values
 \dontrun{
 model <- load_example_model("pheno")
 model$parameters['THETA(1)']
-fix_parameters_to(model, 'THETA(1)', 0.5)
+fix_parameters_to(model, {'THETA(1)': 0.5})
 model$parameters['THETA(1)']
 }
 }
 \seealso{
 fix_parameters : Fix parameters
+
+fix_or_unfix_parameters : Fix or unfix parameters (given boolean)
 
 unfix_paramaters : Unfixing parameters
 

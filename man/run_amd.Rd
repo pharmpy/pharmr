@@ -5,7 +5,7 @@
 \title{run_amd}
 \usage{
 run_amd(
-  dataset_path,
+  input,
   modeltype = "pk_oral",
   cl_init = 0.01,
   vc_init = 1,
@@ -14,11 +14,13 @@ run_amd(
   lloq = NULL,
   order = NULL,
   categorical = NULL,
-  continuous = NULL
+  continuous = NULL,
+  allometric_variable = NULL,
+  occasion = NULL
 )
 }
 \arguments{
-\item{dataset_path}{(Model) Path to a dataset}
+\item{input}{(Model) Read model object/Path to a dataset}
 
 \item{modeltype}{(str) Type of model to build. Either 'pk_oral' or 'pk_iv'}
 
@@ -37,6 +39,10 @@ run_amd(
 \item{categorical}{(vector) List of categorical covariates}
 
 \item{continuous}{(vector) List of continuouts covariates}
+
+\item{allometric_variable}{(str or Symbol) Variable to use for allometry}
+
+\item{occasion}{(str) Name of occasion column}
 }
 \value{
 (Model) Reference to the same model object

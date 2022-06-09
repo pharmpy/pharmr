@@ -4,7 +4,7 @@
 \alias{summarize_individuals_count_table}
 \title{summarize_individuals_count_table}
 \usage{
-summarize_individuals_count_table(models, df)
+summarize_individuals_count_table(models = NULL, df = NULL)
 }
 \arguments{
 \item{models}{(vector of models) List of models to summarize.}

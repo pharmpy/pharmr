@@ -7,7 +7,7 @@
 run_modelsearch(
   search_space,
   algorithm,
-  iiv_strategy = 0,
+  iiv_strategy = "no_add",
   rankfunc = "bic",
   cutoff = NULL,
   model = NULL
@@ -18,7 +18,8 @@ run_modelsearch(
 
 \item{algorithm}{(str) Algorithm to use (e.g. exhaustive)}
 
-\item{iiv_strategy}{(integer) If/how IIV should be added to candidate models. Default is 0 (no IIVs added)}
+\item{iiv_strategy}{(str) If/how IIV should be added to candidate models. Possible strategies are 'no_add',
+'diagonal', 'fullblock', or 'absorption_delay'. Default is 'no_add'}
 
 \item{rankfunc}{(str) Which ranking function should be used (OFV, AIC, BIC). Default is BIC}
 

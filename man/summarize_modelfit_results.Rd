@@ -27,7 +27,7 @@ that wasn't an evaluation).
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-summarize_modelfit_results(c(model))
+summarize_modelfit_results(model)
 }
 
 }

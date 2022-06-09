@@ -23,5 +23,9 @@ model <- load_example_model("pheno")
 set_initial_estimates(model, list('THETA(1)'=2))
 model$parameters['THETA(1)']
 }
+}
+\seealso{
+fix_parameters_to : Fixing and setting parameter initial estimates in the same function
 
+unfix_paramaters_to : Unfixing parameters and setting a new initial estimate in the same
 }

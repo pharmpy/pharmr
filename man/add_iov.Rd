@@ -4,7 +4,13 @@
 \alias{add_iov}
 \title{add_iov}
 \usage{
-add_iov(model, occ, list_of_parameters = NULL, eta_names = NULL)
+add_iov(
+  model,
+  occ,
+  list_of_parameters = NULL,
+  eta_names = NULL,
+  distribution = "disjoint"
+)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model to add new IOVs to.}
@@ -16,6 +22,11 @@ names, or a mix of both.}
 
 \item{eta_names}{(str, vector) Custom names of new etas. Must be equal to the number of input etas times the number of
 categories for occasion.}
+
+\item{distribution}{(str) The distribution that should be used for the new etas. Options are
+'disjoint' for disjoint normal distributions, 'joint' for joint normal
+distribution, 'explicit' for an explicit mix of joint and disjoint
+distributions, and 'same-as-iiv' for copying the distribution of IIV etas.}
 }
 \value{
 (Model) Reference to the same model
