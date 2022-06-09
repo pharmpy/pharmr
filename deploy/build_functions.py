@@ -32,9 +32,8 @@ def create_r_func(func):
     arg_names = [str(arg) for arg in args]
     defaults = argspecs.defaults
     varargs, varkw = argspecs.varargs, argspecs.varkw
-
     if defaults:
-        if len(args) > len(defaults):
+        if len(defaults) > 0:
             defaults_new = [py_to_r_arg(d) for d in defaults]
             defaults = [None for _ in range(len(arg_names) - len(defaults_new))] + defaults_new
         args_defaults = {arg: default for arg, default in zip(arg_names, defaults)}
@@ -115,10 +114,10 @@ def create_r_params(doc_list):
         if skip:
             skip = False
             continue
-        type_declare_pattern = re.compile(r'([\w0-9]+) : ([\w0-9]+)')
+        type_declare_pattern = re.compile(r'([\w0-9]+)\s?: ([\w0-9]+)')
         if type_declare_pattern.match(row):
-            type_declare = row.split(' : ')
-            doc_str += f'@param {type_declare[0]} ({py_to_r_str(type_declare[1])})'
+            type_declare = row.split(': ')
+            doc_str += f'@param {type_declare[0].strip()} ({py_to_r_str(type_declare[1].strip())})'
         elif row == 'args' or row == 'kwargs':
             doc_str += f'@param ... {doc_list[i+1]}\n'
             skip = True
