@@ -64,7 +64,7 @@ jobs:
       - name: Install pharmpy
         working-directory: pharmr_repo
         run: |
-          pharmr::install_pharmpy()
+          pharmr::install_pharmpy(version='latest')
         shell: Rscript {0}
 
       - name: Install deploy dependencies
