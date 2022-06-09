@@ -13,3 +13,15 @@ reset_index <- function(df) {
     inddf <- reticulate::py_to_r(inddf)
     cbind(inddf, df)
 }
+
+
+#' @title
+#' Print pharmpy version
+#' 
+#' @description
+#' Print the pharmpy version pharmr uses. 
+#' 
+#' @export
+print_pharmpy_version <- function() {
+  print(pharmpy$`__version__`)
+}
