@@ -9,7 +9,7 @@
 #' 
 #' @export
 install_pharmpy <- function(envname='r-reticulate', method='auto') {
-  pharmr:::install_pharmpy_devel(envname = envname, method = method, version = 'same')
+  install_pharmpy_devel(envname = envname, method = method, version = 'same')
 }
 
 
