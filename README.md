@@ -21,7 +21,7 @@ pharmr is an R package and toolkit for pharmacometrics. It consists of
 
 pharmr is implemented as an R wrapper to [**Pharmpy**](https://pharmpy.github.io/), a Python library for 
 pharmacometrics. It provides an R interface to all functions found in the `modeling` and `tools` modules 
-(documented [here](https://pharmpy.github.io/latest/reference/pharmpy.modeling.html)). Each
+(documented [here](https://pharmpy.github.io/latest/api.html)). Each
 function is also available via the `help`-function (or `?`).
 
 
