@@ -2,6 +2,7 @@
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/pharmr)](https://cran.r-project.org/package=pharmr)
+[![](https://img.shields.io/github/r-package/v/pharmpy/pharmr?label=github%20version&logo=github)](https://github.com/pharmpy/pharmr)
 [![R-CMD-check](https://github.com/pharmpy/pharmr/workflows/R-CMD-check/badge.svg)](https://github.com/pharmpy/pharmr/actions)
 <!-- badges: end -->
 
@@ -26,6 +27,8 @@ function is also available via the `help`-function (or `?`).
 
 ## Installation
 
+### Install from github
+
 pharmr uses the package [**reticulate**](https://rstudio.github.io/reticulate/) for calling 
 Python from R. When installing pharmr, reticulate will give a prompt to set up the reticulate 
 environment. In order to use pharmr, you need to have Python 3.8 or 3.9. To make reticulate use 
@@ -41,6 +44,17 @@ Then install pharmr and Pharmpy:
 remotes::install_github("pharmpy/pharmr", ref="main")
 pharmr::install_pharmpy()
 ```
+
+### Install from CRAN
+
+pharmr is available on CRAN and can be installed with
+
+```R
+install.packages("pharmr")
+pharmr::install_pharmpy()
+```
+
+Note that pharmr and Pharmpy are under rapid development and the version on github will be a much more up to date version than the version on CRAN. Check the badges above to see the version numbers for CRAN and github.
 
 ## Using pharmr
 
