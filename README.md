@@ -6,7 +6,7 @@ status](https://www.r-pkg.org/badges/version/pharmr)](https://cran.r-project.org
 [![R-CMD-check](https://github.com/pharmpy/pharmr/workflows/R-CMD-check/badge.svg)](https://github.com/pharmpy/pharmr/actions)
 <!-- badges: end -->
 
-# pharmr
+# ![](https://github.com/pharmpy/pharmpy/blob/master/docs/pharmr_logo.svg)
 
 pharmr is an R package and toolkit for pharmacometrics. It consists of 
 
