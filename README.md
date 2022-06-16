@@ -73,10 +73,9 @@ Note that pharmr and Pharmpy are under rapid development and the version on gith
  OMEGA(2,2)  0.031128   0.00       oo  False
  SIGMA(1,1)  0.013086   0.00       oo  False
 >>>
-
 ```
 
-A simple example of reading a model, performing a simple transformation, and run the model in NONMEM:
+A simple example of reading a model, performing a simple transformation, and running the model in NONMEM:
 
 ```R
 model <- load_example_model('pheno') %>%
@@ -90,4 +89,3 @@ Note: If you try to access data frames belonging to a Pharmpy object you often n
 model <- load_example_model('pheno')
 residuals <- reset_index(model$modelfit_results$residuals)
 ```
-
