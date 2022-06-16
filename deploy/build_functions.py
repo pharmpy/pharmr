@@ -1,21 +1,16 @@
-from inspect import getdoc, getfullargspec, getmembers, isfunction, getsourcefile
+from inspect import getdoc, getfullargspec, getmembers, isfunction
 import os
 from pathlib import Path
 import re
 
 import pharmpy.modeling
+import pharmpy.tools
 
 
 def create_functions():
-    modeling_functions = getmembers(pharmpy.modeling, isfunction)
-    full_str = ''
-    for name, func in modeling_functions:
-        if name not in pharmpy.modeling.__all__:
-            continue
-        r_func = create_r_func(func)
-        r_doc = create_r_doc(func)
-        full_str += f'{r_doc}\n{r_func}\n\n'
-
+    modeling_str = create_module_functions(pharmpy.modeling)
+    tool_str = create_module_functions(pharmpy.tools)
+    full_str = modeling_str + tool_str
     # TODO: more general way to get right directory
     cwd = os.getcwd()
     pharmr_root = Path(cwd).parent
@@ -23,6 +18,18 @@ def create_functions():
 
     with open(func_path, 'w') as f:
         f.write(full_str)
+
+
+def create_module_functions(module):
+    funcs = getmembers(module, isfunction)
+    func_str = ''
+    for name, func in funcs:
+        if name not in module.__all__:
+            continue
+        r_func = create_r_func(func)
+        r_doc = create_r_doc(func)
+        func_str += f'{r_doc}\n{r_func}\n\n'
+    return func_str
 
 
 def create_r_func(func):
