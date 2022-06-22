@@ -26,14 +26,20 @@ def create_module_functions(module):
     for name, func in funcs:
         if name not in module.__all__:
             continue
-        r_func = create_r_func(func)
+        r_func = create_r_func(func, module)
         r_doc = create_r_doc(func)
         func_str += f'{r_doc}\n{r_func}\n\n'
     return func_str
 
 
-def create_r_func(func):
+def create_r_func(func, module):
     func_name = func.__name__
+    if 'tools' in module.__name__:
+        module_name = 'tools'
+    elif 'modeling' in module.__name__:
+        module_name = 'modeling'
+    else:
+        raise ValueError(f'Module {module.__name__} not supported')
     argspecs = getfullargspec(func)
     args = argspecs.args
     arg_names = [str(arg) for arg in args]
@@ -59,13 +65,13 @@ def create_r_func(func):
         raise ValueError(f'No documentation available for {func_name}')
     if 'pd.dataframe' in getdoc(func).lower() or 'pd.series' in getdoc(func).lower():
         return f'{func_name} <- function({func_args}) {{\n' \
-               f'    df <- pharmpy$modeling${func_name}({args_str})\n' \
+               f'    df <- pharmpy${module_name}${func_name}({args_str})\n' \
                f'    df_reset <- df$reset_index()\n' \
                f'    return(py_to_r(df_reset))\n' \
                f'}}'
     else:
         r_func = f'{func_name} <- function({func_args}) {{\n' \
-                 f'    func_out <- pharmpy$modeling${func_name}({args_str})\n' \
+                 f'    func_out <- pharmpy${module_name}${func_name}({args_str})\n' \
                  f'    return(py_to_r(func_out))\n' \
                  f'}}'
 
