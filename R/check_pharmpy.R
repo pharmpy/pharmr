@@ -1,3 +1,10 @@
+#' @title
+#' Checks version of Pharmpy/pharmr 
+#' 
+#' @description
+#' Checks whether Pharmpy and pharmr has the same version
+#' 
+#' @param pharmpy_version (str) version number as string
 check_pharmpy <- function(pharmpy_version) {
   pharmr_version <- as.character(utils::packageVersion("pharmr"))
   
