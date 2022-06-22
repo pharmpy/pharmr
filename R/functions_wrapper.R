@@ -1291,10 +1291,8 @@ check_parameters_near_bounds <- function(model, values=NULL, zero_limit=0.001, s
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#'  Result
-#'  Model
-#'  Reference to the same model
-#'  
+#' @return (Model) Reference to the same model
+#' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
@@ -1408,31 +1406,6 @@ create_joint_distribution <- function(model, rvs=NULL) {
 #' @export
 create_report <- function(results, path) {
     func_out <- pharmpy$modeling$create_report(results, path)
-    return(py_to_r(func_out))
-}
-
-#' @title
-#' create_results
-#' 
-#' @description
-#' Create/recalculate results object given path to run directory
-#' 
-#' @param path (str, Path) Path to run directory
-#' @param ... Arguments to pass to tool specific create results function
-#'  
-#' @return (Results) Results object for tool
-#' 
-#' @examples
-#' \dontrun{
-#' res <- create_results("frem_dir1")
-#' }
-#' @seealso
-#' read_results
-#' 
-#' 
-#' @export
-create_results <- function(path, ...) {
-    func_out <- pharmpy$modeling$create_results(path, ...)
     return(py_to_r(func_out))
 }
 
@@ -1825,32 +1798,6 @@ find_volume_parameters <- function(model) {
 }
 
 #' @title
-#' fit
-#' 
-#' @description
-#' Fit models.
-#' 
-#' @param models (vector) List of models or one single model
-#' @param tool (str) Estimation tool to use. NULL to use default
-#'  
-#' @return (Model) Reference to same model
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' fit(model)
-#' }
-#' @seealso
-#' run_tool
-#' 
-#' 
-#' @export
-fit <- function(models, tool=NULL) {
-    func_out <- pharmpy$modeling$fit(models, tool)
-    return(py_to_r(func_out))
-}
-
-#' @title
 #' fix_or_unfix_parameters
 #' 
 #' @description
@@ -2179,6 +2126,37 @@ get_ids <- function(model) {
 }
 
 #' @title
+#' get_individual_parameters
+#' 
+#' @description
+#' Retrieves all parameters with IIV or IOV in :class:`pharmpy.model`.
+#' 
+#' @param model (Model) Pharmpy model to retrieve the individuals parameters from
+#'  
+#' @param level (str) The variability level to look for: 'iiv', 'iov', or 'all' (default)
+#'  
+#' @return (vector) A vector of the parameters' names as strings
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' sorted(get_individual_parameters(model))
+#' sorted(get_individual_parameters(model, 'iiv'))
+#' get_individual_parameters(model, 'iov')
+#' }
+#' @seealso
+#' get_pk_parameters
+#' 
+#' has_random_effect
+#' 
+#' 
+#' @export
+get_individual_parameters <- function(model, level='all') {
+    func_out <- pharmpy$modeling$get_individual_parameters(model, level)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' get_individual_prediction_expression
 #' 
 #' @description
@@ -2445,6 +2423,37 @@ get_omegas <- function(model) {
 }
 
 #' @title
+#' get_pk_parameters
+#' 
+#' @description
+#' Retrieves PK parameters in :class:`pharmpy.model`.
+#' 
+#' @param model (Model) Pharmpy model to retrieve the PK parameters from
+#'  
+#' @param kind (str) The type of parameter to retrieve: 'absorption', 'distribution',
+#'  'elimination', or 'all' (default).
+#'  
+#' @return (Parameters) The PK parameters of the given model
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' sorted(get_pk_parameters(model))
+#' get_pk_parameters(model, 'absorption')
+#' get_pk_parameters(model, 'distribution')
+#' get_pk_parameters(model, 'elimination')
+#' }
+#' @seealso
+#' get_individual_parameters
+#' 
+#' 
+#' @export
+get_pk_parameters <- function(model, kind='all') {
+    func_out <- pharmpy$modeling$get_pk_parameters(model, kind)
+    return(py_to_r(func_out))
+}
+
+#' @title
 #' get_population_prediction_expression
 #' 
 #' @description
@@ -2563,10 +2572,8 @@ get_unit_of <- function(model, variable) {
 #' @param model (Model) Pharmpy model
 #' @param named_subscripts (logical) Use previous parameter names as subscripts. Default is to use integer subscripts
 #'  
-#'  Result
-#'  Model
-#'  Reference to the same model
-#'  
+#' @return (Model) Reference to the same model
+#' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
@@ -2738,6 +2745,36 @@ has_mixed_mm_fo_elimination <- function(model) {
 #' @export
 has_proportional_error_model <- function(model) {
     func_out <- pharmpy$modeling$has_proportional_error_model(model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' has_random_effect
+#' 
+#' @description
+#' Decides whether the given parameter of a :class:`pharmpy.model` has a
+#' random effect.
+#' 
+#' @param model (Model) Input Pharmpy model
+#' @param parameter (str) Input parameter
+#' @param level (str) The variability level to look for: 'iiv', 'iov', or 'all' (default)
+#'  
+#' @return (logical) Whether the given parameter has a random effect
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' has_random_effect(model, 'S1')
+#' has_random_effect(model, 'CL', 'iiv')
+#' has_random_effect(model, 'CL', 'iov')
+#' }
+#' @seealso
+#' get_individual_parameters
+#' 
+#' 
+#' @export
+has_random_effect <- function(model, parameter, level='all') {
+    func_out <- pharmpy$modeling$has_random_effect(model, parameter, level)
     return(py_to_r(func_out))
 }
 
@@ -3091,6 +3128,40 @@ print_model_symbols <- function(model) {
 }
 
 #' @title
+#' rank_models
+#' 
+#' @description
+#' Ranks a vector of models
+#' 
+#' Ranks a vector of models with a given ranking function
+#' 
+#' @param base_model (Model) Base model to compare to
+#' @param models (vector) List of models
+#' @param strictness (vector or NULL) List of strictness criteria to be fulfilled, currently only minimization successful.
+#'  Default is NULL
+#' @param rank_type (str) Name of ranking type. Available options are 'ofv', 'aic', 'bic', 'lrt' (OFV with LRT)
+#' @param cutoff (numeric or NULL) Value to use as cutoff. If using LRT, cutoff denotes p-value. Default is NULL
+#' @param bic_type (str) Type of BIC to calculate. Default is the mixed effects.
+#'  
+#' @return ((data.frame, vector)) A tuple with a DataFrame of the ranked models and a vector of ranked models sorted by rank
+#' 
+#' @examples
+#' \dontrun{
+#' model_1 <- load_example_model("pheno")
+#' model_2 <- load_example_model("pheno_linear")
+#' rank_models(model_1, c(model_2),
+#'             strictness=c('minimization_successful'),
+#'             rank_type='lrt')
+#' }
+#' 
+#' @export
+rank_models <- function(base_model, models, strictness=NULL, rank_type='ofv', cutoff=NULL, bic_type='mixed') {
+    df <- pharmpy$modeling$rank_models(base_model, models, strictness, rank_type, cutoff, bic_type)
+    df_reset <- df$reset_index()
+    return(py_to_r(df_reset))
+}
+
+#' @title
 #' read_dataset_from_datainfo
 #' 
 #' @description
@@ -3194,30 +3265,6 @@ read_model_from_database <- function(name, database=NULL) {
 #' @export
 read_model_from_string <- function(code, path=NULL) {
     func_out <- pharmpy$modeling$read_model_from_string(code, path)
-    return(py_to_r(func_out))
-}
-
-#' @title
-#' read_results
-#' 
-#' @description
-#' Read results object from file
-#' 
-#' @param path (str, Path) Path to results file
-#'  
-#' @return (Results) Results object for tool
-#' 
-#' @examples
-#' \dontrun{
-#' res <- read_resuts("results$json")
-#' }
-#' @seealso
-#' create_results
-#' 
-#' 
-#' @export
-read_results <- function(path) {
-    func_out <- pharmpy$modeling$read_results(path)
     return(py_to_r(func_out))
 }
 
@@ -3555,181 +3602,6 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
     df <- pharmpy$modeling$resample_data(dataset_or_model, group, resamples, stratify, sample_size, replace, name_pattern, name)
     df_reset <- df$reset_index()
     return(py_to_r(df_reset))
-}
-
-#' @title
-#' run_allometry
-#' 
-#' @description
-#' Run allometry tool. For more details, see :ref:`allometry`.
-#' 
-#' @param model (Model) Pharmpy model
-#' @param allometric_variable (str) Name of the variable to use for allometric scaling (default is WT)
-#' @param reference_value (numeric) Reference value for the allometric variable (default is 70)
-#' @param parameters (vector) Parameters to apply scaling to (default is all CL, Q and V parameters)
-#' @param initials (vector) Initial estimates for the exponents. (default is to use 0.75 for CL and Qs and 1 for Vs)
-#' @param lower_bounds (vector) Lower bounds for the exponents. (default is 0 for all parameters)
-#' @param upper_bounds (vector) Upper bounds for the exponents. (default is 2 for all parameters)
-#' @param fixed (logical) Should the exponents be fixed or not. (default TRUE)
-#'  
-#' @return (AllometryResults) Allometry tool result object
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' run_allometry(model=model, allometric_variable='WGT')
-#' }
-#' 
-#' @export
-run_allometry <- function(model=NULL, allometric_variable='WT', reference_value=70, parameters=NULL, initials=NULL, lower_bounds=NULL, upper_bounds=NULL, fixed=TRUE) {
-    func_out <- pharmpy$modeling$run_allometry(model, allometric_variable, reference_value, parameters, initials, lower_bounds, upper_bounds, fixed)
-    return(py_to_r(func_out))
-}
-
-#' @title
-#' run_amd
-#' 
-#' @description
-#' Run Automatic Model Development (AMD) tool
-#' 
-#' Runs structural modelsearch, IIV building, and resmod
-#' 
-#' @param input (Model) Read model object/Path to a dataset
-#' @param modeltype (str) Type of model to build. Either 'pk_oral' or 'pk_iv'
-#' @param cl_init (numeric) Initial estimate for the population clearance
-#' @param vc_init (numeric) Initial estimate for the central compartment population volume
-#' @param mat_init (numeric) Initial estimate for the mean absorption time (not for iv models)
-#' @param search_space (str) MFL for search space for structural model
-#' @param lloq (numeric) Lower limit of quantification. LOQ data will be removed.
-#' @param order (vector) Runorder of components
-#' @param categorical (vector) List of categorical covariates
-#' @param continuous (vector) List of continuouts covariates
-#' @param allometric_variable (str or Symbol) Variable to use for allometry
-#' @param occasion (str) Name of occasion column
-#'  
-#' @return (Model) Reference to the same model object
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' run_amd(model)
-#' }
-#' @seealso
-#' run_iiv
-#' 
-#' run_tool
-#' 
-#' 
-#' @export
-run_amd <- function(input, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_init=0.1, search_space=NULL, lloq=NULL, order=NULL, categorical=NULL, continuous=NULL, allometric_variable=NULL, occasion=NULL) {
-    func_out <- pharmpy$modeling$run_amd(input, modeltype, cl_init, vc_init, mat_init, search_space, lloq, order, categorical, continuous, allometric_variable, occasion)
-    return(py_to_r(func_out))
-}
-
-#' @title
-#' run_iivsearch
-#' 
-#' @description
-#' Run IIVsearch tool. For more details, see :ref:`iivsearch`.
-#' 
-#' @param algorithm (str) Which algorithm to run (brute_force, brute_force_no_of_etas, brute_force_block_structure)
-#' @param iiv_strategy (str) If/how IIV should be added to start model. Possible strategies are 'no_add', 'diagonal', or
-#'  'fullblock'. Default is 'no_add'
-#' @param rankfunc (str) Which ranking function should be used (OFV, AIC, BIC). Default is BIC
-#' @param cutoff (numeric) Cutoff for which value of the ranking function that is considered significant. Default
-#'  is NULL (all models will be ranked)
-#' @param model (Model) Pharmpy model
-#'  
-#' @return (IIVResults) IIVsearch tool result object
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' run_iivsearch('brute_force', model=model)
-#' }
-#' 
-#' @export
-run_iivsearch <- function(algorithm, iiv_strategy='no_add', rankfunc='bic', cutoff=NULL, model=NULL) {
-    func_out <- pharmpy$modeling$run_iivsearch(algorithm, iiv_strategy, rankfunc, cutoff, model)
-    return(py_to_r(func_out))
-}
-
-#' @title
-#' run_modelsearch
-#' 
-#' @description
-#' Run Modelsearch tool. For more details, see :ref:`modelsearch`.
-#' 
-#' @param search_space (str) Search space to test
-#' @param algorithm (str) Algorithm to use (e.g. exhaustive)
-#' @param iiv_strategy (str) If/how IIV should be added to candidate models. Possible strategies are 'no_add',
-#'  'diagonal', 'fullblock', or 'absorption_delay'. Default is 'no_add'
-#' @param rankfunc (str) Which ranking function should be used (OFV, AIC, BIC). Default is BIC
-#' @param cutoff (numeric) Cutoff for which value of the ranking function that is considered significant. Default
-#'  is NULL (all models will be ranked)
-#' @param model (Model) Pharmpy model
-#'  
-#' @return (ModelSearchResults) Modelsearch tool result object
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' run_modelsearch('ABSORPTION(ZO);PERIPHERALS(1)', 'exhaustive', model=model)
-#' }
-#' 
-#' @export
-run_modelsearch <- function(search_space, algorithm, iiv_strategy='no_add', rankfunc='bic', cutoff=NULL, model=NULL) {
-    func_out <- pharmpy$modeling$run_modelsearch(search_space, algorithm, iiv_strategy, rankfunc, cutoff, model)
-    return(py_to_r(func_out))
-}
-
-#' @title
-#' run_resmod
-#' 
-#' @description
-#' Run the resmod tool. For more details, see :ref:`resmod`.
-#' 
-#' @param model (Model) Pharmpy model
-#' @param groups (integer) The number of bins to use for the time varying models
-#' @param p_value (numeric) The p-value to use for the likelihood ratio test
-#' @param skip (vector) A vector of models to not attempt.
-#'  
-#' @return (ResmodResults) Resmod tool result object
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' run_resmod(model=model)
-#' }
-#' 
-#' @export
-run_resmod <- function(model=NULL, groups=4, p_value=0.05, skip=NULL) {
-    func_out <- pharmpy$modeling$run_resmod(model, groups, p_value, skip)
-    return(py_to_r(func_out))
-}
-
-#' @title
-#' run_tool
-#' 
-#' @description
-#' Run tool workflow
-#' 
-#' @param name (str) Name of tool to run
-#' @param ... Arguments to pass to tool
-#' @param ... Arguments to pass to tool
-#'  
-#' @return (Results) Results object for tool
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' res <- run_tool("resmod", model)
-#' }
-#' 
-#' @export
-run_tool <- function(name, ...) {
-    func_out <- pharmpy$modeling$run_tool(name, ...)
-    return(py_to_r(func_out))
 }
 
 #' @title
@@ -5271,6 +5143,332 @@ write_model <- function(model, path='', force=TRUE) {
 #' @export
 write_results <- function(results, path, lzma=FALSE, csv=FALSE) {
     func_out <- pharmpy$modeling$write_results(results, path, lzma, csv)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' create_results
+#' 
+#' @description
+#' Create/recalculate results object given path to run directory
+#' 
+#' @param path (str, Path) Path to run directory
+#' @param ... Arguments to pass to tool specific create results function
+#'  
+#' @return (Results) Results object for tool
+#' 
+#' @examples
+#' \dontrun{
+#' res <- create_results("frem_dir1")
+#' }
+#' @seealso
+#' read_results
+#' 
+#' 
+#' @export
+create_results <- function(path, ...) {
+    func_out <- pharmpy$tools$create_results(path, ...)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' fit
+#' 
+#' @description
+#' Fit models.
+#' 
+#' @param models (vector) List of models or one single model
+#' @param tool (str) Estimation tool to use. NULL to use default
+#'  
+#' @return (Model) Reference to same model
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' fit(model)
+#' }
+#' @seealso
+#' run_tool
+#' 
+#' 
+#' @export
+fit <- function(models, tool=NULL) {
+    func_out <- pharmpy$tools$fit(models, tool)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' read_results
+#' 
+#' @description
+#' Read results object from file
+#' 
+#' @param path (str, Path) Path to results file
+#'  
+#' @return (Results) Results object for tool
+#' 
+#' @examples
+#' \dontrun{
+#' res <- read_resuts("results$json")
+#' }
+#' @seealso
+#' create_results
+#' 
+#' 
+#' @export
+read_results <- function(path) {
+    func_out <- pharmpy$tools$read_results(path)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' retrieve_models
+#' 
+#' @description
+#' Retrieve models after a tool runs
+#' 
+#' Any models created and run by the tool can be
+#' retrieved.
+#' 
+#' @param path (str or Path) A path to the tool directory
+#' @param names (vector) List of names of the models to retrieve or NULL for all
+#'  
+#' @return (vector) List of retrieved model objects
+#' 
+#' 
+#' @export
+retrieve_models <- function(path, names=NULL) {
+    func_out <- pharmpy$tools$retrieve_models(path, names)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' run_allometry
+#' 
+#' @description
+#' Run allometry tool. For more details, see :ref:`allometry`.
+#' 
+#' @param model (Model) Pharmpy model
+#' @param allometric_variable (str) Name of the variable to use for allometric scaling (default is WT)
+#' @param reference_value (numeric) Reference value for the allometric variable (default is 70)
+#' @param parameters (vector) Parameters to apply scaling to (default is all CL, Q and V parameters)
+#' @param initials (vector) Initial estimates for the exponents. (default is to use 0.75 for CL and Qs and 1 for Vs)
+#' @param lower_bounds (vector) Lower bounds for the exponents. (default is 0 for all parameters)
+#' @param upper_bounds (vector) Upper bounds for the exponents. (default is 2 for all parameters)
+#' @param fixed (logical) Should the exponents be fixed or not. (default TRUE)
+#'  
+#' @return (AllometryResults) Allometry tool result object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' run_allometry(model=model, allometric_variable='WGT')
+#' }
+#' 
+#' @export
+run_allometry <- function(model=NULL, allometric_variable='WT', reference_value=70, parameters=NULL, initials=NULL, lower_bounds=NULL, upper_bounds=NULL, fixed=TRUE) {
+    func_out <- pharmpy$tools$run_allometry(model, allometric_variable, reference_value, parameters, initials, lower_bounds, upper_bounds, fixed)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' run_amd
+#' 
+#' @description
+#' Run Automatic Model Development (AMD) tool
+#' 
+#' Runs structural modelsearch, IIV building, and resmod
+#' 
+#' @param input (Model) Read model object/Path to a dataset
+#' @param modeltype (str) Type of model to build. Either 'pk_oral' or 'pk_iv'
+#' @param cl_init (numeric) Initial estimate for the population clearance
+#' @param vc_init (numeric) Initial estimate for the central compartment population volume
+#' @param mat_init (numeric) Initial estimate for the mean absorption time (not for iv models)
+#' @param search_space (str) MFL for search space for structural model
+#' @param lloq (numeric) Lower limit of quantification. LOQ data will be removed.
+#' @param order (vector) Runorder of components
+#' @param categorical (vector) List of categorical covariates
+#' @param continuous (vector) List of continuous covariates
+#' @param allometric_variable (str or Symbol) Variable to use for allometry
+#' @param occasion (str) Name of occasion column
+#'  
+#' @return (Model) Reference to the same model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' run_amd(model)
+#' }
+#' @seealso
+#' run_iiv
+#' 
+#' run_tool
+#' 
+#' 
+#' @export
+run_amd <- function(input, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_init=0.1, search_space=NULL, lloq=NULL, order=NULL, categorical=NULL, continuous=NULL, allometric_variable=NULL, occasion=NULL) {
+    func_out <- pharmpy$tools$run_amd(input, modeltype, cl_init, vc_init, mat_init, search_space, lloq, order, categorical, continuous, allometric_variable, occasion)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' run_covsearch
+#' 
+#' @description
+#' Run COVsearch tool. For more details, see :ref:`covsearch`.
+#' 
+#' @param effects (str | vector) The vector of candidates to try, either in DSL str form or in
+#'  (optionally compact) tuple form.
+#' @param p_forward (numeric) The p-value to use in the likelihood ratio test for forward steps
+#' @param max_steps (integer) The maximum number of search steps to make
+#' @param algorithm (str) The search algorithm to use. Currently only 'scm-forward' is supported.
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (COVSearchResults) COVsearch tool result object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' res <- run_covsearch([
+#' }
+#' 
+#' @export
+run_covsearch <- function(effects, p_forward=0.05, max_steps=-1, algorithm='scm-forward', model=NULL) {
+    func_out <- pharmpy$tools$run_covsearch(effects, p_forward, max_steps, algorithm, model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' run_iivsearch
+#' 
+#' @description
+#' Run IIVsearch tool. For more details, see :ref:`iivsearch`.
+#' 
+#' @param algorithm (str) Which algorithm to run (brute_force, brute_force_no_of_etas, brute_force_block_structure)
+#' @param iiv_strategy (str) If/how IIV should be added to start model. Possible strategies are 'no_add', 'add_diagonal',
+#'  or 'fullblock'. Default is 'no_add'
+#' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC
+#' @param cutoff (numeric) Cutoff for which value of the ranking function that is considered significant. Default
+#'  is NULL (all models will be ranked)
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (IIVSearchResults) IIVsearch tool result object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' run_iivsearch('brute_force', model=model)
+#' }
+#' 
+#' @export
+run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cutoff=NULL, model=NULL) {
+    func_out <- pharmpy$tools$run_iivsearch(algorithm, iiv_strategy, rank_type, cutoff, model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' run_iovsearch
+#' 
+#' @description
+#' Run IOVsearch tool. For more details, see :ref:`iovsearch`.
+#' 
+#' @param column (str) Name of column in dataset to use as occasion column (default is 'OCC')
+#' @param list_of_parameters (vector) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)
+#' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC
+#' @param cutoff (NULL or numeric) Cutoff for which value of the ranking type that is considered significant. Default
+#'  is NULL (all models will be ranked)
+#' @param distribution (str) Which distribution added IOVs should have (default is same-as-iiv)
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (IOVSearchResults) IOVSearch tool result object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' run_iovsearch('OCC', model=model)
+#' }
+#' 
+#' @export
+run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='bic', cutoff=NULL, distribution='same-as-iiv', model=NULL) {
+    func_out <- pharmpy$tools$run_iovsearch(column, list_of_parameters, rank_type, cutoff, distribution, model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' run_modelsearch
+#' 
+#' @description
+#' Run Modelsearch tool. For more details, see :ref:`modelsearch`.
+#' 
+#' @param search_space (str) Search space to test
+#' @param algorithm (str) Algorithm to use (e.g. exhaustive)
+#' @param iiv_strategy (str) If/how IIV should be added to candidate models. Possible strategies are 'no_add',
+#'  'add_diagonal', 'fullblock', or 'absorption_delay'. Default is 'absorption_delay'
+#' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC
+#' @param cutoff (numeric) Cutoff for which value of the ranking function that is considered significant. Default
+#'  is NULL (all models will be ranked)
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (ModelSearchResults) Modelsearch tool result object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' run_modelsearch('ABSORPTION(ZO);PERIPHERALS(1)', 'exhaustive', model=model)
+#' }
+#' 
+#' @export
+run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_delay', rank_type='bic', cutoff=NULL, model=NULL) {
+    func_out <- pharmpy$tools$run_modelsearch(search_space, algorithm, iiv_strategy, rank_type, cutoff, model)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' run_resmod
+#' 
+#' @description
+#' Run the resmod tool. For more details, see :ref:`resmod`.
+#' 
+#' @param model (Model) Pharmpy model
+#' @param groups (integer) The number of bins to use for the time varying models
+#' @param p_value (numeric) The p-value to use for the likelihood ratio test
+#' @param skip (vector) A vector of models to not attempt.
+#'  
+#' @return (ResmodResults) Resmod tool result object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' run_resmod(model=model)
+#' }
+#' 
+#' @export
+run_resmod <- function(model=NULL, groups=4, p_value=0.05, skip=NULL) {
+    func_out <- pharmpy$tools$run_resmod(model, groups, p_value, skip)
+    return(py_to_r(func_out))
+}
+
+#' @title
+#' run_tool
+#' 
+#' @description
+#' Run tool workflow
+#' 
+#' @param name (str) Name of tool to run
+#' @param ... Arguments to pass to tool
+#' @param ... Arguments to pass to tool
+#'  
+#' @return (Results) Results object for tool
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' res <- run_tool("resmod", model)
+#' }
+#' 
+#' @export
+run_tool <- function(name, ...) {
+    func_out <- pharmpy$tools$run_tool(name, ...)
     return(py_to_r(func_out))
 }
 

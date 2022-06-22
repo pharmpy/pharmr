@@ -9,11 +9,10 @@ greekify_model(model, named_subscripts = FALSE)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{named_subscripts}{(logical) Use previous parameter names as subscripts. Default is to use integer subscripts
-
-Result
-Model
-Reference to the same model}
+\item{named_subscripts}{(logical) Use previous parameter names as subscripts. Default is to use integer subscripts}
+}
+\value{
+(Model) Reference to the same model
 }
 \description{
 Convert to using greek letters for all population parameters

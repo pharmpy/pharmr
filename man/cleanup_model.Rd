@@ -7,11 +7,10 @@
 cleanup_model(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model
-
-Result
-Model
-Reference to the same model}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(Model) Reference to the same model
 }
 \description{
 Perform various cleanups of a model

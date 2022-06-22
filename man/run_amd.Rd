@@ -38,7 +38,7 @@ run_amd(
 
 \item{categorical}{(vector) List of categorical covariates}
 
-\item{continuous}{(vector) List of continuouts covariates}
+\item{continuous}{(vector) List of continuous covariates}
 
 \item{allometric_variable}{(str or Symbol) Variable to use for allometry}
 

@@ -7,7 +7,7 @@
 run_iivsearch(
   algorithm,
   iiv_strategy = "no_add",
-  rankfunc = "bic",
+  rank_type = "bic",
   cutoff = NULL,
   model = NULL
 )
@@ -15,10 +15,10 @@ run_iivsearch(
 \arguments{
 \item{algorithm}{(str) Which algorithm to run (brute_force, brute_force_no_of_etas, brute_force_block_structure)}
 
-\item{iiv_strategy}{(str) If/how IIV should be added to start model. Possible strategies are 'no_add', 'diagonal', or
-'fullblock'. Default is 'no_add'}
+\item{iiv_strategy}{(str) If/how IIV should be added to start model. Possible strategies are 'no_add', 'add_diagonal',
+or 'fullblock'. Default is 'no_add'}
 
-\item{rankfunc}{(str) Which ranking function should be used (OFV, AIC, BIC). Default is BIC}
+\item{rank_type}{(str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC}
 
 \item{cutoff}{(numeric) Cutoff for which value of the ranking function that is considered significant. Default
 is NULL (all models will be ranked)}
@@ -26,7 +26,7 @@ is NULL (all models will be ranked)}
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(IIVResults) IIVsearch tool result object
+(IIVSearchResults) IIVsearch tool result object
 }
 \description{
 Run IIVsearch tool. For more details, see :ref:\code{iivsearch}.
