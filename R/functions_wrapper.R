@@ -2012,7 +2012,7 @@ get_concentration_parameters_from_data <- function(model) {
 #' 
 #' @examples
 #' \dontrun{
-#' get_config_path()
+#' get_config_path().replace('\\', '/')
 #' }
 #' 
 #' @export
@@ -3168,13 +3168,14 @@ rank_models <- function(base_model, models, strictness=NULL, rank_type='ofv', cu
 #' Read a dataset given a datainfo object or path to a datainfo file
 #' 
 #' @param datainfo (DataInfo | Path | str) A datainfo object or a path to a datainfo object
+#' @param datatype (str) A string to specify dataset type
 #'  
 #' @return (data.frame) The dataset
 #' 
 #' 
 #' @export
-read_dataset_from_datainfo <- function(datainfo) {
-    df <- pharmpy$modeling$read_dataset_from_datainfo(datainfo)
+read_dataset_from_datainfo <- function(datainfo, datatype=NULL) {
+    df <- pharmpy$modeling$read_dataset_from_datainfo(datainfo, datatype)
     df_reset <- df$reset_index()
     return(py_to_r(df_reset))
 }
@@ -4314,7 +4315,9 @@ set_power_on_ruv <- function(model, list_of_eps=NULL, lower_limit=0.01, ipred=NU
 #' set_proportional_error_model(model)
 #' model$statements$find_assignment("Y")
 #' model <- remove_error_model(load_example_model("pheno"))
-#' set_proportional_error_model(model, data_trans="log(Y)", zero_protection=TRUE)
+#' set_proportional_error_model(
+#'     model,
+#'     data_trans="log(Y)", zero_protection=TRUE
 #' model$statements$after_odes
 #' }
 #' @seealso
@@ -5317,8 +5320,8 @@ run_amd <- function(input, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_ini
 #' @description
 #' Run COVsearch tool. For more details, see :ref:`covsearch`.
 #' 
-#' @param effects (str | vector) The vector of candidates to try, either in DSL str form or in
-#'  (optionally compact) tuple form.
+#' @param effects (str | vector) The vector of candidate parameter-covariate effects to try, either as a
+#'  MFL sentence or in (optionally compact) tuple form.
 #' @param p_forward (numeric) The p-value to use in the likelihood ratio test for forward steps
 #' @param max_steps (integer) The maximum number of search steps to make
 #' @param algorithm (str) The search algorithm to use. Currently only 'scm-forward' is supported.

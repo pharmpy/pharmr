@@ -13,8 +13,8 @@ run_covsearch(
 )
 }
 \arguments{
-\item{effects}{(str | vector) The vector of candidates to try, either in DSL str form or in
-(optionally compact) tuple form.}
+\item{effects}{(str | vector) The vector of candidate parameter-covariate effects to try, either as a
+MFL sentence or in (optionally compact) tuple form.}
 
 \item{p_forward}{(numeric) The p-value to use in the likelihood ratio test for forward steps}
 

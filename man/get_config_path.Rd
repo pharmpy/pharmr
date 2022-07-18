@@ -14,7 +14,7 @@ Returns path to the user config path
 }
 \examples{
 \dontrun{
-get_config_path()
+get_config_path().replace('\\\\', '/')
 }
 
 }
