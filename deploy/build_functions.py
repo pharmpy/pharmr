@@ -41,37 +41,42 @@ def create_r_func(func, module):
     else:
         raise ValueError(f'Module {module.__name__} not supported')
     argspecs = getfullargspec(func)
-    args = argspecs.args
-    arg_names = [str(arg) for arg in args]
+    args = [str(arg) for arg in argspecs.args]
     defaults = argspecs.defaults
-    varargs, varkw = argspecs.varargs, argspecs.varkw
     if defaults:
         if len(defaults) > 0:
             defaults_new = [py_to_r_arg(d) for d in defaults]
-            defaults = [None for _ in range(len(arg_names) - len(defaults_new))] + defaults_new
-        args_defaults = {arg: default for arg, default in zip(arg_names, defaults)}
-        arg_list = [(f'{arg}={default}' if default is not None else f'{arg}') for arg, default in args_defaults.items()]
+            defaults = [None for _ in range(len(args) - len(defaults_new))] + defaults_new
+        wrapper_args, pyfunc_args = [], []
+        for arg, default in zip(args, defaults):
+            if default is None:
+                wrapper_args += [f'{arg}']
+                pyfunc_args += [f'{arg}']
+            else:
+                wrapper_args += [f'{arg}={default}']
+                pyfunc_args += [f'{arg}={arg}']
     else:
-        arg_list = arg_names.copy()
+        wrapper_args = args.copy()
+        pyfunc_args = args.copy()
 
-    if varargs or varkw:
-        arg_list += ['...']
-        arg_names += ['...']
+    if argspecs.varargs or argspecs.varkw:
+        wrapper_args += ['...']
+        pyfunc_args += ['...']
 
-    func_args = ', '.join(arg_list)
-    args_str = ', '.join(arg_names)
+    wrapper_arg_str = ', '.join(wrapper_args)
+    pyfunc_arg_str = ', '.join(pyfunc_args)
 
     if not getdoc(func):
         raise ValueError(f'No documentation available for {func_name}')
     if 'pd.dataframe' in getdoc(func).lower() or 'pd.series' in getdoc(func).lower():
-        return f'{func_name} <- function({func_args}) {{\n' \
-               f'    df <- pharmpy${module_name}${func_name}({args_str})\n' \
+        return f'{func_name} <- function({wrapper_arg_str}) {{\n' \
+               f'    df <- pharmpy${module_name}${func_name}({pyfunc_arg_str})\n' \
                f'    df_reset <- df$reset_index()\n' \
                f'    return(py_to_r(df_reset))\n' \
                f'}}'
     else:
-        r_func = f'{func_name} <- function({func_args}) {{\n' \
-                 f'    func_out <- pharmpy${module_name}${func_name}({args_str})\n' \
+        r_func = f'{func_name} <- function({wrapper_arg_str}) {{\n' \
+                 f'    func_out <- pharmpy${module_name}${func_name}({pyfunc_arg_str})\n' \
                  f'    return(py_to_r(func_out))\n' \
                  f'}}'
 
