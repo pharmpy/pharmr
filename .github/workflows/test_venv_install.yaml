@@ -106,14 +106,6 @@ jobs:
       - name: Check
         working-directory: pharmr_repo
         run: |
-          reticulate::use_python('../pharmpy_repo/pharmpy_venv/bin')
-          options(crayon.enabled = TRUE)
-          rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
-        shell: Rscript {0}
-
-      - name: Check (from command line)
-        working-directory: pharmr_repo
-        run: |
           source ../pharmpy_repo/pharmpy_venv/bin/activate
           mkdir build
           R CMD build pharmr
