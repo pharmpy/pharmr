@@ -107,10 +107,9 @@ jobs:
         run: |
           source pharmpy_repo/pharmpy_venv/bin/activate
           mkdir build
-          ls
           R CMD build pharmr_repo
           R CMD install pharmr_*.*.*.tar.gz build
-          R CMD check build/pharmr_*.*.*.tar.gz
+          R CMD check build/pharmr_*.*.*.tar.gz --no-manual
 
       - name: Upload check results
         if: failure()
