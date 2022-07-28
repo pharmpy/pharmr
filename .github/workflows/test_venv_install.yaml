@@ -6,14 +6,7 @@ on:
 name: Test venv install
 
 jobs:
-  setup_env:
-    uses: ./.github/workflows/setup.yaml
-    with:
-      os: ubuntu-latest
-      r-version: 'release'
-
   test_venv_install:
-    needs: [setup_env]
     runs-on: ubuntu-latest
 
     env:
@@ -22,6 +15,56 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
+      - name: Checkout pharmr
+        uses: actions/checkout@v3
+        with:
+          path: pharmr_repo
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Query dependencies
+        working-directory: pharmr_repo
+        run: |
+          install.packages('remotes')
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
+          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+        shell: Rscript {0}
+
+      - name: Restore R package cache
+        if: runner.os != 'Windows'
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+
+      - name: Install system dependencies
+        working-directory: pharmr_repo
+        if: runner.os == 'Linux'
+        run: |
+          while read -r cmd
+          do
+            eval sudo $cmd
+          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
+
+      - name: Install R dependencies
+        working-directory: pharmr_repo
+        run: |
+          remotes::install_deps(dependencies = TRUE)
+          remotes::install_cran("rcmdcheck")
+          remotes::install_github('rstudio/reticulate')
+        shell: Rscript {0}
+
+      - name: Install pharmr
+        working-directory: pharmr_repo
+        run: |
+          remotes::install_local(force=TRUE)
+        shell: Rscript {0}
+
       - name: Checkout Pharmpy
         uses: actions/checkout@v3
         with:
