@@ -159,6 +159,7 @@ jobs:
           echo "Show status"
           git status
           echo "Tag version"
-          git tag -a "${{ env.pharmpy_version }}"
+          echo "${{ env.pharmpy_version }}"
+          git tag -a `"${{ env.pharmpy_version }}"`
           echo "Show tags"
           git show-ref --tags
