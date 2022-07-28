@@ -108,6 +108,20 @@ jobs:
           install.packages("devtools")
         shell: Rscript {0}
 
+      - name: Update DESCRIPTION and documentation
+        working-directory: pharmr_repo/deploy
+        run: |
+          reticulate::use_python('../../pharmpy_repo/pharmpy_venv/bin')
+
+          pharmpy <- reticulate::import("pharmpy")
+          pharmpy_version <- pharmpy$`__version__`
+          desc::desc_set('Version', pharmpy_version)
+          desc::desc_set('Date', Sys.Date())
+          
+          reticulate::py_run_file('build_functions.py')
+          devtools::document()
+        shell: Rscript {0}
+
       - name: Check
         run: |
           source pharmpy_repo/pharmpy_venv/bin/activate
