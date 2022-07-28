@@ -34,6 +34,9 @@ jobs:
           echo "pharmpy_version=`git rev-list --tags --max-count=1`" >> $GITHUB_ENV 
           git branch -v
 
+      - name: Test github env variable
+        run: echo "${{ env.pharmpy_version }}"
+
       - name: Create venv
         working-directory: pharmpy_repo
         run: |
