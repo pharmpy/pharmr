@@ -31,7 +31,7 @@ jobs:
         run: |
           git fetch
           git checkout -b release_latest "$(git rev-list --tags --max-count=1)"
-          echo "pharmpy_version=`git rev-list --tags --max-count=1`" >> $GITHUB_ENV 
+          echo "pharmpy_version=`git describe --tags`" >> $GITHUB_ENV 
           git branch -v
 
       - name: Test github env variable
