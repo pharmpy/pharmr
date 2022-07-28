@@ -91,7 +91,8 @@ jobs:
       - name: Test Pharmpy
         working-directory: pharmr_repo
         run: |
-          reticulate::use_python('../pharmpy_venv/bin')
+          reticulate::py_discover_config()
+          reticulate::use_python('../pharmpy_repo/pharmpy_venv/bin')
           pharmr::print_pharmpy_version()
         shell: Rscript {0}
 
