@@ -104,12 +104,11 @@ jobs:
         shell: Rscript {0}
 
       - name: Check
-        working-directory: pharmr_repo
         run: |
-          source ../pharmpy_repo/pharmpy_venv/bin/activate
+          source pharmpy_repo/pharmpy_venv/bin/activate
           mkdir build
           ls
-          R CMD build pharmr
+          R CMD build pharmr_repo
           R CMD install pharmr_*.*.*.tar.gz build
           R CMD check build/pharmr_*.*.*.tar.gz
 
