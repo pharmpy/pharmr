@@ -35,15 +35,19 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout pharmr
+        uses: actions/checkout@v3
+        with:
+          path: pharmr_repo
 
-      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
 
-      - uses: r-lib/actions/setup-pandoc@v1
+      - uses: r-lib/actions/setup-pandoc@v2
 
       - name: Query dependencies
+        working-directory: pharmr_repo
         run: |
           install.packages('remotes')
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
@@ -59,6 +63,7 @@ jobs:
           restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
 
       - name: Install system dependencies
+        working-directory: pharmr_repo
         if: runner.os == 'Linux'
         run: |
           while read -r cmd
@@ -66,20 +71,18 @@ jobs:
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
 
-      - name: Install libcurl
-        if: runner.os == 'Linux'
+      - name: Install R dependencies
+        working-directory: pharmr_repo
         run: |
-          sudo apt-get install libcurl4-openssl-dev
-
-      - name: Install dependencies
-        run: |
-          remotes::install_local(dependencies = TRUE, force=TRUE)
+          remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
+          remotes::install_github('rstudio/reticulate')
         shell: Rscript {0}
-        
-      - name: Install reticulate (CRAN)
+
+      - name: Install pharmr
+        working-directory: pharmr_repo
         run: |
-          install.packages('reticulate')
+          remotes::install_local(force=TRUE)
         shell: Rscript {0}
 
       - name: Install miniconda
@@ -88,12 +91,13 @@ jobs:
           reticulate::install_miniconda()
         shell: Rscript {0}
 
-      - name: Install pharmpy/pharmr
+      - name: Install Pharmpy
         run: |
           pharmr::install_pharmpy()
         shell: Rscript {0}
 
       - name: Check (as cran)
+        working-directory: pharmr_repo
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: |
@@ -109,6 +113,7 @@ jobs:
           path: check
 
       - name: Check (to run python)
+        working-directory: pharmr_repo
         run: |
           options(crayon.enabled = TRUE)
           rcmdcheck::rcmdcheck(args = c("--no-manual"), error_on = "warning", check_dir = "check")
