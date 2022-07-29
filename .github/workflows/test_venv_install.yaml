@@ -128,11 +128,14 @@ jobs:
           name: results-cran
           path: check
 
-      - name: Add changes to DESCRIPTION and documentation
-        working-directory: pharmr_repo
+      - name: Set up git config
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Add changes to DESCRIPTION and documentation
+        working-directory: pharmr_repo
+        run: |
           git add DESCRIPTION
           git add NAMESPACE
           git add R/functions_wrapper.R
@@ -152,8 +155,6 @@ jobs:
         if: ${{ env.has_been_updated == 'true' }}
         working-directory: pharmr_repo
         run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           echo "Committing changes"
           git commit -m "Update DESCRIPTION/documentation"
           echo "Show status"
