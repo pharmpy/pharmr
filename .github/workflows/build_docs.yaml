@@ -17,11 +17,11 @@ jobs:
         with:
           path: pharmr_repo
 
-      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-r@v2
         with:
           r-version: 'release'
 
-      - uses: r-lib/actions/setup-pandoc@v1
+      - uses: r-lib/actions/setup-pandoc@v2
 
       - name: Query dependencies
         working-directory: pharmr_repo
@@ -32,6 +32,7 @@ jobs:
         shell: Rscript {0}
 
       - name: Restore R package cache
+        if: runner.os != 'Windows'
         uses: actions/cache@v2
         with:
           path: ${{ env.R_LIBS_USER }}
@@ -40,19 +41,19 @@ jobs:
 
       - name: Install system dependencies
         working-directory: pharmr_repo
+        if: runner.os == 'Linux'
         run: |
           while read -r cmd
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
 
-      - name: Install dependencies
+      - name: Install R dependencies
         working-directory: pharmr_repo
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
           remotes::install_github('rstudio/reticulate')
-          reticulate::install_miniconda()
         shell: Rscript {0}
 
       - name: Install pharmr
@@ -61,33 +62,61 @@ jobs:
           remotes::install_local(force=TRUE)
         shell: Rscript {0}
 
-      - name: Install pharmpy
+      - name: Checkout Pharmpy
+        uses: actions/checkout@v3
+        with:
+          repository: pharmpy/pharmpy
+          path: pharmpy_repo
+
+      - name: Set up Pharmpy release version
+        working-directory: pharmpy_repo
+        run: |
+          git fetch
+          git checkout -b release_latest "$(git rev-list --tags --max-count=1)"
+          echo "pharmpy_version=`git describe --tags`" >> $GITHUB_ENV 
+          git branch -v
+
+      - name: Install Pharmpy in venv
+        working-directory: pharmpy_repo
+        run: |
+          python -m venv pharmpy_venv
+          source pharmpy_venv/bin/activate
+          pip install .
+
+      - name: Test Pharmpy
         working-directory: pharmr_repo
         run: |
-          pharmr:::install_pharmpy_devel(version='latest')
+          reticulate::py_discover_config()
+          reticulate::use_python('../pharmpy_repo/pharmpy_venv/bin')
+          pharmr::print_pharmpy_version()
         shell: Rscript {0}
 
       - name: Install deploy dependencies
         run: |
-          install.packages("here")
-          install.packages("tidyverse")
           install.packages("devtools")
         shell: Rscript {0}
         
       - name: Update DESCRIPTION and documentation
         working-directory: pharmr_repo/deploy
         run: |
-          Rscript update_description.R
-          Rscript document_pharmpy.R
+          reticulate::use_python('../../pharmpy_repo/pharmpy_venv/bin')
+
+          pharmpy <- reticulate::import("pharmpy")
+          pharmpy_version <- pharmpy$`__version__`
+          desc::desc_set('Version', pharmpy_version)
+          desc::desc_set('Date', Sys.Date())
+          
+          reticulate::py_run_file('build_functions.py')
+          devtools::document()
+        shell: Rscript {0}
 
       - name: Check
-        working-directory: pharmr_repo
-        env:
-          _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: |
-          options(crayon.enabled = TRUE)
-          rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
-        shell: Rscript {0}
+          source pharmpy_repo/pharmpy_venv/bin/activate
+          mkdir build
+          R CMD build pharmr_repo
+          R CMD install pharmr_*.*.*.tar.gz build
+          R CMD check build/pharmr_*.*.*.tar.gz --no-manual
 
       - name: Upload check results
         if: failure()
@@ -96,11 +125,15 @@ jobs:
           name: results-cran
           path: check
 
-      - name: Add changes to DESCRIPTION and documentation
+      - name: Set up git config
         working-directory: pharmr_repo
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Add changes to DESCRIPTION and documentation
+        working-directory: pharmr_repo
+        run: |
           git add DESCRIPTION
           git add NAMESPACE
           git add R/functions_wrapper.R
@@ -116,21 +149,18 @@ jobs:
             echo "has_been_updated=false" >> $GITHUB_ENV
           fi
 
-      - name: Commit changes
+      - name: Commit and push changes, tag version
         if: ${{ env.has_been_updated == 'true' }}
         working-directory: pharmr_repo
         run: |
           echo "Committing changes"
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Update DESCRIPTION/documentation"
-
-      - name: Push changes
-        working-directory: pharmr_repo
-        run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          echo "Tag version"
+          git tag "${{ env.pharmpy_version }}"
+          echo "Push changes"
           git push https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
+          echo "push tags"
+          git push --tags https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
         env:
           REPO_KEY: ${{secrets.ACCESS_TOKEN}}
           USERNAME: github-actions[bot]
