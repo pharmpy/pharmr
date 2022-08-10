@@ -402,8 +402,8 @@ add_lag_time <- function(model) {
 #' ==  ===================================================
 #' 1   :math:`{CL} = {CL'}`, :math:`{VC} = {VC'}`,
 #' :math:`{QP1} = {CL'}` and :math:`{VP1} = {VC'} * 0.05`
-#' 2   :math:`{QP1} = {QP1' / 2}`, :math:`{VP1} = {VP1'}`,
-#' :math:`{QP2} = {QP1' / 2}` and :math:`{VP2} = {VP1'}`
+#' 2   :math:`{QP1} = {QP1' * 0.1}`, :math:`{VP1} = {VP1'}`,
+#' :math:`{QP2} = {QP1' * 0.9}` and :math:`{VP2} = {VP1'}`
 #' ==  ===================================================
 #' 
 #' @param model (Model) Pharmpy model
@@ -2008,11 +2008,11 @@ get_concentration_parameters_from_data <- function(model) {
 #' @description
 #' Returns path to the user config path
 #' 
-#' @return (str) Path to user config
+#' @return (str or NULL) Path to user config or NULL if file does not exist
 #' 
 #' @examples
 #' \dontrun{
-#' get_config_path().replace('\\', '/')
+#' get_config_path()
 #' }
 #' 
 #' @export
@@ -2140,8 +2140,8 @@ get_ids <- function(model) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' sorted(get_individual_parameters(model))
-#' sorted(get_individual_parameters(model, 'iiv'))
+#' get_individual_parameters(model)
+#' get_individual_parameters(model, 'iiv')
 #' get_individual_parameters(model, 'iov')
 #' }
 #' @seealso
@@ -2438,7 +2438,7 @@ get_omegas <- function(model) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' sorted(get_pk_parameters(model))
+#' get_pk_parameters(model)
 #' get_pk_parameters(model, 'absorption')
 #' get_pk_parameters(model, 'distribution')
 #' get_pk_parameters(model, 'elimination')
@@ -5323,8 +5323,10 @@ run_amd <- function(input, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_ini
 #' @param effects (str | vector) The vector of candidate parameter-covariate effects to try, either as a
 #'  MFL sentence or in (optionally compact) tuple form.
 #' @param p_forward (numeric) The p-value to use in the likelihood ratio test for forward steps
+#' @param p_backward (numeric) The p-value to use in the likelihood ratio test for backward steps
 #' @param max_steps (integer) The maximum number of search steps to make
-#' @param algorithm (str) The search algorithm to use. Currently only 'scm-forward' is supported.
+#' @param algorithm (str) The search algorithm to use. Currently 'scm-forward' and
+#'  'scm-forward-then-backward' are supported.
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (COVSearchResults) COVsearch tool result object
@@ -5336,8 +5338,8 @@ run_amd <- function(input, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_ini
 #' }
 #' 
 #' @export
-run_covsearch <- function(effects, p_forward=0.05, max_steps=-1, algorithm='scm-forward', model=NULL) {
-    func_out <- pharmpy$tools$run_covsearch(effects, p_forward=p_forward, max_steps=max_steps, algorithm=algorithm, model=model)
+run_covsearch <- function(effects, p_forward=0.05, p_backward=0.01, max_steps=-1, algorithm='scm-forward-then-backward', model=NULL) {
+    func_out <- pharmpy$tools$run_covsearch(effects, p_forward=p_forward, p_backward=p_backward, max_steps=max_steps, algorithm=algorithm, model=model)
     return(py_to_r(func_out))
 }
 

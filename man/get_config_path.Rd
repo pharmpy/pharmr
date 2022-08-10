@@ -7,14 +7,14 @@
 get_config_path()
 }
 \value{
-(str) Path to user config
+(str or NULL) Path to user config or NULL if file does not exist
 }
 \description{
 Returns path to the user config path
 }
 \examples{
 \dontrun{
-get_config_path().replace('\\\\', '/')
+get_config_path()
 }
 
 }

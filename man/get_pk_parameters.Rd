@@ -21,7 +21,7 @@ Retrieves PK parameters in :class:\code{pharmpy.model}.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-sorted(get_pk_parameters(model))
+get_pk_parameters(model)
 get_pk_parameters(model, 'absorption')
 get_pk_parameters(model, 'distribution')
 get_pk_parameters(model, 'elimination')

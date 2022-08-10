@@ -20,8 +20,8 @@ Retrieves all parameters with IIV or IOV in :class:\code{pharmpy.model}.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-sorted(get_individual_parameters(model))
-sorted(get_individual_parameters(model, 'iiv'))
+get_individual_parameters(model)
+get_individual_parameters(model, 'iiv')
 get_individual_parameters(model, 'iov')
 }
 }

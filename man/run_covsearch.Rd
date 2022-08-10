@@ -7,8 +7,9 @@
 run_covsearch(
   effects,
   p_forward = 0.05,
+  p_backward = 0.01,
   max_steps = -1,
-  algorithm = "scm-forward",
+  algorithm = "scm-forward-then-backward",
   model = NULL
 )
 }
@@ -18,9 +19,12 @@ MFL sentence or in (optionally compact) tuple form.}
 
 \item{p_forward}{(numeric) The p-value to use in the likelihood ratio test for forward steps}
 
+\item{p_backward}{(numeric) The p-value to use in the likelihood ratio test for backward steps}
+
 \item{max_steps}{(integer) The maximum number of search steps to make}
 
-\item{algorithm}{(str) The search algorithm to use. Currently only 'scm-forward' is supported.}
+\item{algorithm}{(str) The search algorithm to use. Currently 'scm-forward' and
+'scm-forward-then-backward' are supported.}
 
 \item{model}{(Model) Pharmpy model}
 }
