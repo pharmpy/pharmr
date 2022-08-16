@@ -84,12 +84,16 @@ def create_r_func(func, module):
                  f'\t\tmessage(cond)\n' \
                  f'\t\tmessage(\'Full stack:\')\n' \
                  f'\t\tmessage(reticulate::py_last_error())\n' \
+                 f'\t\tmessage("pharmr version: ", packageVersion("pharmr"))\n' \
+                 f'\t\tmessage("Pharmpy version: ", print_pharmpy_version())\n' \
                  f'\t\treturn(NA)\n' \
                  f'\t}},\n' \
                  f'\twarning=function(cond) {{\n' \
                  f'\t\tmessage(cond)\n' \
                  f'\t\tmessage(\'Full stack:\')\n' \
                  f'\t\tmessage(reticulate::py_last_error())\n' \
+                 f'\t\tmessage("pharmr version: ", packageVersion("pharmr"))\n' \
+                 f'\t\tmessage("Pharmpy version: ", print_pharmpy_version())\n' \
                  f'\t\treturn(NA)\n' \
                  f'\t}}\n' \
                  f'\t)\n' \

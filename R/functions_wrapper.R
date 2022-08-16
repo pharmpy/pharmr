@@ -5179,12 +5179,16 @@ create_results <- function(path, ...) {
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	},
 	warning=function(cond) {
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	}
 	)
@@ -5221,12 +5225,16 @@ fit <- function(models, tool=NULL) {
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	},
 	warning=function(cond) {
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	}
 	)
@@ -5261,12 +5269,16 @@ read_results <- function(path) {
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	},
 	warning=function(cond) {
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	}
 	)
@@ -5298,12 +5310,16 @@ retrieve_models <- function(path, names=NULL) {
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	},
 	warning=function(cond) {
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	}
 	)
@@ -5343,12 +5359,16 @@ run_allometry <- function(model=NULL, allometric_variable='WT', reference_value=
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	},
 	warning=function(cond) {
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	}
 	)
@@ -5399,12 +5419,16 @@ run_amd <- function(input, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_ini
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	},
 	warning=function(cond) {
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	}
 	)
@@ -5444,12 +5468,16 @@ run_covsearch <- function(effects, p_forward=0.05, p_backward=0.01, max_steps=-1
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	},
 	warning=function(cond) {
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	}
 	)
@@ -5488,12 +5516,16 @@ run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cut
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	},
 	warning=function(cond) {
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	}
 	)
@@ -5532,12 +5564,16 @@ run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='bic'
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	},
 	warning=function(cond) {
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	}
 	)
@@ -5577,12 +5613,16 @@ run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_de
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	},
 	warning=function(cond) {
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	}
 	)
@@ -5618,12 +5658,16 @@ run_resmod <- function(model=NULL, groups=4, p_value=0.05, skip=NULL) {
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	},
 	warning=function(cond) {
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	}
 	)
@@ -5658,12 +5702,16 @@ run_tool <- function(name, ...) {
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	},
 	warning=function(cond) {
 		message(cond)
 		message('Full stack:')
 		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	}
 	)
