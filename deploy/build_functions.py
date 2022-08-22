@@ -68,17 +68,49 @@ def create_r_func(func, module):
 
     if not getdoc(func):
         raise ValueError(f'No documentation available for {func_name}')
-    if 'pd.dataframe' in getdoc(func).lower() or 'pd.series' in getdoc(func).lower():
-        return f'{func_name} <- function({wrapper_arg_str}) {{\n' \
-               f'    df <- pharmpy${module_name}${func_name}({pyfunc_arg_str})\n' \
-               f'    df_reset <- df$reset_index()\n' \
-               f'    return(py_to_r(df_reset))\n' \
-               f'}}'
-    else:
-        r_func = f'{func_name} <- function({wrapper_arg_str}) {{\n' \
-                 f'    func_out <- pharmpy${module_name}${func_name}({pyfunc_arg_str})\n' \
-                 f'    return(py_to_r(func_out))\n' \
+
+    func_def = f'{func_name} <- function({wrapper_arg_str})'
+    func_out = f'func_out <- pharmpy${module_name}${func_name}({pyfunc_arg_str})'
+    func_return = 'return(py_to_r(func_out))'
+
+    if module_name == 'tools':
+        r_func = f'{func_def} {{\n' \
+                 f'\ttryCatch(\n' \
+                 f'\t{{\n' \
+                 f'\t\t{func_out}\n' \
+                 f'\t\t{func_return}\n' \
+                 f'\t}},\n' \
+                 f'\terror=function(cond) {{\n' \
+                 f'\t\tmessage(cond)\n' \
+                 f'\t\tmessage(\'Full stack:\')\n' \
+                 f'\t\tmessage(reticulate::py_last_error())\n' \
+                 f'\t\tmessage("pharmr version: ", packageVersion("pharmr"))\n' \
+                 f'\t\tmessage("Pharmpy version: ", print_pharmpy_version())\n' \
+                 f'\t\treturn(NA)\n' \
+                 f'\t}},\n' \
+                 f'\twarning=function(cond) {{\n' \
+                 f'\t\tmessage(cond)\n' \
+                 f'\t\tmessage(\'Full stack:\')\n' \
+                 f'\t\tmessage(reticulate::py_last_error())\n' \
+                 f'\t\tmessage("pharmr version: ", packageVersion("pharmr"))\n' \
+                 f'\t\tmessage("Pharmpy version: ", print_pharmpy_version())\n' \
+                 f'\t\treturn(NA)\n' \
+                 f'\t}}\n' \
+                 f'\t)\n' \
                  f'}}'
+    else:
+        if 'pd.dataframe' in getdoc(func).lower() or 'pd.series' in getdoc(func).lower():
+            func_reset = f'func_out <- func_out$reset_index()'
+            r_func = f'{func_def} {{\n' \
+                     f'\t{func_out}\n' \
+                     f'\t{func_reset}\n' \
+                     f'\t{func_return}\n' \
+                     f'}}'
+        else:
+            r_func = f'{func_def} {{\n' \
+                     f'\t{func_out}\n' \
+                     f'\t{func_return}\n' \
+                     f'}}'
 
     return r_func
 
