@@ -25,6 +25,12 @@ knit_print.pharmpy.random_variables.RandomVariables <- function(x, ...) {
     structure(res, class='knit_asis')
 }
 
+#' @exportS3Method knitr::knit_print pharmpy.statements.ExplicitODESystem
+knit_print.pharmpy.statements.ExplicitODESystem <- function(x, ...) {
+    res <- x$`_repr_latex_`()
+    structure(res, class='knit_asis')
+}
+
 #' @exportS3Method repr::repr_latex pharmpy.statements.Assignment
 repr_latex.pharmpy.statements.Assignment <- function(obj, ...) {
     obj$`_repr_latex_`()
@@ -33,6 +39,11 @@ repr_latex.pharmpy.statements.Assignment <- function(obj, ...) {
 #' @exportS3Method repr::repr_html pharmpy.statements.ModelStatements
 repr_html.pharmpy.statements.ModelStatements <- function(obj, ...) {
     obj$`_repr_html_`()
+}
+
+#' @exportS3Method repr::repr_html pharmpy.statements.ExplicitODESystem
+repr_latex.pharmpy.statements.ExplicitODESystem <- function(obj, ...) {
+    obj$`_repr_latex_`()
 }
 
 #' @exportS3Method repr::repr_latex pharmpy.random_variables.RandomVariable
