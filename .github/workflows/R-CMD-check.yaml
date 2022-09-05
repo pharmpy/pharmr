@@ -70,7 +70,7 @@ jobs:
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
-          apt install libcurl4-openssl-dev
+          sudo apt install libcurl4-openssl-dev
 
       - name: Install R dependencies
         working-directory: pharmr_repo
