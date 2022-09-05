@@ -41,7 +41,7 @@ repr_html.pharmpy.statements.ModelStatements <- function(obj, ...) {
     obj$`_repr_html_`()
 }
 
-#' @exportS3Method repr::repr_html pharmpy.statements.ExplicitODESystem
+#' @exportS3Method repr::repr_latex pharmpy.statements.ExplicitODESystem
 repr_latex.pharmpy.statements.ExplicitODESystem <- function(obj, ...) {
     obj$`_repr_latex_`()
 }
