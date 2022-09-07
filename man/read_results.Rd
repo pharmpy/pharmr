@@ -17,7 +17,7 @@ Read results object from file
 }
 \examples{
 \dontrun{
-res <- read_resuts("results$json")
+res <- read_results("results$json")
 }
 }
 \seealso{

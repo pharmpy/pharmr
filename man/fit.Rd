@@ -4,15 +4,15 @@
 \alias{fit}
 \title{fit}
 \usage{
-fit(models, tool = NULL)
+fit(model_or_models, tool = NULL)
 }
 \arguments{
-\item{models}{(vector) List of models or one single model}
+\item{model_or_models}{(Model | vector\link{Model}) List of models or one single model}
 
 \item{tool}{(str) Estimation tool to use. NULL to use default}
 }
 \value{
-(Model) Reference to same model
+(Model | vector\link{Model}) Input model or models with model fit results
 }
 \description{
 Fit models.

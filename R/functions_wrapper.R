@@ -1470,7 +1470,7 @@ create_symbol <- function(model, stem, force_numbering=FALSE) {
 #' 
 #' @param model (Model) Pharmpy model object
 #' @param column_names (vector or str) List of column names or one column name to drop or mark as dropped
-#' @param mark (logical) Default is to remove column from dataset set this to TRUE to only mark as dropped
+#' @param mark (logical) Default is to remove column from dataset. Set this to TRUE to only mark as dropped
 #'  
 #' @return (Model) Reference to same model object
 #' 
@@ -1978,6 +1978,27 @@ get_bioavailability <- function(model) {
 }
 
 #' @title
+#' get_cmt
+#' 
+#' @description
+#' Get the cmt (compartment) column from the model dataset
+#' 
+#' If a cmt column is present this will be extracted otherwise
+#' a cmt column will be created.
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (data.frame) CMT
+#' 
+#' 
+#' @export
+get_cmt <- function(model) {
+	func_out <- pharmpy$modeling$get_cmt(model)
+	func_out <- func_out$reset_index()
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' get_concentration_parameters_from_data
 #' 
 #' @description
@@ -2036,7 +2057,7 @@ get_config_path <- function() {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' model$datainfo[["WGT", "APGR"]].types <- "covariate"
+#' model <- set_covariates(model, c("WGT", "APGR"))
 #' get_covariate_baselines(model)
 #' }
 #' @seealso
@@ -2099,6 +2120,27 @@ get_doseid <- function(model) {
 #' @export
 get_doses <- function(model) {
 	func_out <- pharmpy$modeling$get_doses(model)
+	func_out <- func_out$reset_index()
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' get_evid
+#' 
+#' @description
+#' Get the evid from model dataset
+#' 
+#' If an event column is present this will be extracted otherwise
+#' an evid column will be created.
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (data.frame) EVID
+#' 
+#' 
+#' @export
+get_evid <- function(model) {
+	func_out <- pharmpy$modeling$get_evid(model)
 	func_out <- func_out$reset_index()
 	return(py_to_r(func_out))
 }
@@ -3137,26 +3179,26 @@ print_model_symbols <- function(model) {
 #' 
 #' @param base_model (Model) Base model to compare to
 #' @param models (vector) List of models
-#' @param strictness (vector or NULL) List of strictness criteria to be fulfilled, currently only minimization successful.
-#'  Default is NULL
+#' @param errors_allowed (vector or NULL) List of errors that are allowed for ranking. Currently available is: rounding_errors and
+#'  maxevals_exceeded. Default is NULL
 #' @param rank_type (str) Name of ranking type. Available options are 'ofv', 'aic', 'bic', 'lrt' (OFV with LRT)
 #' @param cutoff (numeric or NULL) Value to use as cutoff. If using LRT, cutoff denotes p-value. Default is NULL
 #' @param bic_type (str) Type of BIC to calculate. Default is the mixed effects.
 #'  
-#' @return ((data.frame, vector)) A tuple with a DataFrame of the ranked models and a vector of ranked models sorted by rank
+#' @return (data.frame) DataFrame of the ranked models
 #' 
 #' @examples
 #' \dontrun{
 #' model_1 <- load_example_model("pheno")
 #' model_2 <- load_example_model("pheno_linear")
 #' rank_models(model_1, c(model_2),
-#'             strictness=c('minimization_successful'),
+#'             errors_allowed=c('rounding_errors'),
 #'             rank_type='lrt')
 #' }
 #' 
 #' @export
-rank_models <- function(base_model, models, strictness=NULL, rank_type='ofv', cutoff=NULL, bic_type='mixed') {
-	func_out <- pharmpy$modeling$rank_models(base_model, models, strictness=strictness, rank_type=rank_type, cutoff=cutoff, bic_type=bic_type)
+rank_models <- function(base_model, models, errors_allowed=NULL, rank_type='ofv', cutoff=NULL, bic_type='mixed') {
+	func_out <- pharmpy$modeling$rank_models(base_model, models, errors_allowed=errors_allowed, rank_type=rank_type, cutoff=cutoff, bic_type=bic_type)
 	func_out <- func_out$reset_index()
 	return(py_to_r(func_out))
 }
@@ -3836,6 +3878,24 @@ set_bolus_absorption <- function(model) {
 #' @export
 set_combined_error_model <- function(model, data_trans=NULL) {
 	func_out <- pharmpy$modeling$set_combined_error_model(model, data_trans=data_trans)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' set_covariates
+#' 
+#' @description
+#' Set columns in the dataset to be covariates in the datainfo
+#' 
+#' @param model (Model) Pharmpy model
+#' @param covariates (vector) List of column names
+#'  
+#' @return (Model) Reference to the same Pharmpy model object
+#' 
+#' 
+#' @export
+set_covariates <- function(model, covariates) {
+	func_out <- pharmpy$modeling$set_covariates(model, covariates)
 	return(py_to_r(func_out))
 }
 
@@ -5200,10 +5260,10 @@ create_results <- function(path, ...) {
 #' @description
 #' Fit models.
 #' 
-#' @param models (vector) List of models or one single model
+#' @param model_or_models (Model | vector[Model]) List of models or one single model
 #' @param tool (str) Estimation tool to use. NULL to use default
 #'  
-#' @return (Model) Reference to same model
+#' @return (Model | vector[Model]) Input model or models with model fit results
 #' 
 #' @examples
 #' \dontrun{
@@ -5215,10 +5275,10 @@ create_results <- function(path, ...) {
 #' 
 #' 
 #' @export
-fit <- function(models, tool=NULL) {
+fit <- function(model_or_models, tool=NULL) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$fit(models, tool=tool)
+		func_out <- pharmpy$tools$fit(model_or_models, tool=tool)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5252,7 +5312,7 @@ fit <- function(models, tool=NULL) {
 #' 
 #' @examples
 #' \dontrun{
-#' res <- read_resuts("results$json")
+#' res <- read_results("results$json")
 #' }
 #' @seealso
 #' create_results
@@ -5380,7 +5440,7 @@ run_allometry <- function(model=NULL, allometric_variable='WT', reference_value=
 #' @description
 #' Run Automatic Model Development (AMD) tool
 #' 
-#' Runs structural modelsearch, IIV building, and resmod
+#' Runs structural modelsearch, IIV building, and ruvsearch
 #' 
 #' @param input (Model) Read model object/Path to a dataset
 #' @param modeltype (str) Type of model to build. Either 'pk_oral' or 'pk_iv'
@@ -5629,29 +5689,29 @@ run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_de
 }
 
 #' @title
-#' run_resmod
+#' run_ruvsearch
 #' 
 #' @description
-#' Run the resmod tool. For more details, see :ref:`resmod`.
+#' Run the ruvsearch tool. For more details, see :ref:`ruvsearch`.
 #' 
 #' @param model (Model) Pharmpy model
 #' @param groups (integer) The number of bins to use for the time varying models
 #' @param p_value (numeric) The p-value to use for the likelihood ratio test
 #' @param skip (vector) A vector of models to not attempt.
 #'  
-#' @return (ResmodResults) Resmod tool result object
+#' @return (RUVSearchResults) Ruvsearch tool result object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' run_resmod(model=model)
+#' run_ruvsearch(model=model)
 #' }
 #' 
 #' @export
-run_resmod <- function(model=NULL, groups=4, p_value=0.05, skip=NULL) {
+run_ruvsearch <- function(model=NULL, groups=4, p_value=0.05, skip=NULL) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_resmod(model=model, groups=groups, p_value=p_value, skip=skip)
+		func_out <- pharmpy$tools$run_ruvsearch(model=model, groups=groups, p_value=p_value, skip=skip)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5688,7 +5748,7 @@ run_resmod <- function(model=NULL, groups=4, p_value=0.05, skip=NULL) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' res <- run_tool("resmod", model)
+#' res <- run_tool("ruvsearch", model)
 #' }
 #' 
 #' @export

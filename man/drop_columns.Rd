@@ -11,7 +11,7 @@ drop_columns(model, column_names, mark = FALSE)
 
 \item{column_names}{(vector or str) List of column names or one column name to drop or mark as dropped}
 
-\item{mark}{(logical) Default is to remove column from dataset set this to TRUE to only mark as dropped}
+\item{mark}{(logical) Default is to remove column from dataset. Set this to TRUE to only mark as dropped}
 }
 \value{
 (Model) Reference to same model object

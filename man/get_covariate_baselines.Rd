@@ -20,7 +20,7 @@ Baseline is taken to be the first row even if that has a missing value.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-model$datainfo[["WGT", "APGR"]].types <- "covariate"
+model <- set_covariates(model, c("WGT", "APGR"))
 get_covariate_baselines(model)
 }
 }

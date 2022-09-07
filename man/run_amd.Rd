@@ -50,7 +50,7 @@ run_amd(
 \description{
 Run Automatic Model Development (AMD) tool
 
-Runs structural modelsearch, IIV building, and resmod
+Runs structural modelsearch, IIV building, and ruvsearch
 }
 \examples{
 \dontrun{

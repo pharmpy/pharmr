@@ -20,7 +20,7 @@ Run tool workflow
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-res <- run_tool("resmod", model)
+res <- run_tool("ruvsearch", model)
 }
 
 }
