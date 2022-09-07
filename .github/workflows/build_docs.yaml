@@ -67,11 +67,11 @@ jobs:
         with:
           repository: pharmpy/pharmpy
           path: pharmpy_repo
+          fetch-depth: 0
 
       - name: Set up Pharmpy release version
         working-directory: pharmpy_repo
         run: |
-          git fetch
           git checkout -b release_latest "$(git rev-list --tags --max-count=1)"
           echo "pharmpy_version=`git describe --tags`" >> $GITHUB_ENV 
           git branch -v
