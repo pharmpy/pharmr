@@ -7,12 +7,12 @@
 fit(model_or_models, tool = NULL)
 }
 \arguments{
-\item{model_or_models}{(Model | vector\link{Model}) List of models or one single model}
+\item{model_or_models}{(Model | vector of Models) List of models or one single model}
 
 \item{tool}{(str) Estimation tool to use. NULL to use default}
 }
 \value{
-(Model | vector\link{Model}) Input model or models with model fit results
+(Model | vector of Models) Input model or models with model fit results
 }
 \description{
 Fit models.
