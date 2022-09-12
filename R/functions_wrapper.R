@@ -5348,10 +5348,10 @@ create_results <- function(path, ...) {
 #' @description
 #' Fit models.
 #' 
-#' @param model_or_models (Model | vector[Model]) List of models or one single model
+#' @param model_or_models (Model | vector of Models) List of models or one single model
 #' @param tool (str) Estimation tool to use. NULL to use default
 #'  
-#' @return (Model | vector[Model]) Input model or models with model fit results
+#' @return (Model | vector of Models) Input model or models with model fit results
 #' 
 #' @examples
 #' \dontrun{
