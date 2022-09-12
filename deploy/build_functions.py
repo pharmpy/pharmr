@@ -100,10 +100,12 @@ def create_r_func(func, module):
                  f'}}'
     else:
         if 'pd.dataframe' in getdoc(func).lower() or 'pd.series' in getdoc(func).lower():
-            func_reset = f'func_out <- func_out$reset_index()'
+            func_reset = '\tif (func_out$index$nlevels > 1) {\n' \
+                         '\t\tfunc_out <- func_out$reset_index()\n' \
+                         '\t}'
             r_func = f'{func_def} {{\n' \
                      f'\t{func_out}\n' \
-                     f'\t{func_reset}\n' \
+                     f'{func_reset}\n' \
                      f'\t{func_return}\n' \
                      f'}}'
         else:
