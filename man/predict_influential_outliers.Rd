@@ -6,6 +6,7 @@
 \usage{
 predict_influential_outliers(
   model,
+  results,
   outlier_cutoff = 3,
   influential_cutoff = 3.84
 )
@@ -13,12 +14,14 @@ predict_influential_outliers(
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
+\item{results}{(ModelfitResults) Results for model}
+
 \item{outlier_cutoff}{(numeric) Cutoff threshold for a residual singalling an outlier}
 
 \item{influential_cutoff}{(numeric) Cutoff threshold for a dofv signalling an influential individual}
 }
 \value{
-(pd.Dataframe) Dataframe over the individuals with a \code{outliers} and \code{dofv} columns containing the raw predictions and \code{influential}, \code{outlier} and \code{influential_outlier} boolean columns.
+(data.frame) Dataframe over the individuals with a \code{outliers} and \code{dofv} columns containing the raw predictions and \code{influential}, \code{outlier} and \code{influential_outlier} boolean columns.
 }
 \description{
 Predict influential outliers for a model using a machine learning model.

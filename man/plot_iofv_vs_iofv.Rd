@@ -4,12 +4,16 @@
 \alias{plot_iofv_vs_iofv}
 \title{plot_iofv_vs_iofv}
 \usage{
-plot_iofv_vs_iofv(model, other)
+plot_iofv_vs_iofv(iofv1, iofv2, name1, name2)
 }
 \arguments{
-\item{model}{(Model) The first model}
+\item{iofv1}{(data.frame) Estimated iOFV of the first model}
 
-\item{other}{(Model) The second model}
+\item{iofv2}{(data.frame) Estimated iOFV of the second model}
+
+\item{name1}{(str) Name of first model}
+
+\item{name2}{(str) Name of second model}
 }
 \value{
 (alt.Chart) Scatterplot

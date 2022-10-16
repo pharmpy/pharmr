@@ -4,18 +4,18 @@
 \alias{calculate_aic}
 \title{calculate_aic}
 \usage{
-calculate_aic(model, modelfit_results = NULL)
+calculate_aic(model, likelihood)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model object}
 
-\item{modelfit_results}{(ModelfitResults) Alternative results object. Default is to use the one in model}
+\item{likelihood}{(numeric) -2LL}
 }
 \value{
 (numeric) AIC of model fit
 }
 \description{
-Calculate final AIC for model assuming the OFV to be -2LL
+Calculate AIC
 
-AIC = OFV + 2*n_estimated_parameters
+AIC = -2LL + 2*n_estimated_parameters
 }

@@ -4,14 +4,7 @@
 \alias{run_modelsearch}
 \title{run_modelsearch}
 \usage{
-run_modelsearch(
-  search_space,
-  algorithm,
-  iiv_strategy = "absorption_delay",
-  rank_type = "bic",
-  cutoff = NULL,
-  model = NULL
-)
+run_modelsearch(...)
 }
 \arguments{
 \item{search_space}{(str) Search space to test}

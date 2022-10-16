@@ -4,16 +4,7 @@
 \alias{run_allometry}
 \title{run_allometry}
 \usage{
-run_allometry(
-  model = NULL,
-  allometric_variable = "WT",
-  reference_value = 70,
-  parameters = NULL,
-  initials = NULL,
-  lower_bounds = NULL,
-  upper_bounds = NULL,
-  fixed = TRUE
-)
+run_allometry(...)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}

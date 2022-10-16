@@ -6,7 +6,7 @@
 \usage{
 check_parameters_near_bounds(
   model,
-  values = NULL,
+  values,
   zero_limit = 0.001,
   significant_digits = 2
 )
@@ -14,8 +14,7 @@ check_parameters_near_bounds(
 \arguments{
 \item{model}{(Model) Pharmpy model object}
 
-\item{values}{(data.frame) Series of values with index a subset of parameter names.
-Default is to use all parameter estimates}
+\item{values}{(data.frame) Series of values with index a subset of parameter names.}
 
 \item{zero_limit}{(number) maximum distance to 0 bounds}
 
@@ -30,7 +29,7 @@ Check if any estimated parameter value is close to its bounds
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-check_parameters_near_bounds(model)
+check_parameters_near_bounds(model, model$modelfit_results$parameter_estimates)
 }
 
 }

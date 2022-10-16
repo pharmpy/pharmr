@@ -33,7 +33,8 @@ This function currently only support models without ODE systems
 \examples{
 \dontrun{
 model <- load_example_model("pheno_linear")
-evaluate_eta_gradient(model)
+etas <- model$modelfit_results$individual_estimates
+evaluate_eta_gradient(model, etas=etas)
 }
 }
 \seealso{

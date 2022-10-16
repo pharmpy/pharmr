@@ -4,13 +4,23 @@
 \alias{calculate_individual_parameter_statistics}
 \title{calculate_individual_parameter_statistics}
 \usage{
-calculate_individual_parameter_statistics(model, exprs, rng = NULL)
+calculate_individual_parameter_statistics(
+  model,
+  expr_or_exprs,
+  parameter_estimates,
+  covariance_matrix = NULL,
+  rng = NULL
+)
 }
 \arguments{
 \item{model}{(Model) A previously estimated model}
 
-\item{exprs}{(str, sympy expression or iterable of str or sympy expressions) Expressions or equations for parameters of interest. If equations are used
+\item{expr_or_exprs}{(str, sympy expression or iterable of str or sympy expressions) Expressions or equations for parameters of interest. If equations are used
 the names of the left hand sides will be used as the names of the parameters.}
+
+\item{parameter_estimates}{(data.frame) Parameter estimates}
+
+\item{covariance_matrix}{(data.frame) Parameter uncertainty covariance matrix}
 
 \item{rng}{(Generator or integer) Random number generator or integer seed}
 }
@@ -34,7 +44,9 @@ for the model the standard error will not be calculated.
 \dontrun{
 model <- load_example_model("pheno")
 rng <- create_rng(23)
-calculate_individual_parameter_statistics(model, "K=CL/V", rng=rng)
+pe <- model$modelfit_results$parameter_estimates
+cov <- model$modelfit_results$covariance_matrix
+calculate_individual_parameter_statistics(model, "K=CL/V", pe, cov, rng=rng)
 }
 
 }

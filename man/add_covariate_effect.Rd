@@ -4,7 +4,14 @@
 \alias{add_covariate_effect}
 \title{add_covariate_effect}
 \usage{
-add_covariate_effect(model, parameter, covariate, effect, operation = "*")
+add_covariate_effect(
+  model,
+  parameter,
+  covariate,
+  effect,
+  operation = "*",
+  allow_nested = FALSE
+)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model to add covariate effect to.}
@@ -16,6 +23,9 @@ add_covariate_effect(model, parameter, covariate, effect, operation = "*")
 \item{effect}{(str) Type of covariate effect. May be abbreviated covariate effect (see above) or custom.}
 
 \item{operation}{(str, optional) Whether the covariate effect should be added or multiplied (default).}
+
+\item{allow_nested}{(logical, optional) Whether to allow adding a covariate effect when one already exists for
+the input parameter-covariate pair.}
 }
 \value{
 (Model) Reference to the same model

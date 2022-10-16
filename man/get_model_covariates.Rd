@@ -18,7 +18,8 @@ get_model_covariates(model, strings = FALSE)
 List of covariates used in model
 
 A covariate in the model is here defined to be a data item
-affecting the model prediction excluding dosing items.
+affecting the model prediction excluding dosing items that
+are not used in model code.
 }
 \examples{
 \dontrun{

@@ -12,7 +12,7 @@ get_individual_parameters(model, level = "all")
 \item{level}{(str) The variability level to look for: 'iiv', 'iov', or 'all' (default)}
 }
 \value{
-(vector) A vector of the parameters' names as strings
+(vector\link{str}) A vector of the parameter names as strings
 }
 \description{
 Retrieves all parameters with IIV or IOV in :class:\code{pharmpy.model}.
@@ -27,6 +27,8 @@ get_individual_parameters(model, 'iov')
 }
 \seealso{
 get_pk_parameters
+
+get_rv_parameters
 
 has_random_effect
 }

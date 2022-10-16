@@ -16,11 +16,12 @@ run_amd(
   categorical = NULL,
   continuous = NULL,
   allometric_variable = NULL,
-  occasion = NULL
+  occasion = NULL,
+  path = NULL
 )
 }
 \arguments{
-\item{input}{(Model) Read model object/Path to a dataset}
+\item{input}{(Model or Path) Read model object/Path to a dataset}
 
 \item{modeltype}{(str) Type of model to build. Either 'pk_oral' or 'pk_iv'}
 
@@ -43,6 +44,8 @@ run_amd(
 \item{allometric_variable}{(str or Symbol) Variable to use for allometry}
 
 \item{occasion}{(str) Name of occasion column}
+
+\item{path}{(str or Path) Path to run AMD in}
 }
 \value{
 (Model) Reference to the same model object

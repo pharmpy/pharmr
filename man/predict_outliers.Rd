@@ -4,15 +4,17 @@
 \alias{predict_outliers}
 \title{predict_outliers}
 \usage{
-predict_outliers(model, cutoff = 3)
+predict_outliers(model, results, cutoff = 3)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
+\item{results}{(ModelfitResults) ModelfitResults for the model}
+
 \item{cutoff}{(numeric) Cutoff threshold for a residual singalling an outlier}
 }
 \value{
-(pd.Dataframe) Dataframe over the individuals with a \code{residual} column containing the raw predicted residuals and a \code{outlier} column with a boolean to tell whether the individual is an outlier or not.
+(data.frame) Dataframe over the individuals with a \code{residual} column containing the raw predicted residuals and a \code{outlier} column with a boolean to tell whether the individual is an outlier or not.
 }
 \description{
 Predict outliers for a model using a machine learning model.
@@ -22,7 +24,8 @@ See the :ref:\verb{simeval <Individual OFV summary>} documentation for a definit
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-predict_outliers(model)
+results <- model$modelfit_results
+predict_outliers(model, results)
 }
 }
 \seealso{

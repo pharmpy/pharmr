@@ -4,10 +4,12 @@
 \alias{check_high_correlations}
 \title{check_high_correlations}
 \usage{
-check_high_correlations(model, limit = 0.9)
+check_high_correlations(model, cor, limit = 0.9)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model object}
+
+\item{cor}{(data.frame) Estimated correlation matrix}
 
 \item{limit}{(numeric) Lower limit for a high correlation}
 }
@@ -20,7 +22,8 @@ Check for highly correlated parameter estimates
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-check_high_correlations(model, limit=0.3)
+cor <- model$modelfit_results$correlation_matrix
+check_high_correlations(model, cor, limit=0.3)
 }
 
 }

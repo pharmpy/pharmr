@@ -30,4 +30,6 @@ has_random_effect(model, 'CL', 'iov')
 }
 \seealso{
 get_individual_parameters
+
+get_rv_parameters
 }

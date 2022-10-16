@@ -13,7 +13,7 @@ get_pk_parameters(model, kind = "all")
 'elimination', or 'all' (default).}
 }
 \value{
-(Parameters) The PK parameters of the given model
+(vector\link{str}) A vector of the PK parameter names of the given model
 }
 \description{
 Retrieves PK parameters in :class:\code{pharmpy.model}.
@@ -29,4 +29,6 @@ get_pk_parameters(model, 'elimination')
 }
 \seealso{
 get_individual_parameters
+
+get_rv_parameters
 }

@@ -4,14 +4,7 @@
 \alias{run_covsearch}
 \title{run_covsearch}
 \usage{
-run_covsearch(
-  effects,
-  p_forward = 0.05,
-  p_backward = 0.01,
-  max_steps = -1,
-  algorithm = "scm-forward-then-backward",
-  model = NULL
-)
+run_covsearch(...)
 }
 \arguments{
 \item{effects}{(str | vector) The vector of candidate parameter-covariate effects to try, either as a

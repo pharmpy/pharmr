@@ -6,8 +6,8 @@
 \usage{
 sample_parameters_uniformly(
   model,
+  parameter_estimates,
   fraction = 0.1,
-  parameters = NULL,
   force_posdef_samples = NULL,
   n = 1,
   rng = NULL
@@ -16,9 +16,9 @@ sample_parameters_uniformly(
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{fraction}{(numeric) Fraction of estimate value to use for distribution bounds}
+\item{parameter_estimates}{(data.frame) Parameter estimates for parameters to use}
 
-\item{parameters}{(data.frame) Names of parameters to use. Default is to use all parameters in the model.}
+\item{fraction}{(numeric) Fraction of estimate value to use for distribution bounds}
 
 \item{force_posdef_samples}{(integer) Number of samples to reject before forcing variability parameters to give
 positive definite covariance matrices.}
@@ -40,7 +40,8 @@ with the bounds being estimate ± estimate * fraction.
 \dontrun{
 model <- load_example_model("pheno")
 rng <- create_rng(23)
-sample_parameters_uniformly(model, n=3, rng=rng)
+pe <- model$modelfit_results$parameter_estimates
+sample_parameters_uniformly(model, pe, n=3, rng=rng)
 }
 }
 \seealso{

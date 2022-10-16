@@ -4,13 +4,7 @@
 \alias{run_iivsearch}
 \title{run_iivsearch}
 \usage{
-run_iivsearch(
-  algorithm,
-  iiv_strategy = "no_add",
-  rank_type = "bic",
-  cutoff = NULL,
-  model = NULL
-)
+run_iivsearch(...)
 }
 \arguments{
 \item{algorithm}{(str) Which algorithm to run (brute_force, brute_force_no_of_etas, brute_force_block_structure)}

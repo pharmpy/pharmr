@@ -4,19 +4,12 @@
 \alias{run_iovsearch}
 \title{run_iovsearch}
 \usage{
-run_iovsearch(
-  column = "OCC",
-  list_of_parameters = NULL,
-  rank_type = "bic",
-  cutoff = NULL,
-  distribution = "same-as-iiv",
-  model = NULL
-)
+run_iovsearch(...)
 }
 \arguments{
 \item{column}{(str) Name of column in dataset to use as occasion column (default is 'OCC')}
 
-\item{list_of_parameters}{(vector) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)}
+\item{list_of_parameters}{(NULL or vector) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)}
 
 \item{rank_type}{(str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC}
 

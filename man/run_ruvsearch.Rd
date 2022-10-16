@@ -4,7 +4,7 @@
 \alias{run_ruvsearch}
 \title{run_ruvsearch}
 \usage{
-run_ruvsearch(model = NULL, groups = 4, p_value = 0.05, skip = NULL)
+run_ruvsearch(...)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}

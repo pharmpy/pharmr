@@ -29,7 +29,8 @@ This function currently only support models without ODE systems
 \examples{
 \dontrun{
 model <- load_example_model("pheno_linear")
-evaluate_population_prediction(model)
+pe <- model$modelfit_results$parameter_estimates
+evaluate_population_prediction(model, parameters=list(pe))
 }
 }
 \seealso{

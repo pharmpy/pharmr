@@ -6,8 +6,8 @@
 \usage{
 sample_parameters_from_covariance_matrix(
   model,
-  modelfit_results = NULL,
-  parameters = NULL,
+  parameter_estimates,
+  covariance_matrix,
   force_posdef_samples = NULL,
   force_posdef_covmatrix = FALSE,
   n = 1,
@@ -17,9 +17,9 @@ sample_parameters_from_covariance_matrix(
 \arguments{
 \item{model}{(Model) Input model}
 
-\item{modelfit_results}{(ModelfitResults) Alternative results object. Default is to use the one in model}
+\item{parameter_estimates}{(data.frame) Parameter estimates to use as means in sampling}
 
-\item{parameters}{(vector) Use to only sample a subset of the parameters. NULL means all}
+\item{covariance_matrix}{(data.frame) Parameter uncertainty covariance matrix}
 
 \item{force_posdef_samples}{(integer) Set to how many iterations to do before forcing all samples to be positive definite. NULL is
 default and means never and 0 means always}
@@ -36,13 +36,15 @@ default and means never and 0 means always}
 \description{
 Sample parameter vectors using the covariance matrix
 
-If modelfit_results is not provided the results from the model will be used
+If parameters is not provided all estimated parameters will be used
 }
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
 rng <- create_rng(23)
-sample_parameters_from_covariance_matrix(model, n=3, rng=rng)
+cov <- model$modelfit_results$covariance_matrix
+pe <- model$modelfit_results$parameter_estimates
+sample_parameters_from_covariance_matrix(model, pe, cov, n=3, rng=rng)
 }
 }
 \seealso{

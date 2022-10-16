@@ -9,7 +9,7 @@ remove_iov(model, to_remove = NULL)
 \arguments{
 \item{model}{(Model) Pharmpy model to remove IOV from.}
 
-\item{to_remove}{(str, vector) Name/names of IOV etas to remove, e.g. 'ETA_IOV_11'.
+\item{to_remove}{(str, vector) Name/names of IOV etas to remove, e.g. 'ETA_IOV_1_1'.
 If NULL, all etas that are IOVs will be removed. NULL is default.}
 }
 \value{

@@ -4,10 +4,19 @@
 \alias{calculate_pk_parameters_statistics}
 \title{calculate_pk_parameters_statistics}
 \usage{
-calculate_pk_parameters_statistics(model, rng = NULL)
+calculate_pk_parameters_statistics(
+  model,
+  parameter_estimates,
+  covariance_matrix = NULL,
+  rng = NULL
+)
 }
 \arguments{
 \item{model}{(Model) A previously estimated model}
+
+\item{parameter_estimates}{(data.frame) Parameter estimates}
+
+\item{covariance_matrix}{(data.frame) Parameter uncertainty covariance matrix}
 
 \item{rng}{(Generator or integer) Random number generator or seed}
 }
@@ -25,7 +34,9 @@ pre-defined pharmacokinetic parameters.
 \dontrun{
 model <- load_example_model("pheno")
 rng <- create_rng(23)
-calculate_pk_parameters_statistics(model, rng=rng)
+pe <- model$modelfit_results$parameter_estimates
+cov <- model$modelfit_results$covariance_matrix
+calculate_pk_parameters_statistics(model, pe, cov, rng=rng)
 }
 }
 \seealso{

@@ -18,9 +18,9 @@ add_allometry(
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{allometric_variable}{(str or Symbol) Variable to use for allometry (X above)}
+\item{allometric_variable}{(str or sympy.Expr) Value to use for allometry (X above)}
 
-\item{reference_value}{(str, integer, numeric or expression) Reference value (Z above)}
+\item{reference_value}{(str, integer, numeric or sympy.Expr) Reference value (Z above)}
 
 \item{parameters}{(vector) Parameters to use or NULL (default) for all available CL, Q and V parameters}
 

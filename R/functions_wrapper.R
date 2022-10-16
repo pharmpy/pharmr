@@ -9,8 +9,8 @@
 #' and T is a theta. Default is to automatically use clearance and volume parameters.
 #' 
 #' @param model (Model) Pharmpy model
-#' @param allometric_variable (str or Symbol) Variable to use for allometry (X above)
-#' @param reference_value (str, integer, numeric or expression) Reference value (Z above)
+#' @param allometric_variable (str or sympy.Expr) Value to use for allometry (X above)
+#' @param reference_value (str, integer, numeric or sympy.Expr) Reference value (Z above)
 #' @param parameters (vector) Parameters to use or NULL (default) for all available CL, Q and V parameters
 #' @param initials (vector) Initial estimates for the exponents. Default is to use 0.75 for CL and Qs and 1 for Vs
 #' @param lower_bounds (vector) Lower bounds for the exponents. Default is 0 for all parameters
@@ -177,6 +177,8 @@ add_covariance_step <- function(model) {
 #' @param covariate (str) Name of covariate.
 #' @param effect (str) Type of covariate effect. May be abbreviated covariate effect (see above) or custom.
 #' @param operation (str, optional) Whether the covariate effect should be added or multiplied (default).
+#' @param allow_nested (logical, optional) Whether to allow adding a covariate effect when one already exists for
+#'  the input parameter-covariate pair.
 #'  
 #' @return (Model) Reference to the same model
 #' 
@@ -188,8 +190,8 @@ add_covariance_step <- function(model) {
 #' }
 #' 
 #' @export
-add_covariate_effect <- function(model, parameter, covariate, effect, operation='*') {
-	func_out <- pharmpy$modeling$add_covariate_effect(model, parameter, covariate, effect, operation=operation)
+add_covariate_effect <- function(model, parameter, covariate, effect, operation='*', allow_nested=FALSE) {
+	func_out <- pharmpy$modeling$add_covariate_effect(model, parameter, covariate, effect, operation=operation, allow_nested=allow_nested)
 	return(py_to_r(func_out))
 }
 
@@ -590,19 +592,19 @@ bump_model_number <- function(model, path=NULL) {
 #' calculate_aic
 #' 
 #' @description
-#' Calculate final AIC for model assuming the OFV to be -2LL
+#' Calculate AIC
 #' 
-#' AIC = OFV + 2*n_estimated_parameters
+#' AIC = -2LL + 2*n_estimated_parameters
 #' 
 #' @param model (Model) Pharmpy model object
-#' @param modelfit_results (ModelfitResults) Alternative results object. Default is to use the one in model
+#' @param likelihood (numeric) -2LL
 #'  
 #' @return (numeric) AIC of model fit
 #' 
 #' 
 #' @export
-calculate_aic <- function(model, modelfit_results=NULL) {
-	func_out <- pharmpy$modeling$calculate_aic(model, modelfit_results=modelfit_results)
+calculate_aic <- function(model, likelihood) {
+	func_out <- pharmpy$modeling$calculate_aic(model, likelihood)
 	return(py_to_r(func_out))
 }
 
@@ -610,38 +612,39 @@ calculate_aic <- function(model, modelfit_results=NULL) {
 #' calculate_bic
 #' 
 #' @description
-#' Calculate final BIC value assuming the OFV to be -2LL
+#' Calculate BIC
 #' 
 #' Different variations of the BIC can be calculated:
 #' 
 #' * | mixed (default)
-#' | BIC = OFV + n_random_parameters * log(n_individuals) +
+#' | BIC = -2LL + n_random_parameters * log(n_individuals) +
 #' |       n_fixed_parameters * log(n_observations)
 #' * | fixed
-#' | BIC = OFV + n_estimated_parameters * log(n_observations)
+#' | BIC = -2LL + n_estimated_parameters * log(n_observations)
 #' * | random
-#' | BIC = OFV + n_estimated_parameters * log(n_individals)
+#' | BIC = -2LL + n_estimated_parameters * log(n_individals)
 #' * | iiv
-#' | BIC = OFV + n_estimated_iiv_omega_parameters * log(n_individals)
+#' | BIC = -2LL + n_estimated_iiv_omega_parameters * log(n_individals)
 #' 
 #' @param model (Model) Pharmpy model object
+#' @param likelihood (numeric) -2LL to use
 #' @param type (str) Type of BIC to calculate. Default is the mixed effects.
-#' @param modelfit_results (ModelfitResults) Alternative results object. Default is to use the one in model
 #'  
 #' @return (numeric) BIC of model fit
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' calculate_bic(model)
-#' calculate_bic(model, type='fixed')
-#' calculate_bic(model, type='random')
-#' calculate_bic(model, type='iiv')
+#' ofv <- model$modelfit_results$ofv
+#' calculate_bic(model, ofv)
+#' calculate_bic(model, ofv, type='fixed')
+#' calculate_bic(model, ofv, type='random')
+#' calculate_bic(model, ofv, type='iiv')
 #' }
 #' 
 #' @export
-calculate_bic <- function(model, type=NULL, modelfit_results=NULL) {
-	func_out <- pharmpy$modeling$calculate_bic(model, type=type, modelfit_results=modelfit_results)
+calculate_bic <- function(model, likelihood, type=NULL) {
+	func_out <- pharmpy$modeling$calculate_bic(model, likelihood, type=type)
 	return(py_to_r(func_out))
 }
 
@@ -876,6 +879,8 @@ calculate_eta_gradient_expression <- function(model) {
 #' Calculate eta shrinkage for each eta
 #' 
 #' @param model (Model) Pharmpy model
+#' @param parameter_estimates (data.frame) Parameter estimates
+#' @param individual_estimates (data.frame) Table of individual (eta) estimates
 #' @param sd (logical) Calculate shrinkage on the standard deviation scale (default is to calculate on the
 #'  variance scale)
 #'  
@@ -884,16 +889,21 @@ calculate_eta_gradient_expression <- function(model) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' calculate_eta_shrinkage(model)
-#' calculate_eta_shrinkage(model, sd=TRUE)
+#' pe <- model$modelfit_results$parameter_estimates
+#' ie <- model$modelfit_results$individual_estimates
+#' calculate_eta_shrinkage(model, pe, ie)
+#' calculate_eta_shrinkage(model, pe, ie, sd=TRUE)
 #' }
 #' @seealso
 #' calculate_individual_shrinkage
 #' 
 #' 
 #' @export
-calculate_eta_shrinkage <- function(model, sd=FALSE) {
-	func_out <- pharmpy$modeling$calculate_eta_shrinkage(model, sd=sd)
+calculate_eta_shrinkage <- function(model, parameter_estimates, individual_estimates, sd=FALSE) {
+	func_out <- pharmpy$modeling$calculate_eta_shrinkage(model, parameter_estimates, individual_estimates, sd=sd)
+	if (func_out$index$nlevels > 1) {
+		func_out <- func_out$reset_index()
+	}
 	return(py_to_r(func_out))
 }
 
@@ -914,7 +924,9 @@ calculate_eta_shrinkage <- function(model, sd=FALSE) {
 #' for the model the standard error will not be calculated.
 #' 
 #' @param model (Model) A previously estimated model
-#' @param exprs (str, sympy expression or iterable of str or sympy expressions) Expressions or equations for parameters of interest. If equations are used
+#' @param parameter_estimates (data.frame) Parameter estimates
+#' @param covariance_matrix (data.frame) Parameter uncertainty covariance matrix
+#' @param expr_or_exprs (str, sympy expression or iterable of str or sympy expressions) Expressions or equations for parameters of interest. If equations are used
 #'  the names of the left hand sides will be used as the names of the parameters.
 #' @param rng (Generator or integer) Random number generator or integer seed
 #'  
@@ -924,12 +936,14 @@ calculate_eta_shrinkage <- function(model, sd=FALSE) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' rng <- create_rng(23)
-#' calculate_individual_parameter_statistics(model, "K=CL/V", rng=rng)
+#' pe <- model$modelfit_results$parameter_estimates
+#' cov <- model$modelfit_results$covariance_matrix
+#' calculate_individual_parameter_statistics(model, "K=CL/V", pe, cov, rng=rng)
 #' }
 #' 
 #' @export
-calculate_individual_parameter_statistics <- function(model, exprs, rng=NULL) {
-	func_out <- pharmpy$modeling$calculate_individual_parameter_statistics(model, exprs, rng=rng)
+calculate_individual_parameter_statistics <- function(model, expr_or_exprs, parameter_estimates, covariance_matrix=NULL, rng=NULL) {
+	func_out <- pharmpy$modeling$calculate_individual_parameter_statistics(model, expr_or_exprs, parameter_estimates, covariance_matrix=covariance_matrix, rng=rng)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
 	}
@@ -945,21 +959,28 @@ calculate_individual_parameter_statistics <- function(model, exprs, rng=NULL) {
 #' Definition: ieta_shr = (var(eta) / omega)
 #' 
 #' @param model (Model) Pharmpy model
+#' @param parameter_estimates (data.frame) Parameter estimates of model
+#' @param individual_estimates_covariance (data.frame) Uncertainty covariance matrices of individual estimates
 #'  
 #' @return (DataFrame) Shrinkage for each eta and individual
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' calculate_individual_shrinkage(model)
+#' pe <- model$modelfit_results$parameter_estimates
+#' covs <- model$modelfit_results$individual_estimates_covariance
+#' calculate_individual_shrinkage(model, pe, covs)
 #' }
 #' @seealso
 #' calculate_eta_shrinkage
 #' 
 #' 
 #' @export
-calculate_individual_shrinkage <- function(model) {
-	func_out <- pharmpy$modeling$calculate_individual_shrinkage(model)
+calculate_individual_shrinkage <- function(model, parameter_estimates, individual_estimates_covariance) {
+	func_out <- pharmpy$modeling$calculate_individual_shrinkage(model, parameter_estimates, individual_estimates_covariance)
+	if (func_out$index$nlevels > 1) {
+		func_out <- func_out$reset_index()
+	}
 	return(py_to_r(func_out))
 }
 
@@ -1092,6 +1113,8 @@ calculate_parameters_from_ucp <- function(model, scale, ucps) {
 #' pre-defined pharmacokinetic parameters.
 #' 
 #' @param model (Model) A previously estimated model
+#' @param parameter_estimates (data.frame) Parameter estimates
+#' @param covariance_matrix (data.frame) Parameter uncertainty covariance matrix
 #' @param rng (Generator or integer) Random number generator or seed
 #'  
 #' @return (data.frame) A DataFrame of statistics indexed on parameter and covariate value.
@@ -1100,15 +1123,17 @@ calculate_parameters_from_ucp <- function(model, scale, ucps) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' rng <- create_rng(23)
-#' calculate_pk_parameters_statistics(model, rng=rng)
+#' pe <- model$modelfit_results$parameter_estimates
+#' cov <- model$modelfit_results$covariance_matrix
+#' calculate_pk_parameters_statistics(model, pe, cov, rng=rng)
 #' }
 #' @seealso
 #' calculate_individual_parameter_statistics : Calculation of statistics for arbitrary parameters
 #' 
 #' 
 #' @export
-calculate_pk_parameters_statistics <- function(model, rng=NULL) {
-	func_out <- pharmpy$modeling$calculate_pk_parameters_statistics(model, rng=rng)
+calculate_pk_parameters_statistics <- function(model, parameter_estimates, covariance_matrix=NULL, rng=NULL) {
+	func_out <- pharmpy$modeling$calculate_pk_parameters_statistics(model, parameter_estimates, covariance_matrix=covariance_matrix, rng=rng)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
 	}
@@ -1258,6 +1283,7 @@ check_dataset <- function(model, dataframe=FALSE, verbose=FALSE) {
 #' Check for highly correlated parameter estimates
 #' 
 #' @param model (Model) Pharmpy model object
+#' @param cor (data.frame) Estimated correlation matrix
 #' @param limit (numeric) Lower limit for a high correlation
 #'  
 #' @return (data.frame) Correlation values indexed on pairs of parameters for (absolute) correlations above limit
@@ -1265,12 +1291,13 @@ check_dataset <- function(model, dataframe=FALSE, verbose=FALSE) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' check_high_correlations(model, limit=0.3)
+#' cor <- model$modelfit_results$correlation_matrix
+#' check_high_correlations(model, cor, limit=0.3)
 #' }
 #' 
 #' @export
-check_high_correlations <- function(model, limit=0.9) {
-	func_out <- pharmpy$modeling$check_high_correlations(model, limit=limit)
+check_high_correlations <- function(model, cor, limit=0.9) {
+	func_out <- pharmpy$modeling$check_high_correlations(model, cor, limit=limit)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
 	}
@@ -1285,7 +1312,6 @@ check_high_correlations <- function(model, limit=0.9) {
 #' 
 #' @param model (Model) Pharmpy model object
 #' @param values (data.frame) Series of values with index a subset of parameter names.
-#'  Default is to use all parameter estimates
 #' @param zero_limit (number) maximum distance to 0 bounds
 #' @param significant_digits (integer) maximum distance to non-zero bounds in number of significant digits
 #'  
@@ -1294,12 +1320,12 @@ check_high_correlations <- function(model, limit=0.9) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' check_parameters_near_bounds(model)
+#' check_parameters_near_bounds(model, model$modelfit_results$parameter_estimates)
 #' }
 #' 
 #' @export
-check_parameters_near_bounds <- function(model, values=NULL, zero_limit=0.001, significant_digits=2) {
-	func_out <- pharmpy$modeling$check_parameters_near_bounds(model, values=values, zero_limit=zero_limit, significant_digits=significant_digits)
+check_parameters_near_bounds <- function(model, values, zero_limit=0.001, significant_digits=2) {
+	func_out <- pharmpy$modeling$check_parameters_near_bounds(model, values, zero_limit=zero_limit, significant_digits=significant_digits)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
 	}
@@ -1394,12 +1420,13 @@ copy_model <- function(model, name=NULL) {
 #' 
 #' The etas must be IIVs and cannot
 #' be fixed. Initial estimates for covariance between the etas is dependent on whether
-#' the model has results from a previous results. In that case, the correlation will
+#' the model has results from a previous run. In that case, the correlation will
 #' be calculated from individual estimates, otherwise correlation will be set to 10%.
 #' 
 #' @param model (Model) Pharmpy model
 #' @param rvs (vector) Sequence of etas or names of etas to combine. If NULL, all etas that are IIVs and
 #'  non-fixed will be used (full block). NULL is default.
+#' @param individual_estimates (data.frame) Optional individual estimates to use for calculation of initial estimates
 #'  
 #' @return (Model) Reference to the same model
 #' 
@@ -1415,8 +1442,11 @@ copy_model <- function(model, name=NULL) {
 #' 
 #' 
 #' @export
-create_joint_distribution <- function(model, rvs=NULL) {
-	func_out <- pharmpy$modeling$create_joint_distribution(model, rvs=rvs)
+create_joint_distribution <- function(model, rvs=NULL, individual_estimates=NULL) {
+	func_out <- pharmpy$modeling$create_joint_distribution(model, rvs=rvs, individual_estimates=individual_estimates)
+	if (func_out$index$nlevels > 1) {
+		func_out <- func_out$reset_index()
+	}
 	return(py_to_r(func_out))
 }
 
@@ -1576,7 +1606,8 @@ drop_dropped_columns <- function(model) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno_linear")
-#' evaluate_epsilon_gradient(model)
+#' etas <- model$modelfit_results$individual_estimates
+#' evaluate_epsilon_gradient(model, etas=etas)
 #' }
 #' @seealso
 #' evaluate_eta_gradient : Evaluate the eta gradient
@@ -1616,7 +1647,8 @@ evaluate_epsilon_gradient <- function(model, etas=NULL, parameters=NULL, dataset
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno_linear")
-#' evaluate_eta_gradient(model)
+#' etas <- model$modelfit_results$individual_estimates
+#' evaluate_eta_gradient(model, etas=etas)
 #' }
 #' @seealso
 #' evaluate_epsilon_gradient : Evaluate the epsilon gradient
@@ -1644,18 +1676,20 @@ evaluate_eta_gradient <- function(model, etas=NULL, parameters=NULL, dataset=NUL
 #' 
 #' @param model (Model) Pharmpy model
 #' @param expression (str or sympy expression) Expression to evaluate
+#' @param parameter_estimates (data.frame) Parameter estimates to use instead of initial estimates
 #'  
 #' @return (data.frame) A series of one evaluated value for each data record
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' evaluate_expression(model, "TVCL*1000")
+#' pe <- model$modelfit_results$parameter_estimates
+#' evaluate_expression(model, "TVCL*1000", parameter_estimates=pe)
 #' }
 #' 
 #' @export
-evaluate_expression <- function(model, expression) {
-	func_out <- pharmpy$modeling$evaluate_expression(model, expression)
+evaluate_expression <- function(model, expression, parameter_estimates=NULL) {
+	func_out <- pharmpy$modeling$evaluate_expression(model, expression, parameter_estimates=parameter_estimates)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
 	}
@@ -1687,7 +1721,8 @@ evaluate_expression <- function(model, expression) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno_linear")
-#' evaluate_individual_prediction(model)
+#' etas <- model$modelfit_results$individual_estimates
+#' evaluate_individual_prediction(model, etas=etas)
 #' }
 #' @seealso
 #' evaluate_population_prediction : Evaluate the population prediction
@@ -1724,7 +1759,8 @@ evaluate_individual_prediction <- function(model, etas=NULL, parameters=NULL, da
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno_linear")
-#' evaluate_population_prediction(model)
+#' pe <- model$modelfit_results$parameter_estimates
+#' evaluate_population_prediction(model, parameters=list(pe))
 #' }
 #' @seealso
 #' evaluate_individual_prediction : Evaluate the individual prediction
@@ -1761,7 +1797,8 @@ evaluate_population_prediction <- function(model, parameters=NULL, dataset=NULL)
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno_linear")
-#' evaluate_weighted_residuals(model)
+#' parameters <- model$modelfit_results$parameter_estimates
+#' evaluate_weighted_residuals(model, parameters=list(parameters))
 #' }
 #' 
 #' @export
@@ -2231,7 +2268,7 @@ get_ids <- function(model) {
 #'  
 #' @param level (str) The variability level to look for: 'iiv', 'iov', or 'all' (default)
 #'  
-#' @return (vector) A vector of the parameters' names as strings
+#' @return (vector[str]) A vector of the parameter names as strings
 #' 
 #' @examples
 #' \dontrun{
@@ -2242,6 +2279,8 @@ get_ids <- function(model) {
 #' }
 #' @seealso
 #' get_pk_parameters
+#' 
+#' get_rv_parameters
 #' 
 #' has_random_effect
 #' 
@@ -2323,7 +2362,8 @@ get_mdv <- function(model) {
 #' List of covariates used in model
 #' 
 #' A covariate in the model is here defined to be a data item
-#' affecting the model prediction excluding dosing items.
+#' affecting the model prediction excluding dosing items that
+#' are not used in model code.
 #' 
 #' @param model (Model) Pharmpy model
 #' @param strings (logical) Return strings instead of symbols? FALSE (default) will give symbols
@@ -2535,7 +2575,7 @@ get_omegas <- function(model) {
 #' @param kind (str) The type of parameter to retrieve: 'absorption', 'distribution',
 #'  'elimination', or 'all' (default).
 #'  
-#' @return (Parameters) The PK parameters of the given model
+#' @return (vector[str]) A vector of the PK parameter names of the given model
 #' 
 #' @examples
 #' \dontrun{
@@ -2547,6 +2587,8 @@ get_omegas <- function(model) {
 #' }
 #' @seealso
 #' get_individual_parameters
+#' 
+#' get_rv_parameters
 #' 
 #' 
 #' @export
@@ -2579,6 +2621,36 @@ get_pk_parameters <- function(model, kind='all') {
 #' @export
 get_population_prediction_expression <- function(model) {
 	func_out <- pharmpy$modeling$get_population_prediction_expression(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' get_rv_parameters
+#' 
+#' @description
+#' Retrieves parameters in :class:`pharmpy.model` given a random variable.
+#' 
+#' @param model (Model) Pharmpy model to retrieve parameters from
+#' @param rv (str) Name of random variable to retrieve
+#'  
+#' @return (vector[str]) A vector of parameter names for the given random variable
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' get_rv_parameters(model, 'ETA(1)')
+#' }
+#' @seealso
+#' has_random_effect
+#' 
+#' get_pk_parameters
+#' 
+#' get_individual_parameters
+#' 
+#' 
+#' @export
+get_rv_parameters <- function(model, rv) {
+	func_out <- pharmpy$modeling$get_rv_parameters(model, rv)
 	return(py_to_r(func_out))
 }
 
@@ -2745,6 +2817,31 @@ has_combined_error_model <- function(model) {
 }
 
 #' @title
+#' has_covariate_effect
+#' 
+#' @description
+#' Tests if an instance of :class:`pharmpy.model` has a given covariate
+#' effect.
+#' 
+#' @param model (Model) Pharmpy model to check for covariate effect.
+#' @param parameter (str) Name of parameter.
+#' @param covariate (str) Name of covariate.
+#'  
+#' @return (logical) Whether input model has a covariate effect of the input covariate on the input parameter.
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' has_covariate_effect(model, "CL", "APGR")
+#' }
+#' 
+#' @export
+has_covariate_effect <- function(model, parameter, covariate) {
+	func_out <- pharmpy$modeling$has_covariate_effect(model, parameter, covariate)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' has_first_order_elimination
 #' 
 #' @description
@@ -2776,7 +2873,7 @@ has_first_order_elimination <- function(model) {
 #' Check if the model describes Michaelis-Menten elimination
 #' 
 #' This function relies on heuristics and will not be able to detect all
-#' possible ways of coding the Michalis-Menten elimination.
+#' possible ways of coding the Michaelis-Menten elimination.
 #' 
 #' @param model (Model) Pharmpy model
 #'  
@@ -2872,6 +2969,8 @@ has_proportional_error_model <- function(model) {
 #' }
 #' @seealso
 #' get_individual_parameters
+#' 
+#' get_rv_parameters
 #' 
 #' 
 #' @export
@@ -3064,15 +3163,18 @@ omit_data <- function(dataset_or_model, group, name_pattern='omitted_{}') {
 #' Plot DV and predictions grouped on individuals
 #' 
 #' @param model (Model) Previously run Pharmpy model.
-#' @param predictions (vector) A vector of names of predictions to plot. NULL for all available
+#' @param predictions (data.frame) One column for each type of prediction
 #' @param individuals (vector) A vector of individuals to include. NULL for all individuals
 #'  
 #' @return (alt.Chart) Plot
 #' 
 #' 
 #' @export
-plot_individual_predictions <- function(model, predictions=NULL, individuals=NULL) {
-	func_out <- pharmpy$modeling$plot_individual_predictions(model, predictions=predictions, individuals=individuals)
+plot_individual_predictions <- function(model, predictions, individuals=NULL) {
+	func_out <- pharmpy$modeling$plot_individual_predictions(model, predictions, individuals=individuals)
+	if (func_out$index$nlevels > 1) {
+		func_out <- func_out$reset_index()
+	}
 	return(py_to_r(func_out))
 }
 
@@ -3082,115 +3184,20 @@ plot_individual_predictions <- function(model, predictions=NULL, individuals=NUL
 #' @description
 #' Plot individual OFV of two models against each other
 #' 
-#' @param model (Model) The first model
-#' @param other (Model) The second model
+#' @param iofv1 (data.frame) Estimated iOFV of the first model
+#' @param iofv2 (data.frame) Estimated iOFV of the second model
+#' @param name1 (str) Name of first model
+#' @param name2 (str) Name of second model
 #'  
 #' @return (alt.Chart) Scatterplot
 #' 
 #' 
 #' @export
-plot_iofv_vs_iofv <- function(model, other) {
-	func_out <- pharmpy$modeling$plot_iofv_vs_iofv(model, other)
-	return(py_to_r(func_out))
-}
-
-#' @title
-#' predict_influential_individuals
-#' 
-#' @description
-#' Predict influential individuals for a model using a machine learning model.
-#' 
-#' @param model (Model) Pharmpy model
-#' @param cutoff (numeric) Cutoff threshold for a dofv signalling an influential individual
-#'  
-#' @return (pd.Dataframe) Dataframe over the individuals with a `dofv` column containing the raw predicted delta-OFV and an `influential` column with a boolean to tell whether the individual is influential or not.
-#' 
-#' @seealso
-#' predict_influential_outliers
-#' 
-#' predict_outliers
-#' 
-#' 
-#' @export
-predict_influential_individuals <- function(model, cutoff=3.84) {
-	func_out <- pharmpy$modeling$predict_influential_individuals(model, cutoff=cutoff)
+plot_iofv_vs_iofv <- function(iofv1, iofv2, name1, name2) {
+	func_out <- pharmpy$modeling$plot_iofv_vs_iofv(iofv1, iofv2, name1, name2)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
 	}
-	return(py_to_r(func_out))
-}
-
-#' @title
-#' predict_influential_outliers
-#' 
-#' @description
-#' Predict influential outliers for a model using a machine learning model.
-#' 
-#' @param model (Model) Pharmpy model
-#' @param outlier_cutoff (numeric) Cutoff threshold for a residual singalling an outlier
-#' @param influential_cutoff (numeric) Cutoff threshold for a dofv signalling an influential individual
-#'  
-#' @return (pd.Dataframe) Dataframe over the individuals with a `outliers` and `dofv` columns containing the raw predictions and `influential`, `outlier` and `influential_outlier` boolean columns.
-#' 
-#' @seealso
-#' predict_influential_individuals
-#' 
-#' predict_outliers
-#' 
-#' 
-#' @export
-predict_influential_outliers <- function(model, outlier_cutoff=3, influential_cutoff=3.84) {
-	func_out <- pharmpy$modeling$predict_influential_outliers(model, outlier_cutoff=outlier_cutoff, influential_cutoff=influential_cutoff)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
-	return(py_to_r(func_out))
-}
-
-#' @title
-#' predict_outliers
-#' 
-#' @description
-#' Predict outliers for a model using a machine learning model.
-#' 
-#' See the :ref:`simeval <Individual OFV summary>` documentation for a definition of the `residual`
-#' 
-#' @param model (Model) Pharmpy model
-#' @param cutoff (numeric) Cutoff threshold for a residual singalling an outlier
-#'  
-#' @return (pd.Dataframe) Dataframe over the individuals with a `residual` column containing the raw predicted residuals and a `outlier` column with a boolean to tell whether the individual is an outlier or not.
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' predict_outliers(model)
-#' }
-#' @seealso
-#' predict_influential_individuals
-#' 
-#' predict_influential_outliers
-#' 
-#' 
-#' @export
-predict_outliers <- function(model, cutoff=3.0) {
-	func_out <- pharmpy$modeling$predict_outliers(model, cutoff=cutoff)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
-	return(py_to_r(func_out))
-}
-
-#' @title
-#' print_fit_summary
-#' 
-#' @description
-#' Print a summary of the model fit
-#' 
-#' @param model (Model) Pharmpy model object
-#' 
-#' @export
-print_fit_summary <- function(model) {
-	func_out <- pharmpy$modeling$print_fit_summary(model)
 	return(py_to_r(func_out))
 }
 
@@ -3234,42 +3241,6 @@ print_model_code <- function(model) {
 #' @export
 print_model_symbols <- function(model) {
 	func_out <- pharmpy$modeling$print_model_symbols(model)
-	return(py_to_r(func_out))
-}
-
-#' @title
-#' rank_models
-#' 
-#' @description
-#' Ranks a vector of models
-#' 
-#' Ranks a vector of models with a given ranking function
-#' 
-#' @param base_model (Model) Base model to compare to
-#' @param models (vector) List of models
-#' @param errors_allowed (vector or NULL) List of errors that are allowed for ranking. Currently available is: rounding_errors and
-#'  maxevals_exceeded. Default is NULL
-#' @param rank_type (str) Name of ranking type. Available options are 'ofv', 'aic', 'bic', 'lrt' (OFV with LRT)
-#' @param cutoff (numeric or NULL) Value to use as cutoff. If using LRT, cutoff denotes p-value. Default is NULL
-#' @param bic_type (str) Type of BIC to calculate. Default is the mixed effects.
-#'  
-#' @return (data.frame) DataFrame of the ranked models
-#' 
-#' @examples
-#' \dontrun{
-#' model_1 <- load_example_model("pheno")
-#' model_2 <- load_example_model("pheno_linear")
-#' rank_models(model_1, c(model_2),
-#'             errors_allowed=c('rounding_errors'),
-#'             rank_type='lrt')
-#' }
-#' 
-#' @export
-rank_models <- function(base_model, models, errors_allowed=NULL, rank_type='ofv', cutoff=NULL, bic_type='mixed') {
-	func_out <- pharmpy$modeling$rank_models(base_model, models, errors_allowed=errors_allowed, rank_type=rank_type, cutoff=cutoff, bic_type=bic_type)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
 	return(py_to_r(func_out))
 }
 
@@ -3421,6 +3392,31 @@ remove_covariance_step <- function(model) {
 }
 
 #' @title
+#' remove_covariate_effect
+#' 
+#' @description
+#' Remove a covariate effect from an instance of :class:`pharmpy.model`.
+#' 
+#' @param model (Model) Pharmpy model from which to remove the covariate effect.
+#' @param parameter (str) Name of parameter.
+#' @param covariate (str) Name of covariate.
+#'  
+#'  
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' has_covariate_effect(model, "CL", "WGT")
+#' remove_covariate_effect(model, "CL", "WGT")
+#' has_covariate_effect(model, "CL", "WGT")
+#' }
+#' 
+#' @export
+remove_covariate_effect <- function(model, parameter, covariate) {
+	func_out <- pharmpy$modeling$remove_covariate_effect(model, parameter, covariate)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' remove_error_model
 #' 
 #' @description
@@ -3526,7 +3522,7 @@ remove_iiv <- function(model, to_remove=NULL) {
 #' Removes all IOV etas given a vector with eta names.
 #' 
 #' @param model (Model) Pharmpy model to remove IOV from.
-#' @param to_remove (str, vector) Name/names of IOV etas to remove, e.g. 'ETA_IOV_11'.
+#' @param to_remove (str, vector) Name/names of IOV etas to remove, e.g. 'ETA_IOV_1_1'.
 #'  If NULL, all etas that are IOVs will be removed. NULL is default.
 #' @return (Model) Reference to the same model
 #' 
@@ -3728,6 +3724,8 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' Sample individual estimates given their covariance.
 #' 
 #' @param model (Model) Pharmpy model
+#' @param individual_estimates (data.frame) Individual estimates to use
+#' @param individual_estimates_covariance (data.frame) Uncertainty covariance of the individual estimates
 #' @param parameters (vector) A vector of a subset of individual parameters to sample. Default is NULL, which means all.
 #' @param samples_per_id (integer) Number of samples per individual
 #' @param rng (rng or integer) Random number generator or seed
@@ -3738,7 +3736,9 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' rng <- create_rng(23)
-#' sample_individual_estimates(model, samples_per_id=2, rng=rng)
+#' ie <- model$modelfit_results$individual_estimates
+#' iec <- model$modelfit_results$individual_estimates_covariance
+#' sample_individual_estimates(model, ie, iec, samples_per_id=2, rng=rng)
 #' }
 #' @seealso
 #' sample_parameters_from_covariance_matrix : Sample parameter vectors using the
@@ -3749,8 +3749,8 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' 
 #' 
 #' @export
-sample_individual_estimates <- function(model, parameters=NULL, samples_per_id=100, rng=NULL) {
-	func_out <- pharmpy$modeling$sample_individual_estimates(model, parameters=parameters, samples_per_id=samples_per_id, rng=rng)
+sample_individual_estimates <- function(model, individual_estimates, individual_estimates_covariance, parameters=NULL, samples_per_id=100, rng=NULL) {
+	func_out <- pharmpy$modeling$sample_individual_estimates(model, individual_estimates, individual_estimates_covariance, parameters=parameters, samples_per_id=samples_per_id, rng=rng)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
 	}
@@ -3763,11 +3763,11 @@ sample_individual_estimates <- function(model, parameters=NULL, samples_per_id=1
 #' @description
 #' Sample parameter vectors using the covariance matrix
 #' 
-#' If modelfit_results is not provided the results from the model will be used
+#' If parameters is not provided all estimated parameters will be used
 #' 
 #' @param model (Model) Input model
-#' @param modelfit_results (ModelfitResults) Alternative results object. Default is to use the one in model
-#' @param parameters (vector) Use to only sample a subset of the parameters. NULL means all
+#' @param parameter_estimates (data.frame) Parameter estimates to use as means in sampling
+#' @param covariance_matrix (data.frame) Parameter uncertainty covariance matrix
 #' @param force_posdef_samples (integer) Set to how many iterations to do before forcing all samples to be positive definite. NULL is
 #'  default and means never and 0 means always
 #' @param force_posdef_covmatrix (logical) Set to TRUE to force the input covariance matrix to be positive definite
@@ -3780,7 +3780,9 @@ sample_individual_estimates <- function(model, parameters=NULL, samples_per_id=1
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' rng <- create_rng(23)
-#' sample_parameters_from_covariance_matrix(model, n=3, rng=rng)
+#' cov <- model$modelfit_results$covariance_matrix
+#' pe <- model$modelfit_results$parameter_estimates
+#' sample_parameters_from_covariance_matrix(model, pe, cov, n=3, rng=rng)
 #' }
 #' @seealso
 #' sample_parameters_uniformly : Sample parameter vectors using uniform distribution
@@ -3789,8 +3791,8 @@ sample_individual_estimates <- function(model, parameters=NULL, samples_per_id=1
 #' 
 #' 
 #' @export
-sample_parameters_from_covariance_matrix <- function(model, modelfit_results=NULL, parameters=NULL, force_posdef_samples=NULL, force_posdef_covmatrix=FALSE, n=1, rng=NULL) {
-	func_out <- pharmpy$modeling$sample_parameters_from_covariance_matrix(model, modelfit_results=modelfit_results, parameters=parameters, force_posdef_samples=force_posdef_samples, force_posdef_covmatrix=force_posdef_covmatrix, n=n, rng=rng)
+sample_parameters_from_covariance_matrix <- function(model, parameter_estimates, covariance_matrix, force_posdef_samples=NULL, force_posdef_covmatrix=FALSE, n=1, rng=NULL) {
+	func_out <- pharmpy$modeling$sample_parameters_from_covariance_matrix(model, parameter_estimates, covariance_matrix, force_posdef_samples=force_posdef_samples, force_posdef_covmatrix=force_posdef_covmatrix, n=n, rng=rng)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
 	}
@@ -3807,8 +3809,8 @@ sample_parameters_from_covariance_matrix <- function(model, modelfit_results=NUL
 #' with the bounds being estimate ± estimate * fraction.
 #' 
 #' @param model (Model) Pharmpy model
+#' @param parameter_estimates (data.frame) Parameter estimates for parameters to use
 #' @param fraction (numeric) Fraction of estimate value to use for distribution bounds
-#' @param parameters (data.frame) Names of parameters to use. Default is to use all parameters in the model.
 #' @param force_posdef_samples (integer) Number of samples to reject before forcing variability parameters to give
 #'  positive definite covariance matrices.
 #' @param n (integer) Number of samples
@@ -3820,7 +3822,8 @@ sample_parameters_from_covariance_matrix <- function(model, modelfit_results=NUL
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' rng <- create_rng(23)
-#' sample_parameters_uniformly(model, n=3, rng=rng)
+#' pe <- model$modelfit_results$parameter_estimates
+#' sample_parameters_uniformly(model, pe, n=3, rng=rng)
 #' }
 #' @seealso
 #' sample_parameters_from_covariance_matrix : Sample parameter vectors using the
@@ -3831,8 +3834,8 @@ sample_parameters_from_covariance_matrix <- function(model, modelfit_results=NUL
 #' 
 #' 
 #' @export
-sample_parameters_uniformly <- function(model, fraction=0.1, parameters=NULL, force_posdef_samples=NULL, n=1, rng=NULL) {
-	func_out <- pharmpy$modeling$sample_parameters_uniformly(model, fraction=fraction, parameters=parameters, force_posdef_samples=force_posdef_samples, n=n, rng=rng)
+sample_parameters_uniformly <- function(model, parameter_estimates, fraction=0.1, force_posdef_samples=NULL, n=1, rng=NULL) {
+	func_out <- pharmpy$modeling$sample_parameters_uniformly(model, parameter_estimates, fraction=fraction, force_posdef_samples=force_posdef_samples, n=n, rng=rng)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
 	}
@@ -4402,9 +4405,9 @@ set_peripheral_compartments <- function(model, n) {
 #' model is proportional, otherwise they are 0.1.
 #' 
 #' @param model (Model) Pharmpy model to create block effect on.
-#' @param list_of_eps (str, vector) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
+#' @param list_of_eps (str or vector or NULL) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
 #'  NULL is default.
-#' @param lower_limit (integer or NULL) Lower limit of power (theta). NULL for no limit.
+#' @param lower_limit (numeric or NULL) Lower limit of power (theta). NULL for no limit.
 #' @param ipred (Symbol) Symbol to use as IPRED. Default is to autodetect expression for IPRED.
 #' @param zero_protection (logical) Set to TRUE to add code protecting from IPRED=0
 #'  
@@ -4762,155 +4765,6 @@ split_joint_distribution <- function(model, rvs=NULL) {
 }
 
 #' @title
-#' summarize_errors
-#' 
-#' @description
-#' Summarize errors and warnings from one or multiple model runs.
-#' 
-#' Summarize the errors and warnings found after running the model/models.
-#' 
-#' @param models (vector, Model) List of models or single model
-#'  
-#' @return (data.frame) A DataFrame of errors with model name, category (error or warning), and an integer as index, an empty DataFrame if there were no errors or warnings found.
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' summarize_errors(model)
-#' }
-#' 
-#' @export
-summarize_errors <- function(models) {
-	func_out <- pharmpy$modeling$summarize_errors(models)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
-	return(py_to_r(func_out))
-}
-
-#' @title
-#' summarize_individuals
-#' 
-#' @description
-#' Creates a summary dataframe keyed by model-individual pairs for an input
-#' vector of models.
-#' 
-#' Content of the various columns:
-#' 
-#' +-------------------------+----------------------------------------------------------------------+
-#' | Column                  | Description                                                          |
-#' +=========================+======================================================================+
-#' | ``outlier_count``       | Number of observations with CWRES > 5                                |
-#' +-------------------------+----------------------------------------------------------------------+
-#' | ``ofv``                 | Individual OFV                                                       |
-#' +-------------------------+----------------------------------------------------------------------+
-#' | ``dofv_vs_parent``      | Difference in individual OFV between this model and its parent model |
-#' +-------------------------+----------------------------------------------------------------------+
-#' | ``predicted_dofv``      | Predicted dOFV if this individual was excluded                       |
-#' +-------------------------+----------------------------------------------------------------------+
-#' | ``predicted_residual``  | Predicted residual                                                   |
-#' +-------------------------+----------------------------------------------------------------------+
-#' 
-#' @param models (vector of Models) Input models
-#'  
-#' @return (data.frame | NULL) The summary as a dataframe
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' fit(model)
-#' results <- run_tool(
-#'     model=model,
-#'     mfl='ABSORPTION(ZO);PERIPHERALS(c(1, 2))',
-#'     algorithm='reduced_stepwise'
-#' summarize_individuals([results$start_model, *results$models])
-#' }
-#' 
-#' @export
-summarize_individuals <- function(models) {
-	func_out <- pharmpy$modeling$summarize_individuals(models)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
-	return(py_to_r(func_out))
-}
-
-#' @title
-#' summarize_individuals_count_table
-#' 
-#' @description
-#' Create a count table for individual data
-#' 
-#' Content of the various columns:
-#' 
-#' +-------------------------+------------------------------------------------------------------------------------------------+
-#' | Column                  | Description                                                                                    |
-#' +=========================+================================================================================================+
-#' | ``inf_selection``       | Number of subjects influential on model selection.                                             |
-#' |                         | :math:`\mathrm{OFV}_{parent} - \mathrm{OFV} > 3.84 \veebar`                                    |
-#' |                         | :math:`\mathrm{OFV}_{parent} - \mathrm{iOFV}_{parent} - (\mathrm{OFV} - \mathrm{iOFV}) > 3.84` |
-#' +-------------------------+------------------------------------------------------------------------------------------------+
-#' | ``inf_params``          | Number of subjects influential on parameters. predicted_dofv > 3.84                            |
-#' +-------------------------+------------------------------------------------------------------------------------------------+
-#' | ``out_obs``             | Number of subjects having at least one outlying observation (CWRES > 5)                        |
-#' +-------------------------+------------------------------------------------------------------------------------------------+
-#' | ``out_ind``             | Number of outlying subjects. predicted_residual > 3.0                                          |
-#' +-------------------------+------------------------------------------------------------------------------------------------+
-#' | ``inf_outlier``         | Number of subjects both influential by any criteria and outlier by any criteria                |
-#' +-------------------------+------------------------------------------------------------------------------------------------+
-#' 
-#' @param models (vector of models) List of models to summarize.
-#' @param df (data.frame) Output from a previous call to summarize_individuals.
-#'  
-#' @return (data.frame) Table with one row per model.
-#' 
-#' @seealso
-#' summarize_individuals : Get raw individual data
-#' 
-#' 
-#' @export
-summarize_individuals_count_table <- function(models=NULL, df=NULL) {
-	func_out <- pharmpy$modeling$summarize_individuals_count_table(models=models, df=df)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
-	return(py_to_r(func_out))
-}
-
-#' @title
-#' summarize_modelfit_results
-#' 
-#' @description
-#' Summarize results of model runs
-#' 
-#' Summarize different results after fitting a model, includes runtime, ofv,
-#' and parameter estimates (with errors). If include_all_estimation_steps is FALSE,
-#' only the last estimation step will be included (note that in that case, the
-#' minimization_successful value will be referring to the last estimation step, if
-#' last step is evaluation it will go backwards until it finds an estimation step
-#' that wasn't an evaluation).
-#' 
-#' @param models (vector, Model) List of models or single model
-#' @param include_all_estimation_steps (logical) Whether to include all estimation steps, default is FALSE
-#'  
-#' @return (data.frame) A DataFrame of modelfit results with model name and estmation step as index.
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' summarize_modelfit_results(model)
-#' }
-#' 
-#' @export
-summarize_modelfit_results <- function(models, include_all_estimation_steps=FALSE) {
-	func_out <- pharmpy$modeling$summarize_modelfit_results(models, include_all_estimation_steps=include_all_estimation_steps)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
-	return(py_to_r(func_out))
-}
-
-#' @title
 #' transform_etas_boxcox
 #' 
 #' @description
@@ -5173,18 +5027,46 @@ unfix_parameters_to <- function(model, inits) {
 }
 
 #' @title
+#' update_initial_individual_estimates
+#' 
+#' @description
+#' Update initial individual estimates for a model
+#' 
+#' Updates initial individual estimates for a model.
+#' 
+#' @param model (Model) Pharmpy model to update initial estimates
+#' @param individual_estimates (data.frame) Individual estimates to use
+#' @param force (logical) Set to FALSE to only update if the model had initial individual estimates before
+#'  
+#' @return (Model) Reference to the same model
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' ie <- model$modelfit_results$individual_estimates
+#' model <- update_initial_individual_estimates(model, ie)
+#' }
+#' 
+#' @export
+update_initial_individual_estimates <- function(model, individual_estimates, force=TRUE) {
+	func_out <- pharmpy$modeling$update_initial_individual_estimates(model, individual_estimates, force=force)
+	if (func_out$index$nlevels > 1) {
+		func_out <- func_out$reset_index()
+	}
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' update_inits
 #' 
 #' @description
 #' Update initial parameter estimate for a model
 #' 
-#' Updates initial estimates of population parameters for a model from
-#' its modelfit_results. If the model has used initial estimates for
-#' individual estimates these will also be updated. If the new initial estimates
-#' are out of bounds or NaN this function will raise.
+#' Updates initial estimates of population parameters for a model.
+#' If the new initial estimates are out of bounds or NaN this function will raise.
 #' 
 #' @param model (Model) Pharmpy model to update initial estimates
-#' @param force_individual_estimates (logical) Update initial individual estimates even if model din't use them previously.
+#' @param parameter_estimates (data.frame) Parameter estimates to update
 #' @param move_est_close_to_bounds (logical) Move estimates that are close to bounds. If correlation >0.99 the correlation will
 #'  be set to 0.9, if variance is <0.001 the variance will be set to 0.01.
 #'  
@@ -5194,13 +5076,16 @@ unfix_parameters_to <- function(model, inits) {
 #' \dontrun{
 #' model <- load_example_model("pheno")   # This model was previously fitted to its data
 #' model$parameters$inits
-#' update_inits(model)
+#' update_inits(model, model$modelfit_results$parameter_estimates)
 #' model$parameters$inits
 #' }
 #' 
 #' @export
-update_inits <- function(model, force_individual_estimates=FALSE, move_est_close_to_bounds=FALSE) {
-	func_out <- pharmpy$modeling$update_inits(model, force_individual_estimates=force_individual_estimates, move_est_close_to_bounds=move_est_close_to_bounds)
+update_inits <- function(model, parameter_estimates, move_est_close_to_bounds=FALSE) {
+	func_out <- pharmpy$modeling$update_inits(model, parameter_estimates, move_est_close_to_bounds=move_est_close_to_bounds)
+	if (func_out$index$nlevels > 1) {
+		func_out <- func_out$reset_index()
+	}
 	return(py_to_r(func_out))
 }
 
@@ -5234,10 +5119,10 @@ use_thetas_for_error_stdev <- function(model) {
 #' write_csv
 #' 
 #' @description
-#' Write dataset to a csv file
+#' Write dataset to a csv file and updates the datainfo path
 #' 
 #' @param model (Model) Model whose dataset to write to file
-#' @param path (Path) Destination path. Default is to use original path with .csv suffix.
+#' @param path (NULL or str or Path) Destination path. Default is to use original path with .csv suffix.
 #' @param force (logical) Overwrite file with same path. Default is FALSE.
 #'  
 #' @return (Path) path to the written file.
@@ -5275,25 +5160,6 @@ write_csv <- function(model, path=NULL, force=FALSE) {
 #' @export
 write_model <- function(model, path='', force=TRUE) {
 	func_out <- pharmpy$modeling$write_model(model, path=path, force=force)
-	return(py_to_r(func_out))
-}
-
-#' @title
-#' write_results
-#' 
-#' @description
-#' Write results object to json (or csv) file
-#' 
-#' Note that the csv-file cannot be read into a results object again.
-#' 
-#' @param results (Results) Pharmpy results object
-#' @param path (Path) Path to results file
-#' @param lzma (logical) TRUE for lzma compression. Not applicable to csv file
-#' @param csv (logical) Save as csv file
-#' 
-#' @export
-write_results <- function(results, path, lzma=FALSE, csv=FALSE) {
-	func_out <- pharmpy$modeling$write_results(results, path, lzma=lzma, csv=csv)
 	return(py_to_r(func_out))
 }
 
@@ -5389,6 +5255,234 @@ fit <- function(model_or_models, tool=NULL) {
 }
 
 #' @title
+#' predict_influential_individuals
+#' 
+#' @description
+#' Predict influential individuals for a model using a machine learning model.
+#' 
+#' @param model (Model) Pharmpy model
+#' @param results (ModelfitResults) Results for model
+#' @param cutoff (numeric) Cutoff threshold for a dofv signalling an influential individual
+#'  
+#' @return (data.frame) Dataframe over the individuals with a `dofv` column containing the raw predicted delta-OFV and an `influential` column with a boolean to tell whether the individual is influential or not.
+#' 
+#' @seealso
+#' predict_influential_outliers
+#' 
+#' predict_outliers
+#' 
+#' 
+#' @export
+predict_influential_individuals <- function(model, results, cutoff=3.84) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$predict_influential_individuals(model, results, cutoff=cutoff)
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
+#' predict_influential_outliers
+#' 
+#' @description
+#' Predict influential outliers for a model using a machine learning model.
+#' 
+#' @param model (Model) Pharmpy model
+#' @param results (ModelfitResults) Results for model
+#' @param outlier_cutoff (numeric) Cutoff threshold for a residual singalling an outlier
+#' @param influential_cutoff (numeric) Cutoff threshold for a dofv signalling an influential individual
+#'  
+#' @return (data.frame) Dataframe over the individuals with a `outliers` and `dofv` columns containing the raw predictions and `influential`, `outlier` and `influential_outlier` boolean columns.
+#' 
+#' @seealso
+#' predict_influential_individuals
+#' 
+#' predict_outliers
+#' 
+#' 
+#' @export
+predict_influential_outliers <- function(model, results, outlier_cutoff=3, influential_cutoff=3.84) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$predict_influential_outliers(model, results, outlier_cutoff=outlier_cutoff, influential_cutoff=influential_cutoff)
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
+#' predict_outliers
+#' 
+#' @description
+#' Predict outliers for a model using a machine learning model.
+#' 
+#' See the :ref:`simeval <Individual OFV summary>` documentation for a definition of the `residual`
+#' 
+#' @param model (Model) Pharmpy model
+#' @param results (ModelfitResults) ModelfitResults for the model
+#' @param cutoff (numeric) Cutoff threshold for a residual singalling an outlier
+#'  
+#' @return (data.frame) Dataframe over the individuals with a `residual` column containing the raw predicted residuals and a `outlier` column with a boolean to tell whether the individual is an outlier or not.
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' results <- model$modelfit_results
+#' predict_outliers(model, results)
+#' }
+#' @seealso
+#' predict_influential_individuals
+#' 
+#' predict_influential_outliers
+#' 
+#' 
+#' @export
+predict_outliers <- function(model, results, cutoff=3.0) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$predict_outliers(model, results, cutoff=cutoff)
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
+#' print_fit_summary
+#' 
+#' @description
+#' Print a summary of the model fit
+#' 
+#' @param model (Model) Pharmpy model object
+#' 
+#' @export
+print_fit_summary <- function(model) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$print_fit_summary(model)
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
+#' rank_models
+#' 
+#' @description
+#' Ranks a vector of models
+#' 
+#' Ranks a vector of models with a given ranking function
+#' 
+#' @param base_model (Model) Base model to compare to
+#' @param models (vector) List of models
+#' @param errors_allowed (vector or NULL) List of errors that are allowed for ranking. Currently available is: rounding_errors and
+#'  maxevals_exceeded. Default is NULL
+#' @param rank_type (str) Name of ranking type. Available options are 'ofv', 'aic', 'bic', 'lrt' (OFV with LRT)
+#' @param cutoff (numeric or NULL) Value to use as cutoff. If using LRT, cutoff denotes p-value. Default is NULL
+#' @param bic_type (str) Type of BIC to calculate. Default is the mixed effects.
+#'  
+#' @return (data.frame) DataFrame of the ranked models
+#' 
+#' @examples
+#' \dontrun{
+#' model_1 <- load_example_model("pheno")
+#' model_2 <- load_example_model("pheno_linear")
+#' rank_models(model_1, c(model_2),
+#'             errors_allowed=c('rounding_errors'),
+#'             rank_type='lrt')
+#' }
+#' 
+#' @export
+rank_models <- function(base_model, models, errors_allowed=NULL, rank_type='ofv', cutoff=NULL, bic_type='mixed') {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$rank_models(base_model, models, errors_allowed=errors_allowed, rank_type=rank_type, cutoff=cutoff, bic_type=bic_type)
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
 #' read_results
 #' 
 #' @description
@@ -5433,25 +5527,79 @@ read_results <- function(path) {
 }
 
 #' @title
+#' retrieve_final_model
+#' 
+#' @description
+#' Retrieve final model from a result object
+#' 
+#' @param res (Results) A results object
+#'  
+#' @return (Model) Reference to final model
+#' 
+#' @examples
+#' \dontrun{
+#' res <- read_results("results$json")
+#' model <- retrieve_final_model(res)
+#' }
+#' @seealso
+#' retrieve_models
+#' 
+#' 
+#' @export
+retrieve_final_model <- function(res) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$retrieve_final_model(res)
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
 #' retrieve_models
 #' 
 #' @description
-#' Retrieve models after a tool runs
+#' Retrieve models after a tool run
 #' 
 #' Any models created and run by the tool can be
 #' retrieved.
 #' 
-#' @param path (str or Path) A path to the tool directory
+#' @param source (str, Path, Results, ToolDatabase, ModelDatabase) Source where to find models. Can be a path (as str or Path), a results object, or a
+#'  ToolDatabase/ModelDatabase
 #' @param names (vector) List of names of the models to retrieve or NULL for all
 #'  
 #' @return (vector) List of retrieved model objects
 #' 
+#' @examples
+#' \dontrun{
+#' tooldir_path <- 'path/to/tool/directory'
+#' models <- retrieve_models(tooldir_path, names=c('run1'))
+#' }
+#' @seealso
+#' retrieve_final_model
+#' 
 #' 
 #' @export
-retrieve_models <- function(path, names=NULL) {
+retrieve_models <- function(source, names=NULL) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$retrieve_models(path, names=names)
+		func_out <- pharmpy$tools$retrieve_models(source, names=names)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5497,10 +5645,10 @@ retrieve_models <- function(path, names=NULL) {
 #' }
 #' 
 #' @export
-run_allometry <- function(model=NULL, allometric_variable='WT', reference_value=70, parameters=NULL, initials=NULL, lower_bounds=NULL, upper_bounds=NULL, fixed=TRUE) {
+run_allometry <- function(...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_allometry(model=model, allometric_variable=allometric_variable, reference_value=reference_value, parameters=parameters, initials=initials, lower_bounds=lower_bounds, upper_bounds=upper_bounds, fixed=fixed)
+		func_out <- pharmpy$tools$run_allometry(...)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5530,7 +5678,7 @@ run_allometry <- function(model=NULL, allometric_variable='WT', reference_value=
 #' 
 #' Runs structural modelsearch, IIV building, and ruvsearch
 #' 
-#' @param input (Model) Read model object/Path to a dataset
+#' @param input (Model or Path) Read model object/Path to a dataset
 #' @param modeltype (str) Type of model to build. Either 'pk_oral' or 'pk_iv'
 #' @param cl_init (numeric) Initial estimate for the population clearance
 #' @param vc_init (numeric) Initial estimate for the central compartment population volume
@@ -5542,6 +5690,7 @@ run_allometry <- function(model=NULL, allometric_variable='WT', reference_value=
 #' @param continuous (vector) List of continuous covariates
 #' @param allometric_variable (str or Symbol) Variable to use for allometry
 #' @param occasion (str) Name of occasion column
+#' @param path (str or Path) Path to run AMD in
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -5557,10 +5706,10 @@ run_allometry <- function(model=NULL, allometric_variable='WT', reference_value=
 #' 
 #' 
 #' @export
-run_amd <- function(input, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_init=0.1, search_space=NULL, lloq=NULL, order=NULL, categorical=NULL, continuous=NULL, allometric_variable=NULL, occasion=NULL) {
+run_amd <- function(input, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_init=0.1, search_space=NULL, lloq=NULL, order=NULL, categorical=NULL, continuous=NULL, allometric_variable=NULL, occasion=NULL, path=NULL) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_amd(input, modeltype=modeltype, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, search_space=search_space, lloq=lloq, order=order, categorical=categorical, continuous=continuous, allometric_variable=allometric_variable, occasion=occasion)
+		func_out <- pharmpy$tools$run_amd(input, modeltype=modeltype, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, search_space=search_space, lloq=lloq, order=order, categorical=categorical, continuous=continuous, allometric_variable=allometric_variable, occasion=occasion, path=path)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5606,10 +5755,10 @@ run_amd <- function(input, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_ini
 #' }
 #' 
 #' @export
-run_covsearch <- function(effects, p_forward=0.05, p_backward=0.01, max_steps=-1, algorithm='scm-forward-then-backward', model=NULL) {
+run_covsearch <- function(...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_covsearch(effects, p_forward=p_forward, p_backward=p_backward, max_steps=max_steps, algorithm=algorithm, model=model)
+		func_out <- pharmpy$tools$run_covsearch(...)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5654,10 +5803,10 @@ run_covsearch <- function(effects, p_forward=0.05, p_backward=0.01, max_steps=-1
 #' }
 #' 
 #' @export
-run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cutoff=NULL, model=NULL) {
+run_iivsearch <- function(...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_iivsearch(algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, cutoff=cutoff, model=model)
+		func_out <- pharmpy$tools$run_iivsearch(...)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5686,7 +5835,7 @@ run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cut
 #' Run IOVsearch tool. For more details, see :ref:`iovsearch`.
 #' 
 #' @param column (str) Name of column in dataset to use as occasion column (default is 'OCC')
-#' @param list_of_parameters (vector) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)
+#' @param list_of_parameters (NULL or vector) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)
 #' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC
 #' @param cutoff (NULL or numeric) Cutoff for which value of the ranking type that is considered significant. Default
 #'  is NULL (all models will be ranked)
@@ -5702,10 +5851,10 @@ run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cut
 #' }
 #' 
 #' @export
-run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='bic', cutoff=NULL, distribution='same-as-iiv', model=NULL) {
+run_iovsearch <- function(...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_iovsearch(column=column, list_of_parameters=list_of_parameters, rank_type=rank_type, cutoff=cutoff, distribution=distribution, model=model)
+		func_out <- pharmpy$tools$run_iovsearch(...)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5751,10 +5900,10 @@ run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='bic'
 #' }
 #' 
 #' @export
-run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_delay', rank_type='bic', cutoff=NULL, model=NULL) {
+run_modelsearch <- function(...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_modelsearch(search_space, algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, cutoff=cutoff, model=model)
+		func_out <- pharmpy$tools$run_modelsearch(...)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5796,10 +5945,10 @@ run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_de
 #' }
 #' 
 #' @export
-run_ruvsearch <- function(model=NULL, groups=4, p_value=0.05, skip=NULL) {
+run_ruvsearch <- function(...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_ruvsearch(model=model, groups=groups, p_value=p_value, skip=skip)
+		func_out <- pharmpy$tools$run_ruvsearch(...)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5844,6 +5993,262 @@ run_tool <- function(name, ...) {
 	tryCatch(
 	{
 		func_out <- pharmpy$tools$run_tool(name, ...)
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
+#' summarize_errors
+#' 
+#' @description
+#' Summarize errors and warnings from one or multiple model runs.
+#' 
+#' Summarize the errors and warnings found after running the model/models.
+#' 
+#' @param models (vector, Model) List of models or single model
+#'  
+#' @return (data.frame) A DataFrame of errors with model name, category (error or warning), and an integer as index, an empty DataFrame if there were no errors or warnings found.
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' summarize_errors(model)
+#' }
+#' 
+#' @export
+summarize_errors <- function(models) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$summarize_errors(models)
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
+#' summarize_individuals
+#' 
+#' @description
+#' Creates a summary dataframe keyed by model-individual pairs for an input
+#' vector of models.
+#' 
+#' Content of the various columns:
+#' 
+#' +-------------------------+----------------------------------------------------------------------+
+#' | Column                  | Description                                                          |
+#' +=========================+======================================================================+
+#' | ``outlier_count``       | Number of observations with CWRES > 5                                |
+#' +-------------------------+----------------------------------------------------------------------+
+#' | ``ofv``                 | Individual OFV                                                       |
+#' +-------------------------+----------------------------------------------------------------------+
+#' | ``dofv_vs_parent``      | Difference in individual OFV between this model and its parent model |
+#' +-------------------------+----------------------------------------------------------------------+
+#' | ``predicted_dofv``      | Predicted dOFV if this individual was excluded                       |
+#' +-------------------------+----------------------------------------------------------------------+
+#' | ``predicted_residual``  | Predicted residual                                                   |
+#' +-------------------------+----------------------------------------------------------------------+
+#' 
+#' @param models (vector of Models) Input models
+#'  
+#' @return (data.frame | NULL) The summary as a dataframe
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' fit(model)
+#' results <- run_tool(
+#'     model=model,
+#'     mfl='ABSORPTION(ZO);PERIPHERALS(c(1, 2))',
+#'     algorithm='reduced_stepwise'
+#' summarize_individuals([results$start_model, *results$models])
+#' }
+#' 
+#' @export
+summarize_individuals <- function(models) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$summarize_individuals(models)
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
+#' summarize_individuals_count_table
+#' 
+#' @description
+#' Create a count table for individual data
+#' 
+#' Content of the various columns:
+#' 
+#' +-------------------------+------------------------------------------------------------------------------------------------+
+#' | Column                  | Description                                                                                    |
+#' +=========================+================================================================================================+
+#' | ``inf_selection``       | Number of subjects influential on model selection.                                             |
+#' |                         | :math:`\mathrm{OFV}_{parent} - \mathrm{OFV} > 3.84 \veebar`                                    |
+#' |                         | :math:`\mathrm{OFV}_{parent} - \mathrm{iOFV}_{parent} - (\mathrm{OFV} - \mathrm{iOFV}) > 3.84` |
+#' +-------------------------+------------------------------------------------------------------------------------------------+
+#' | ``inf_params``          | Number of subjects influential on parameters. predicted_dofv > 3.84                            |
+#' +-------------------------+------------------------------------------------------------------------------------------------+
+#' | ``out_obs``             | Number of subjects having at least one outlying observation (CWRES > 5)                        |
+#' +-------------------------+------------------------------------------------------------------------------------------------+
+#' | ``out_ind``             | Number of outlying subjects. predicted_residual > 3.0                                          |
+#' +-------------------------+------------------------------------------------------------------------------------------------+
+#' | ``inf_outlier``         | Number of subjects both influential by any criteria and outlier by any criteria                |
+#' +-------------------------+------------------------------------------------------------------------------------------------+
+#' 
+#' @param models (vector of models) List of models to summarize.
+#' @param df (data.frame) Output from a previous call to summarize_individuals.
+#'  
+#' @return (data.frame) Table with one row per model.
+#' 
+#' @seealso
+#' summarize_individuals : Get raw individual data
+#' 
+#' 
+#' @export
+summarize_individuals_count_table <- function(models=NULL, df=NULL) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$summarize_individuals_count_table(models=models, df=df)
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
+#' summarize_modelfit_results
+#' 
+#' @description
+#' Summarize results of model runs
+#' 
+#' Summarize different results after fitting a model, includes runtime, ofv,
+#' and parameter estimates (with errors). If include_all_estimation_steps is FALSE,
+#' only the last estimation step will be included (note that in that case, the
+#' minimization_successful value will be referring to the last estimation step, if
+#' last step is evaluation it will go backwards until it finds an estimation step
+#' that wasn't an evaluation).
+#' 
+#' @param models (vector, Model) List of models or single model
+#' @param include_all_estimation_steps (logical) Whether to include all estimation steps, default is FALSE
+#'  
+#' @return (data.frame) A DataFrame of modelfit results with model name and estmation step as index.
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' summarize_modelfit_results(model)
+#' }
+#' 
+#' @export
+summarize_modelfit_results <- function(models, include_all_estimation_steps=FALSE) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$summarize_modelfit_results(models, include_all_estimation_steps=include_all_estimation_steps)
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
+#' write_results
+#' 
+#' @description
+#' Write results object to json (or csv) file
+#' 
+#' Note that the csv-file cannot be read into a results object again.
+#' 
+#' @param results (Results) Pharmpy results object
+#' @param path (Path) Path to results file
+#' @param lzma (logical) TRUE for lzma compression. Not applicable to csv file
+#' @param csv (logical) Save as csv file
+#' 
+#' @export
+write_results <- function(results, path, lzma=FALSE, csv=FALSE) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$write_results(results, path, lzma=lzma, csv=csv)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
