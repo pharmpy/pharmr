@@ -4456,11 +4456,11 @@ set_power_on_ruv <- function(model, list_of_eps=NULL, lower_limit=0.01, ipred=NU
 #' \dontrun{
 #' model <- remove_error_model(load_example_model("pheno"))
 #' set_proportional_error_model(model)
-#' model$statements$find_assignment("Y")
+#' model$statements$after_odes
 #' model <- remove_error_model(load_example_model("pheno"))
 #' set_proportional_error_model(
 #'     model,
-#'     data_trans="log(Y)", zero_protection=TRUE
+#'     data_trans="log(Y)"
 #' model$statements$after_odes
 #' }
 #' @seealso
@@ -4470,7 +4470,7 @@ set_power_on_ruv <- function(model, list_of_eps=NULL, lower_limit=0.01, ipred=NU
 #' 
 #' 
 #' @export
-set_proportional_error_model <- function(model, data_trans=NULL, zero_protection=FALSE) {
+set_proportional_error_model <- function(model, data_trans=NULL, zero_protection=TRUE) {
 	func_out <- pharmpy$modeling$set_proportional_error_model(model, data_trans=data_trans, zero_protection=zero_protection)
 	return(py_to_r(func_out))
 }
@@ -5217,12 +5217,12 @@ create_results <- function(path, ...) {
 #' @param model_or_models (Model | vector of Models) List of models or one single model
 #' @param tool (str) Estimation tool to use. NULL to use default
 #'  
-#' @return (Model | vector of Models) Input model or models with model fit results
+#' @return (ModelfitResults | vector[ModelfitResults]) ModelfitResults for the model or models
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' fit(model)
+#' results <- fit(model)
 #' }
 #' @seealso
 #' run_tool
@@ -5877,6 +5877,50 @@ run_iovsearch <- function(...) {
 }
 
 #' @title
+#' run_modelfit
+#' 
+#' @description
+#' Run modelfit tool.
+#' 
+#' @param models (Model) A vector of models are one single model object
+#' @param n (integer) Number of models to fit. This is only used if the tool is going to be combined with other tools.
+#' @param tool (str) Which tool to use for fitting. Currently 'nonmem' or 'nlmixr' can be used.
+#'  
+#' @return (ModelfitResults) Modelfit tool result object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' run_modelfit(model)
+#' }
+#' 
+#' @export
+run_modelfit <- function(...) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$run_modelfit(...)
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
 #' run_modelsearch
 #' 
 #' @description
@@ -6088,7 +6132,7 @@ summarize_errors <- function(models) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' fit(model)
+#' fit_results <- fit(model)
 #' results <- run_tool(
 #'     model=model,
 #'     mfl='ABSORPTION(ZO);PERIPHERALS(c(1, 2))',

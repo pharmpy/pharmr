@@ -12,7 +12,7 @@ fit(model_or_models, tool = NULL)
 \item{tool}{(str) Estimation tool to use. NULL to use default}
 }
 \value{
-(Model | vector of Models) Input model or models with model fit results
+(ModelfitResults | vector\link{ModelfitResults}) ModelfitResults for the model or models
 }
 \description{
 Fit models.
@@ -20,7 +20,7 @@ Fit models.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-fit(model)
+results <- fit(model)
 }
 }
 \seealso{

@@ -35,7 +35,7 @@ Content of the various columns:
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-fit(model)
+fit_results <- fit(model)
 results <- run_tool(
     model=model,
     mfl='ABSORPTION(ZO);PERIPHERALS(c(1, 2))',

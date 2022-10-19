@@ -4,7 +4,7 @@
 \alias{set_proportional_error_model}
 \title{set_proportional_error_model}
 \usage{
-set_proportional_error_model(model, data_trans = NULL, zero_protection = FALSE)
+set_proportional_error_model(model, data_trans = NULL, zero_protection = TRUE)
 }
 \arguments{
 \item{model}{(Model) Set error model for this model}
@@ -34,11 +34,11 @@ The error function being applied depends on the data transformation.
 \dontrun{
 model <- remove_error_model(load_example_model("pheno"))
 set_proportional_error_model(model)
-model$statements$find_assignment("Y")
+model$statements$after_odes
 model <- remove_error_model(load_example_model("pheno"))
 set_proportional_error_model(
     model,
-    data_trans="log(Y)", zero_protection=TRUE
+    data_trans="log(Y)"
 model$statements$after_odes
 }
 }
