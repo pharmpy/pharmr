@@ -26,7 +26,7 @@ knit_print.pharmpy.model.distributions.symbolic.JointNormalDistribution <- funct
 }
 
 #' @exportS3Method knitr::knit_print pharmpy.model.random_variables.RandomVariables
-knit_print.pharmpy.random_variables.model.RandomVariables <- function(x, ...) {
+knit_print.pharmpy.model.random_variables.model.RandomVariables <- function(x, ...) {
     res <- x$`_repr_latex_`()
     structure(res, class='knit_asis')
 }
