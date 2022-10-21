@@ -293,7 +293,8 @@ def py_to_r_str(arg, example=False):
              'dictionary': 'list',
              'pd.DataFrame': 'data.frame',
              'pd.Series': 'data.frame',
-             r'\w+\[Model\]': 'vector of Models'}  # FIXME: more general pattern
+             r'\w+\[Model\]': 'vector of Model',  # FIXME: more general pattern
+             r'\w+\[ModelfitResults\]': 'vector of ModelfitResults'}  # FIXME: more general pattern
 
     latex = {r'\\mathsf': '',
              r'\\cdot': '*',
