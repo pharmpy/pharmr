@@ -45,9 +45,10 @@ def create_r_func(func, module):
 
     params = inspect.signature(func).parameters
     for param in params.values():
-        if param.kind == param.VAR_KEYWORD:
-            wrapper_args += ['...']
-            pyfunc_args += ['...']
+        if param.kind == param.VAR_KEYWORD or param.kind == param.VAR_POSITIONAL:
+            if '...' not in wrapper_args:
+                wrapper_args += ['...']
+                pyfunc_args += ['...']
         elif param.default is param.empty:
             wrapper_args += [f'{param.name}']
             pyfunc_args += [f'{param.name}']
@@ -163,7 +164,8 @@ def create_r_params(doc_list):
             type_declare = row.split(': ')
             doc_str += f'@param {type_declare[0].strip()} ({py_to_r_str(type_declare[1].strip())})'
         elif row == 'args' or row == 'kwargs':
-            doc_str += f'@param ... {doc_list[i+1]}\n'
+            if '@param ...' not in doc_str:
+                doc_str += f'@param ... {doc_list[i+1]}\n'
             skip = True
         else:
             doc_str += f' {py_to_r_str(row)}\n'
