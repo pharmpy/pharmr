@@ -111,12 +111,13 @@ jobs:
         shell: Rscript {0}
 
       - name: Check
+        working-directory: pharmr_repo
+        env:
+          _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: |
-          source pharmpy_repo/pharmpy_venv/bin/activate
-          mkdir build
-          R CMD build pharmr_repo
-          R CMD install pharmr_*.*.*.tar.gz build
-          R CMD check build/pharmr_*.*.*.tar.gz --no-manual
+          options(crayon.enabled = TRUE)
+          rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
+        shell: Rscript {0}
 
       - name: Upload check results
         if: failure()
