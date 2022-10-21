@@ -1,4 +1,4 @@
-from inspect import getdoc, getfullargspec, getmembers, isfunction
+import inspect
 import os
 from pathlib import Path
 import re
@@ -21,7 +21,7 @@ def create_functions():
 
 
 def create_module_functions(module):
-    funcs = getmembers(module, isfunction)
+    funcs = inspect.getmembers(module, inspect.isfunction)
     func_str = ''
     for name, func in funcs:
         if name not in module.__all__:
@@ -40,33 +40,25 @@ def create_r_func(func, module):
         module_name = 'modeling'
     else:
         raise ValueError(f'Module {module.__name__} not supported')
-    argspecs = getfullargspec(func)
-    args = [str(arg) for arg in argspecs.args]
-    defaults = argspecs.defaults
-    if defaults:
-        if len(defaults) > 0:
-            defaults_new = [py_to_r_arg(d) for d in defaults]
-            defaults = [None for _ in range(len(args) - len(defaults_new))] + defaults_new
-        wrapper_args, pyfunc_args = [], []
-        for arg, default in zip(args, defaults):
-            if default is None:
-                wrapper_args += [f'{arg}']
-                pyfunc_args += [f'{arg}']
-            else:
-                wrapper_args += [f'{arg}={default}']
-                pyfunc_args += [f'{arg}={arg}']
-    else:
-        wrapper_args = args.copy()
-        pyfunc_args = args.copy()
 
-    if argspecs.varargs or argspecs.varkw:
-        wrapper_args += ['...']
-        pyfunc_args += ['...']
+    wrapper_args, pyfunc_args = [], []
+
+    params = inspect.signature(func).parameters
+    for param in params.values():
+        if param.kind == param.VAR_KEYWORD:
+            wrapper_args += ['...']
+            pyfunc_args += ['...']
+        elif param.default is param.empty:
+            wrapper_args += [f'{param.name}']
+            pyfunc_args += [f'{param.name}']
+        else:
+            wrapper_args += [f'{param.name}={py_to_r_arg(param.default)}']
+            pyfunc_args += [f'{param.name}={param.name}']
 
     wrapper_arg_str = ', '.join(wrapper_args)
     pyfunc_arg_str = ', '.join(pyfunc_args)
 
-    if not getdoc(func):
+    if not inspect.getdoc(func):
         raise ValueError(f'No documentation available for {func_name}')
 
     func_def = f'{func_name} <- function({wrapper_arg_str})'
@@ -99,7 +91,7 @@ def create_r_func(func, module):
                  f'\t)\n' \
                  f'}}'
     else:
-        if 'pd.dataframe' in getdoc(func).lower() or 'pd.series' in getdoc(func).lower():
+        if 'pd.dataframe' in inspect.getdoc(func).lower() or 'pd.series' in inspect.getdoc(func).lower():
             func_reset = '\tif (func_out$index$nlevels > 1) {\n' \
                          '\t\tfunc_out <- func_out$reset_index()\n' \
                          '\t}'
@@ -118,7 +110,7 @@ def create_r_func(func, module):
 
 
 def create_r_doc(func):
-    doc = getdoc(func)
+    doc = inspect.getdoc(func)
 
     if not doc:
         return f'#\' @title\n' \
