@@ -1,6 +1,6 @@
 Package: pharmr
 Encoding: UTF-8
-Version: 0.81.1
+Version: 0.82.0
 Date: 2022-10-24
 Title: Interface to the 'Pharmpy' 'Pharmacometrics' Library
 Authors@R: c(

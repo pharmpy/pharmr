@@ -6289,7 +6289,7 @@ summarize_individuals_count_table <- function(models=NULL, df=NULL) {
 #' last step is evaluation it will go backwards until it finds an estimation step
 #' that wasn't an evaluation).
 #' 
-#' @param models (vector, Model) List of models or single model
+#' @param results (vector, ModelfitResults) List of ModelfitResults or single ModelfitResults
 #' @param include_all_estimation_steps (logical) Whether to include all estimation steps, default is FALSE
 #'  
 #' @return (data.frame) A DataFrame of modelfit results with model name and estmation step as index.
@@ -6297,14 +6297,14 @@ summarize_individuals_count_table <- function(models=NULL, df=NULL) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' summarize_modelfit_results(model)
+#' summarize_modelfit_results(model$modelfit_results)
 #' }
 #' 
 #' @export
-summarize_modelfit_results <- function(models, include_all_estimation_steps=FALSE) {
+summarize_modelfit_results <- function(results, include_all_estimation_steps=FALSE) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$summarize_modelfit_results(models, include_all_estimation_steps=include_all_estimation_steps)
+		func_out <- pharmpy$tools$summarize_modelfit_results(results, include_all_estimation_steps=include_all_estimation_steps)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {

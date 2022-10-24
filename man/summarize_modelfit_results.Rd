@@ -4,10 +4,10 @@
 \alias{summarize_modelfit_results}
 \title{summarize_modelfit_results}
 \usage{
-summarize_modelfit_results(models, include_all_estimation_steps = FALSE)
+summarize_modelfit_results(results, include_all_estimation_steps = FALSE)
 }
 \arguments{
-\item{models}{(vector, Model) List of models or single model}
+\item{results}{(vector, ModelfitResults) List of ModelfitResults or single ModelfitResults}
 
 \item{include_all_estimation_steps}{(logical) Whether to include all estimation steps, default is FALSE}
 }
@@ -27,7 +27,7 @@ that wasn't an evaluation).
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-summarize_modelfit_results(model)
+summarize_modelfit_results(model$modelfit_results)
 }
 
 }
