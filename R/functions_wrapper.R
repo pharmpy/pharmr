@@ -1086,7 +1086,7 @@ calculate_inf_from_cov <- function(cov) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' scale <- calculate_ucp_scale(model)
-#' values <- {'THETA(1)': 0.1, 'THETA(2)': 0.1, 'THETA(3)': 0.1, 'OMEGA(1,1)': 0.1, 'OMEGA(2,2)': 0.1, 'SIGMA(1,1)': 0.1}
+#' values <- {'THETA(1)': 0.1, 'THETA(2)': 0.1, 'THETA(3)': 0.1,                   'OMEGA(1,1)': 0.1, 'OMEGA(2,2)': 0.1, 'SIGMA(1,1)': 0.1}
 #' calculate_parameters_from_ucp(model, scale, values)
 #' }
 #' @seealso
@@ -5214,10 +5214,10 @@ create_results <- function(path, ...) {
 #' @description
 #' Fit models.
 #' 
-#' @param model_or_models (Model | vector of Models) List of models or one single model
+#' @param model_or_models (Model | vector of Model) List of models or one single model
 #' @param tool (str) Estimation tool to use. NULL to use default
 #'  
-#' @return (ModelfitResults | vector[ModelfitResults]) ModelfitResults for the model or models
+#' @return (ModelfitResults | vector of ModelfitResults) ModelfitResults for the model or models
 #' 
 #' @examples
 #' \dontrun{
@@ -5483,6 +5483,43 @@ rank_models <- function(base_model, models, errors_allowed=NULL, rank_type='ofv'
 }
 
 #' @title
+#' read_modelfit_results
+#' 
+#' @description
+#' Read results from external tool for a model
+#' 
+#' @param path (Path or str) Path to model file
+#'  
+#' @return (ModelfitResults) Results object
+#' 
+#' 
+#' @export
+read_modelfit_results <- function(path) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$read_modelfit_results(path)
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
 #' read_results
 #' 
 #' @description
@@ -5628,27 +5665,29 @@ retrieve_models <- function(source, names=NULL) {
 #' Run allometry tool. For more details, see :ref:`allometry`.
 #' 
 #' @param model (Model) Pharmpy model
+#' @param results (ModelfitResults) Results for model
 #' @param allometric_variable (str) Name of the variable to use for allometric scaling (default is WT)
 #' @param reference_value (numeric) Reference value for the allometric variable (default is 70)
 #' @param parameters (vector) Parameters to apply scaling to (default is all CL, Q and V parameters)
 #' @param initials (vector) Initial estimates for the exponents. (default is to use 0.75 for CL and Qs and 1 for Vs)
 #' @param lower_bounds (vector) Lower bounds for the exponents. (default is 0 for all parameters)
 #' @param upper_bounds (vector) Upper bounds for the exponents. (default is 2 for all parameters)
-#' @param fixed (logical) Should the exponents be fixed or not. (default TRUE)
+#' @param fixed (logical) Should the exponents be fixed or not. (default TRUE
+#' @param ... Arguments to pass to tool
 #'  
 #' @return (AllometryResults) Allometry tool result object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' run_allometry(model=model, allometric_variable='WGT')
+#' run_allometry(model=model, results=model$modelfit_results, allometric_variable='WGT')
 #' }
 #' 
 #' @export
-run_allometry <- function(...) {
+run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', reference_value=70, parameters=NULL, initials=NULL, lower_bounds=NULL, upper_bounds=NULL, fixed=TRUE, ...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_allometry(...)
+		func_out <- pharmpy$tools$run_allometry(model=model, results=results, allometric_variable=allometric_variable, reference_value=reference_value, parameters=parameters, initials=initials, lower_bounds=lower_bounds, upper_bounds=upper_bounds, fixed=fixed, ...)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5679,6 +5718,7 @@ run_allometry <- function(...) {
 #' Runs structural modelsearch, IIV building, and ruvsearch
 #' 
 #' @param input (Model or Path) Read model object/Path to a dataset
+#' @param results (ModelfitResults) Reults of input if input is a model
 #' @param modeltype (str) Type of model to build. Either 'pk_oral' or 'pk_iv'
 #' @param cl_init (numeric) Initial estimate for the population clearance
 #' @param vc_init (numeric) Initial estimate for the central compartment population volume
@@ -5697,7 +5737,7 @@ run_allometry <- function(...) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' run_amd(model)
+#' run_amd(model, results=model$modelfit_results)
 #' }
 #' @seealso
 #' run_iiv
@@ -5706,10 +5746,10 @@ run_allometry <- function(...) {
 #' 
 #' 
 #' @export
-run_amd <- function(input, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_init=0.1, search_space=NULL, lloq=NULL, order=NULL, categorical=NULL, continuous=NULL, allometric_variable=NULL, occasion=NULL, path=NULL) {
+run_amd <- function(input, results=NULL, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_init=0.1, search_space=NULL, lloq=NULL, order=NULL, categorical=NULL, continuous=NULL, allometric_variable=NULL, occasion=NULL, path=NULL) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_amd(input, modeltype=modeltype, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, search_space=search_space, lloq=lloq, order=order, categorical=categorical, continuous=continuous, allometric_variable=allometric_variable, occasion=occasion, path=path)
+		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, search_space=search_space, lloq=lloq, order=order, categorical=categorical, continuous=continuous, allometric_variable=allometric_variable, occasion=occasion, path=path)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5744,7 +5784,9 @@ run_amd <- function(input, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_ini
 #' @param max_steps (integer) The maximum number of search steps to make
 #' @param algorithm (str) The search algorithm to use. Currently 'scm-forward' and
 #'  'scm-forward-then-backward' are supported.
-#' @param model (Model) Pharmpy model
+#' @param results (ModelfitResults) Results of model
+#' @param model (Model) Pharmpy mode
+#' @param ... Arguments to pass to tool
 #'  
 #' @return (COVSearchResults) COVsearch tool result object
 #' 
@@ -5755,10 +5797,10 @@ run_amd <- function(input, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_ini
 #' }
 #' 
 #' @export
-run_covsearch <- function(...) {
+run_covsearch <- function(effects, p_forward=0.05, p_backward=0.01, max_steps=-1, algorithm='scm-forward-then-backward', results=NULL, model=NULL, ...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_covsearch(...)
+		func_out <- pharmpy$tools$run_covsearch(effects, p_forward=p_forward, p_backward=p_backward, max_steps=max_steps, algorithm=algorithm, results=results, model=model, ...)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5792,21 +5834,23 @@ run_covsearch <- function(...) {
 #' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC
 #' @param cutoff (numeric) Cutoff for which value of the ranking function that is considered significant. Default
 #'  is NULL (all models will be ranked)
-#' @param model (Model) Pharmpy model
+#' @param results (ModelfitResults) Results for model
+#' @param model (Model) Pharmpy mode
+#' @param ... Arguments to pass to tool
 #'  
 #' @return (IIVSearchResults) IIVsearch tool result object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' run_iivsearch('brute_force', model=model)
+#' run_iivsearch('brute_force', results=model$modelfit_results, model=model)
 #' }
 #' 
 #' @export
-run_iivsearch <- function(...) {
+run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cutoff=NULL, results=NULL, model=NULL, ...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_iivsearch(...)
+		func_out <- pharmpy$tools$run_iivsearch(algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, cutoff=cutoff, results=results, model=model, ...)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5840,21 +5884,23 @@ run_iivsearch <- function(...) {
 #' @param cutoff (NULL or numeric) Cutoff for which value of the ranking type that is considered significant. Default
 #'  is NULL (all models will be ranked)
 #' @param distribution (str) Which distribution added IOVs should have (default is same-as-iiv)
-#' @param model (Model) Pharmpy model
+#' @param results (ModelfitResults) Results for model
+#' @param model (Model) Pharmpy mode
+#' @param ... Arguments to pass to tool
 #'  
 #' @return (IOVSearchResults) IOVSearch tool result object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' run_iovsearch('OCC', model=model)
+#' run_iovsearch('OCC', results=model$modelfit_results, model=model)
 #' }
 #' 
 #' @export
-run_iovsearch <- function(...) {
+run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='bic', cutoff=NULL, distribution='same-as-iiv', results=NULL, model=NULL, ...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_iovsearch(...)
+		func_out <- pharmpy$tools$run_iovsearch(column=column, list_of_parameters=list_of_parameters, rank_type=rank_type, cutoff=cutoff, distribution=distribution, results=results, model=model, ...)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5884,7 +5930,8 @@ run_iovsearch <- function(...) {
 #' 
 #' @param models (Model) A vector of models are one single model object
 #' @param n (integer) Number of models to fit. This is only used if the tool is going to be combined with other tools.
-#' @param tool (str) Which tool to use for fitting. Currently 'nonmem' or 'nlmixr' can be used.
+#' @param tool (str) Which tool to use for fitting. Currently 'nonmem' or 'nlmixr' can be used
+#' @param ... Arguments to pass to tool
 #'  
 #' @return (ModelfitResults) Modelfit tool result object
 #' 
@@ -5895,10 +5942,10 @@ run_iovsearch <- function(...) {
 #' }
 #' 
 #' @export
-run_modelfit <- function(...) {
+run_modelfit <- function(models=NULL, n=NULL, tool=NULL, ...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_modelfit(...)
+		func_out <- pharmpy$tools$run_modelfit(models=models, n=n, tool=tool, ...)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5933,21 +5980,24 @@ run_modelfit <- function(...) {
 #' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC
 #' @param cutoff (numeric) Cutoff for which value of the ranking function that is considered significant. Default
 #'  is NULL (all models will be ranked)
-#' @param model (Model) Pharmpy model
+#' @param results (ModelfitResults) Results for model
+#' @param model (Model) Pharmpy mode
+#' @param ... Arguments to pass to tool
 #'  
 #' @return (ModelSearchResults) Modelsearch tool result object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' run_modelsearch('ABSORPTION(ZO);PERIPHERALS(1)', 'exhaustive', model=model)
+#' res <- model$modelfit_results
+#' run_modelsearch('ABSORPTION(ZO);PERIPHERALS(1)', 'exhaustive', results=res, model=model)
 #' }
 #' 
 #' @export
-run_modelsearch <- function(...) {
+run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_delay', rank_type='bic', cutoff=NULL, results=NULL, model=NULL, ...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_modelsearch(...)
+		func_out <- pharmpy$tools$run_modelsearch(search_space, algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, cutoff=cutoff, results=results, model=model, ...)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5976,23 +6026,25 @@ run_modelsearch <- function(...) {
 #' Run the ruvsearch tool. For more details, see :ref:`ruvsearch`.
 #' 
 #' @param model (Model) Pharmpy model
+#' @param results (ModelfitResults) Results of model
 #' @param groups (integer) The number of bins to use for the time varying models
 #' @param p_value (numeric) The p-value to use for the likelihood ratio test
-#' @param skip (vector) A vector of models to not attempt.
+#' @param skip (vector) A vector of models to not attempt
+#' @param ... Arguments to pass to tool
 #'  
 #' @return (RUVSearchResults) Ruvsearch tool result object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' run_ruvsearch(model=model)
+#' run_ruvsearch(model=model, results=model$modelfit_results)
 #' }
 #' 
 #' @export
-run_ruvsearch <- function(...) {
+run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.05, skip=NULL, ...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_ruvsearch(...)
+		func_out <- pharmpy$tools$run_ruvsearch(model=model, results=results, groups=groups, p_value=p_value, skip=skip, ...)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -6021,7 +6073,6 @@ run_ruvsearch <- function(...) {
 #' Run tool workflow
 #' 
 #' @param name (str) Name of tool to run
-#' @param ... Arguments to pass to tool
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (Results) Results object for tool
@@ -6125,7 +6176,7 @@ summarize_errors <- function(models) {
 #' | ``predicted_residual``  | Predicted residual                                                   |
 #' +-------------------------+----------------------------------------------------------------------+
 #' 
-#' @param models (vector of Models) Input models
+#' @param models (vector of Model) Input models
 #'  
 #' @return (data.frame | NULL) The summary as a dataframe
 #' 

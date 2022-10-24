@@ -7,7 +7,7 @@
 summarize_individuals(models)
 }
 \arguments{
-\item{models}{(vector of Models) Input models}
+\item{models}{(vector of Model) Input models}
 }
 \value{
 (data.frame | NULL) The summary as a dataframe

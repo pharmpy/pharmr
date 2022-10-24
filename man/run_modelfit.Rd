@@ -4,14 +4,16 @@
 \alias{run_modelfit}
 \title{run_modelfit}
 \usage{
-run_modelfit(...)
+run_modelfit(models = NULL, n = NULL, tool = NULL, ...)
 }
 \arguments{
 \item{models}{(Model) A vector of models are one single model object}
 
 \item{n}{(integer) Number of models to fit. This is only used if the tool is going to be combined with other tools.}
 
-\item{tool}{(str) Which tool to use for fitting. Currently 'nonmem' or 'nlmixr' can be used.}
+\item{tool}{(str) Which tool to use for fitting. Currently 'nonmem' or 'nlmixr' can be used}
+
+\item{...}{Arguments to pass to tool}
 }
 \value{
 (ModelfitResults) Modelfit tool result object

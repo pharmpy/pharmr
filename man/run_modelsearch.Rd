@@ -4,7 +4,16 @@
 \alias{run_modelsearch}
 \title{run_modelsearch}
 \usage{
-run_modelsearch(...)
+run_modelsearch(
+  search_space,
+  algorithm,
+  iiv_strategy = "absorption_delay",
+  rank_type = "bic",
+  cutoff = NULL,
+  results = NULL,
+  model = NULL,
+  ...
+)
 }
 \arguments{
 \item{search_space}{(str) Search space to test}
@@ -19,7 +28,11 @@ run_modelsearch(...)
 \item{cutoff}{(numeric) Cutoff for which value of the ranking function that is considered significant. Default
 is NULL (all models will be ranked)}
 
-\item{model}{(Model) Pharmpy model}
+\item{results}{(ModelfitResults) Results for model}
+
+\item{model}{(Model) Pharmpy mode}
+
+\item{...}{Arguments to pass to tool}
 }
 \value{
 (ModelSearchResults) Modelsearch tool result object
@@ -30,7 +43,8 @@ Run Modelsearch tool. For more details, see :ref:\code{modelsearch}.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-run_modelsearch('ABSORPTION(ZO);PERIPHERALS(1)', 'exhaustive', model=model)
+res <- model$modelfit_results
+run_modelsearch('ABSORPTION(ZO);PERIPHERALS(1)', 'exhaustive', results=res, model=model)
 }
 
 }

@@ -4,7 +4,16 @@
 \alias{run_iovsearch}
 \title{run_iovsearch}
 \usage{
-run_iovsearch(...)
+run_iovsearch(
+  column = "OCC",
+  list_of_parameters = NULL,
+  rank_type = "bic",
+  cutoff = NULL,
+  distribution = "same-as-iiv",
+  results = NULL,
+  model = NULL,
+  ...
+)
 }
 \arguments{
 \item{column}{(str) Name of column in dataset to use as occasion column (default is 'OCC')}
@@ -18,7 +27,11 @@ is NULL (all models will be ranked)}
 
 \item{distribution}{(str) Which distribution added IOVs should have (default is same-as-iiv)}
 
-\item{model}{(Model) Pharmpy model}
+\item{results}{(ModelfitResults) Results for model}
+
+\item{model}{(Model) Pharmpy mode}
+
+\item{...}{Arguments to pass to tool}
 }
 \value{
 (IOVSearchResults) IOVSearch tool result object
@@ -29,7 +42,7 @@ Run IOVsearch tool. For more details, see :ref:\code{iovsearch}.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-run_iovsearch('OCC', model=model)
+run_iovsearch('OCC', results=model$modelfit_results, model=model)
 }
 
 }

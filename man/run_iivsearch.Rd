@@ -4,7 +4,15 @@
 \alias{run_iivsearch}
 \title{run_iivsearch}
 \usage{
-run_iivsearch(...)
+run_iivsearch(
+  algorithm,
+  iiv_strategy = "no_add",
+  rank_type = "bic",
+  cutoff = NULL,
+  results = NULL,
+  model = NULL,
+  ...
+)
 }
 \arguments{
 \item{algorithm}{(str) Which algorithm to run (brute_force, brute_force_no_of_etas, brute_force_block_structure)}
@@ -17,7 +25,11 @@ or 'fullblock'. Default is 'no_add'}
 \item{cutoff}{(numeric) Cutoff for which value of the ranking function that is considered significant. Default
 is NULL (all models will be ranked)}
 
-\item{model}{(Model) Pharmpy model}
+\item{results}{(ModelfitResults) Results for model}
+
+\item{model}{(Model) Pharmpy mode}
+
+\item{...}{Arguments to pass to tool}
 }
 \value{
 (IIVSearchResults) IIVsearch tool result object
@@ -28,7 +40,7 @@ Run IIVsearch tool. For more details, see :ref:\code{iivsearch}.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-run_iivsearch('brute_force', model=model)
+run_iivsearch('brute_force', results=model$modelfit_results, model=model)
 }
 
 }

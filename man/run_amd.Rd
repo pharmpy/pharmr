@@ -6,6 +6,7 @@
 \usage{
 run_amd(
   input,
+  results = NULL,
   modeltype = "pk_oral",
   cl_init = 0.01,
   vc_init = 1,
@@ -22,6 +23,8 @@ run_amd(
 }
 \arguments{
 \item{input}{(Model or Path) Read model object/Path to a dataset}
+
+\item{results}{(ModelfitResults) Reults of input if input is a model}
 
 \item{modeltype}{(str) Type of model to build. Either 'pk_oral' or 'pk_iv'}
 
@@ -58,7 +61,7 @@ Runs structural modelsearch, IIV building, and ruvsearch
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-run_amd(model)
+run_amd(model, results=model$modelfit_results)
 }
 }
 \seealso{

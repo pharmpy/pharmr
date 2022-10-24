@@ -4,16 +4,27 @@
 \alias{run_ruvsearch}
 \title{run_ruvsearch}
 \usage{
-run_ruvsearch(...)
+run_ruvsearch(
+  model = NULL,
+  results = NULL,
+  groups = 4,
+  p_value = 0.05,
+  skip = NULL,
+  ...
+)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
+
+\item{results}{(ModelfitResults) Results of model}
 
 \item{groups}{(integer) The number of bins to use for the time varying models}
 
 \item{p_value}{(numeric) The p-value to use for the likelihood ratio test}
 
-\item{skip}{(vector) A vector of models to not attempt.}
+\item{skip}{(vector) A vector of models to not attempt}
+
+\item{...}{Arguments to pass to tool}
 }
 \value{
 (RUVSearchResults) Ruvsearch tool result object
@@ -24,7 +35,7 @@ Run the ruvsearch tool. For more details, see :ref:\code{ruvsearch}.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-run_ruvsearch(model=model)
+run_ruvsearch(model=model, results=model$modelfit_results)
 }
 
 }

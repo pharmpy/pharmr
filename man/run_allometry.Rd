@@ -4,10 +4,23 @@
 \alias{run_allometry}
 \title{run_allometry}
 \usage{
-run_allometry(...)
+run_allometry(
+  model = NULL,
+  results = NULL,
+  allometric_variable = "WT",
+  reference_value = 70,
+  parameters = NULL,
+  initials = NULL,
+  lower_bounds = NULL,
+  upper_bounds = NULL,
+  fixed = TRUE,
+  ...
+)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
+
+\item{results}{(ModelfitResults) Results for model}
 
 \item{allometric_variable}{(str) Name of the variable to use for allometric scaling (default is WT)}
 
@@ -21,7 +34,9 @@ run_allometry(...)
 
 \item{upper_bounds}{(vector) Upper bounds for the exponents. (default is 2 for all parameters)}
 
-\item{fixed}{(logical) Should the exponents be fixed or not. (default TRUE)}
+\item{fixed}{(logical) Should the exponents be fixed or not. (default TRUE}
+
+\item{...}{Arguments to pass to tool}
 }
 \value{
 (AllometryResults) Allometry tool result object
@@ -32,7 +47,7 @@ Run allometry tool. For more details, see :ref:\code{allometry}.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-run_allometry(model=model, allometric_variable='WGT')
+run_allometry(model=model, results=model$modelfit_results, allometric_variable='WGT')
 }
 
 }
