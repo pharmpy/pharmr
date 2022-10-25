@@ -5082,7 +5082,7 @@ update_initial_individual_estimates <- function(model, individual_estimates, for
 #' 
 #' @export
 update_inits <- function(model, parameter_estimates, move_est_close_to_bounds=FALSE) {
-    if (class(parameter_estimates) == "array" && length(rownames(pe)) > 0) {
+    if (class(parameter_estimates) == "array" && length(rownames(parameter_estimates)) > 0) {
         parameter_estimates = as.list(parameter_estimates)
     }
 	func_out <- pharmpy$modeling$update_inits(model, parameter_estimates, move_est_close_to_bounds=move_est_close_to_bounds)
