@@ -1,7 +1,9 @@
 import inspect
 import os
-from pathlib import Path
 import re
+import textwrap
+from pathlib import Path
+from typing import List
 
 import pharmpy.modeling
 import pharmpy.tools
@@ -63,51 +65,70 @@ def create_r_func(func, module):
         raise ValueError(f'No documentation available for {func_name}')
 
     func_def = f'{func_name} <- function({wrapper_arg_str})'
-    func_out = f'func_out <- pharmpy${module_name}${func_name}({pyfunc_arg_str})'
+    func_execute = f'func_out <- pharmpy${module_name}${func_name}({pyfunc_arg_str})'
     func_return = 'return(py_to_r(func_out))'
 
-    if module_name == 'tools':
-        r_func = f'{func_def} {{\n' \
-                 f'\ttryCatch(\n' \
-                 f'\t{{\n' \
-                 f'\t\t{func_out}\n' \
-                 f'\t\t{func_return}\n' \
-                 f'\t}},\n' \
-                 f'\terror=function(cond) {{\n' \
-                 f'\t\tmessage(cond)\n' \
-                 f'\t\tmessage(\'Full stack:\')\n' \
-                 f'\t\tmessage(reticulate::py_last_error())\n' \
-                 f'\t\tmessage("pharmr version: ", packageVersion("pharmr"))\n' \
-                 f'\t\tmessage("Pharmpy version: ", print_pharmpy_version())\n' \
-                 f'\t\treturn(NA)\n' \
-                 f'\t}},\n' \
-                 f'\twarning=function(cond) {{\n' \
-                 f'\t\tmessage(cond)\n' \
-                 f'\t\tmessage(\'Full stack:\')\n' \
-                 f'\t\tmessage(reticulate::py_last_error())\n' \
-                 f'\t\tmessage("pharmr version: ", packageVersion("pharmr"))\n' \
-                 f'\t\tmessage("Pharmpy version: ", print_pharmpy_version())\n' \
-                 f'\t\treturn(NA)\n' \
-                 f'\t}}\n' \
-                 f'\t)\n' \
-                 f'}}'
-    else:
-        if 'pd.dataframe' in inspect.getdoc(func).lower() or 'pd.series' in inspect.getdoc(func).lower():
-            func_reset = '\tif (func_out$index$nlevels > 1) {\n' \
-                         '\t\tfunc_out <- func_out$reset_index()\n' \
-                         '\t}'
-            r_func = f'{func_def} {{\n' \
-                     f'\t{func_out}\n' \
-                     f'{func_reset}\n' \
-                     f'\t{func_return}\n' \
-                     f'}}'
-        else:
-            r_func = f'{func_def} {{\n' \
-                     f'\t{func_out}\n' \
-                     f'\t{func_return}\n' \
-                     f'}}'
+    r_wrapper = [f'{func_def} {{']
 
-    return r_func
+    if module_name == 'tools':
+        error_msg = [
+            'message(cond)',
+            'message("Full stack:")',
+            'message(reticulate::py_last_error())',
+            'message("pharmr version: ", packageVersion("pharmr"))',
+            'message("Pharmpy version: ", print_pharmpy_version())',
+            'return(NA)'
+        ]
+
+        r_trycatch = [
+            'tryCatch(',
+            '{',
+            f'{func_execute}',
+            f'{func_return}',
+            '},',
+            'error=function(cond) {',
+            *error_msg,
+            '},',
+            'warning=function(cond) {',
+            *error_msg,
+            '}',
+            ')',
+            '}'
+        ]
+
+        r_wrapper.extend(r_trycatch)
+    else:
+        r_execute = f'{func_execute}'
+        r_wrapper.append(r_execute)
+        if 'pd.dataframe' in inspect.getdoc(func).lower() or 'pd.series' in inspect.getdoc(func).lower():
+            r_reset_index = [
+                'if (func_out$index$nlevels > 1) {',
+                'func_out <- func_out$reset_index()',
+                '}'
+            ]
+            r_wrapper.extend(r_reset_index)
+        r_return = [
+            f'{func_return}',
+            '}'
+        ]
+        r_wrapper.extend(r_return)
+
+    r_wrapper_indented = indent(r_wrapper)
+    return '\n'.join(r_wrapper_indented)
+
+
+def indent(r_code: List[str]):
+    # FIXME make more general
+    indent_cur = 0
+    list_indented = []
+    for row in r_code:
+        if row.count('}'):
+            indent_cur -= row.count('}')
+        list_indented.append(textwrap.indent(row, '\t'*indent_cur))
+        if row.count('{'):
+            indent_cur += row.count('{')
+    assert indent_cur == 0
+    return list_indented
 
 
 def create_r_doc(func):
