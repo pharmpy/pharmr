@@ -943,6 +943,11 @@ calculate_eta_shrinkage <- function(model, parameter_estimates, individual_estim
 #' 
 #' @export
 calculate_individual_parameter_statistics <- function(model, expr_or_exprs, parameter_estimates, covariance_matrix=NULL, rng=NULL) {
+    pd <- reticulate::import('pandas', convert=FALSE)
+    if (class(parameter_estimates) == "array" && length(rownames(parameter_estimates)) > 0) {
+        parameter_estimates <- pd$Series(as.list(parameter_estimates))
+    }
+
 	func_out <- pharmpy$modeling$calculate_individual_parameter_statistics(model, expr_or_exprs, parameter_estimates, covariance_matrix=covariance_matrix, rng=rng)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
