@@ -1,5 +1,6 @@
 import inspect
 import os
+import warnings
 from pathlib import Path
 import re
 
@@ -43,8 +44,8 @@ def create_r_func(func, module):
 
     wrapper_args, pyfunc_args = [], []
 
-    params = inspect.signature(func).parameters
-    for param in params.values():
+    sig = inspect.signature(func)
+    for param in sig.parameters.values():
         if param.kind == param.VAR_KEYWORD or param.kind == param.VAR_POSITIONAL:
             if '...' not in wrapper_args:
                 wrapper_args += ['...']
@@ -92,7 +93,8 @@ def create_r_func(func, module):
                  f'\t)\n' \
                  f'}}'
     else:
-        if 'pd.dataframe' in inspect.getdoc(func).lower() or 'pd.series' in inspect.getdoc(func).lower():
+        # FIXME temporary workaround until inspect return annotation is used
+        if _has_return_type_pd(inspect.getdoc(func)):
             func_reset = '\tif (func_out$index$nlevels > 1) {\n' \
                          '\t\tfunc_out <- func_out$reset_index()\n' \
                          '\t}'
@@ -108,6 +110,18 @@ def create_r_func(func, module):
                      f'}}'
 
     return r_func
+
+
+def _has_return_type_pd(doc):
+    m = re.compile(r'(Returns*|Results*)\n-+\n(.+)')
+    return_row = m.search(doc)
+    if return_row:
+        return_type = return_row.group(2)
+    else:
+        return False
+    if 'series' in return_type.lower() or 'dataframe' in return_type.lower():
+        return True
+    return False
 
 
 def create_r_doc(func):
