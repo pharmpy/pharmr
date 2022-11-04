@@ -63,8 +63,8 @@ def create_r_func(func, module):
 
     wrapper_args, pyfunc_args = [], []
 
-    params = inspect.signature(func).parameters
-    for param in params.values():
+    sig = inspect.signature(func)
+    for param in sig.parameters.values():
         if param.kind == param.VAR_KEYWORD or param.kind == param.VAR_POSITIONAL:
             if '...' not in wrapper_args:
                 wrapper_args += ['...']
@@ -118,7 +118,7 @@ def create_r_func(func, module):
     else:
         r_execute = f'{func_execute}'
         r_wrapper.append(r_execute)
-        if 'pd.dataframe' in inspect.getdoc(func).lower() or 'pd.series' in inspect.getdoc(func).lower():
+        if _has_return_type_pd(inspect.getdoc(func)):
             r_reset_index = [
                 'if (func_out$index$nlevels > 1) {',
                 'func_out <- func_out$reset_index()',
@@ -133,6 +133,18 @@ def create_r_func(func, module):
 
     r_wrapper_indented = indent(r_wrapper)
     return '\n'.join(r_wrapper_indented)
+
+
+def _has_return_type_pd(doc):
+    m = re.compile(r'(Returns*|Results*)\n-+\n(.+)')
+    return_row = m.search(doc)
+    if return_row:
+        return_type = return_row.group(2)
+    else:
+        return False
+    if 'series' in return_type.lower() or 'dataframe' in return_type.lower():
+        return True
+    return False
 
 
 def indent(r_code: List[str]):

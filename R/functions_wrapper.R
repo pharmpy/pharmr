@@ -943,11 +943,6 @@ calculate_eta_shrinkage <- function(model, parameter_estimates, individual_estim
 #' 
 #' @export
 calculate_individual_parameter_statistics <- function(model, expr_or_exprs, parameter_estimates, covariance_matrix=NULL, rng=NULL) {
-    pd <- reticulate::import('pandas', convert=FALSE)
-    if (class(parameter_estimates) == "array" && length(rownames(parameter_estimates)) > 0) {
-        parameter_estimates <- pd$Series(as.list(parameter_estimates))
-    }
-
 	func_out <- pharmpy$modeling$calculate_individual_parameter_statistics(model, expr_or_exprs, parameter_estimates, covariance_matrix=covariance_matrix, rng=rng)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -1449,9 +1444,6 @@ copy_model <- function(model, name=NULL) {
 #' @export
 create_joint_distribution <- function(model, rvs=NULL, individual_estimates=NULL) {
 	func_out <- pharmpy$modeling$create_joint_distribution(model, rvs=rvs, individual_estimates=individual_estimates)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
 	return(py_to_r(func_out))
 }
 
@@ -3155,9 +3147,6 @@ mu_reference_model <- function(model) {
 #' @export
 omit_data <- function(dataset_or_model, group, name_pattern='omitted_{}') {
 	func_out <- pharmpy$modeling$omit_data(dataset_or_model, group, name_pattern=name_pattern)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
 	return(py_to_r(func_out))
 }
 
@@ -3177,9 +3166,6 @@ omit_data <- function(dataset_or_model, group, name_pattern='omitted_{}') {
 #' @export
 plot_individual_predictions <- function(model, predictions, individuals=NULL) {
 	func_out <- pharmpy$modeling$plot_individual_predictions(model, predictions, individuals=individuals)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
 	return(py_to_r(func_out))
 }
 
@@ -3200,9 +3186,6 @@ plot_individual_predictions <- function(model, predictions, individuals=NULL) {
 #' @export
 plot_iofv_vs_iofv <- function(iofv1, iofv2, name1, name2) {
 	func_out <- pharmpy$modeling$plot_iofv_vs_iofv(iofv1, iofv2, name1, name2)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
 	return(py_to_r(func_out))
 }
 
@@ -3716,9 +3699,6 @@ rename_symbols <- function(model, new_names) {
 #' @export
 resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, sample_size=NULL, replace=FALSE, name_pattern='resample_{}', name=NULL) {
 	func_out <- pharmpy$modeling$resample_data(dataset_or_model, group, resamples=resamples, stratify=stratify, sample_size=sample_size, replace=replace, name_pattern=name_pattern, name=name)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
 	return(py_to_r(func_out))
 }
 
@@ -5055,9 +5035,6 @@ unfix_parameters_to <- function(model, inits) {
 #' @export
 update_initial_individual_estimates <- function(model, individual_estimates, force=TRUE) {
 	func_out <- pharmpy$modeling$update_initial_individual_estimates(model, individual_estimates, force=force)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
 	return(py_to_r(func_out))
 }
 
@@ -5087,9 +5064,6 @@ update_initial_individual_estimates <- function(model, individual_estimates, for
 #' 
 #' @export
 update_inits <- function(model, parameter_estimates, move_est_close_to_bounds=FALSE) {
-    if (class(parameter_estimates) == "array" && length(rownames(parameter_estimates)) > 0) {
-        parameter_estimates = as.list(parameter_estimates)
-    }
 	func_out <- pharmpy$modeling$update_inits(model, parameter_estimates, move_est_close_to_bounds=move_est_close_to_bounds)
 	return(py_to_r(func_out))
 }
