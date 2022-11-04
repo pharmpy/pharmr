@@ -1,11 +1,31 @@
 import inspect
+import pandas as pd
 import re
 import textwrap
 from pathlib import Path
-from typing import List
+from typing import List, Literal, Union, get_args, get_origin, get_type_hints
+from collections.abc import Mapping, Sequence
 
 import pharmpy.modeling
 import pharmpy.tools
+from pharmpy.deps import sympy
+from pharmpy.model import DataInfo, Model
+from pharmpy.results import ModelfitResults
+
+TYPE_DICT = {
+    DataInfo: 'DataInfo',
+    Model: 'Model',
+    ModelfitResults: 'ModelfitResults',
+    str: 'str',
+    int: 'integer',
+    float: 'numeric',
+    sympy.Float: 'numeric',
+    bool: 'logical',
+    list: 'array',
+    None: 'NULL',
+    pd.DataFrame: 'data.frame',
+    pd.Series: 'array',
+}
 
 
 def create_functions():
@@ -151,7 +171,7 @@ def create_r_doc(func):
         doc_str += f'{py_to_r_str(row)}\n'
 
     if 'params' in doc_dict.keys():
-        doc_str += create_r_params(doc_dict['params'])
+        doc_str += create_r_params(doc_dict['params'], func)
     if 'returns' in doc_dict.keys():
         doc_str += create_r_returns(doc_dict['returns']) + '\n\n'
     if 'examples' in doc_dict.keys():
@@ -171,24 +191,98 @@ def create_r_doc(func):
     return r_doc
 
 
-def create_r_params(doc_list):
-    doc_str = ''
-    skip = False
+def create_r_params(doc_list, func):
+    type_hints = {key: value for key, value in get_type_hints(func).items() if key != 'return'}
+    params = inspect.signature(func).parameters.values()
+    params_unbound = [param for param in params if param.kind in (param.VAR_KEYWORD, param.VAR_POSITIONAL)]
+    if len(params_unbound) > 2:
+        raise ValueError(f'Unexpected number of unbound parameters: {params_unbound}')
+
+    if type_hints and len(type_hints) == len(params) - len(params_unbound):
+        try:
+            type_dict = _convert_types_from_typehints(type_hints)
+            if params_unbound:
+                for param in params_unbound:
+                    type_dict[param.name] = None
+        except NotImplementedError:
+            print(f'Could not translate function {func.__name__} with type hints, fall back to docstring')
+            type_dict = _convert_types_from_docs(doc_list)
+    else:
+        type_dict = _convert_types_from_docs(doc_list)
+
+    desc_dict = _get_desc(type_dict.keys(), '\n'.join(doc_list))
+
+    r_params, unbound_added = '', False
+    for key, value in type_dict.items():
+        if key in ('args', 'kwargs'):
+            if unbound_added:
+                continue
+            r_params += f'@param ... {desc_dict[key]}'
+            unbound_added = True
+        else:
+            r_params += f'@param {key} ({value}) {desc_dict[key]}'
+
+    return r_params + ' \n'
+
+
+def _convert_types_from_docs(doc_list):
+    type_dict = {}
     for i, row in enumerate(doc_list):
-        if skip:
-            skip = False
-            continue
         type_declare_pattern = re.compile(r'([\w0-9]+)\s?: ([\w0-9]+)')
         if type_declare_pattern.match(row):
             type_declare = row.split(': ')
-            doc_str += f'@param {type_declare[0].strip()} ({py_to_r_str(type_declare[1].strip())})'
+            var_name = type_declare[0].strip()
+            type_dict[var_name] = py_to_r_str(type_declare[1].strip())
         elif row == 'args' or row == 'kwargs':
-            if '@param ...' not in doc_str:
-                doc_str += f'@param ... {doc_list[i+1]}\n'
-            skip = True
+            type_dict[row.strip()] = None
+    return type_dict
+
+
+def _convert_types_from_typehints(type_hints):
+    type_dict = {}
+    for var_name, var_type in type_hints.items():
+        try:
+            r_type = _translate_type_hints(var_type)
+        except NotImplementedError:
+            raise
+        type_dict[var_name] = r_type
+
+    return type_dict
+
+
+def _translate_type_hints(var_type):
+    skip_args = [sympy.Expr, sympy.Symbol, Path, type(None)]
+    skip_origins = [Literal]
+
+    if isinstance(var_type, type):
+        return TYPE_DICT[var_type]
+    else:
+        args, origin = get_args(var_type), get_origin(var_type)
+        if origin in skip_origins:
+            return 'str'
+        args_as_str = [_translate_type_hints(arg) for arg in args if arg not in skip_args]
+        # If two args are translated to same type, only write once
+        args_as_str = set(args_as_str)
+        if origin is Union:
+            if type(None) in args:
+                return f'{", ".join(args_as_str)} (optional)'
+            else:
+                return ' or '.join(args_as_str)
+        elif origin is list or origin is Sequence:
+            return f'array({",".join(args_as_str)})'
+        elif origin is Mapping:
+            return f'list({"=".join(args_as_str)})'
         else:
-            doc_str += f' {py_to_r_str(row)}\n'
-    return doc_str
+            raise NotImplementedError(f'Could not translate {var_type}')
+
+
+def _get_desc(var_names, docstring):
+    # FIXME currently assumes order is same as in typing
+    m = re.compile(r'^\S+\s*:\s*.+\s*\n|kwargs\n|args\n', flags=re.MULTILINE)
+    descs = m.split(docstring)
+    descs = list(filter(None, descs))
+    assert len(descs) == len(var_names)
+    return {name: py_to_r_str(desc) for name, desc in zip(var_names, descs)}
 
 
 def create_r_returns(doc_list):
