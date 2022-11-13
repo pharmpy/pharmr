@@ -7,10 +7,10 @@
 get_lag_times(model)
 }
 \arguments{
-\item{model}{(Pharmpy model)
-Result
-list
-Dictionary from compartment name to lag time expression}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(list) Dictionary from compartment name to lag time expression
 }
 \description{
 Get lag times for all compartments

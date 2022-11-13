@@ -7,10 +7,10 @@
 get_bioavailability(model)
 }
 \arguments{
-\item{model}{(Pharmpy model)
-Result
-list
-Dictionary from compartment name to bioavailability expression}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(list) Dictionary from compartment name to bioavailability expression
 }
 \description{
 Get bioavailability of doses for all compartments
