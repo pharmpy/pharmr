@@ -1,4 +1,6 @@
 import inspect
+import warnings
+
 import pandas as pd
 import re
 import textwrap
@@ -10,12 +12,14 @@ import pharmpy.modeling
 import pharmpy.tools
 from pharmpy.deps import sympy
 from pharmpy.model import DataInfo, Model
-from pharmpy.results import ModelfitResults
+from pharmpy.results import ModelfitResults, Results
+from pharmpy.workflows import ModelDatabase, ToolDatabase
 
 TYPE_DICT = {
     DataInfo: 'DataInfo',
     Model: 'Model',
     ModelfitResults: 'ModelfitResults',
+    Results: 'Results',
     str: 'str',
     int: 'integer',
     float: 'numeric',
@@ -26,6 +30,15 @@ TYPE_DICT = {
     pd.DataFrame: 'data.frame',
     pd.Series: 'array',
 }
+
+SKIP = [
+    sympy.Expr,
+    sympy.Symbol,
+    Path,
+    type(None),
+    ModelDatabase,
+    ToolDatabase
+]
 
 
 def create_functions():
@@ -204,7 +217,12 @@ def create_r_doc(func):
 
 
 def create_r_params(doc_list, func):
-    type_hints = {key: value for key, value in get_type_hints(func).items() if key != 'return'}
+    try:
+        type_hints_all = get_type_hints(func)
+        type_hints = {key: value for key, value in type_hints_all.items() if key != 'return'}
+    except AttributeError as e:
+        print(e)
+        type_hints = None
     params = inspect.signature(func).parameters.values()
     params_unbound = [param for param in params if param.kind in (param.VAR_KEYWORD, param.VAR_POSITIONAL)]
     if len(params_unbound) > 2:
@@ -263,7 +281,6 @@ def _convert_types_from_typehints(type_hints):
 
 
 def _translate_type_hints(var_type):
-    skip_args = [sympy.Expr, sympy.Symbol, Path, type(None)]
     skip_origins = [Literal]
 
     if isinstance(var_type, type):
@@ -272,7 +289,7 @@ def _translate_type_hints(var_type):
         args, origin = get_args(var_type), get_origin(var_type)
         if origin in skip_origins:
             return 'str'
-        args_as_str = [_translate_type_hints(arg) for arg in args if arg not in skip_args]
+        args_as_str = [_translate_type_hints(arg) for arg in args if arg not in SKIP]
         # If two args are translated to same type, only write once
         args_as_str = set(args_as_str)
         if origin is Union:
