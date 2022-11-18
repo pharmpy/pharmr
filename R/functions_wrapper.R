@@ -3343,7 +3343,6 @@ read_model_from_database <- function(name, database=NULL) {
 #' Read model from the model code in a string
 #' 
 #' @param code (str) Model code to read
-#' @param path (Path or str) Specified to set the path for the created model
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -3367,8 +3366,8 @@ read_model_from_database <- function(name, database=NULL) {
 #' 
 #' 
 #' @export
-read_model_from_string <- function(code, path=NULL) {
-	func_out <- pharmpy$modeling$read_model_from_string(code, path=path)
+read_model_from_string <- function(code) {
+	func_out <- pharmpy$modeling$read_model_from_string(code)
 	return(py_to_r(func_out))
 }
 
@@ -5736,8 +5735,6 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' @param search_space (str) MFL for search space for structural model
 #' @param lloq (numeric) Lower limit of quantification. LOQ data will be removed.
 #' @param order (vector) Runorder of components
-#' @param categorical (vector) List of categorical covariates
-#' @param continuous (vector) List of continuous covariates
 #' @param allometric_variable (str or Symbol) Variable to use for allometry
 #' @param occasion (str) Name of occasion column
 #' @param path (str or Path) Path to run AMD in
@@ -5757,10 +5754,10 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' 
 #' 
 #' @export
-run_amd <- function(input, results=NULL, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_init=0.1, search_space=NULL, lloq=NULL, order=NULL, categorical=NULL, continuous=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE) {
+run_amd <- function(input, results=NULL, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_init=0.1, search_space=NULL, lloq=NULL, order=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, search_space=search_space, lloq=lloq, order=order, categorical=categorical, continuous=continuous, allometric_variable=allometric_variable, occasion=occasion, path=path, resume=resume)
+		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, search_space=search_space, lloq=lloq, order=order, allometric_variable=allometric_variable, occasion=occasion, path=path, resume=resume)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5812,6 +5809,57 @@ run_covsearch <- function(effects, p_forward=0.05, p_backward=0.01, max_steps=-1
 	tryCatch(
 	{
 		func_out <- pharmpy$tools$run_covsearch(effects, p_forward=p_forward, p_backward=p_backward, max_steps=max_steps, algorithm=algorithm, results=results, model=model, ...)
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
+#' run_estmethod
+#' 
+#' @description
+#' Run estmethod tool.
+#' 
+#' @param algorithm (str) The algorithm to use (can be 'exhaustive' or 'reduced'
+#' @param methods (vector or NULL) List of estimation methods to test. Can be specified as 'all', a vector of methods, or
+#'  NULL (to not test any estimation method)
+#' @param solvers (vector, str or NULL) List of solver to test. Can be specified as 'all', a vector of solvers, or NULL (to
+#'  not test any solver)
+#' @param results (ModelfitResults) Results for model
+#' @param model (Model) Pharmpy mode
+#' @param ... Arguments to pass to tool
+#'  
+#' @return (EstMethodResults) Estmethod tool result object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' res <- model$modelfit_results
+#' methods <- c('imp', 'saem')
+#' run_estmethod('reduced', methods=methods, solvers='all', results=res, model=model)
+#' }
+#' 
+#' @export
+run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, results=NULL, model=NULL, ...) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$run_estmethod(algorithm, methods=methods, solvers=solvers, results=results, model=model, ...)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {

@@ -14,8 +14,6 @@ run_amd(
   search_space = NULL,
   lloq = NULL,
   order = NULL,
-  categorical = NULL,
-  continuous = NULL,
   allometric_variable = NULL,
   occasion = NULL,
   path = NULL,
@@ -40,10 +38,6 @@ run_amd(
 \item{lloq}{(numeric) Lower limit of quantification. LOQ data will be removed.}
 
 \item{order}{(vector) Runorder of components}
-
-\item{categorical}{(vector) List of categorical covariates}
-
-\item{continuous}{(vector) List of continuous covariates}
 
 \item{allometric_variable}{(str or Symbol) Variable to use for allometry}
 
