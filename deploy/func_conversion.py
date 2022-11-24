@@ -119,7 +119,7 @@ def _preprocess_input(func):
             continue
 
         if origin is Union and type(None) in get_args(value):
-            r_conversion_null = [f'if (!is.null({key}) {{',
+            r_conversion_null = [f'if (!(is.null({key}))) {{',
                                  r_conversion,
                                  '}']
             r_preprocess.extend(r_conversion_null)
@@ -131,13 +131,13 @@ def _preprocess_input(func):
 
 def _get_conversion_str(key, args, origin):
     if args is int:
-        return f'{key} = as.integer({key})'
+        return f'{key} <- as.integer({key})'
     elif origin is list:
-        return f'{key} = as.list({key})'
+        return f'{key} <- as.list({key})'
     # FIXME make more general (handles optional type)
     elif isinstance(args, tuple) and len(args) == 2 and type(None) in args:
         if get_origin(args[0]) is list:
-            return f'{key} = as.list({key})'
+            return f'{key} <- as.list({key})'
     return None
 
 
