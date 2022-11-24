@@ -77,11 +77,16 @@ def _create_func_body_tool(func, func_execute):
         'return(NA)'
     ]
 
+    r_results_transform = ['if (\'pharmpy.model.results.Results\' %in% class(func_out)) {',
+                           'func_out <- reset_indices_results(func_out)',
+                           '}']
+
     r_func_body = [
         'tryCatch(',
         '{',
         *_preprocess_input(func),
         f'{func_execute}',
+        *r_results_transform,
         *_create_func_return(func),
         '},',
         'error=function(cond) {',
