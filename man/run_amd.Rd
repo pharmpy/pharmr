@@ -14,11 +14,10 @@ run_amd(
   search_space = NULL,
   lloq = NULL,
   order = NULL,
-  categorical = NULL,
-  continuous = NULL,
   allometric_variable = NULL,
   occasion = NULL,
-  path = NULL
+  path = NULL,
+  resume = FALSE
 )
 }
 \arguments{
@@ -40,15 +39,13 @@ run_amd(
 
 \item{order}{(vector) Runorder of components}
 
-\item{categorical}{(vector) List of categorical covariates}
-
-\item{continuous}{(vector) List of continuous covariates}
-
 \item{allometric_variable}{(str or Symbol) Variable to use for allometry}
 
 \item{occasion}{(str) Name of occasion column}
 
 \item{path}{(str or Path) Path to run AMD in}
+
+\item{resume}{(logical) Whether to allow resuming previous run}
 }
 \value{
 (Model) Reference to the same model object

@@ -1518,6 +1518,38 @@ create_symbol <- function(model, stem, force_numbering=FALSE) {
 }
 
 #' @title
+#' deidentify_data
+#' 
+#' @description
+#' Deidentify a dataset
+#' 
+#' Two operations are performed on the dataset:
+#' 
+#' 1. All ID numbers are randomized from the range 1 to n
+#' 2. All columns containing dates will have the year changed
+#' 
+#' The year change is done by letting the earliest year in the dataset
+#' be used as a reference and by maintaining leap years. The reference year
+#' will either be 1901, 1902, 1903 or 1904 depending on its distance to the closest
+#' preceeding leap year.
+#' 
+#' @param df (data.frame) A dataset
+#' @param id_column (str) Name of the id column
+#' @param date_columns (vector) Names of all date columns
+#'  
+#' @return (data.frame) Deidentified dataset
+#' 
+#' 
+#' @export
+deidentify_data <- function(df, id_column='ID', date_columns=NULL) {
+	func_out <- pharmpy$modeling$deidentify_data(df, id_column=id_column, date_columns=date_columns)
+	if (func_out$index$nlevels > 1) {
+		func_out <- func_out$reset_index()
+	}
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' drop_columns
 #' 
 #' @description
@@ -2042,10 +2074,10 @@ get_baselines <- function(model) {
 #' @description
 #' Get bioavailability of doses for all compartments
 #' 
-#' @param model (Pharmpy model) 
-#'  Result
-#'  list
-#'  Dictionary from compartment name to bioavailability expression
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (list) Dictionary from compartment name to bioavailability expression
+#' 
 #' 
 #' @export
 get_bioavailability <- function(model) {
@@ -2262,7 +2294,6 @@ get_ids <- function(model) {
 #' Retrieves all parameters with IIV or IOV in :class:`pharmpy.model`.
 #' 
 #' @param model (Model) Pharmpy model to retrieve the individuals parameters from
-#'  
 #' @param level (str) The variability level to look for: 'iiv', 'iov', or 'all' (default)
 #'  
 #' @return (vector[str]) A vector of the parameter names as strings
@@ -2321,10 +2352,10 @@ get_individual_prediction_expression <- function(model) {
 #' @description
 #' Get lag times for all compartments
 #' 
-#' @param model (Pharmpy model) 
-#'  Result
-#'  list
-#'  Dictionary from compartment name to lag time expression
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (list) Dictionary from compartment name to lag time expression
+#' 
 #' 
 #' @export
 get_lag_times <- function(model) {
@@ -2568,7 +2599,6 @@ get_omegas <- function(model) {
 #' Retrieves PK parameters in :class:`pharmpy.model`.
 #' 
 #' @param model (Model) Pharmpy model to retrieve the PK parameters from
-#'  
 #' @param kind (str) The type of parameter to retrieve: 'absorption', 'distribution',
 #'  'elimination', or 'all' (default).
 #'  
@@ -3313,7 +3343,6 @@ read_model_from_database <- function(name, database=NULL) {
 #' Read model from the model code in a string
 #' 
 #' @param code (str) Model code to read
-#' @param path (Path or str) Specified to set the path for the created model
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -3337,8 +3366,8 @@ read_model_from_database <- function(name, database=NULL) {
 #' 
 #' 
 #' @export
-read_model_from_string <- function(code, path=NULL) {
-	func_out <- pharmpy$modeling$read_model_from_string(code, path=path)
+read_model_from_string <- function(code) {
+	func_out <- pharmpy$modeling$read_model_from_string(code)
 	return(py_to_r(func_out))
 }
 
@@ -3389,7 +3418,8 @@ remove_covariance_step <- function(model) {
 #' @param parameter (str) Name of parameter.
 #' @param covariate (str) Name of covariate.
 #'  
-#'  
+#' @return (Model) Reference to the same model
+#' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
@@ -5705,11 +5735,10 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' @param search_space (str) MFL for search space for structural model
 #' @param lloq (numeric) Lower limit of quantification. LOQ data will be removed.
 #' @param order (vector) Runorder of components
-#' @param categorical (vector) List of categorical covariates
-#' @param continuous (vector) List of continuous covariates
 #' @param allometric_variable (str or Symbol) Variable to use for allometry
 #' @param occasion (str) Name of occasion column
 #' @param path (str or Path) Path to run AMD in
+#' @param resume (logical) Whether to allow resuming previous run
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -5725,10 +5754,10 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' 
 #' 
 #' @export
-run_amd <- function(input, results=NULL, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_init=0.1, search_space=NULL, lloq=NULL, order=NULL, categorical=NULL, continuous=NULL, allometric_variable=NULL, occasion=NULL, path=NULL) {
+run_amd <- function(input, results=NULL, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_init=0.1, search_space=NULL, lloq=NULL, order=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, search_space=search_space, lloq=lloq, order=order, categorical=categorical, continuous=continuous, allometric_variable=allometric_variable, occasion=occasion, path=path)
+		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, search_space=search_space, lloq=lloq, order=order, allometric_variable=allometric_variable, occasion=occasion, path=path, resume=resume)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5780,6 +5809,57 @@ run_covsearch <- function(effects, p_forward=0.05, p_backward=0.01, max_steps=-1
 	tryCatch(
 	{
 		func_out <- pharmpy$tools$run_covsearch(effects, p_forward=p_forward, p_backward=p_backward, max_steps=max_steps, algorithm=algorithm, results=results, model=model, ...)
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
+#' run_estmethod
+#' 
+#' @description
+#' Run estmethod tool.
+#' 
+#' @param algorithm (str) The algorithm to use (can be 'exhaustive' or 'reduced'
+#' @param methods (vector or NULL) List of estimation methods to test. Can be specified as 'all', a vector of methods, or
+#'  NULL (to not test any estimation method)
+#' @param solvers (vector, str or NULL) List of solver to test. Can be specified as 'all', a vector of solvers, or NULL (to
+#'  not test any solver)
+#' @param results (ModelfitResults) Results for model
+#' @param model (Model) Pharmpy mode
+#' @param ... Arguments to pass to tool
+#'  
+#' @return (EstMethodResults) Estmethod tool result object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' res <- model$modelfit_results
+#' methods <- c('imp', 'saem')
+#' run_estmethod('reduced', methods=methods, solvers='all', results=res, model=model)
+#' }
+#' 
+#' @export
+run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, results=NULL, model=NULL, ...) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$run_estmethod(algorithm, methods=methods, solvers=solvers, results=results, model=model, ...)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {

@@ -4,7 +4,7 @@ name: Build docs
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true

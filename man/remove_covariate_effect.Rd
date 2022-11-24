@@ -13,6 +13,9 @@ remove_covariate_effect(model, parameter, covariate)
 
 \item{covariate}{(str) Name of covariate.}
 }
+\value{
+(Model) Reference to the same model
+}
 \description{
 Remove a covariate effect from an instance of :class:\code{pharmpy.model}.
 }
