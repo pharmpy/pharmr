@@ -29,7 +29,13 @@ def create_r_func(func, module):
     if module_name == 'tools':
         r_func_body = _create_func_body_tool(func, func_execute)
     else:
-        r_func_body = _create_func_body_modeling(func, func_execute)
+        r_func_body = []
+        # FIXME remove once model is immutable
+        if 'model' in params.keys() and func.__name__ != 'copy_model':
+            r_func_body += ['if (\'pharmpy.model.model.Model\' %in% class(model)) {',
+                            'model = pharmpy$modeling$copy_model(model)',
+                            '}']
+        r_func_body += _create_func_body_modeling(func, func_execute)
 
     r_wrapper = [f'{func_def} {{',
                  *r_func_body,
