@@ -10,7 +10,7 @@ reset_indices_results <- function(res) {
   args_new <- c()
   for (py_attr_name in reticulate::py_list_attributes(res)) {
     # Skip e.g. __class__
-    if (startsWith(py_attr_name, '__')) {
+    if (startsWith(py_attr_name, '_')) {
       next
     }
     py_attr <- reticulate::py_get_attr(res, py_attr_name)
@@ -43,7 +43,6 @@ reset_indices_results <- function(res) {
   # Create full constructor call, e.g.
   #  pharmpy.tools$modelsearch$tool$ModelSearchResults(summary_tool=attrs_new$summary_tool, ...)
   constructor_str <- paste(res_class_r, '(', input_args, ')', sep = '')
-  
   res_new <- eval(parse(text=constructor_str))
   return(res_new)
 }
