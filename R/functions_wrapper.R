@@ -10,7 +10,7 @@
 #' 
 #' @param model (Model) Pharmpy model
 #' @param allometric_variable (str) Value to use for allometry (X above)
-#' @param reference_value (numeric or str or integer) Reference value (Z above)
+#' @param reference_value (str or integer or numeric) Reference value (Z above)
 #' @param parameters (array(str) (optional)) Parameters to use or NULL (default) for all available CL, Q and V parameters
 #' @param initials (array(numeric or integer) (optional)) Initial estimates for the exponents. Default is to use 0.75 for CL and Qs and 1 for Vs
 #' @param lower_bounds (array(numeric or integer) (optional)) Lower bounds for the exponents. Default is 0 for all parameters
@@ -1741,7 +1741,7 @@ drop_dropped_columns <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param etas (data.frame (optional)) Optional list of eta values
-#' @param parameters (list(numeric=str) (optional)) Optional list of parameters and values
+#' @param parameters (list(str=numeric) (optional)) Optional list of parameters and values
 #' @param dataset (data.frame (optional)) Optional dataset
 #'  
 #' @return (data.frame) Gradient
@@ -1785,7 +1785,7 @@ evaluate_epsilon_gradient <- function(model, etas=NULL, parameters=NULL, dataset
 #' 
 #' @param model (Model) Pharmpy model
 #' @param etas (data.frame (optional)) Optional list of eta values
-#' @param parameters (list(numeric=str) (optional)) Optional list of parameters and values
+#' @param parameters (list(str=numeric) (optional)) Optional list of parameters and values
 #' @param dataset (data.frame (optional)) Optional dataset
 #'  
 #' @return (data.frame) Gradient
@@ -1825,7 +1825,7 @@ evaluate_eta_gradient <- function(model, etas=NULL, parameters=NULL, dataset=NUL
 #' 
 #' @param model (Model) Pharmpy model
 #' @param expression (str) Expression to evaluate
-#' @param parameter_estimates (list(numeric=str) (optional)) Parameter estimates to use instead of initial estimates
+#' @param parameter_estimates (list(str=numeric) (optional)) Parameter estimates to use instead of initial estimates
 #'  
 #' @return (data.frame) A series of one evaluated value for each data record
 #' 
@@ -1865,7 +1865,7 @@ evaluate_expression <- function(model, expression, parameter_estimates=NULL) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param etas (data.frame (optional)) Optional list of eta values
-#' @param parameters (list(numeric=str) (optional)) Optional list of parameters and values
+#' @param parameters (list(str=numeric) (optional)) Optional list of parameters and values
 #' @param dataset (data.frame (optional)) Optional dataset
 #'  
 #' @return (data.frame) Individual predictions
@@ -1906,7 +1906,7 @@ evaluate_individual_prediction <- function(model, etas=NULL, parameters=NULL, da
 #' This function currently only support models without ODE systems
 #' 
 #' @param model (Model) Pharmpy model
-#' @param parameters (list(numeric=str) (optional)) Optional list of parameters and values
+#' @param parameters (list(str=numeric) (optional)) Optional list of parameters and values
 #' @param dataset (data.frame (optional)) Optional dataset
 #'  
 #' @return (data.frame) Population predictions
@@ -1947,7 +1947,7 @@ evaluate_population_prediction <- function(model, parameters=NULL, dataset=NULL)
 #' This function currently only support models without ODE systems
 #' 
 #' @param model (Model) Pharmpy model
-#' @param parameters (list(numeric=str) (optional)) Optional list of parameters and values
+#' @param parameters (list(str=numeric) (optional)) Optional list of parameters and values
 #' @param dataset (data.frame (optional)) Optional dataset
 #'  
 #' @return (data.frame) WRES
@@ -4795,7 +4795,7 @@ set_peripheral_compartments <- function(model, n) {
 #' model is proportional, otherwise they are 0.1.
 #' 
 #' @param model (Model) Pharmpy model to create block effect on.
-#' @param list_of_eps (array, str (optional)) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
+#' @param list_of_eps (str, array (optional)) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
 #' NULL is default.
 #' @param lower_limit (numeric (optional)) Lower limit of power (theta). NULL for no limit.
 #' @param ipred (str (optional)) Symbol to use as IPRED. Default is to autodetect expression for IPRED.
@@ -5677,7 +5677,7 @@ create_results <- function(path, ...) {
 #' @description
 #' Fit models.
 #' 
-#' @param model_or_models (array(Model) or Model) List of models or one single model
+#' @param model_or_models (Model or array(Model)) List of models or one single model
 #' @param tool (str (optional)) Estimation tool to use. NULL to use default
 #'  
 #' @return (ModelfitResults | vector of ModelfitResults) ModelfitResults for the model or models
@@ -5696,9 +5696,6 @@ fit <- function(model_or_models, tool=NULL) {
 	tryCatch(
 	{
 		func_out <- pharmpy$tools$fit(model_or_models, tool=tool)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5995,9 +5992,6 @@ read_modelfit_results <- function(path) {
 	tryCatch(
 	{
 		func_out <- pharmpy$tools$read_modelfit_results(path)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -6123,7 +6117,7 @@ retrieve_final_model <- function(res) {
 #' Any models created and run by the tool can be
 #' retrieved.
 #' 
-#' @param source (Results or str) Source where to find models. Can be a path (as str or Path), a results object, or a
+#' @param source (str or Results) Source where to find models. Can be a path (as str or Path), a results object, or a
 #' ToolDatabase/ModelDatabase
 #' @param names (array(str) (optional)) List of names of the models to retrieve or NULL for all
 #'  
@@ -6179,7 +6173,7 @@ retrieve_models <- function(source, names=NULL) {
 #' @param model (Model (optional)) Pharmpy model
 #' @param results (ModelfitResults (optional)) Results for model
 #' @param allometric_variable (str) Name of the variable to use for allometric scaling (default is WT)
-#' @param reference_value (numeric or str or integer) Reference value for the allometric variable (default is 70)
+#' @param reference_value (str or integer or numeric) Reference value for the allometric variable (default is 70)
 #' @param parameters (array(str) (optional)) Parameters to apply scaling to (default is all CL, Q and V parameters)
 #' @param initials (array(numeric or integer) (optional)) Initial estimates for the exponents. (default is to use 0.75 for CL and Qs and 1 for Vs)
 #' @param lower_bounds (array(numeric or integer) (optional)) Lower bounds for the exponents. (default is 0 for all parameters)
@@ -6419,7 +6413,7 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, results=NULL, m
 #' @param iiv_strategy (str) If/how IIV should be added to start model. Possible strategies are 'no_add', 'add_diagonal',
 #' or 'fullblock'. Default is 'no_add'
 #' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC
-#' @param cutoff (numeric, integer (optional)) Cutoff for which value of the ranking function that is considered significant. Default
+#' @param cutoff (integer, numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 #' is NULL (all models will be ranked)
 #' @param results (ModelfitResults (optional)) Results for model
 #' @param model (Model (optional)) Pharmpy mode
@@ -6471,7 +6465,7 @@ run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cut
 #' @param column (str) Name of column in dataset to use as occasion column (default is 'OCC')
 #' @param list_of_parameters (array(str) (optional)) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)
 #' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC
-#' @param cutoff (numeric, integer (optional)) Cutoff for which value of the ranking type that is considered significant. Default
+#' @param cutoff (integer, numeric (optional)) Cutoff for which value of the ranking type that is considered significant. Default
 #' is NULL (all models will be ranked)
 #' @param distribution (str) Which distribution added IOVs should have (default is same-as-iiv)
 #' @param results (ModelfitResults (optional)) Results for model
@@ -6577,7 +6571,7 @@ run_modelfit <- function(models=NULL, n=NULL, tool=NULL, ...) {
 #' @param iiv_strategy (str) If/how IIV should be added to candidate models. Possible strategies are 'no_add',
 #' 'add_diagonal', 'fullblock', or 'absorption_delay'. Default is 'absorption_delay'
 #' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC
-#' @param cutoff (numeric, integer (optional)) Cutoff for which value of the ranking function that is considered significant. Default
+#' @param cutoff (integer, numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 #' is NULL (all models will be ranked)
 #' @param results (ModelfitResults (optional)) Results for model
 #' @param model (Model (optional)) Pharmpy mode
