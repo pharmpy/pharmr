@@ -75,7 +75,7 @@ jobs:
       - name: Install R dependencies
         working-directory: pharmr_repo
         run: |
-          remotes::install_deps(dependencies = TRUE)
+          remotes::install_deps(dependencies = TRUE, build = FALSE)
           remotes::install_cran("rcmdcheck")
           remotes::install_github('rstudio/reticulate')
         shell: Rscript {0}
