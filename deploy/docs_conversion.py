@@ -114,6 +114,7 @@ def _convert_types_from_typehints(type_hints):
 
 
 def _translate_type_hints(var_type):
+    # FIXME the order is not deterministic
     skip_origins = [Literal]
 
     if isinstance(var_type, type):
