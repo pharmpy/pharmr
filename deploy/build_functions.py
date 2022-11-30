@@ -1,4 +1,5 @@
 import inspect
+import os
 
 from pathlib import Path
 
@@ -13,8 +14,9 @@ def create_functions():
     modeling_str = create_module_functions(pharmpy.modeling)
     tool_str = create_module_functions(pharmpy.tools)
     full_str = modeling_str + tool_str
-
-    pharmr_root = Path(inspect.getsourcefile(lambda: 0)).parent.parent
+    # TODO: more general way to get right directory
+    cwd = os.getcwd()
+    pharmr_root = Path(cwd).parent
     func_path = pharmr_root / 'R' / 'functions_wrapper.R'
 
     with open(func_path, 'w') as f:
