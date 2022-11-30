@@ -72,6 +72,13 @@ jobs:
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
           sudo apt install libcurl4-openssl-dev
 
+      - name: Install png (temporary)
+        working-directory: pharmr_repo
+        if: runner.os == 'Windows'
+        run: |
+          install.packages('png', repos='https://mran.microsoft.com/snapshot/2022-11-27')
+        shell: Rscript {0}
+
       - name: Install R dependencies
         working-directory: pharmr_repo
         run: |

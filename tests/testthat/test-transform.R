@@ -6,7 +6,7 @@ test_that("pharmr can use pharmpy transformations", {
   skip_on_cran()
 
   model <- load_example_model('pheno')
-  add_individual_parameter(model, 'MAT')
+  model <- add_individual_parameter(model, 'MAT')
 
   expect_match(model$model_code, 'POP_MAT')
 })
