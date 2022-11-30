@@ -14,15 +14,15 @@ run_ruvsearch(
 )
 }
 \arguments{
-\item{model}{(Model) Pharmpy model}
+\item{model}{(Model (optional)) Pharmpy model}
 
-\item{results}{(ModelfitResults) Results of model}
+\item{results}{(ModelfitResults (optional)) Results of model}
 
 \item{groups}{(integer) The number of bins to use for the time varying models}
 
 \item{p_value}{(numeric) The p-value to use for the likelihood ratio test}
 
-\item{skip}{(vector) A vector of models to not attempt}
+\item{skip}{(array(str) (optional)) A vector of models to not attempt}
 
 \item{...}{Arguments to pass to tool}
 }

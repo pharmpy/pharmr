@@ -25,12 +25,12 @@ run_modelsearch(
 
 \item{rank_type}{(str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC}
 
-\item{cutoff}{(numeric) Cutoff for which value of the ranking function that is considered significant. Default
+\item{cutoff}{(numeric, integer (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 is NULL (all models will be ranked)}
 
-\item{results}{(ModelfitResults) Results for model}
+\item{results}{(ModelfitResults (optional)) Results for model}
 
-\item{model}{(Model) Pharmpy mode}
+\item{model}{(Model (optional)) Pharmpy mode}
 
 \item{...}{Arguments to pass to tool}
 }

@@ -7,7 +7,7 @@
 read_results(path)
 }
 \arguments{
-\item{path}{(str, Path) Path to results file}
+\item{path}{(str) Path to results file}
 }
 \value{
 (Results) Results object for tool

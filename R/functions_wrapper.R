@@ -10,7 +10,7 @@
 #' 
 #' @param model (Model) Pharmpy model
 #' @param allometric_variable (str) Value to use for allometry (X above)
-#' @param reference_value (str or integer or numeric) Reference value (Z above)
+#' @param reference_value (numeric or str or integer) Reference value (Z above)
 #' @param parameters (array(str) (optional)) Parameters to use or NULL (default) for all available CL, Q and V parameters
 #' @param initials (array(numeric or integer) (optional)) Initial estimates for the exponents. Default is to use 0.75 for CL and Qs and 1 for Vs
 #' @param lower_bounds (array(numeric or integer) (optional)) Lower bounds for the exponents. Default is 0 for all parameters
@@ -1740,9 +1740,9 @@ drop_dropped_columns <- function(model) {
 #' This function currently only support models without ODE systems
 #' 
 #' @param model (Model) Pharmpy model
-#' @param etas (data.frame (optional)) Optional list of eta values
-#' @param parameters (list(str=numeric) (optional)) Optional list of parameters and values
-#' @param dataset (data.frame (optional)) Optional dataset
+#' @param etas (list) Optional list of eta values
+#' @param parameters (list) Optional list of parameters and values
+#' @param dataset (data.frame) Optional dataset
 #'  
 #' @return (data.frame) Gradient
 #' 
@@ -1784,9 +1784,9 @@ evaluate_epsilon_gradient <- function(model, etas=NULL, parameters=NULL, dataset
 #' This function currently only support models without ODE systems
 #' 
 #' @param model (Model) Pharmpy model
-#' @param etas (data.frame (optional)) Optional list of eta values
-#' @param parameters (list(str=numeric) (optional)) Optional list of parameters and values
-#' @param dataset (data.frame (optional)) Optional dataset
+#' @param etas (list) Optional list of eta values
+#' @param parameters (list) Optional list of parameters and values
+#' @param dataset (data.frame) Optional dataset
 #'  
 #' @return (data.frame) Gradient
 #' 
@@ -1824,8 +1824,8 @@ evaluate_eta_gradient <- function(model, etas=NULL, parameters=NULL, dataset=NUL
 #' will be used. Initial estimates will be used for non-estimated parameters.
 #' 
 #' @param model (Model) Pharmpy model
-#' @param expression (str) Expression to evaluate
-#' @param parameter_estimates (list(str=numeric) (optional)) Parameter estimates to use instead of initial estimates
+#' @param expression (str or sympy expression) Expression to evaluate
+#' @param parameter_estimates (data.frame) Parameter estimates to use instead of initial estimates
 #'  
 #' @return (data.frame) A series of one evaluated value for each data record
 #' 
@@ -1864,9 +1864,9 @@ evaluate_expression <- function(model, expression, parameter_estimates=NULL) {
 #' This function currently only support models without ODE systems
 #' 
 #' @param model (Model) Pharmpy model
-#' @param etas (data.frame (optional)) Optional list of eta values
-#' @param parameters (list(str=numeric) (optional)) Optional list of parameters and values
-#' @param dataset (data.frame (optional)) Optional dataset
+#' @param etas (list) Optional list of eta values
+#' @param parameters (list) Optional list of parameters and values
+#' @param dataset (data.frame) Optional dataset
 #'  
 #' @return (data.frame) Individual predictions
 #' 
@@ -1906,8 +1906,8 @@ evaluate_individual_prediction <- function(model, etas=NULL, parameters=NULL, da
 #' This function currently only support models without ODE systems
 #' 
 #' @param model (Model) Pharmpy model
-#' @param parameters (list(str=numeric) (optional)) Optional list of parameters and values
-#' @param dataset (data.frame (optional)) Optional dataset
+#' @param parameters (list) Optional list of parameters and values
+#' @param dataset (data.frame) Optional dataset
 #'  
 #' @return (data.frame) Population predictions
 #' 
@@ -1947,8 +1947,8 @@ evaluate_population_prediction <- function(model, parameters=NULL, dataset=NULL)
 #' This function currently only support models without ODE systems
 #' 
 #' @param model (Model) Pharmpy model
-#' @param parameters (list(str=numeric) (optional)) Optional list of parameters and values
-#' @param dataset (data.frame (optional)) Optional dataset
+#' @param parameters (list) Optional list of parameters and values
+#' @param dataset (data.frame) Optional dataset
 #'  
 #' @return (data.frame) WRES
 #' 
@@ -4795,7 +4795,7 @@ set_peripheral_compartments <- function(model, n) {
 #' model is proportional, otherwise they are 0.1.
 #' 
 #' @param model (Model) Pharmpy model to create block effect on.
-#' @param list_of_eps (str, array (optional)) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
+#' @param list_of_eps (array, str (optional)) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
 #' NULL is default.
 #' @param lower_limit (numeric (optional)) Lower limit of power (theta). NULL for no limit.
 #' @param ipred (str (optional)) Symbol to use as IPRED. Default is to autodetect expression for IPRED.
@@ -6173,7 +6173,7 @@ retrieve_models <- function(source, names=NULL) {
 #' @param model (Model (optional)) Pharmpy model
 #' @param results (ModelfitResults (optional)) Results for model
 #' @param allometric_variable (str) Name of the variable to use for allometric scaling (default is WT)
-#' @param reference_value (str or integer or numeric) Reference value for the allometric variable (default is 70)
+#' @param reference_value (numeric or str or integer) Reference value for the allometric variable (default is 70)
 #' @param parameters (array(str) (optional)) Parameters to apply scaling to (default is all CL, Q and V parameters)
 #' @param initials (array(numeric or integer) (optional)) Initial estimates for the exponents. (default is to use 0.75 for CL and Qs and 1 for Vs)
 #' @param lower_bounds (array(numeric or integer) (optional)) Lower bounds for the exponents. (default is 0 for all parameters)
@@ -6238,19 +6238,19 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' 
 #' Runs structural modelsearch, IIV building, and ruvsearch
 #' 
-#' @param input (Model or Path) Read model object/Path to a dataset
-#' @param results (ModelfitResults) Reults of input if input is a model
-#' @param modeltype (str) Type of model to build. Either 'pk_oral' or 'pk_iv'
-#' @param cl_init (numeric) Initial estimate for the population clearance
-#' @param vc_init (numeric) Initial estimate for the central compartment population volume
-#' @param mat_init (numeric) Initial estimate for the mean absorption time (not for iv models)
-#' @param search_space (str) MFL for search space for structural model
-#' @param lloq (numeric) Lower limit of quantification. LOQ data will be removed.
-#' @param order (vector) Runorder of components
-#' @param allometric_variable (str or Symbol) Variable to use for allometry
-#' @param occasion (str) Name of occasion column
-#' @param path (str or Path) Path to run AMD in
-#' @param resume (logical) Whether to allow resuming previous run
+#' @param input (Model or str) Read model object/Path to a dataset
+#' @param results (ModelfitResults (optional)) Reults of input if input is a model
+#' @param modeltype (str (optional)) Type of model to build. Either 'pk_oral' or 'pk_iv'
+#' @param cl_init (numeric (optional)) Initial estimate for the population clearance
+#' @param vc_init (numeric (optional)) Initial estimate for the central compartment population volume
+#' @param mat_init (numeric (optional)) Initial estimate for the mean absorption time (not for iv models)
+#' @param search_space (str (optional)) MFL for search space for structural model
+#' @param lloq (numeric (optional)) Lower limit of quantification. LOQ data will be removed.
+#' @param order (array() (optional)) Runorder of components
+#' @param allometric_variable (str (optional)) Variable to use for allometry
+#' @param occasion (str (optional)) Name of occasion column
+#' @param path (str (optional)) Path to run AMD in
+#' @param resume (logical (optional)) Whether to allow resuming previous run
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -6266,9 +6266,12 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' 
 #' 
 #' @export
-run_amd <- function(input, results=NULL, modeltype='pk_oral', cl_init=0.01, vc_init=1, mat_init=0.1, search_space=NULL, lloq=NULL, order=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE) {
+run_amd <- function(input, results=NULL, modeltype='pk_oral', cl_init=0.01, vc_init=1.0, mat_init=0.1, search_space=NULL, lloq=NULL, order=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE) {
 	tryCatch(
 	{
+		if (!(is.null(order))) {
+			order <- as.list(order)
+		}
 		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, search_space=search_space, lloq=lloq, order=order, allometric_variable=allometric_variable, occasion=occasion, path=path, resume=resume)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
@@ -6413,7 +6416,7 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, results=NULL, m
 #' @param iiv_strategy (str) If/how IIV should be added to start model. Possible strategies are 'no_add', 'add_diagonal',
 #' or 'fullblock'. Default is 'no_add'
 #' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC
-#' @param cutoff (integer, numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
+#' @param cutoff (numeric, integer (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 #' is NULL (all models will be ranked)
 #' @param results (ModelfitResults (optional)) Results for model
 #' @param model (Model (optional)) Pharmpy mode
@@ -6465,7 +6468,7 @@ run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cut
 #' @param column (str) Name of column in dataset to use as occasion column (default is 'OCC')
 #' @param list_of_parameters (array(str) (optional)) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)
 #' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC
-#' @param cutoff (integer, numeric (optional)) Cutoff for which value of the ranking type that is considered significant. Default
+#' @param cutoff (numeric, integer (optional)) Cutoff for which value of the ranking type that is considered significant. Default
 #' is NULL (all models will be ranked)
 #' @param distribution (str) Which distribution added IOVs should have (default is same-as-iiv)
 #' @param results (ModelfitResults (optional)) Results for model
@@ -6571,7 +6574,7 @@ run_modelfit <- function(models=NULL, n=NULL, tool=NULL, ...) {
 #' @param iiv_strategy (str) If/how IIV should be added to candidate models. Possible strategies are 'no_add',
 #' 'add_diagonal', 'fullblock', or 'absorption_delay'. Default is 'absorption_delay'
 #' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC
-#' @param cutoff (integer, numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
+#' @param cutoff (numeric, integer (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 #' is NULL (all models will be ranked)
 #' @param results (ModelfitResults (optional)) Results for model
 #' @param model (Model (optional)) Pharmpy mode
@@ -6723,7 +6726,7 @@ run_tool <- function(name, ...) {
 #' 
 #' Summarize the errors and warnings found after running the model/models.
 #' 
-#' @param models (vector, Model) List of models or single model
+#' @param models (Model or array(Model)) List of models or single model
 #'  
 #' @return (data.frame) A DataFrame of errors with model name, category (error or warning), and an integer as index, an empty DataFrame if there were no errors or warnings found.
 #' 
@@ -6914,7 +6917,7 @@ summarize_individuals_count_table <- function(models=NULL, df=NULL) {
 #' last step is evaluation it will go backwards until it finds an estimation step
 #' that wasn't an evaluation).
 #' 
-#' @param results (vector, ModelfitResults) List of ModelfitResults or single ModelfitResults
+#' @param results (array(ModelfitResults) or ModelfitResults) List of ModelfitResults or single ModelfitResults
 #' @param include_all_estimation_steps (logical) Whether to include all estimation steps, default is FALSE
 #'  
 #' @return (data.frame) A DataFrame of modelfit results with model name and estmation step as index.

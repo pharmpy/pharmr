@@ -7,7 +7,7 @@
 read_modelfit_results(path)
 }
 \arguments{
-\item{path}{(Path or str) Path to model file}
+\item{path}{(str) Path to model file}
 }
 \value{
 (ModelfitResults) Results object

@@ -21,31 +21,31 @@ run_amd(
 )
 }
 \arguments{
-\item{input}{(Model or Path) Read model object/Path to a dataset}
+\item{input}{(Model or str) Read model object/Path to a dataset}
 
-\item{results}{(ModelfitResults) Reults of input if input is a model}
+\item{results}{(ModelfitResults (optional)) Reults of input if input is a model}
 
-\item{modeltype}{(str) Type of model to build. Either 'pk_oral' or 'pk_iv'}
+\item{modeltype}{(str (optional)) Type of model to build. Either 'pk_oral' or 'pk_iv'}
 
-\item{cl_init}{(numeric) Initial estimate for the population clearance}
+\item{cl_init}{(numeric (optional)) Initial estimate for the population clearance}
 
-\item{vc_init}{(numeric) Initial estimate for the central compartment population volume}
+\item{vc_init}{(numeric (optional)) Initial estimate for the central compartment population volume}
 
-\item{mat_init}{(numeric) Initial estimate for the mean absorption time (not for iv models)}
+\item{mat_init}{(numeric (optional)) Initial estimate for the mean absorption time (not for iv models)}
 
-\item{search_space}{(str) MFL for search space for structural model}
+\item{search_space}{(str (optional)) MFL for search space for structural model}
 
-\item{lloq}{(numeric) Lower limit of quantification. LOQ data will be removed.}
+\item{lloq}{(numeric (optional)) Lower limit of quantification. LOQ data will be removed.}
 
-\item{order}{(vector) Runorder of components}
+\item{order}{(array() (optional)) Runorder of components}
 
-\item{allometric_variable}{(str or Symbol) Variable to use for allometry}
+\item{allometric_variable}{(str (optional)) Variable to use for allometry}
 
-\item{occasion}{(str) Name of occasion column}
+\item{occasion}{(str (optional)) Name of occasion column}
 
-\item{path}{(str or Path) Path to run AMD in}
+\item{path}{(str (optional)) Path to run AMD in}
 
-\item{resume}{(logical) Whether to allow resuming previous run}
+\item{resume}{(logical (optional)) Whether to allow resuming previous run}
 }
 \value{
 (Model) Reference to the same model object

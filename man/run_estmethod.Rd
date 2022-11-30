@@ -16,15 +16,15 @@ run_estmethod(
 \arguments{
 \item{algorithm}{(str) The algorithm to use (can be 'exhaustive' or 'reduced'}
 
-\item{methods}{(vector or NULL) List of estimation methods to test. Can be specified as 'all', a vector of methods, or
+\item{methods}{(str, array(str) (optional)) List of estimation methods to test. Can be specified as 'all', a vector of methods, or
 NULL (to not test any estimation method)}
 
-\item{solvers}{(vector, str or NULL) List of solver to test. Can be specified as 'all', a vector of solvers, or NULL (to
+\item{solvers}{(str, array(str) (optional)) List of solver to test. Can be specified as 'all', a vector of solvers, or NULL (to
 not test any solver)}
 
-\item{results}{(ModelfitResults) Results for model}
+\item{results}{(ModelfitResults (optional)) Results for model}
 
-\item{model}{(Model) Pharmpy mode}
+\item{model}{(Model (optional)) Pharmpy mode}
 
 \item{...}{Arguments to pass to tool}
 }

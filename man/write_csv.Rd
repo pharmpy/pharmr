@@ -9,7 +9,7 @@ write_csv(model, path = NULL, force = FALSE)
 \arguments{
 \item{model}{(Model) Model whose dataset to write to file}
 
-\item{path}{(NULL or str or Path) Destination path. Default is to use original path with .csv suffix.}
+\item{path}{(str (optional)) Destination path. Default is to use original path with .csv suffix.}
 
 \item{force}{(logical) Overwrite file with same path. Default is FALSE.}
 }

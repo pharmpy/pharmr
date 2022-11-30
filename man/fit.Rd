@@ -7,9 +7,9 @@
 fit(model_or_models, tool = NULL)
 }
 \arguments{
-\item{model_or_models}{(Model | vector of Model) List of models or one single model}
+\item{model_or_models}{(Model or array(Model)) List of models or one single model}
 
-\item{tool}{(str) Estimation tool to use. NULL to use default}
+\item{tool}{(str (optional)) Estimation tool to use. NULL to use default}
 }
 \value{
 (ModelfitResults | vector of ModelfitResults) ModelfitResults for the model or models

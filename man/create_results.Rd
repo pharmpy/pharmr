@@ -7,7 +7,7 @@
 create_results(path, ...)
 }
 \arguments{
-\item{path}{(str, Path) Path to run directory}
+\item{path}{(str) Path to run directory}
 
 \item{...}{Arguments to pass to tool specific create results function}
 }

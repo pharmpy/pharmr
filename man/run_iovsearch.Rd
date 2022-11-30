@@ -18,18 +18,18 @@ run_iovsearch(
 \arguments{
 \item{column}{(str) Name of column in dataset to use as occasion column (default is 'OCC')}
 
-\item{list_of_parameters}{(NULL or vector) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)}
+\item{list_of_parameters}{(array(str) (optional)) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)}
 
 \item{rank_type}{(str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC}
 
-\item{cutoff}{(NULL or numeric) Cutoff for which value of the ranking type that is considered significant. Default
+\item{cutoff}{(numeric, integer (optional)) Cutoff for which value of the ranking type that is considered significant. Default
 is NULL (all models will be ranked)}
 
 \item{distribution}{(str) Which distribution added IOVs should have (default is same-as-iiv)}
 
-\item{results}{(ModelfitResults) Results for model}
+\item{results}{(ModelfitResults (optional)) Results for model}
 
-\item{model}{(Model) Pharmpy mode}
+\item{model}{(Model (optional)) Pharmpy mode}
 
 \item{...}{Arguments to pass to tool}
 }

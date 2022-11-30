@@ -15,12 +15,12 @@ set_power_on_ruv(
 \arguments{
 \item{model}{(Model) Pharmpy model to create block effect on.}
 
-\item{list_of_eps}{(str or vector or NULL) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
+\item{list_of_eps}{(array, str (optional)) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
 NULL is default.}
 
-\item{lower_limit}{(numeric or NULL) Lower limit of power (theta). NULL for no limit.}
+\item{lower_limit}{(numeric (optional)) Lower limit of power (theta). NULL for no limit.}
 
-\item{ipred}{(Symbol) Symbol to use as IPRED. Default is to autodetect expression for IPRED.}
+\item{ipred}{(str (optional)) Symbol to use as IPRED. Default is to autodetect expression for IPRED.}
 
 \item{zero_protection}{(logical) Set to TRUE to add code protecting from IPRED=0}
 }

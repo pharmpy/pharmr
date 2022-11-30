@@ -9,7 +9,7 @@ write_results(results, path, lzma = FALSE, csv = FALSE)
 \arguments{
 \item{results}{(Results) Pharmpy results object}
 
-\item{path}{(Path) Path to results file}
+\item{path}{(str) Path to results file}
 
 \item{lzma}{(logical) TRUE for lzma compression. Not applicable to csv file}
 

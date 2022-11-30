@@ -22,9 +22,9 @@ add_covariate_effect(
 
 \item{effect}{(str) Type of covariate effect. May be abbreviated covariate effect (see above) or custom.}
 
-\item{operation}{(str, optional) Whether the covariate effect should be added or multiplied (default).}
+\item{operation}{(str) Whether the covariate effect should be added or multiplied (default).}
 
-\item{allow_nested}{(logical, optional) Whether to allow adding a covariate effect when one already exists for
+\item{allow_nested}{(logical) Whether to allow adding a covariate effect when one already exists for
 the input parameter-covariate pair.}
 }
 \value{

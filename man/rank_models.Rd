@@ -16,14 +16,14 @@ rank_models(
 \arguments{
 \item{base_model}{(Model) Base model to compare to}
 
-\item{models}{(vector) List of models}
+\item{models}{(array(Model)) List of models}
 
-\item{errors_allowed}{(vector or NULL) List of errors that are allowed for ranking. Currently available is: rounding_errors and
+\item{errors_allowed}{(array(str) (optional)) List of errors that are allowed for ranking. Currently available is: rounding_errors and
 maxevals_exceeded. Default is NULL}
 
 \item{rank_type}{(str) Name of ranking type. Available options are 'ofv', 'aic', 'bic', 'lrt' (OFV with LRT)}
 
-\item{cutoff}{(numeric or NULL) Value to use as cutoff. If using LRT, cutoff denotes p-value. Default is NULL}
+\item{cutoff}{(numeric (optional)) Value to use as cutoff. If using LRT, cutoff denotes p-value. Default is NULL}
 
 \item{bic_type}{(str) Type of BIC to calculate. Default is the mixed effects.}
 }

@@ -7,7 +7,7 @@
 summarize_modelfit_results(results, include_all_estimation_steps = FALSE)
 }
 \arguments{
-\item{results}{(vector, ModelfitResults) List of ModelfitResults or single ModelfitResults}
+\item{results}{(array(ModelfitResults) or ModelfitResults) List of ModelfitResults or single ModelfitResults}
 
 \item{include_all_estimation_steps}{(logical) Whether to include all estimation steps, default is FALSE}
 }
