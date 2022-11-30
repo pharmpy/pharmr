@@ -76,7 +76,7 @@ jobs:
         working-directory: pharmr_repo
         if: runner.os == 'Windows'
         run: |
-          install.packages('png')
+          remotes::install_version('png', version='0.1.7')
         shell: Rscript {0}
 
       - name: Install R dependencies
