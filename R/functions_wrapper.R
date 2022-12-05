@@ -5536,7 +5536,7 @@ update_inits <- function(model, parameter_estimates, move_est_close_to_bounds=FA
 	if ('pharmpy.model.model.Model' %in% class(model)) {
 		model = pharmpy$modeling$copy_model(model)
 	}
-	func_out <- pharmpy$modeling$update_inits(model, parameter_estimates, move_est_close_to_bounds=move_est_close_to_bounds)
+	func_out <- pharmpy$modeling$update_inits(model, to_list(parameter_estimates), move_est_close_to_bounds=move_est_close_to_bounds)
 	return(py_to_r(func_out))
 }
 

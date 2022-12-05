@@ -46,3 +46,26 @@ reset_indices_results <- function(res) {
   res_new <- eval(parse(text=constructor_str))
   return(res_new)
 }
+
+
+is_named_onedim <- function(x) {
+    is_onedim_array <- is.array(x) && (length(dim(x)) == 1)
+    is_named <- !is.null(names(x))
+    (is.vector(x) || is_onedim_array) && is_named
+}
+
+
+named_onedim_to_list <- function(x) {
+    split(unname(x), names(x))
+}
+
+
+to_list <- function(x) {
+    if (is.list(x)) {
+	    x
+    } else if (is_named_onedim(x)) {
+        named_onedim_to_list(x)
+    } else {
+        stop("Cannot convert to list")
+    }
+}
