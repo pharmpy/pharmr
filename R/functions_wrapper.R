@@ -1015,7 +1015,9 @@ calculate_individual_parameter_statistics <- function(model, expr_or_exprs, para
 	if ('pharmpy.model.model.Model' %in% class(model)) {
 		model = pharmpy$modeling$copy_model(model)
 	}
-	func_out <- pharmpy$modeling$calculate_individual_parameter_statistics(model, expr_or_exprs, to_list(parameter_estimates), covariance_matrix=covariance_matrix, rng=rng)
+    pd <- reticulate::import("pandas", convert=FALSE)
+    pe <- pd$Series(to_list(parameter_estimates))
+	func_out <- pharmpy$modeling$calculate_individual_parameter_statistics(model, expr_or_exprs, pe, covariance_matrix=covariance_matrix, rng=rng)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
 	}
