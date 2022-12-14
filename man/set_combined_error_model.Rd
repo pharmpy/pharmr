@@ -9,7 +9,7 @@ set_combined_error_model(model, data_trans = NULL)
 \arguments{
 \item{model}{(Model) Set error model for this model}
 
-\item{data_trans}{(str or expression) A data transformation expression or NULL (default) to use the transformation
+\item{data_trans}{(str (optional)) A data transformation expression or NULL (default) to use the transformation
 specified by the model.}
 }
 \value{

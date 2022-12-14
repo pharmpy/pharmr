@@ -9,7 +9,7 @@ update_initial_individual_estimates(model, individual_estimates, force = TRUE)
 \arguments{
 \item{model}{(Model) Pharmpy model to update initial estimates}
 
-\item{individual_estimates}{(data.frame) Individual estimates to use}
+\item{individual_estimates}{(array) Individual estimates to use}
 
 \item{force}{(logical) Set to FALSE to only update if the model had initial individual estimates before}
 }

@@ -9,9 +9,9 @@ check_dataset(model, dataframe = FALSE, verbose = FALSE)
 \arguments{
 \item{model}{(Model) Pharmpy model object}
 
-\item{dataframe}{(Bool) TRUE to return a DataFrame instead of printing to the console}
+\item{dataframe}{(logical) TRUE to return a DataFrame instead of printing to the console}
 
-\item{verbose}{(Bool) Print out all rules checked if TRUE else print only failed rules}
+\item{verbose}{(logical) Print out all rules checked if TRUE else print only failed rules}
 }
 \value{
 (data.frame) Only returns a DataFrame is dataframe=TRUE

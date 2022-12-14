@@ -9,7 +9,7 @@ set_covariates(model, covariates)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{covariates}{(vector) List of column names}
+\item{covariates}{(array(str)) List of column names}
 }
 \value{
 (Model) Reference to the same Pharmpy model object

@@ -11,7 +11,7 @@ deidentify_data(df, id_column = "ID", date_columns = NULL)
 
 \item{id_column}{(str) Name of the id column}
 
-\item{date_columns}{(vector) Names of all date columns}
+\item{date_columns}{(array(str) (optional)) Names of all date columns}
 }
 \value{
 (data.frame) Deidentified dataset

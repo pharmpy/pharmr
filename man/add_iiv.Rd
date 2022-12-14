@@ -16,15 +16,15 @@ add_iiv(
 \arguments{
 \item{model}{(Model) Pharmpy model to add new IIVs to.}
 
-\item{list_of_parameters}{(str, vector) Name/names of parameter to add new IIVs to.}
+\item{list_of_parameters}{(str or array(str)) Name/names of parameter to add new IIVs to.}
 
-\item{expression}{(str, vector) Effect/effects on eta. Either abbreviated (see above) or custom.}
+\item{expression}{(str or array(str)) Effect/effects on eta. Either abbreviated (see above) or custom.}
 
-\item{operation}{(str, vector, optional) Whether the new IIV should be added or multiplied (default).}
+\item{operation}{(str) Whether the new IIV should be added or multiplied (default).}
 
 \item{initial_estimate}{(numeric) Value of initial estimate of parameter. Default is 0.09}
 
-\item{eta_names}{(str, vector, optional) Custom name/names of new eta}
+\item{eta_names}{(array(str) (optional)) Custom name/names of new eta}
 }
 \value{
 (Model) Reference to the same model

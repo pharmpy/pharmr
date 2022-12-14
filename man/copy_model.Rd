@@ -9,7 +9,7 @@ copy_model(model, name = NULL)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{name}{(str) Optional new name of model}
+\item{name}{(str (optional)) Optional new name of model}
 }
 \value{
 (Model) A copy of the input model

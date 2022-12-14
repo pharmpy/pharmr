@@ -17,10 +17,10 @@ add_iov(
 
 \item{occ}{(str) Name of occasion column.}
 
-\item{list_of_parameters}{(str, vector) List of names of parameters and random variables. Accepts random variable names, parameter
+\item{list_of_parameters}{(str, array(str) (optional)) List of names of parameters and random variables. Accepts random variable names, parameter
 names, or a mix of both.}
 
-\item{eta_names}{(str, vector) Custom names of new etas. Must be equal to the number of input etas times the number of
+\item{eta_names}{(str, array(str) (optional)) Custom names of new etas. Must be equal to the number of input etas times the number of
 categories for occasion.}
 
 \item{distribution}{(str) The distribution that should be used for the new etas. Options are

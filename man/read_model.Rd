@@ -7,7 +7,7 @@
 read_model(path)
 }
 \arguments{
-\item{path}{(str or Path) Path to model}
+\item{path}{(str) Path to model}
 }
 \value{
 (Model) Read model object

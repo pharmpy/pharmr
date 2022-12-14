@@ -25,7 +25,7 @@ run_modelsearch(
 
 \item{rank_type}{(str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC}
 
-\item{cutoff}{(numeric, integer (optional)) Cutoff for which value of the ranking function that is considered significant. Default
+\item{cutoff}{(integer, numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 is NULL (all models will be ranked)}
 
 \item{results}{(ModelfitResults (optional)) Results for model}

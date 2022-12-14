@@ -10,11 +10,11 @@
 #' 
 #' @param model (Model) Pharmpy model
 #' @param allometric_variable (str) Value to use for allometry (X above)
-#' @param reference_value (numeric or str or integer) Reference value (Z above)
+#' @param reference_value (str or integer or numeric) Reference value (Z above)
 #' @param parameters (array(str) (optional)) Parameters to use or NULL (default) for all available CL, Q and V parameters
-#' @param initials (array(numeric or integer) (optional)) Initial estimates for the exponents. Default is to use 0.75 for CL and Qs and 1 for Vs
-#' @param lower_bounds (array(numeric or integer) (optional)) Lower bounds for the exponents. Default is 0 for all parameters
-#' @param upper_bounds (array(numeric or integer) (optional)) Upper bounds for the exponents. Default is 2 for all parameters
+#' @param initials (array(integer or numeric) (optional)) Initial estimates for the exponents. Default is to use 0.75 for CL and Qs and 1 for Vs
+#' @param lower_bounds (array(integer or numeric) (optional)) Lower bounds for the exponents. Default is 0 for all parameters
+#' @param upper_bounds (array(integer or numeric) (optional)) Upper bounds for the exponents. Default is 2 for all parameters
 #' @param fixed (logical) Whether the exponents should be fixed
 #'  
 #' @return (Model) Pharmpy model object
@@ -227,7 +227,7 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' 
 #' @param model (Model) Pharmpy model
 #' @param method (str) estimation method to change to
-#' @param idx (integer) index of estimation step (starting from 0), default is NULL (adds step at the end)
+#' @param idx (integer (optional)) index of estimation step (starting from 0), default is NULL (adds step at the end)
 #' @param ... Arguments to pass to EstimationStep (such as interaction, evaluation)
 #'  
 #' @return (Model) Reference to the same model object
@@ -281,11 +281,11 @@ add_estimation_step <- function(model, method, idx=NULL, ...) {
 #' input is supported. Initial estimates for new etas are 0.09.
 #' 
 #' @param model (Model) Pharmpy model to add new IIVs to.
-#' @param list_of_parameters (str, vector) Name/names of parameter to add new IIVs to.
-#' @param expression (str, vector) Effect/effects on eta. Either abbreviated (see above) or custom.
-#' @param operation (str, vector, optional) Whether the new IIV should be added or multiplied (default).
+#' @param list_of_parameters (str or array(str)) Name/names of parameter to add new IIVs to.
+#' @param expression (str or array(str)) Effect/effects on eta. Either abbreviated (see above) or custom.
+#' @param operation (str) Whether the new IIV should be added or multiplied (default).
 #' @param initial_estimate (numeric) Value of initial estimate of parameter. Default is 0.09
-#' @param eta_names (str, vector, optional) Custom name/names of new eta
+#' @param eta_names (array(str) (optional)) Custom name/names of new eta
 #'  
 #' @return (Model) Reference to the same model
 #' 
@@ -310,6 +310,9 @@ add_estimation_step <- function(model, method, idx=NULL, ...) {
 add_iiv <- function(model, list_of_parameters, expression, operation='*', initial_estimate=0.09, eta_names=NULL) {
 	if ('pharmpy.model.model.Model' %in% class(model)) {
 		model = pharmpy$modeling$copy_model(model)
+	}
+	if (!(is.null(eta_names))) {
+		eta_names <- as.list(eta_names)
 	}
 	func_out <- pharmpy$modeling$add_iiv(model, list_of_parameters, expression, operation=operation, initial_estimate=initial_estimate, eta_names=eta_names)
 	return(py_to_r(func_out))
@@ -352,9 +355,9 @@ add_individual_parameter <- function(model, name) {
 #' 
 #' @param model (Model) Pharmpy model to add new IOVs to.
 #' @param occ (str) Name of occasion column.
-#' @param list_of_parameters (str, vector) List of names of parameters and random variables. Accepts random variable names, parameter
+#' @param list_of_parameters (str, array(str) (optional)) List of names of parameters and random variables. Accepts random variable names, parameter
 #' names, or a mix of both.
-#' @param eta_names (str, vector) Custom names of new etas. Must be equal to the number of input etas times the number of
+#' @param eta_names (str, array(str) (optional)) Custom names of new etas. Must be equal to the number of input etas times the number of
 #' categories for occasion.
 #' @param distribution (str) The distribution that should be used for the new etas. Options are
 #' 'disjoint' for disjoint normal distributions, 'joint' for joint normal
@@ -606,6 +609,7 @@ append_estimation_step_options <- function(model, tool_options, idx) {
 	if ('pharmpy.model.model.Model' %in% class(model)) {
 		model = pharmpy$modeling$copy_model(model)
 	}
+	idx <- as.integer(idx)
 	func_out <- pharmpy$modeling$append_estimation_step_options(model, tool_options, idx)
 	return(py_to_r(func_out))
 }
@@ -621,7 +625,7 @@ append_estimation_step_options <- function(model, tool_options, idx) {
 #' If model name does not end in a number do nothing.
 #' 
 #' @param model (Model) Pharmpy model object
-#' @param path (Path in which to find next unique number) Default is to not look for files.
+#' @param path (str (optional)) Default is to not look for files.
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -1015,9 +1019,7 @@ calculate_individual_parameter_statistics <- function(model, expr_or_exprs, para
 	if ('pharmpy.model.model.Model' %in% class(model)) {
 		model = pharmpy$modeling$copy_model(model)
 	}
-    pd <- reticulate::import("pandas", convert=FALSE)
-    pe <- pd$Series(to_list(parameter_estimates))
-	func_out <- pharmpy$modeling$calculate_individual_parameter_statistics(model, expr_or_exprs, pe, covariance_matrix=covariance_matrix, rng=rng)
+	func_out <- pharmpy$modeling$calculate_individual_parameter_statistics(model, expr_or_exprs, parameter_estimates, covariance_matrix=covariance_matrix, rng=rng)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
 	}
@@ -1347,8 +1349,8 @@ calculate_ucp_scale <- function(model) {
 #' Check dataset for consistency across a set of rules
 #' 
 #' @param model (Model) Pharmpy model object
-#' @param dataframe (Bool) TRUE to return a DataFrame instead of printing to the console
-#' @param verbose (Bool) Print out all rules checked if TRUE else print only failed rules
+#' @param dataframe (logical) TRUE to return a DataFrame instead of printing to the console
+#' @param verbose (logical) Print out all rules checked if TRUE else print only failed rules
 #'  
 #' @return (data.frame) Only returns a DataFrame is dataframe=TRUE
 #' 
@@ -1497,7 +1499,7 @@ convert_model <- function(model, to_format) {
 #' Copies model to a new model object
 #' 
 #' @param model (Model) Pharmpy model
-#' @param name (str) Optional new name of model
+#' @param name (str (optional)) Optional new name of model
 #'  
 #' @return (Model) A copy of the input model
 #' 
@@ -1525,9 +1527,9 @@ copy_model <- function(model, name=NULL) {
 #' be calculated from individual estimates, otherwise correlation will be set to 10%.
 #' 
 #' @param model (Model) Pharmpy model
-#' @param rvs (vector) Sequence of etas or names of etas to combine. If NULL, all etas that are IIVs and
+#' @param rvs (array(str) (optional)) Sequence of etas or names of etas to combine. If NULL, all etas that are IIVs and
 #' non-fixed will be used (full block). NULL is default.
-#' @param individual_estimates (data.frame) Optional individual estimates to use for calculation of initial estimates
+#' @param individual_estimates (data.frame (optional)) Optional individual estimates to use for calculation of initial estimates
 #'  
 #' @return (Model) Reference to the same model
 #' 
@@ -1645,13 +1647,16 @@ create_symbol <- function(model, stem, force_numbering=FALSE) {
 #' 
 #' @param df (data.frame) A dataset
 #' @param id_column (str) Name of the id column
-#' @param date_columns (vector) Names of all date columns
+#' @param date_columns (array(str) (optional)) Names of all date columns
 #'  
 #' @return (data.frame) Deidentified dataset
 #' 
 #' 
 #' @export
 deidentify_data <- function(df, id_column='ID', date_columns=NULL) {
+	if (!(is.null(date_columns))) {
+		date_columns <- as.list(date_columns)
+	}
 	func_out <- pharmpy$modeling$deidentify_data(df, id_column=id_column, date_columns=date_columns)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -1666,7 +1671,7 @@ deidentify_data <- function(df, id_column='ID', date_columns=NULL) {
 #' Drop columns from the dataset or mark as dropped
 #' 
 #' @param model (Model) Pharmpy model object
-#' @param column_names (vector or str) List of column names or one column name to drop or mark as dropped
+#' @param column_names (str or array(str)) List of column names or one column name to drop or mark as dropped
 #' @param mark (logical) Default is to remove column from dataset. Set this to TRUE to only mark as dropped
 #'  
 #' @return (Model) Reference to same model object
@@ -3552,8 +3557,8 @@ print_model_symbols <- function(model) {
 #' @description
 #' Read a dataset given a datainfo object or path to a datainfo file
 #' 
-#' @param datainfo (DataInfo | Path | str) A datainfo object or a path to a datainfo object
-#' @param datatype (str) A string to specify dataset type
+#' @param datainfo (str or DataInfo) A datainfo object or a path to a datainfo object
+#' @param datatype (str (optional)) A string to specify dataset type
 #'  
 #' @return (data.frame) The dataset
 #' 
@@ -3573,7 +3578,7 @@ read_dataset_from_datainfo <- function(datainfo, datatype=NULL) {
 #' @description
 #' Read model from file
 #' 
-#' @param path (str or Path) Path to model
+#' @param path (str) Path to model
 #'  
 #' @return (Model) Read model object
 #' 
@@ -3788,6 +3793,7 @@ remove_estimation_step <- function(model, idx) {
 	if ('pharmpy.model.model.Model' %in% class(model)) {
 		model = pharmpy$modeling$copy_model(model)
 	}
+	idx <- as.integer(idx)
 	func_out <- pharmpy$modeling$remove_estimation_step(model, idx)
 	return(py_to_r(func_out))
 }
@@ -3799,7 +3805,7 @@ remove_estimation_step <- function(model, idx) {
 #' Removes all IIV etas given a vector with eta names and/or parameter names.
 #' 
 #' @param model (Model) Pharmpy model to create block effect on.
-#' @param to_remove (str, vector) Name/names of etas and/or name/names of individual parameters to remove.
+#' @param to_remove (str, array(str) (optional)) Name/names of etas and/or name/names of individual parameters to remove.
 #' If NULL, all etas that are IIVs will be removed. NULL is default.
 #'  
 #' @return (Model) Reference to the same model
@@ -3839,7 +3845,7 @@ remove_iiv <- function(model, to_remove=NULL) {
 #' Removes all IOV etas given a vector with eta names.
 #' 
 #' @param model (Model) Pharmpy model to remove IOV from.
-#' @param to_remove (str, vector) Name/names of IOV etas to remove, e.g. 'ETA_IOV_1_1'.
+#' @param to_remove (str, array(str) (optional)) Name/names of IOV etas to remove, e.g. 'ETA_IOV_1_1'.
 #' If NULL, all etas that are IOVs will be removed. NULL is default. 
 #' @return (Model) Reference to the same model
 #' 
@@ -3906,8 +3912,8 @@ remove_lag_time <- function(model) {
 #' Does nothing if none of the limits is specified.
 #' 
 #' @param model (Model) Pharmpy model object
-#' @param lloq (numeric) Lower limit of quantification. Default not specified.
-#' @param uloq (numeric) Upper limit of quantification. Default not specified.
+#' @param lloq (numeric (optional)) Lower limit of quantification. Default not specified.
+#' @param uloq (numeric (optional)) Upper limit of quantification. Default not specified.
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -4201,7 +4207,7 @@ sample_parameters_uniformly <- function(model, parameter_estimates, fraction=0.1
 #' +------------------------+----------------------------------------+
 #' 
 #' @param model (Model) Set error model for this model
-#' @param data_trans (str or expression) A data transformation expression or NULL (default) to use the transformation
+#' @param data_trans (str (optional)) A data transformation expression or NULL (default) to use the transformation
 #' specified by the model. Series expansion will be used for approximation.
 #' @param series_terms (integer) Number of terms to use for the series expansion approximation for data
 #' transformation.
@@ -4230,6 +4236,7 @@ set_additive_error_model <- function(model, data_trans=NULL, series_terms=2) {
 	if ('pharmpy.model.model.Model' %in% class(model)) {
 		model = pharmpy$modeling$copy_model(model)
 	}
+	series_terms <- as.integer(series_terms)
 	func_out <- pharmpy$modeling$set_additive_error_model(model, data_trans=data_trans, series_terms=series_terms)
 	return(py_to_r(func_out))
 }
@@ -4285,7 +4292,7 @@ set_bolus_absorption <- function(model) {
 #' +------------------------+-----------------------------------------------------+
 #' 
 #' @param model (Model) Set error model for this model
-#' @param data_trans (str or expression) A data transformation expression or NULL (default) to use the transformation
+#' @param data_trans (str (optional)) A data transformation expression or NULL (default) to use the transformation
 #' specified by the model.
 #'  
 #' @return (Model) Reference to the same model
@@ -4321,7 +4328,7 @@ set_combined_error_model <- function(model, data_trans=NULL) {
 #' Set columns in the dataset to be covariates in the datainfo
 #' 
 #' @param model (Model) Pharmpy model
-#' @param covariates (vector) List of column names
+#' @param covariates (array(str)) List of column names
 #'  
 #' @return (Model) Reference to the same Pharmpy model object
 #' 
@@ -4331,6 +4338,7 @@ set_covariates <- function(model, covariates) {
 	if ('pharmpy.model.model.Model' %in% class(model)) {
 		model = pharmpy$modeling$copy_model(model)
 	}
+	covariates <- as.list(covariates)
 	func_out <- pharmpy$modeling$set_covariates(model, covariates)
 	return(py_to_r(func_out))
 }
@@ -4342,7 +4350,7 @@ set_covariates <- function(model, covariates) {
 #' Dynamic transform both sides
 #' 
 #' @param model (Model) Pharmpy model
-#' @param fix_to_log (Boolean) Set to TRUE to fix lambda and zeta to 0, i.e. emulating log-transformed data
+#' @param fix_to_log (logical) Set to TRUE to fix lambda and zeta to 0, i.e. emulating log-transformed data
 #'  
 #' @return (Model) Reference to the same model
 #' 
@@ -4403,6 +4411,7 @@ set_estimation_step <- function(model, method, idx=0, ...) {
 	if ('pharmpy.model.model.Model' %in% class(model)) {
 		model = pharmpy$modeling$copy_model(model)
 	}
+	idx <- as.integer(idx)
 	func_out <- pharmpy$modeling$set_estimation_step(model, method, idx=idx, ...)
 	return(py_to_r(func_out))
 }
@@ -4446,6 +4455,7 @@ set_evaluation_step <- function(model, idx=-1) {
 	if ('pharmpy.model.model.Model' %in% class(model)) {
 		model = pharmpy$modeling$copy_model(model)
 	}
+	idx <- as.integer(idx)
 	func_out <- pharmpy$modeling$set_evaluation_step(model, idx=idx)
 	return(py_to_r(func_out))
 }
@@ -4783,6 +4793,7 @@ set_peripheral_compartments <- function(model, n) {
 	if ('pharmpy.model.model.Model' %in% class(model)) {
 		model = pharmpy$modeling$copy_model(model)
 	}
+	n <- as.integer(n)
 	func_out <- pharmpy$modeling$set_peripheral_compartments(model, n)
 	return(py_to_r(func_out))
 }
@@ -4797,7 +4808,7 @@ set_peripheral_compartments <- function(model, n) {
 #' model is proportional, otherwise they are 0.1.
 #' 
 #' @param model (Model) Pharmpy model to create block effect on.
-#' @param list_of_eps (array, str (optional)) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
+#' @param list_of_eps (str, array (optional)) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
 #' NULL is default.
 #' @param lower_limit (numeric (optional)) Lower limit of power (theta). NULL for no limit.
 #' @param ipred (str (optional)) Symbol to use as IPRED. Default is to autodetect expression for IPRED.
@@ -4841,7 +4852,7 @@ set_power_on_ruv <- function(model, list_of_eps=NULL, lower_limit=0.01, ipred=NU
 #' +------------------------+----------------------------------------+
 #' 
 #' @param model (Model) Set error model for this model
-#' @param data_trans (str or expression) A data transformation expression or NULL (default) to use the transformation
+#' @param data_trans (str (optional)) A data transformation expression or NULL (default) to use the transformation
 #' specified by the model.
 #' @param zero_protection (logical) Set to TRUE to add code protecting from IPRED=0
 #'  
@@ -5167,7 +5178,7 @@ solve_ode_system <- function(model) {
 #' Splits etas following a joint distribution into separate distributions.
 #' 
 #' @param model (Model) Pharmpy model
-#' @param rvs (str, vector) Name/names of etas to separate. If NULL, all etas that are IIVs and
+#' @param rvs (str, array(str) (optional)) Name/names of etas to separate. If NULL, all etas that are IIVs and
 #' non-fixed will become single. NULL is default.
 #'  
 #' @return (Model) Reference to the same model
@@ -5367,7 +5378,7 @@ unconstrain_parameters <- function(model, parameter_names) {
 #' Undrop columns of model
 #' 
 #' @param model (Model) Pharmpy model object
-#' @param column_names (vector or str) List of column names or one column name to undrop
+#' @param column_names (str or array(str)) List of column names or one column name to undrop
 #'  
 #' @return (Model) Reference to same model object
 #' 
@@ -5488,7 +5499,7 @@ unfix_parameters_to <- function(model, inits) {
 #' Updates initial individual estimates for a model.
 #' 
 #' @param model (Model) Pharmpy model to update initial estimates
-#' @param individual_estimates (data.frame) Individual estimates to use
+#' @param individual_estimates (array) Individual estimates to use
 #' @param force (logical) Set to FALSE to only update if the model had initial individual estimates before
 #'  
 #' @return (Model) Reference to the same model
@@ -5519,7 +5530,7 @@ update_initial_individual_estimates <- function(model, individual_estimates, for
 #' If the new initial estimates are out of bounds or NaN this function will raise.
 #' 
 #' @param model (Model) Pharmpy model to update initial estimates
-#' @param parameter_estimates (data.frame) Parameter estimates to update
+#' @param parameter_estimates (array) Parameter estimates to update
 #' @param move_est_close_to_bounds (logical) Move estimates that are close to bounds. If correlation >0.99 the correlation will
 #' be set to 0.9, if variance is <0.001 the variance will be set to 0.01.
 #'  
@@ -5538,7 +5549,7 @@ update_inits <- function(model, parameter_estimates, move_est_close_to_bounds=FA
 	if ('pharmpy.model.model.Model' %in% class(model)) {
 		model = pharmpy$modeling$copy_model(model)
 	}
-	func_out <- pharmpy$modeling$update_inits(model, to_list(parameter_estimates), move_est_close_to_bounds=move_est_close_to_bounds)
+	func_out <- pharmpy$modeling$update_inits(model, parameter_estimates, move_est_close_to_bounds=move_est_close_to_bounds)
 	return(py_to_r(func_out))
 }
 
@@ -6175,11 +6186,11 @@ retrieve_models <- function(source, names=NULL) {
 #' @param model (Model (optional)) Pharmpy model
 #' @param results (ModelfitResults (optional)) Results for model
 #' @param allometric_variable (str) Name of the variable to use for allometric scaling (default is WT)
-#' @param reference_value (numeric or str or integer) Reference value for the allometric variable (default is 70)
+#' @param reference_value (str or integer or numeric) Reference value for the allometric variable (default is 70)
 #' @param parameters (array(str) (optional)) Parameters to apply scaling to (default is all CL, Q and V parameters)
-#' @param initials (array(numeric or integer) (optional)) Initial estimates for the exponents. (default is to use 0.75 for CL and Qs and 1 for Vs)
-#' @param lower_bounds (array(numeric or integer) (optional)) Lower bounds for the exponents. (default is 0 for all parameters)
-#' @param upper_bounds (array(numeric or integer) (optional)) Upper bounds for the exponents. (default is 2 for all parameters)
+#' @param initials (array(integer or numeric) (optional)) Initial estimates for the exponents. (default is to use 0.75 for CL and Qs and 1 for Vs)
+#' @param lower_bounds (array(integer or numeric) (optional)) Lower bounds for the exponents. (default is 0 for all parameters)
+#' @param upper_bounds (array(integer or numeric) (optional)) Upper bounds for the exponents. (default is 2 for all parameters)
 #' @param fixed (logical) Should the exponents be fixed or not. (default TRUE
 #' @param ... Arguments to pass to tool
 #'  
@@ -6242,10 +6253,10 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' 
 #' @param input (Model or str) Read model object/Path to a dataset
 #' @param results (ModelfitResults (optional)) Reults of input if input is a model
-#' @param modeltype (str (optional)) Type of model to build. Either 'pk_oral' or 'pk_iv'
-#' @param cl_init (numeric (optional)) Initial estimate for the population clearance
-#' @param vc_init (numeric (optional)) Initial estimate for the central compartment population volume
-#' @param mat_init (numeric (optional)) Initial estimate for the mean absorption time (not for iv models)
+#' @param modeltype (str) Type of model to build. Either 'pk_oral' or 'pk_iv'
+#' @param cl_init (numeric) Initial estimate for the population clearance
+#' @param vc_init (numeric) Initial estimate for the central compartment population volume
+#' @param mat_init (numeric) Initial estimate for the mean absorption time (not for iv models)
 #' @param search_space (str (optional)) MFL for search space for structural model
 #' @param lloq (numeric (optional)) Lower limit of quantification. LOQ data will be removed.
 #' @param order (array() (optional)) Runorder of components
@@ -6418,7 +6429,7 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, results=NULL, m
 #' @param iiv_strategy (str) If/how IIV should be added to start model. Possible strategies are 'no_add', 'add_diagonal',
 #' or 'fullblock'. Default is 'no_add'
 #' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC
-#' @param cutoff (numeric, integer (optional)) Cutoff for which value of the ranking function that is considered significant. Default
+#' @param cutoff (integer, numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 #' is NULL (all models will be ranked)
 #' @param results (ModelfitResults (optional)) Results for model
 #' @param model (Model (optional)) Pharmpy mode
@@ -6470,7 +6481,7 @@ run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cut
 #' @param column (str) Name of column in dataset to use as occasion column (default is 'OCC')
 #' @param list_of_parameters (array(str) (optional)) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)
 #' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC
-#' @param cutoff (numeric, integer (optional)) Cutoff for which value of the ranking type that is considered significant. Default
+#' @param cutoff (integer, numeric (optional)) Cutoff for which value of the ranking type that is considered significant. Default
 #' is NULL (all models will be ranked)
 #' @param distribution (str) Which distribution added IOVs should have (default is same-as-iiv)
 #' @param results (ModelfitResults (optional)) Results for model
@@ -6576,7 +6587,7 @@ run_modelfit <- function(models=NULL, n=NULL, tool=NULL, ...) {
 #' @param iiv_strategy (str) If/how IIV should be added to candidate models. Possible strategies are 'no_add',
 #' 'add_diagonal', 'fullblock', or 'absorption_delay'. Default is 'absorption_delay'
 #' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC
-#' @param cutoff (numeric, integer (optional)) Cutoff for which value of the ranking function that is considered significant. Default
+#' @param cutoff (integer, numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 #' is NULL (all models will be ranked)
 #' @param results (ModelfitResults (optional)) Results for model
 #' @param model (Model (optional)) Pharmpy mode

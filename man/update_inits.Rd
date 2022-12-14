@@ -9,7 +9,7 @@ update_inits(model, parameter_estimates, move_est_close_to_bounds = FALSE)
 \arguments{
 \item{model}{(Model) Pharmpy model to update initial estimates}
 
-\item{parameter_estimates}{(data.frame) Parameter estimates to update}
+\item{parameter_estimates}{(array) Parameter estimates to update}
 
 \item{move_est_close_to_bounds}{(logical) Move estimates that are close to bounds. If correlation >0.99 the correlation will
 be set to 0.9, if variance is <0.001 the variance will be set to 0.01.}

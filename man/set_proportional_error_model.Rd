@@ -9,7 +9,7 @@ set_proportional_error_model(model, data_trans = NULL, zero_protection = TRUE)
 \arguments{
 \item{model}{(Model) Set error model for this model}
 
-\item{data_trans}{(str or expression) A data transformation expression or NULL (default) to use the transformation
+\item{data_trans}{(str (optional)) A data transformation expression or NULL (default) to use the transformation
 specified by the model.}
 
 \item{zero_protection}{(logical) Set to TRUE to add code protecting from IPRED=0}

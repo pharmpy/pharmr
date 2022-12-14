@@ -24,15 +24,15 @@ run_allometry(
 
 \item{allometric_variable}{(str) Name of the variable to use for allometric scaling (default is WT)}
 
-\item{reference_value}{(numeric or str or integer) Reference value for the allometric variable (default is 70)}
+\item{reference_value}{(str or integer or numeric) Reference value for the allometric variable (default is 70)}
 
 \item{parameters}{(array(str) (optional)) Parameters to apply scaling to (default is all CL, Q and V parameters)}
 
-\item{initials}{(array(numeric or integer) (optional)) Initial estimates for the exponents. (default is to use 0.75 for CL and Qs and 1 for Vs)}
+\item{initials}{(array(integer or numeric) (optional)) Initial estimates for the exponents. (default is to use 0.75 for CL and Qs and 1 for Vs)}
 
-\item{lower_bounds}{(array(numeric or integer) (optional)) Lower bounds for the exponents. (default is 0 for all parameters)}
+\item{lower_bounds}{(array(integer or numeric) (optional)) Lower bounds for the exponents. (default is 0 for all parameters)}
 
-\item{upper_bounds}{(array(numeric or integer) (optional)) Upper bounds for the exponents. (default is 2 for all parameters)}
+\item{upper_bounds}{(array(integer or numeric) (optional)) Upper bounds for the exponents. (default is 2 for all parameters)}
 
 \item{fixed}{(logical) Should the exponents be fixed or not. (default TRUE}
 

@@ -9,7 +9,7 @@ bump_model_number(model, path = NULL)
 \arguments{
 \item{model}{(Model) Pharmpy model object}
 
-\item{path}{(Path in which to find next unique number) Default is to not look for files.}
+\item{path}{(str (optional)) Default is to not look for files.}
 }
 \value{
 (Model) Reference to the same model object

@@ -25,13 +25,13 @@ run_amd(
 
 \item{results}{(ModelfitResults (optional)) Reults of input if input is a model}
 
-\item{modeltype}{(str (optional)) Type of model to build. Either 'pk_oral' or 'pk_iv'}
+\item{modeltype}{(str) Type of model to build. Either 'pk_oral' or 'pk_iv'}
 
-\item{cl_init}{(numeric (optional)) Initial estimate for the population clearance}
+\item{cl_init}{(numeric) Initial estimate for the population clearance}
 
-\item{vc_init}{(numeric (optional)) Initial estimate for the central compartment population volume}
+\item{vc_init}{(numeric) Initial estimate for the central compartment population volume}
 
-\item{mat_init}{(numeric (optional)) Initial estimate for the mean absorption time (not for iv models)}
+\item{mat_init}{(numeric) Initial estimate for the mean absorption time (not for iv models)}
 
 \item{search_space}{(str (optional)) MFL for search space for structural model}
 
