@@ -1,4 +1,5 @@
 import inspect
+import pandas as pd
 
 import re
 import textwrap
@@ -142,6 +143,8 @@ def _get_conversion_str(key, args, origin):
         return f'{key} <- as.integer({key})'
     elif origin is list:
         return f'{key} <- as.list({key})'
+    elif args is pd.Series:
+        return f'{key} <- to_list({key})'
     # FIXME make more general (handles optional type)
     elif isinstance(args, tuple) and len(args) == 2 and type(None) in args:
         if get_origin(args[0]) is list:
