@@ -21,7 +21,7 @@ run_amd(
 )
 }
 \arguments{
-\item{input}{(Model or str) Read model object/Path to a dataset}
+\item{input}{(str or Model) Read model object/Path to a dataset}
 
 \item{results}{(ModelfitResults (optional)) Reults of input if input is a model}
 

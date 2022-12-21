@@ -7,7 +7,7 @@
 fit(model_or_models, tool = NULL)
 }
 \arguments{
-\item{model_or_models}{(Model or array(Model)) List of models or one single model}
+\item{model_or_models}{(array(Model) or Model) List of models or one single model}
 
 \item{tool}{(str (optional)) Estimation tool to use. NULL to use default}
 }

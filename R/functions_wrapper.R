@@ -1019,9 +1019,7 @@ calculate_individual_parameter_statistics <- function(model, expr_or_exprs, para
 	if ('pharmpy.model.model.Model' %in% class(model)) {
 		model = pharmpy$modeling$copy_model(model)
 	}
-	pd <- reticulate::import("pandas", convert=FALSE)
-    pe <- pd$Series(to_list(parameter_estimates))
-	func_out <- pharmpy$modeling$calculate_individual_parameter_statistics(model, expr_or_exprs, pe, covariance_matrix=covariance_matrix, rng=rng)
+	func_out <- pharmpy$modeling$calculate_individual_parameter_statistics(model, expr_or_exprs, parameter_estimates, covariance_matrix=covariance_matrix, rng=rng)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
 	}
@@ -5518,6 +5516,7 @@ update_initial_individual_estimates <- function(model, individual_estimates, for
 	if ('pharmpy.model.model.Model' %in% class(model)) {
 		model = pharmpy$modeling$copy_model(model)
 	}
+	individual_estimates <- to_list(individual_estimates)
 	func_out <- pharmpy$modeling$update_initial_individual_estimates(model, individual_estimates, force=force)
 	return(py_to_r(func_out))
 }
@@ -5551,7 +5550,8 @@ update_inits <- function(model, parameter_estimates, move_est_close_to_bounds=FA
 	if ('pharmpy.model.model.Model' %in% class(model)) {
 		model = pharmpy$modeling$copy_model(model)
 	}
-	func_out <- pharmpy$modeling$update_inits(model, to_list(parameter_estimates), move_est_close_to_bounds=move_est_close_to_bounds)
+	parameter_estimates <- to_list(parameter_estimates)
+	func_out <- pharmpy$modeling$update_inits(model, parameter_estimates, move_est_close_to_bounds=move_est_close_to_bounds)
 	return(py_to_r(func_out))
 }
 
@@ -5692,7 +5692,7 @@ create_results <- function(path, ...) {
 #' @description
 #' Fit models.
 #' 
-#' @param model_or_models (Model or array(Model)) List of models or one single model
+#' @param model_or_models (array(Model) or Model) List of models or one single model
 #' @param tool (str (optional)) Estimation tool to use. NULL to use default
 #'  
 #' @return (ModelfitResults | vector of ModelfitResults) ModelfitResults for the model or models
@@ -6253,7 +6253,7 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' 
 #' Runs structural modelsearch, IIV building, and ruvsearch
 #' 
-#' @param input (Model or str) Read model object/Path to a dataset
+#' @param input (str or Model) Read model object/Path to a dataset
 #' @param results (ModelfitResults (optional)) Reults of input if input is a model
 #' @param modeltype (str) Type of model to build. Either 'pk_oral' or 'pk_iv'
 #' @param cl_init (numeric) Initial estimate for the population clearance
@@ -6373,7 +6373,7 @@ run_covsearch <- function(effects, p_forward=0.05, p_backward=0.01, max_steps=-1
 #' @description
 #' Run estmethod tool.
 #' 
-#' @param algorithm (str) The algorithm to use (can be 'exhaustive' or 'reduced'
+#' @param algorithm (str) The algorithm to use (can be 'exhaustive', 'exhaustive_with_update' or 'exhaustive_only_eval')
 #' @param methods (str, array(str) (optional)) List of estimation methods to test. Can be specified as 'all', a vector of methods, or
 #' NULL (to not test any estimation method)
 #' @param solvers (str, array(str) (optional)) List of solver to test. Can be specified as 'all', a vector of solvers, or NULL (to
@@ -6741,7 +6741,7 @@ run_tool <- function(name, ...) {
 #' 
 #' Summarize the errors and warnings found after running the model/models.
 #' 
-#' @param models (Model or array(Model)) List of models or single model
+#' @param models (array(Model) or Model) List of models or single model
 #'  
 #' @return (data.frame) A DataFrame of errors with model name, category (error or warning), and an integer as index, an empty DataFrame if there were no errors or warnings found.
 #' 
