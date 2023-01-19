@@ -3,17 +3,12 @@ import re
 from pathlib import Path
 
 from pharmpy.deps import sympy
-from pharmpy.model import DataInfo, Model
-from pharmpy.results import ModelfitResults, Results
+from pharmpy.deps import numpy as np
 from pharmpy.workflows import ModelDatabase, ToolDatabase
 
 TYPE_DICT = {
-    DataInfo: 'DataInfo',
-    Model: 'Model',
-    ModelfitResults: 'ModelfitResults',
-    Results: 'Results',
     str: 'str',
-    int: 'integer',
+    int: 'numeric',
     float: 'numeric',
     sympy.Float: 'numeric',
     bool: 'logical',
@@ -26,6 +21,8 @@ TYPE_DICT = {
 SKIP = [
     sympy.Expr,
     sympy.Symbol,
+    sympy.Eq,
+    np.random.Generator,
     Path,
     type(None),
     ModelDatabase,

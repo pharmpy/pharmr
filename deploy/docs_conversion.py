@@ -1,8 +1,9 @@
 import inspect
 import re
+import warnings
 
 from typing import Literal, Union, get_args, get_origin, get_type_hints
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 
 from help_functions import py_to_r_str, SKIP, TYPE_DICT
 
@@ -108,35 +109,43 @@ def _convert_types_from_typehints(type_hints):
             r_type = _translate_type_hints(var_type)
         except NotImplementedError:
             raise
+        if r_type == '':
+            raise ValueError('Could not translate')
         type_dict[var_name] = r_type
 
     return type_dict
 
 
 def _translate_type_hints(var_type):
-    # FIXME the order is not deterministic
-    skip_origins = [Literal]
-
     if isinstance(var_type, type):
+        # Do not attempt to translate
+        if var_type.__module__.startswith('pharmpy'):
+            return var_type.__name__
+        elif var_type not in TYPE_DICT:
+            warnings.warn(f'Could not translate type: {var_type}')
+            return var_type
         return TYPE_DICT[var_type]
     else:
         args, origin = get_args(var_type), get_origin(var_type)
-        if origin in skip_origins:
-            return 'str'
-        args_as_str = [_translate_type_hints(arg) for arg in args if arg not in SKIP]
+        args_trans_all = [_translate_type_hints(arg) for arg in args if arg not in SKIP]
         # If two args are translated to same type, only write once
-        args_as_str = set(args_as_str)
+        args_trans_unique = list(filter(None, dict.fromkeys(args_trans_all)))
+        if not args_trans_unique:
+            if origin is Literal:
+                return 'str'
+            else:
+                return ''
         if origin is Union:
             if type(None) in args:
-                return f'{", ".join(args_as_str)} (optional)'
+                return f'{" or ".join(args_trans_unique)} (optional)'
             else:
-                return ' or '.join(args_as_str)
-        elif origin is list or origin is Sequence:
-            return f'array({",".join(args_as_str)})'
-        elif origin is Mapping:
-            return f'list({"=".join(args_as_str)})'
+                return ' or '.join(args_trans_unique)
+        elif origin in (list, Iterable, Sequence):
+            return f'array({",".join(args_trans_unique)})'
+        elif origin in (dict, Mapping):
+            return f'list({"=".join(args_trans_unique)})'
         else:
-            raise NotImplementedError(f'Could not translate {var_type}')
+            raise NotImplementedError(f'Could not translate origin: {origin}')
 
 
 def _get_desc(var_names, docstring):
