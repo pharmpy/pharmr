@@ -51,28 +51,21 @@ def create_r_doc(func):
 
 
 def _create_r_params(doc_list, func):
-    try:
-        type_hints_all = get_type_hints(func)
-        type_hints = {key: value for key, value in type_hints_all.items() if key != 'return'}
-    except AttributeError as e:
-        print(e)
-        type_hints = None
+    type_hints = {key: value for key, value in get_type_hints(func).items() if key != 'return'}
+
     params = inspect.signature(func).parameters.values()
     params_unbound = [param for param in params if param.kind in (param.VAR_KEYWORD, param.VAR_POSITIONAL)]
-    if len(params_unbound) > 2:
-        raise ValueError(f'Unexpected number of unbound parameters: {params_unbound}')
 
-    if type_hints and len(type_hints) == len(params) - len(params_unbound):
-        try:
-            type_dict = _convert_types_from_typehints(type_hints)
-            if params_unbound:
-                for param in params_unbound:
-                    type_dict[param.name] = None
-        except NotImplementedError:
-            print(f'Could not translate function {func.__name__} with type hints, fall back to docstring')
-            type_dict = _convert_types_from_docs(doc_list)
+    if len(params_unbound) > 2:
+        raise ValueError(f'Unexpected number of unbound parameters: {func.__name__}')
+
+    if len(type_hints) == len(params) - len(params_unbound):
+        type_dict = _convert_types_from_typehints(type_hints)
+        if params_unbound:
+            for param in params_unbound:
+                type_dict[param.name] = None
     else:
-        type_dict = _convert_types_from_docs(doc_list)
+        raise ValueError(f'All type hints not represented: {func.__name__}')
 
     desc_dict = _get_desc(type_dict.keys(), '\n'.join(doc_list))
 
@@ -87,19 +80,6 @@ def _create_r_params(doc_list, func):
             r_params += f'@param {key} ({value}) {desc_dict[key]}'
 
     return r_params + ' \n'
-
-
-def _convert_types_from_docs(doc_list):
-    type_dict = {}
-    for i, row in enumerate(doc_list):
-        type_declare_pattern = re.compile(r'([\w0-9]+)\s?: ([\w0-9]+)')
-        if type_declare_pattern.match(row):
-            type_declare = row.split(': ')
-            var_name = type_declare[0].strip()
-            type_dict[var_name] = py_to_r_str(type_declare[1].strip())
-        elif row == 'args' or row == 'kwargs':
-            type_dict[row.strip()] = None
-    return type_dict
 
 
 def _convert_types_from_typehints(type_hints):
