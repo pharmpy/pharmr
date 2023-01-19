@@ -127,23 +127,25 @@ def _translate_type_hints(var_type):
         return TYPE_DICT[var_type]
     else:
         args, origin = get_args(var_type), get_origin(var_type)
-        args_trans_all = [_translate_type_hints(arg) for arg in args if arg not in SKIP]
-        # If two args are translated to same type, only write once
-        args_trans_unique = list(filter(None, dict.fromkeys(args_trans_all)))
-        if not args_trans_unique:
-            if origin is Literal:
-                return 'str'
-            else:
-                return ''
+        args_trans = [_translate_type_hints(arg) for arg in args if arg not in SKIP]
+        # If two args are translated to same type, for union only needs to be written once
+        if origin is Union:
+            args_trans = list(filter(None, dict.fromkeys(args_trans)))
+        if not args_trans:
+            return ''
         if origin is Union:
             if type(None) in args:
-                return f'{" or ".join(args_trans_unique)} (optional)'
+                return f'{" or ".join(args_trans)} (optional)'
             else:
-                return ' or '.join(args_trans_unique)
+                return ' or '.join(args_trans)
         elif origin in (list, Iterable, Sequence):
-            return f'array({",".join(args_trans_unique)})'
+            return f'array({",".join(args_trans)})'
         elif origin in (dict, Mapping):
-            return f'list({"=".join(args_trans_unique)})'
+            return f'list({"=".join(args_trans)})'
+        elif origin is tuple:
+            return f'list({",".join(args_trans)})'
+        elif origin is Literal:
+            return 'str'
         else:
             raise NotImplementedError(f'Could not translate origin: {origin}')
 
