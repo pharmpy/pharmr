@@ -2,7 +2,7 @@ import inspect
 import re
 import warnings
 
-from typing import Literal, Union, get_args, get_origin, get_type_hints
+from typing import Any, Literal, Union, get_args, get_origin, get_type_hints
 from collections.abc import Iterable, Mapping, Sequence
 
 from help_functions import py_to_r_str, SKIP, TYPE_DICT
@@ -105,6 +105,8 @@ def _translate_type_hints(var_type):
             warnings.warn(f'Could not translate type: {var_type}')
             return var_type
         return TYPE_DICT[var_type]
+    elif var_type == Any:
+        return 'any'
     else:
         args, origin = get_args(var_type), get_origin(var_type)
         args_trans = [_translate_type_hints(arg) for arg in args if arg not in SKIP]
