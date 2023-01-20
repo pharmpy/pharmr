@@ -3,10 +3,11 @@ import pandas as pd
 
 import re
 import textwrap
-from typing import get_args, get_origin, get_type_hints, Union
+from typing import List, Union, get_args, get_origin, get_type_hints
 
+import pharmpy.model
 
-from help_functions import py_to_r_arg
+from help_functions import py_to_r_arg, SKIP
 
 
 def create_r_func(func, module):
@@ -30,13 +31,7 @@ def create_r_func(func, module):
     if module_name == 'tools':
         r_func_body = _create_func_body_tool(func, func_execute)
     else:
-        r_func_body = []
-        # FIXME remove once model is immutable
-        if 'model' in params.keys() and func.__name__ != 'copy_model':
-            r_func_body += ['if (\'pharmpy.model.model.Model\' %in% class(model)) {',
-                            'model = pharmpy$modeling$copy_model(model)',
-                            '}']
-        r_func_body += _create_func_body_modeling(func, func_execute)
+        r_func_body = _create_func_body_modeling(func, func_execute)
 
     r_wrapper = [f'{func_def} {{',
                  *r_func_body,
@@ -108,16 +103,11 @@ def _create_func_body_tool(func, func_execute):
 # FIXME make more general (handle nested types), combine overlapping functionality with
 #  equivalent in docs_conversion.py::_translate_type_hints
 def _preprocess_input(func):
-    try:
-        type_hints = {key: value for key, value in get_type_hints(func).items() if key != 'return'}
-    except AttributeError:
-        type_hints = None
-
-    if not type_hints:
-        return []
-
+    type_hints = get_type_hints(func)
     r_preprocess = []
     for key, value in type_hints.items():
+        if key == 'return':
+            continue
         args, origin = get_args(value), get_origin(value)
         if value is Union or origin is Union:
             r_conversion = _get_conversion_str(key, args, origin)
@@ -127,28 +117,37 @@ def _preprocess_input(func):
         if r_conversion is None:
             continue
 
-        if origin is Union and type(None) in get_args(value):
-            r_conversion_null = [f'if (!(is.null({key}))) {{',
-                                 r_conversion,
-                                 '}']
-            r_preprocess.extend(r_conversion_null)
-        else:
-            r_preprocess.append(r_conversion)
+        r_preprocess.append(r_conversion)
 
     return r_preprocess
 
 
 def _get_conversion_str(key, args, origin):
+    if origin is Union:
+        args_new = []
+        for arg in args:
+            # Filter out None type (no conversion necessary)
+            if arg is type(None):
+                continue
+            # Filter out arguments that are skipped
+            if arg in SKIP:
+                continue
+            args_new.append(arg)
+        args = tuple(args_new)
+        # This is done if e.g. args=(<class 'str'>,), then it needs to be extracted for
+        # the checks below, and origin needs to be reassigned
+        if len(args) == 1:
+            args = args[0]
+            origin = get_origin(args)
     if args is int:
-        return f'{key} <- as.integer({key})'
-    elif origin is list:
-        return f'{key} <- as.list({key})'
+        return f'{key} <- convert_input({key}, "int")'
+    elif origin is list or args == (List[str], str):
+        return f'{key} <- convert_input({key}, "list")'
     elif args is pd.Series:
-        return f'{key} <- to_list({key})'
-    # FIXME make more general (handles optional type)
-    elif isinstance(args, tuple) and len(args) == 2 and type(None) in args:
-        if get_origin(args[0]) is list:
-            return f'{key} <- as.list({key})'
+        return f'{key} <- convert_input({key}, "pd.Series")'
+    # FIXME remove once model is immutable
+    elif args is pharmpy.model.Model:
+        return f'{key} <- convert_input({key}, "pharmpy.model.Model")'
     return None
 
 
@@ -186,9 +185,8 @@ def _indent(r_code):
     for row in r_code:
         if row.count('}'):
             indent_cur -= row.count('}')
-        list_indented.append(textwrap.indent(row, '\t'*indent_cur))
+        list_indented.append(textwrap.indent(row, '\t' * indent_cur))
         if row.count('{'):
             indent_cur += row.count('{')
     assert indent_cur == 0
     return list_indented
-

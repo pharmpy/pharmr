@@ -69,3 +69,22 @@ to_list <- function(x) {
         stop("Cannot convert to list")
     }
 }
+
+convert_input <- function(arg, to_py_type) {
+    if (is.null(arg)) {
+        return(arg)
+    }
+    else if (to_py_type == 'pharmpy.model.Model') {
+        return(pharmpy$modeling$copy_model(arg))
+    }
+    else if (to_py_type == 'pd.Series') {
+        pd <- reticulate::import("pandas", convert=FALSE)
+        return(pd$Series(to_list(arg)))
+    }
+    else if (to_py_type == 'list') {
+        return(as.list(arg))
+    }
+    else if (to_py_type == 'int') {
+        return(as.integer(arg))
+    }
+}
