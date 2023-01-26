@@ -16,16 +16,16 @@ sample_parameters_uniformly(
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{parameter_estimates}{(data.frame) Parameter estimates for parameters to use}
+\item{parameter_estimates}{(array) Parameter estimates for parameters to use}
 
 \item{fraction}{(numeric) Fraction of estimate value to use for distribution bounds}
 
-\item{force_posdef_samples}{(integer) Number of samples to reject before forcing variability parameters to give
+\item{force_posdef_samples}{(numeric (optional)) Number of samples to reject before forcing variability parameters to give
 positive definite covariance matrices.}
 
-\item{n}{(integer) Number of samples}
+\item{n}{(numeric) Number of samples}
 
-\item{rng}{(integer or rng) Random number generator or seed}
+\item{rng}{(numeric (optional)) Random number generator or seed}
 }
 \value{
 (data.frame) samples

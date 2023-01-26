@@ -7,7 +7,7 @@
 summarize_errors(models)
 }
 \arguments{
-\item{models}{(array(Model) or Model) List of models or single model}
+\item{models}{(Model or array(Model)) List of models or single model}
 }
 \value{
 (data.frame) A DataFrame of errors with model name, category (error or warning), and an integer as index, an empty DataFrame if there were no errors or warnings found.

@@ -12,7 +12,7 @@ set_additive_error_model(model, data_trans = NULL, series_terms = 2)
 \item{data_trans}{(str (optional)) A data transformation expression or NULL (default) to use the transformation
 specified by the model. Series expansion will be used for approximation.}
 
-\item{series_terms}{(integer) Number of terms to use for the series expansion approximation for data
+\item{series_terms}{(numeric) Number of terms to use for the series expansion approximation for data
 transformation.}
 }
 \value{

@@ -17,18 +17,18 @@ sample_parameters_from_covariance_matrix(
 \arguments{
 \item{model}{(Model) Input model}
 
-\item{parameter_estimates}{(data.frame) Parameter estimates to use as means in sampling}
+\item{parameter_estimates}{(array) Parameter estimates to use as means in sampling}
 
 \item{covariance_matrix}{(data.frame) Parameter uncertainty covariance matrix}
 
-\item{force_posdef_samples}{(integer) Set to how many iterations to do before forcing all samples to be positive definite. NULL is
+\item{force_posdef_samples}{(numeric (optional)) Set to how many iterations to do before forcing all samples to be positive definite. NULL is
 default and means never and 0 means always}
 
 \item{force_posdef_covmatrix}{(logical) Set to TRUE to force the input covariance matrix to be positive definite}
 
-\item{n}{(integer) Number of samples}
+\item{n}{(numeric) Number of samples}
 
-\item{rng}{(Generator) Random number generator}
+\item{rng}{(numeric (optional)) Random number generator}
 }
 \value{
 (data.frame) A dataframe with one sample per row

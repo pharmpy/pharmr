@@ -14,11 +14,11 @@ calculate_pk_parameters_statistics(
 \arguments{
 \item{model}{(Model) A previously estimated model}
 
-\item{parameter_estimates}{(data.frame) Parameter estimates}
+\item{parameter_estimates}{(array) Parameter estimates}
 
-\item{covariance_matrix}{(data.frame) Parameter uncertainty covariance matrix}
+\item{covariance_matrix}{(data.frame (optional)) Parameter uncertainty covariance matrix}
 
-\item{rng}{(Generator or integer) Random number generator or seed}
+\item{rng}{(numeric (optional)) Random number generator or seed}
 }
 \value{
 (data.frame) A DataFrame of statistics indexed on parameter and covariate value.

@@ -14,7 +14,7 @@ calculate_eta_shrinkage(
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{parameter_estimates}{(data.frame) Parameter estimates}
+\item{parameter_estimates}{(array) Parameter estimates}
 
 \item{individual_estimates}{(data.frame) Table of individual (eta) estimates}
 

@@ -20,11 +20,11 @@ sample_individual_estimates(
 
 \item{individual_estimates_covariance}{(data.frame) Uncertainty covariance of the individual estimates}
 
-\item{parameters}{(vector) A vector of a subset of individual parameters to sample. Default is NULL, which means all.}
+\item{parameters}{(array(str) (optional)) A vector of a subset of individual parameters to sample. Default is NULL, which means all.}
 
-\item{samples_per_id}{(integer) Number of samples per individual}
+\item{samples_per_id}{(numeric) Number of samples per individual}
 
-\item{rng}{(rng or integer) Random number generator or seed}
+\item{rng}{(numeric (optional)) Random number generator or seed}
 }
 \value{
 (data.frame) Pool of samples in a DataFrame

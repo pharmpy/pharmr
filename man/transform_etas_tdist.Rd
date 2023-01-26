@@ -9,7 +9,7 @@ transform_etas_tdist(model, list_of_etas = NULL)
 \arguments{
 \item{model}{(Model) Pharmpy model to apply t distribution transformation to.}
 
-\item{list_of_etas}{(str, vector) Name/names of etas to transform. If NULL, all etas will be transformed (default).}
+\item{list_of_etas}{(array(str) or str (optional)) Name/names of etas to transform. If NULL, all etas will be transformed (default).}
 }
 \value{
 (Model) Reference to the same model
@@ -22,7 +22,7 @@ Initial estimate for degrees of freedom is 80 with bounds (3, 100).
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-transform_etas_tdist(model, c("ETA(1)"))
+transform_etas_tdist(model, c("ETA_1"))
 model$statements$before_odes$full_expression("CL")
 }
 }

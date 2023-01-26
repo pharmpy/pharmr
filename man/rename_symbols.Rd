@@ -9,7 +9,7 @@ rename_symbols(model, new_names)
 \arguments{
 \item{model}{(Model) Pharmpy model object}
 
-\item{new_names}{(list) From old name or symbol to new name or symbol}
+\item{new_names}{(list(str=str)) From old name or symbol to new name or symbol}
 }
 \value{
 (Model) Reference to same model object

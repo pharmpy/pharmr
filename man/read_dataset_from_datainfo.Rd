@@ -7,7 +7,7 @@
 read_dataset_from_datainfo(datainfo, datatype = NULL)
 }
 \arguments{
-\item{datainfo}{(str or DataInfo) A datainfo object or a path to a datainfo object}
+\item{datainfo}{(DataInfo or str) A datainfo object or a path to a datainfo object}
 
 \item{datatype}{(str (optional)) A string to specify dataset type}
 }

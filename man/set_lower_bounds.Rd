@@ -9,7 +9,7 @@ set_lower_bounds(model, bounds)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{bounds}{(list) A list of parameter bounds for parameters to change}
+\item{bounds}{(list(str=numeric)) A list of parameter bounds for parameters to change}
 }
 \value{
 (Model) Reference to the same model object
@@ -20,8 +20,8 @@ Set parameter lower bounds
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-set_lower_bounds(model, {'THETA(1)': -10})
-model$parameters['THETA(1)']
+set_lower_bounds(model, {'PTVCL': -10})
+model$parameters['PTVCL']
 }
 }
 \seealso{

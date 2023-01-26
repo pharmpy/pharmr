@@ -15,14 +15,15 @@ calculate_individual_parameter_statistics(
 \arguments{
 \item{model}{(Model) A previously estimated model}
 
-\item{expr_or_exprs}{(str, sympy expression or iterable of str or sympy expressions) Expressions or equations for parameters of interest. If equations are used
+\item{expr_or_exprs}{(array(str) or str) Parameter estimates}
+
+\item{parameter_estimates}{(array) Parameter uncertainty covariance matrix}
+
+\item{covariance_matrix}{(data.frame (optional)) sympy expression or iterable of str or sympy expressions
+Expressions or equations for parameters of interest. If equations are used
 the names of the left hand sides will be used as the names of the parameters.}
 
-\item{parameter_estimates}{(data.frame) Parameter estimates}
-
-\item{covariance_matrix}{(data.frame) Parameter uncertainty covariance matrix}
-
-\item{rng}{(Generator or integer) Random number generator or integer seed}
+\item{rng}{(numeric (optional)) Random number generator or integer seed}
 }
 \value{
 (data.frame) A DataFrame of statistics indexed on parameter and covariate value.

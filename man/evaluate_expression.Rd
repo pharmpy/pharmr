@@ -9,9 +9,9 @@ evaluate_expression(model, expression, parameter_estimates = NULL)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{expression}{(str or sympy expression) Expression to evaluate}
+\item{expression}{(str) Expression to evaluate}
 
-\item{parameter_estimates}{(data.frame) Parameter estimates to use instead of initial estimates}
+\item{parameter_estimates}{(list(str=numeric) (optional)) Parameter estimates to use instead of initial estimates}
 }
 \value{
 (data.frame) A series of one evaluated value for each data record

@@ -9,7 +9,7 @@ set_peripheral_compartments(model, n)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{n}{(integer) Number of transit compartments}
+\item{n}{(numeric) Number of transit compartments}
 }
 \value{
 (Model) Reference to same model

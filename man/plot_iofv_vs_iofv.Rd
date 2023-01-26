@@ -7,9 +7,9 @@
 plot_iofv_vs_iofv(iofv1, iofv2, name1, name2)
 }
 \arguments{
-\item{iofv1}{(data.frame) Estimated iOFV of the first model}
+\item{iofv1}{(array) Estimated iOFV of the first model}
 
-\item{iofv2}{(data.frame) Estimated iOFV of the second model}
+\item{iofv2}{(array) Estimated iOFV of the second model}
 
 \item{name1}{(str) Name of first model}
 

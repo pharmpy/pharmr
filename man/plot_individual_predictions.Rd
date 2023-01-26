@@ -11,7 +11,7 @@ plot_individual_predictions(model, predictions, individuals = NULL)
 
 \item{predictions}{(data.frame) One column for each type of prediction}
 
-\item{individuals}{(vector) A vector of individuals to include. NULL for all individuals}
+\item{individuals}{(array(numeric) (optional)) A vector of individuals to include. NULL for all individuals}
 }
 \value{
 (alt.Chart) Plot

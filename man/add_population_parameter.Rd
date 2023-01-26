@@ -20,9 +20,9 @@ add_population_parameter(
 
 \item{init}{(numeric) Initial estimate of the new parameter}
 
-\item{lower}{(numeric) Lower bound of the new parameter}
+\item{lower}{(numeric (optional)) Lower bound of the new parameter}
 
-\item{upper}{(numeric) Upper bound of the new parameter}
+\item{upper}{(numeric (optional)) Upper bound of the new parameter}
 
 \item{fix}{(logical) Should the new parameter be fixed?}
 }

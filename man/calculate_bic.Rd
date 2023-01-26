@@ -11,7 +11,7 @@ calculate_bic(model, likelihood, type = NULL)
 
 \item{likelihood}{(numeric) -2LL to use}
 
-\item{type}{(str) Type of BIC to calculate. Default is the mixed effects.}
+\item{type}{(str (optional)) Type of BIC to calculate. Default is the mixed effects.}
 }
 \value{
 (numeric) BIC of model fit

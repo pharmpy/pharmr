@@ -9,7 +9,7 @@ set_evaluation_step(model, idx = -1)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{idx}{(integer) index of estimation step, default is -1 (last estimation step)}
+\item{idx}{(numeric) index of estimation step, default is -1 (last estimation step)}
 }
 \value{
 (Model) Reference to the same model object

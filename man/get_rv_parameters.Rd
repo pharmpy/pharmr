@@ -20,7 +20,7 @@ Retrieves parameters in :class:\code{pharmpy.model} given a random variable.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-get_rv_parameters(model, 'ETA(1)')
+get_rv_parameters(model, 'ETA_1')
 }
 }
 \seealso{

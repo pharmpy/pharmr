@@ -13,7 +13,7 @@ calculate_individual_shrinkage(
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{parameter_estimates}{(data.frame) Parameter estimates of model}
+\item{parameter_estimates}{(array) Parameter estimates of model}
 
 \item{individual_estimates_covariance}{(data.frame) Uncertainty covariance matrices of individual estimates}
 }

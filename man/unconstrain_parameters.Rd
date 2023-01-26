@@ -9,7 +9,7 @@ unconstrain_parameters(model, parameter_names)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{parameter_names}{(vector) Remove all constraints for the listed parameters}
+\item{parameter_names}{(array(str)) Remove all constraints for the listed parameters}
 }
 \value{
 (Model) Reference to the same model object
@@ -20,9 +20,9 @@ Remove all constraints from parameters
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-model$parameters['THETA(1)']
-unconstrain_parameters(model, c('THETA(1)'))
-model$parameters['THETA(1)']
+model$parameters['PTVCL']
+unconstrain_parameters(model, c('PTVCL'))
+model$parameters['PTVCL']
 }
 }
 \seealso{

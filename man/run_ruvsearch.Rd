@@ -18,7 +18,7 @@ run_ruvsearch(
 
 \item{results}{(ModelfitResults (optional)) Results of model}
 
-\item{groups}{(integer) The number of bins to use for the time varying models}
+\item{groups}{(numeric) The number of bins to use for the time varying models}
 
 \item{p_value}{(numeric) The p-value to use for the likelihood ratio test}
 

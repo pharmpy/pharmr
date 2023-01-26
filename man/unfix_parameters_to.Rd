@@ -9,7 +9,7 @@ unfix_parameters_to(model, inits)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{inits}{(list) Inits for all parameters to unfix and change init}
+\item{inits}{(list(str=numeric)) Inits for all parameters to unfix and change init}
 }
 \value{
 (Model) Reference to the same model object
@@ -22,11 +22,11 @@ Unfix all listed parameters to specified value/values
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-fix_parameters(model, c('THETA(1)', 'THETA(2)', 'THETA(3)'))
+fix_parameters(model, c('PTVCL', 'PTVV', 'THETA_3'))
 model$parameters$fix
-unfix_parameters_to(model, {'THETA(1)': 0.5})
+unfix_parameters_to(model, {'PTVCL': 0.5})
 model$parameters$fix
-model$parameters['THETA(1)']
+model$parameters['PTVCL']
 }
 }
 \seealso{

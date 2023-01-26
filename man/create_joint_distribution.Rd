@@ -29,7 +29,7 @@ be calculated from individual estimates, otherwise correlation will be set to 10
 \dontrun{
 model <- load_example_model("pheno")
 model$random_variables$etas
-create_joint_distribution(model, c('ETA(1)', 'ETA(2)'))
+create_joint_distribution(model, c('ETA_1', 'ETA_2'))
 model$random_variables$etas
 }
 }

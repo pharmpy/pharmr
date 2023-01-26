@@ -20,13 +20,13 @@ resample_data(
 
 \item{group}{(str) Name of column to group by}
 
-\item{resamples}{(integer) Number of resamples (iterations) to make}
+\item{resamples}{(numeric) Number of resamples (iterations) to make}
 
-\item{stratify}{(str) Name of column to use for stratification.
+\item{stratify}{(str (optional)) Name of column to use for stratification.
 The values in the stratification column must be equal within a group so that the group
 can be uniquely determined. A ValueError exception will be raised otherwise.}
 
-\item{sample_size}{(integer) The number of groups that should be sampled. The default is
+\item{sample_size}{(numeric (optional)) The number of groups that should be sampled. The default is
 the number of groups. If using stratification the default is to sample using the
 proportion of the stratas in the dataset. A list of specific sample sizes
 for each strata can also be supplied.}
@@ -37,7 +37,7 @@ without replacement}
 \item{name_pattern}{(str) Name to use for generated datasets. A number starting from 1 will
 be put in the placeholder.}
 
-\item{name}{(str) Option to name pattern in case of only one resample}
+\item{name}{(str (optional)) Option to name pattern in case of only one resample}
 }
 \value{
 (iterator) An iterator yielding tuples of a resampled DataFrame and a vector of resampled groups in order

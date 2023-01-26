@@ -21,7 +21,7 @@ run_amd(
 )
 }
 \arguments{
-\item{input}{(str or Model) Read model object/Path to a dataset}
+\item{input}{(Model or str) Read model object/Path to a dataset}
 
 \item{results}{(ModelfitResults (optional)) Reults of input if input is a model}
 
@@ -37,7 +37,7 @@ run_amd(
 
 \item{lloq}{(numeric (optional)) Lower limit of quantification. LOQ data will be removed.}
 
-\item{order}{(array() (optional)) Runorder of components}
+\item{order}{(array(str) (optional)) Runorder of components}
 
 \item{allometric_variable}{(str (optional)) Variable to use for allometry}
 

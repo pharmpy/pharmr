@@ -7,11 +7,11 @@
 run_modelfit(models = NULL, n = NULL, tool = NULL, ...)
 }
 \arguments{
-\item{models}{(Model) A vector of models are one single model object}
+\item{models}{(array(Model) or Model (optional)) A vector of models or one single model object}
 
-\item{n}{(integer) Number of models to fit. This is only used if the tool is going to be combined with other tools.}
+\item{n}{(numeric (optional)) Number of models to fit. This is only used if the tool is going to be combined with other tools.}
 
-\item{tool}{(str) Which tool to use for fitting. Currently 'nonmem' or 'nlmixr' can be used}
+\item{tool}{(str (optional)) Which tool to use for fitting. Currently 'nonmem' or 'nlmixr' can be used}
 
 \item{...}{Arguments to pass to tool}
 }

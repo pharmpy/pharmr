@@ -16,21 +16,20 @@ run_covsearch(
 )
 }
 \arguments{
-\item{effects}{(str | vector) The vector of candidate parameter-covariate effects to try, either as a
-MFL sentence or in (optionally compact) tuple form.}
+\item{effects}{(str) MFL of covariate effects to try}
 
 \item{p_forward}{(numeric) The p-value to use in the likelihood ratio test for forward steps}
 
 \item{p_backward}{(numeric) The p-value to use in the likelihood ratio test for backward steps}
 
-\item{max_steps}{(integer) The maximum number of search steps to make}
+\item{max_steps}{(numeric) The maximum number of search steps to make}
 
 \item{algorithm}{(str) The search algorithm to use. Currently 'scm-forward' and
 'scm-forward-then-backward' are supported.}
 
-\item{results}{(ModelfitResults) Results of model}
+\item{results}{(ModelfitResults (optional)) Results of model}
 
-\item{model}{(Model) Pharmpy mode}
+\item{model}{(Model (optional)) Pharmpy mode}
 
 \item{...}{Arguments to pass to tool}
 }
@@ -43,7 +42,8 @@ Run COVsearch tool. For more details, see :ref:\code{covsearch}.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-res <- run_covsearch([
+effects <- 'COVARIATE(c(CL, V), c(AGE, WT), EXP)'
+res <- run_covsearch(effects, model=model, results=model$modelfit_results)
 }
 
 }

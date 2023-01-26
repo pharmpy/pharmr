@@ -9,7 +9,7 @@ get_unit_of(model, variable)
 \arguments{
 \item{model}{(Model) Pharmpy model object}
 
-\item{variable}{(str or Symbol) Find physical unit of this variable}
+\item{variable}{(str) Find physical unit of this variable}
 }
 \value{
 (unit expression) A sympy physics.units expression

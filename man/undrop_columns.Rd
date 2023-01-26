@@ -9,7 +9,7 @@ undrop_columns(model, column_names)
 \arguments{
 \item{model}{(Model) Pharmpy model object}
 
-\item{column_names}{(str or array(str)) List of column names or one column name to undrop}
+\item{column_names}{(array(str) or str) List of column names or one column name to undrop}
 }
 \value{
 (Model) Reference to same model object

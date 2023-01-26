@@ -20,15 +20,15 @@ add_allometry(
 
 \item{allometric_variable}{(str) Value to use for allometry (X above)}
 
-\item{reference_value}{(str or integer or numeric) Reference value (Z above)}
+\item{reference_value}{(str or numeric) Reference value (Z above)}
 
 \item{parameters}{(array(str) (optional)) Parameters to use or NULL (default) for all available CL, Q and V parameters}
 
-\item{initials}{(array(integer or numeric) (optional)) Initial estimates for the exponents. Default is to use 0.75 for CL and Qs and 1 for Vs}
+\item{initials}{(array(numeric) (optional)) Initial estimates for the exponents. Default is to use 0.75 for CL and Qs and 1 for Vs}
 
-\item{lower_bounds}{(array(integer or numeric) (optional)) Lower bounds for the exponents. Default is 0 for all parameters}
+\item{lower_bounds}{(array(numeric) (optional)) Lower bounds for the exponents. Default is 0 for all parameters}
 
-\item{upper_bounds}{(array(integer or numeric) (optional)) Upper bounds for the exponents. Default is 2 for all parameters}
+\item{upper_bounds}{(array(numeric) (optional)) Upper bounds for the exponents. Default is 2 for all parameters}
 
 \item{fixed}{(logical) Whether the exponents should be fixed}
 }

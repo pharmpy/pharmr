@@ -11,7 +11,7 @@ set_estimation_step(model, method, idx = 0, ...)
 
 \item{method}{(str) estimation method to change to}
 
-\item{idx}{(integer) index of estimation step, default is 0 (first estimation step)}
+\item{idx}{(numeric) index of estimation step, default is 0 (first estimation step)}
 
 \item{...}{Arguments to pass to EstimationStep (such as interaction, evaluation)}
 }

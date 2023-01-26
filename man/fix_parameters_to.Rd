@@ -9,7 +9,7 @@ fix_parameters_to(model, inits)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{inits}{(list) Inits for all parameters to fix and set init}
+\item{inits}{(list(str=numeric)) Inits for all parameters to fix and set init}
 }
 \value{
 (Model) Reference to the same model object
@@ -22,9 +22,9 @@ Fix all listed parameters to specified value/values
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-model$parameters['THETA(1)']
-fix_parameters_to(model, {'THETA(1)': 0.5})
-model$parameters['THETA(1)']
+model$parameters['PTVCL']
+fix_parameters_to(model, {'PTVCL': 0.5})
+model$parameters['PTVCL']
 }
 }
 \seealso{

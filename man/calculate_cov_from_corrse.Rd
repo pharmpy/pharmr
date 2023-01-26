@@ -9,7 +9,7 @@ calculate_cov_from_corrse(corr, se)
 \arguments{
 \item{corr}{(data.frame) Correlation matrix}
 
-\item{se}{(data.frame) Standard errors}
+\item{se}{(array) Standard errors}
 }
 \value{
 (data.frame) Covariance matrix

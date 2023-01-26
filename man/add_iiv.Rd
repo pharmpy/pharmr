@@ -16,9 +16,9 @@ add_iiv(
 \arguments{
 \item{model}{(Model) Pharmpy model to add new IIVs to.}
 
-\item{list_of_parameters}{(str or array(str)) Name/names of parameter to add new IIVs to.}
+\item{list_of_parameters}{(array(str) or str) Name/names of parameter to add new IIVs to.}
 
-\item{expression}{(str or array(str)) Effect/effects on eta. Either abbreviated (see above) or custom.}
+\item{expression}{(array(str) or str) Effect/effects on eta. Either abbreviated (see above) or custom.}
 
 \item{operation}{(str) Whether the new IIV should be added or multiplied (default).}
 

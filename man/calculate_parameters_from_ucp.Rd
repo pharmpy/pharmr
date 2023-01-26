@@ -9,9 +9,9 @@ calculate_parameters_from_ucp(model, scale, ucps)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{scale}{(UCPSCale) A parameter scale}
+\item{scale}{(UCPScale) A parameter scale}
 
-\item{ucps}{(data.frame or list) Series of parameter values}
+\item{ucps}{(array or list(str=numeric)) Series of parameter values}
 }
 \value{
 (data.frame) Parameters on the normal scale
@@ -23,7 +23,7 @@ Scale parameter values from ucp to normal scale
 \dontrun{
 model <- load_example_model("pheno")
 scale <- calculate_ucp_scale(model)
-values <- {'THETA(1)': 0.1, 'THETA(2)': 0.1, 'THETA(3)': 0.1,                   'OMEGA(1,1)': 0.1, 'OMEGA(2,2)': 0.1, 'SIGMA(1,1)': 0.1}
+values <- {'PTVCL': 0.1, 'PTVV': 0.1, 'THETA_3': 0.1,                   'IVCL': 0.1, 'IVV': 0.1, 'SIGMA_1_1': 0.1}
 calculate_parameters_from_ucp(model, scale, values)
 }
 }

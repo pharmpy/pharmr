@@ -9,11 +9,11 @@ evaluate_eta_gradient(model, etas = NULL, parameters = NULL, dataset = NULL)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{etas}{(list) Optional list of eta values}
+\item{etas}{(data.frame (optional)) Optional list of eta values}
 
-\item{parameters}{(list) Optional list of parameters and values}
+\item{parameters}{(list(str=numeric) (optional)) Optional list of parameters and values}
 
-\item{dataset}{(data.frame) Optional dataset}
+\item{dataset}{(data.frame (optional)) Optional dataset}
 }
 \value{
 (data.frame) Gradient

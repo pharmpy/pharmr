@@ -7,7 +7,7 @@
 create_rng(seed = NULL)
 }
 \arguments{
-\item{seed}{(integer or rng) Seed for the random number generator or NULL (default) for a randomized seed. If seed
+\item{seed}{(numeric (optional)) Seed for the random number generator or NULL (default) for a randomized seed. If seed
 is generator it will be passed through.}
 }
 \value{

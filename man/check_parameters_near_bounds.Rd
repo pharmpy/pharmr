@@ -14,11 +14,11 @@ check_parameters_near_bounds(
 \arguments{
 \item{model}{(Model) Pharmpy model object}
 
-\item{values}{(data.frame) Series of values with index a subset of parameter names.}
+\item{values}{(array) Series of values with index a subset of parameter names.}
 
-\item{zero_limit}{(number) maximum distance to 0 bounds}
+\item{zero_limit}{(numeric) maximum distance to 0 bounds}
 
-\item{significant_digits}{(integer) maximum distance to non-zero bounds in number of significant digits}
+\item{significant_digits}{(numeric) maximum distance to non-zero bounds in number of significant digits}
 }
 \value{
 (data.frame) Logical Series with same index as values
