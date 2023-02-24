@@ -145,9 +145,6 @@ def _get_conversion_str(key, args, origin):
         return f'{key} <- convert_input({key}, "list")'
     elif args is pd.Series:
         return f'{key} <- convert_input({key}, "pd.Series")'
-    # FIXME remove once model is immutable
-    elif args is pharmpy.model.Model:
-        return f'{key} <- convert_input({key}, "pharmpy.model.Model")'
     return None
 
 
