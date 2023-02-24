@@ -12,7 +12,7 @@ set_evaluation_step(model, idx = -1)
 \item{idx}{(numeric) index of estimation step, default is -1 (last estimation step)}
 }
 \value{
-(Model) Reference to the same model object
+(Model) Pharmpy model object
 }
 \description{
 Set estimation step
@@ -23,7 +23,7 @@ FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM, BAYES
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-set_evaluation_step(model)
+model <- set_evaluation_step(model)
 model$estimation_steps[1]
 }
 }

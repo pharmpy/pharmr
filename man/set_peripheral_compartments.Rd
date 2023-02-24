@@ -12,7 +12,7 @@ set_peripheral_compartments(model, n)
 \item{n}{(numeric) Number of transit compartments}
 }
 \value{
-(Model) Reference to same model
+(Model) Pharmpy model object
 }
 \description{
 Sets the number of peripheral compartments to a specified number.
@@ -20,7 +20,7 @@ Sets the number of peripheral compartments to a specified number.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-set_peripheral_compartments(model, 2)
+model <- set_peripheral_compartments(model, 2)
 model$statements$ode_system
 }
 }

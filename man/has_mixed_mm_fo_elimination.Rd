@@ -22,7 +22,7 @@ possible ways of coding the mixed Michalis-Menten and first order elimination.
 \dontrun{
 model <- load_example_model("pheno")
 has_mixed_mm_fo_elimination(model)
-set_mixed_mm_fo_elimination(model)
+model <- set_mixed_mm_fo_elimination(model)
 has_mixed_mm_fo_elimination(model)
 }
 

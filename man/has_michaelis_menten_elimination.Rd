@@ -22,7 +22,7 @@ possible ways of coding the Michaelis-Menten elimination.
 \dontrun{
 model <- load_example_model("pheno")
 has_michaelis_menten_elimination(model)
-set_michaelis_menten_elimination(model)
+model <- set_michaelis_menten_elimination(model)
 has_michaelis_menten_elimination(model)
 }
 

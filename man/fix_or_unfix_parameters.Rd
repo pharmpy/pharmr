@@ -12,7 +12,7 @@ fix_or_unfix_parameters(model, parameters)
 \item{parameters}{(list(str=logical)) Set fix/unfix for these parameters}
 }
 \value{
-(Model) Reference to the same model object
+(Model) Pharmpy model object
 }
 \description{
 Fix or unfix parameters
@@ -23,7 +23,7 @@ Set fixedness of parameters to specified values
 \dontrun{
 model <- load_example_model("pheno")
 model$parameters['PTVCL']
-fix_or_unfix_parameters(model, list('PTVCL'=TRUE))
+model <- fix_or_unfix_parameters(model, list('PTVCL'=TRUE))
 model$parameters['PTVCL']
 }
 }

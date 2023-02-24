@@ -12,7 +12,7 @@ add_individual_parameter(model, name)
 \item{name}{(str) Name of individual/pk parameter}
 }
 \value{
-(Model) Reference to same model
+(Model) Pharmpy model object
 }
 \description{
 Add an individual or pk parameter to a model
@@ -20,7 +20,7 @@ Add an individual or pk parameter to a model
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-add_individual_parameter(model, "KA")
+model <- add_individual_parameter(model, "KA")
 model$statements$find_assignment("KA")
 }
 

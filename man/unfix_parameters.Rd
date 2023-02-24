@@ -12,7 +12,7 @@ unfix_parameters(model, parameter_names)
 \item{parameter_names}{(array(str) or str) one parameter name or a vector of parameter names}
 }
 \value{
-(Model) Reference to the same model object
+(Model) Pharmpy model object
 }
 \description{
 Unfix parameters
@@ -22,9 +22,9 @@ Unfix all listed parameters
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-fix_parameters(model, c('PTVCL', 'PTVV', 'THETA_3'))
+model <- fix_parameters(model, c('PTVCL', 'PTVV', 'THETA_3'))
 model$parameters$fix
-unfix_parameters(model, 'PTVCL')
+model <- unfix_parameters(model, 'PTVCL')
 model$parameters$fix
 }
 }

@@ -15,7 +15,7 @@ update_inits(model, parameter_estimates, move_est_close_to_bounds = FALSE)
 be set to 0.9, if variance is <0.001 the variance will be set to 0.01.}
 }
 \value{
-(Model) Reference to the same model
+(Model) Pharmpy model object
 }
 \description{
 Update initial parameter estimate for a model
@@ -27,7 +27,7 @@ If the new initial estimates are out of bounds or NaN this function will raise.
 \dontrun{
 model <- load_example_model("pheno")   # This model was previously fitted to its data
 model$parameters$inits
-update_inits(model, model$modelfit_results$parameter_estimates)
+model <- update_inits(model, model$modelfit_results$parameter_estimates)
 model$parameters$inits
 }
 

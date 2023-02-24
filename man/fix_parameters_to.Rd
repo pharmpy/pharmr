@@ -12,7 +12,7 @@ fix_parameters_to(model, inits)
 \item{inits}{(list(str=numeric)) Inits for all parameters to fix and set init}
 }
 \value{
-(Model) Reference to the same model object
+(Model) Pharmpy model object
 }
 \description{
 Fix parameters to
@@ -23,7 +23,7 @@ Fix all listed parameters to specified value/values
 \dontrun{
 model <- load_example_model("pheno")
 model$parameters['PTVCL']
-fix_parameters_to(model, {'PTVCL': 0.5})
+model <- fix_parameters_to(model, {'PTVCL': 0.5})
 model$parameters['PTVCL']
 }
 }

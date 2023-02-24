@@ -10,7 +10,7 @@ make_declarative(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Reference to the same model
+(Model) Pharmpy model object
 }
 \description{
 Make the model statments declarative
@@ -21,7 +21,7 @@ Each symbol will only be declared once.
 \dontrun{
 model <- load_example_model("pheno")
 model$statements$before_odes
-make_declarative(model)
+model <- make_declarative(model)
 model$statements$before_odes
 }
 

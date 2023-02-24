@@ -29,7 +29,7 @@ distribution, 'explicit' for an explicit mix of joint and disjoint
 distributions, and 'same-as-iiv' for copying the distribution of IIV etas.}
 }
 \value{
-(Model) Reference to the same model
+(Model) Pharmpy model object
 }
 \description{
 Adds IOVs to :class:\code{pharmpy.model}.
@@ -39,7 +39,7 @@ Initial estimate of new IOVs are 10\% of the IIV eta it is based on.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-add_iov(model, "TIME", "CL")
+model <- add_iov(model, "TIME", "CL")
 model$statements$find_assignment("CL")
 }
 }

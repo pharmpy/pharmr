@@ -14,7 +14,7 @@ write_csv(model, path = NULL, force = FALSE)
 \item{force}{(logical) Overwrite file with same path. Default is FALSE.}
 }
 \value{
-(Path) path to the written file.
+(Model) Updated model object
 }
 \description{
 Write dataset to a csv file and updates the datainfo path
@@ -22,7 +22,7 @@ Write dataset to a csv file and updates the datainfo path
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-write_csv(model, path="newdataset$csv")
+model <- write_csv(model, path="newdataset$csv")
 }
 
 }

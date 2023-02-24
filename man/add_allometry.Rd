@@ -45,7 +45,7 @@ and T is a theta. Default is to automatically use clearance and volume parameter
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-add_allometry(model, allometric_variable='WGT')
+model <- add_allometry(model, allometric_variable='WGT')
 model$statements$before_odes
 }
 

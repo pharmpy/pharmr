@@ -10,7 +10,7 @@ remove_lag_time(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Reference to same model
+(Model) Pharmpy model object
 }
 \description{
 Remove lag time from the dose compartment of model.
@@ -18,7 +18,7 @@ Remove lag time from the dose compartment of model.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-remove_lag_time(model)
+model <- remove_lag_time(model)
 }
 }
 \seealso{

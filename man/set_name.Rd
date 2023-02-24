@@ -12,7 +12,7 @@ set_name(model, new_name)
 \item{new_name}{(str) New name of model}
 }
 \value{
-(Model) Reference to the same model object
+(Model) Pharmpy model object
 }
 \description{
 Set name of model object
@@ -21,7 +21,7 @@ Set name of model object
 \dontrun{
 model <- load_example_model("pheno")
 model$name
-set_name(model, "run2")
+model <- set_name(model, "run2")
 model$name
 }
 

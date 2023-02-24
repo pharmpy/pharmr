@@ -12,7 +12,7 @@ set_ode_solver(model, solver)
 \item{solver}{(str) Solver to use or NULL for no preference}
 }
 \value{
-(Model) Reference to same model
+(Model) Pharmpy model object
 }
 \description{
 Sets ODE solver to use for model
@@ -38,7 +38,7 @@ Recognized solvers and their corresponding NONMEM advans:
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-set_ode_solver(model, 'LSODA')
+model <- set_ode_solver(model, 'LSODA')
 }
 
 }

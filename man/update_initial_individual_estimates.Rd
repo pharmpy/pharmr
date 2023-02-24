@@ -14,7 +14,7 @@ update_initial_individual_estimates(model, individual_estimates, force = TRUE)
 \item{force}{(logical) Set to FALSE to only update if the model had initial individual estimates before}
 }
 \value{
-(Model) Reference to the same model
+(Model) Pharmpy model object
 }
 \description{
 Update initial individual estimates for a model

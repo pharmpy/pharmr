@@ -10,7 +10,7 @@ remove_peripheral_compartment(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Reference to same model
+(Model) Pharmpy model object
 }
 \description{
 Remove a peripheral distribution compartment from model
@@ -29,8 +29,8 @@ n
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-set_peripheral_compartments(model, 2)
-remove_peripheral_compartment(model)
+model <- set_peripheral_compartments(model, 2)
+model <- remove_peripheral_compartment(model)
 model$statements$ode_system
 }
 }

@@ -22,13 +22,12 @@
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' add_allometry(model, allometric_variable='WGT')
+#' model <- add_allometry(model, allometric_variable='WGT')
 #' model$statements$before_odes
 #' }
 #' 
 #' @export
 add_allometry <- function(model, allometric_variable='WT', reference_value=70, parameters=NULL, initials=NULL, lower_bounds=NULL, upper_bounds=NULL, fixed=TRUE) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	parameters <- convert_input(parameters, "list")
 	initials <- convert_input(initials, "list")
 	lower_bounds <- convert_input(lower_bounds, "list")
@@ -45,13 +44,13 @@ add_allometry <- function(model, allometric_variable='WT', reference_value=70, p
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_estimation_step(model, 'FOCE', cov=FALSE)
-#' add_covariance_step(model)
+#' model <- set_estimation_step(model, 'FOCE', cov=FALSE)
+#' model <- add_covariance_step(model)
 #' ests <- model$estimation_steps
 #' ests[1]
 #' }
@@ -71,7 +70,6 @@ add_allometry <- function(model, allometric_variable='WT', reference_value=70, p
 #' 
 #' @export
 add_covariance_step <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$add_covariance_step(model)
 	return(py_to_r(func_out))
 }
@@ -186,18 +184,17 @@ add_covariance_step <- function(model) {
 #' @param allow_nested (logical) Whether to allow adding a covariate effect when one already exists for
 #' the input parameter-covariate pair.
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' add_covariate_effect(model, "CL", "APGR", "exp")
+#' model <- add_covariate_effect(model, "CL", "APGR", "exp")
 #' model$statements$before_odes$full_expression("CL")
 #' }
 #' 
 #' @export
 add_covariate_effect <- function(model, parameter, covariate, effect, operation='*', allow_nested=FALSE) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$add_covariate_effect(model, parameter, covariate, effect, operation=operation, allow_nested=allow_nested)
 	return(py_to_r(func_out))
 }
@@ -216,13 +213,13 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' @param idx (numeric (optional)) index of estimation step (starting from 0), default is NULL (adds step at the end)
 #' @param ... Arguments to pass to EstimationStep (such as interaction, evaluation)
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' opts <- list('NITER'=1000, 'ISAMPLE'=100)
-#' add_estimation_step(model, "IMP", tool_options=opts)
+#' model <- add_estimation_step(model, "IMP", tool_options=opts)
 #' ests <- model$estimation_steps
 #' length(ests)
 #' ests[2]
@@ -243,7 +240,6 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' 
 #' @export
 add_estimation_step <- function(model, method, idx=NULL, ...) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	idx <- convert_input(idx, "int")
 	func_out <- pharmpy$modeling$add_estimation_step(model, method, idx=idx, ...)
 	return(py_to_r(func_out))
@@ -272,13 +268,13 @@ add_estimation_step <- function(model, method, idx=NULL, ...) {
 #' @param initial_estimate (numeric) Value of initial estimate of parameter. Default is 0.09
 #' @param eta_names (array(str) (optional)) Custom name/names of new eta
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' remove_iiv(model, "CL")
-#' add_iiv(model, "CL", "add")
+#' model <- remove_iiv(model, "CL")
+#' model <- add_iiv(model, "CL", "add")
 #' model$statements$find_assignment("CL")
 #' }
 #' @seealso
@@ -293,7 +289,6 @@ add_estimation_step <- function(model, method, idx=NULL, ...) {
 #' 
 #' @export
 add_iiv <- function(model, list_of_parameters, expression, operation='*', initial_estimate=0.09, eta_names=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	list_of_parameters <- convert_input(list_of_parameters, "list")
 	expression <- convert_input(expression, "list")
 	eta_names <- convert_input(eta_names, "list")
@@ -310,18 +305,17 @@ add_iiv <- function(model, list_of_parameters, expression, operation='*', initia
 #' @param model (Model) Pharmpy model
 #' @param name (str) Name of individual/pk parameter
 #'  
-#' @return (Model) Reference to same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' add_individual_parameter(model, "KA")
+#' model <- add_individual_parameter(model, "KA")
 #' model$statements$find_assignment("KA")
 #' }
 #' 
 #' @export
 add_individual_parameter <- function(model, name) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$add_individual_parameter(model, name)
 	return(py_to_r(func_out))
 }
@@ -345,12 +339,12 @@ add_individual_parameter <- function(model, name) {
 #' distribution, 'explicit' for an explicit mix of joint and disjoint
 #' distributions, and 'same-as-iiv' for copying the distribution of IIV etas.
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' add_iov(model, "TIME", "CL")
+#' model <- add_iov(model, "TIME", "CL")
 #' model$statements$find_assignment("CL")
 #' }
 #' @seealso
@@ -365,7 +359,6 @@ add_individual_parameter <- function(model, name) {
 #' 
 #' @export
 add_iov <- function(model, occ, list_of_parameters=NULL, eta_names=NULL, distribution='disjoint') {
-	model <- convert_input(model, "pharmpy.model.Model")
 	list_of_parameters <- convert_input(list_of_parameters, "list")
 	eta_names <- convert_input(eta_names, "list")
 	func_out <- pharmpy$modeling$add_iov(model, occ, list_of_parameters=list_of_parameters, eta_names=eta_names, distribution=distribution)
@@ -383,12 +376,12 @@ add_iov <- function(model, occ, list_of_parameters=NULL, eta_names=NULL, distrib
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Model) Reference to same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' add_lag_time(model)
+#' model <- add_lag_time(model)
 #' }
 #' @seealso
 #' set_transit_compartments
@@ -398,7 +391,6 @@ add_iov <- function(model, occ, list_of_parameters=NULL, eta_names=NULL, distrib
 #' 
 #' @export
 add_lag_time <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$add_lag_time(model)
 	return(py_to_r(func_out))
 }
@@ -428,12 +420,12 @@ add_lag_time <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Model) Reference to same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' add_peripheral_compartment(model)
+#' model <- add_peripheral_compartment(model)
 #' model$statements$ode_system
 #' }
 #' @seealso
@@ -444,7 +436,6 @@ add_lag_time <- function(model) {
 #' 
 #' @export
 add_peripheral_compartment <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$add_peripheral_compartment(model)
 	return(py_to_r(func_out))
 }
@@ -460,14 +451,14 @@ add_peripheral_compartment <- function(model) {
 #' @param model (Model) Pharmpy model to add new IIVs to.
 #' @param initial_estimate (numeric) Value of initial estimate of parameter. Default is 0.09
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_first_order_absorption(model)
+#' model <- set_first_order_absorption(model)
 #' model$statements$find_assignment("MAT")
-#' add_pk_iiv(model)
+#' model <- add_pk_iiv(model)
 #' model$statements$find_assignment("MAT")
 #' }
 #' @seealso
@@ -482,7 +473,6 @@ add_peripheral_compartment <- function(model) {
 #' 
 #' @export
 add_pk_iiv <- function(model, initial_estimate=0.09) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$add_pk_iiv(model, initial_estimate=initial_estimate)
 	return(py_to_r(func_out))
 }
@@ -500,18 +490,17 @@ add_pk_iiv <- function(model, initial_estimate=0.09) {
 #' @param upper (numeric (optional)) Upper bound of the new parameter
 #' @param fix (logical) Should the new parameter be fixed?
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' add_population_parameter(model, 'POP_KA', 2)
+#' model <- add_population_parameter(model, 'POP_KA', 2)
 #' model$parameters
 #' }
 #' 
 #' @export
 add_population_parameter <- function(model, name, init, lower=NULL, upper=NULL, fix=FALSE) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$add_population_parameter(model, name, init, lower=lower, upper=upper, fix=fix)
 	return(py_to_r(func_out))
 }
@@ -524,17 +513,16 @@ add_population_parameter <- function(model, name, init, lower=NULL, upper=NULL, 
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' add_time_after_dose(model)
+#' model <- add_time_after_dose(model)
 #' }
 #' 
 #' @export
 add_time_after_dose <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$add_time_after_dose(model)
 	return(py_to_r(func_out))
 }
@@ -551,13 +539,13 @@ add_time_after_dose <- function(model) {
 #' @param tool_options (list(str=any)) any additional tool specific options
 #' @param idx (numeric) index of estimation step (starting from 0)
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' opts <- list('NITER'=1000, 'ISAMPLE'=100)
-#' append_estimation_step_options(model, tool_options=opts, idx=0)
+#' model <- append_estimation_step_options(model, tool_options=opts, idx=0)
 #' est <- model$estimation_steps[1]
 #' length(est$tool_options)
 #' }
@@ -577,7 +565,6 @@ add_time_after_dose <- function(model) {
 #' 
 #' @export
 append_estimation_step_options <- function(model, tool_options, idx) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	idx <- convert_input(idx, "int")
 	func_out <- pharmpy$modeling$append_estimation_step_options(model, tool_options, idx)
 	return(py_to_r(func_out))
@@ -596,19 +583,18 @@ append_estimation_step_options <- function(model, tool_options, idx) {
 #' @param model (Model) Pharmpy model object
 #' @param path (str (optional)) Default is to not look for files.
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' model$name <- "run2"
-#' bump_model_number(model)
+#' model <- model$replace(name="run2")
+#' model <- bump_model_number(model)
 #' model$name
 #' }
 #' 
 #' @export
 bump_model_number <- function(model, path=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$bump_model_number(model, path=path)
 	return(py_to_r(func_out))
 }
@@ -629,7 +615,6 @@ bump_model_number <- function(model, path=NULL) {
 #' 
 #' @export
 calculate_aic <- function(model, likelihood) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$calculate_aic(model, likelihood)
 	return(py_to_r(func_out))
 }
@@ -670,7 +655,6 @@ calculate_aic <- function(model, likelihood) {
 #' 
 #' @export
 calculate_bic <- function(model, likelihood, type=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$calculate_bic(model, likelihood, type=type)
 	return(py_to_r(func_out))
 }
@@ -869,7 +853,6 @@ calculate_cov_from_inf <- function(information_matrix) {
 #' 
 #' @export
 calculate_epsilon_gradient_expression <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$calculate_epsilon_gradient_expression(model)
 	return(py_to_r(func_out))
 }
@@ -897,7 +880,6 @@ calculate_epsilon_gradient_expression <- function(model) {
 #' 
 #' @export
 calculate_eta_gradient_expression <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$calculate_eta_gradient_expression(model)
 	return(py_to_r(func_out))
 }
@@ -930,7 +912,6 @@ calculate_eta_gradient_expression <- function(model) {
 #' 
 #' @export
 calculate_eta_shrinkage <- function(model, parameter_estimates, individual_estimates, sd=FALSE) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
 	func_out <- pharmpy$modeling$calculate_eta_shrinkage(model, parameter_estimates, individual_estimates, sd=sd)
 	if (func_out$index$nlevels > 1) {
@@ -976,7 +957,6 @@ calculate_eta_shrinkage <- function(model, parameter_estimates, individual_estim
 #' 
 #' @export
 calculate_individual_parameter_statistics <- function(model, expr_or_exprs, parameter_estimates, covariance_matrix=NULL, rng=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
 	rng <- convert_input(rng, "int")
 	func_out <- pharmpy$modeling$calculate_individual_parameter_statistics(model, expr_or_exprs, parameter_estimates, covariance_matrix=covariance_matrix, rng=rng)
@@ -1013,7 +993,6 @@ calculate_individual_parameter_statistics <- function(model, expr_or_exprs, para
 #' 
 #' @export
 calculate_individual_shrinkage <- function(model, parameter_estimates, individual_estimates_covariance) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
 	func_out <- pharmpy$modeling$calculate_individual_shrinkage(model, parameter_estimates, individual_estimates_covariance)
 	if (func_out$index$nlevels > 1) {
@@ -1134,7 +1113,6 @@ calculate_inf_from_cov <- function(cov) {
 #' 
 #' @export
 calculate_parameters_from_ucp <- function(model, scale, ucps) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$calculate_parameters_from_ucp(model, scale, ucps)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -1173,7 +1151,6 @@ calculate_parameters_from_ucp <- function(model, scale, ucps) {
 #' 
 #' @export
 calculate_pk_parameters_statistics <- function(model, parameter_estimates, covariance_matrix=NULL, rng=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
 	rng <- convert_input(rng, "int")
 	func_out <- pharmpy$modeling$calculate_pk_parameters_statistics(model, parameter_estimates, covariance_matrix=covariance_matrix, rng=rng)
@@ -1293,7 +1270,6 @@ calculate_se_from_inf <- function(information_matrix) {
 #' 
 #' @export
 calculate_ucp_scale <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$calculate_ucp_scale(model)
 	return(py_to_r(func_out))
 }
@@ -1313,7 +1289,6 @@ calculate_ucp_scale <- function(model) {
 #' 
 #' @export
 check_dataset <- function(model, dataframe=FALSE, verbose=FALSE) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$check_dataset(model, dataframe=dataframe, verbose=verbose)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -1342,7 +1317,6 @@ check_dataset <- function(model, dataframe=FALSE, verbose=FALSE) {
 #' 
 #' @export
 check_high_correlations <- function(model, cor, limit=0.9) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$check_high_correlations(model, cor, limit=limit)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -1371,7 +1345,6 @@ check_high_correlations <- function(model, cor, limit=0.9) {
 #' 
 #' @export
 check_parameters_near_bounds <- function(model, values, zero_limit=0.001, significant_digits=2) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	values <- convert_input(values, "pd.Series")
 	significant_digits <- convert_input(significant_digits, "int")
 	func_out <- pharmpy$modeling$check_parameters_near_bounds(model, values, zero_limit=zero_limit, significant_digits=significant_digits)
@@ -1392,7 +1365,7 @@ check_parameters_near_bounds <- function(model, values, zero_limit=0.001, signif
 #' * Make model statements declarative, i.e. only one assignment per symbol
 #' * Inline all assignments of one symbol, e.g. X = Y
 #' 
-#' @param model (Model) Pharmpy model
+#' @param model (Model) Pharmpy model object
 #'  
 #' @return (Model) Reference to the same model
 #' 
@@ -1400,7 +1373,7 @@ check_parameters_near_bounds <- function(model, values, zero_limit=0.001, signif
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$statements
-#' cleanup_model(model)
+#' model <- cleanup_model(model)
 #' model$statements
 #' }
 #' @note
@@ -1409,7 +1382,6 @@ check_parameters_near_bounds <- function(model, values, zero_limit=0.001, signif
 #' 
 #' @export
 cleanup_model <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$cleanup_model(model)
 	return(py_to_r(func_out))
 }
@@ -1435,32 +1407,7 @@ cleanup_model <- function(model) {
 #' 
 #' @export
 convert_model <- function(model, to_format) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$convert_model(model, to_format)
-	return(py_to_r(func_out))
-}
-
-#' @title
-#' copy_model
-#' 
-#' @description
-#' Copies model to a new model object
-#' 
-#' @param model (Model) Pharmpy model
-#' @param name (str (optional)) Optional new name of model
-#'  
-#' @return (Model) A copy of the input model
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' model_copy <- copy_model(model, "pheno2")
-#' }
-#' 
-#' @export
-copy_model <- function(model, name=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
-	func_out <- pharmpy$modeling$copy_model(model, name=name)
 	return(py_to_r(func_out))
 }
 
@@ -1480,13 +1427,13 @@ copy_model <- function(model, name=NULL) {
 #' non-fixed will be used (full block). NULL is default.
 #' @param individual_estimates (data.frame (optional)) Optional individual estimates to use for calculation of initial estimates
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$random_variables$etas
-#' create_joint_distribution(model, c('ETA_1', 'ETA_2'))
+#' model <- create_joint_distribution(model, c('ETA_1', 'ETA_2'))
 #' model$random_variables$etas
 #' }
 #' @seealso
@@ -1495,7 +1442,6 @@ copy_model <- function(model, name=NULL) {
 #' 
 #' @export
 create_joint_distribution <- function(model, rvs=NULL, individual_estimates=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	rvs <- convert_input(rvs, "list")
 	func_out <- pharmpy$modeling$create_joint_distribution(model, rvs=rvs, individual_estimates=individual_estimates)
 	return(py_to_r(func_out))
@@ -1568,7 +1514,6 @@ create_rng <- function(seed=NULL) {
 #' 
 #' @export
 create_symbol <- function(model, stem, force_numbering=FALSE) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$create_symbol(model, stem, force_numbering=force_numbering)
 	return(py_to_r(func_out))
 }
@@ -1624,7 +1569,6 @@ deidentify_data <- function(df, id_column='ID', date_columns=NULL) {
 #' 
 #' @export
 display_odes <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$display_odes(model)
 	return(py_to_r(func_out))
 }
@@ -1639,12 +1583,12 @@ display_odes <- function(model) {
 #' @param column_names (array(str) or str) List of column names or one column name to drop or mark as dropped
 #' @param mark (logical) Default is to remove column from dataset. Set this to TRUE to only mark as dropped
 #'  
-#' @return (Model) Reference to same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' drop_columns(model, c('WGT', 'APGR'))
+#' model <- drop_columns(model, c('WGT', 'APGR'))
 #' vector(model$dataset$columns)
 #' }
 #' @seealso
@@ -1655,7 +1599,6 @@ display_odes <- function(model) {
 #' 
 #' @export
 drop_columns <- function(model, column_names, mark=FALSE) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	column_names <- convert_input(column_names, "list")
 	func_out <- pharmpy$modeling$drop_columns(model, column_names, mark=mark)
 	return(py_to_r(func_out))
@@ -1674,12 +1617,12 @@ drop_columns <- function(model, column_names, mark=FALSE) {
 #' 
 #' @param model (Model) Pharmpy model object
 #'  
-#' @return (Model) Reference to same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' drop_dropped_columns(model)
+#' model <- drop_dropped_columns(model)
 #' vector(model$dataset$columns)
 #' }
 #' @seealso
@@ -1688,7 +1631,6 @@ drop_columns <- function(model, column_names, mark=FALSE) {
 #' 
 #' @export
 drop_dropped_columns <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$drop_dropped_columns(model)
 	return(py_to_r(func_out))
 }
@@ -1727,7 +1669,6 @@ drop_dropped_columns <- function(model) {
 #' 
 #' @export
 evaluate_epsilon_gradient <- function(model, etas=NULL, parameters=NULL, dataset=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$evaluate_epsilon_gradient(model, etas=etas, parameters=parameters, dataset=dataset)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -1769,7 +1710,6 @@ evaluate_epsilon_gradient <- function(model, etas=NULL, parameters=NULL, dataset
 #' 
 #' @export
 evaluate_eta_gradient <- function(model, etas=NULL, parameters=NULL, dataset=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$evaluate_eta_gradient(model, etas=etas, parameters=parameters, dataset=dataset)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -1803,7 +1743,6 @@ evaluate_eta_gradient <- function(model, etas=NULL, parameters=NULL, dataset=NUL
 #' 
 #' @export
 evaluate_expression <- function(model, expression, parameter_estimates=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$evaluate_expression(model, expression, parameter_estimates=parameter_estimates)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -1845,7 +1784,6 @@ evaluate_expression <- function(model, expression, parameter_estimates=NULL) {
 #' 
 #' @export
 evaluate_individual_prediction <- function(model, etas=NULL, parameters=NULL, dataset=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$evaluate_individual_prediction(model, etas=etas, parameters=parameters, dataset=dataset)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -1884,7 +1822,6 @@ evaluate_individual_prediction <- function(model, etas=NULL, parameters=NULL, da
 #' 
 #' @export
 evaluate_population_prediction <- function(model, parameters=NULL, dataset=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$evaluate_population_prediction(model, parameters=parameters, dataset=dataset)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -1920,7 +1857,6 @@ evaluate_population_prediction <- function(model, parameters=NULL, dataset=NULL)
 #' 
 #' @export
 evaluate_weighted_residuals <- function(model, parameters=NULL, dataset=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$evaluate_weighted_residuals(model, parameters=parameters, dataset=dataset)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -1939,12 +1875,11 @@ evaluate_weighted_residuals <- function(model, parameters=NULL, dataset=NULL) {
 #' columns in the original dataset will be kept. Care needs to be taken to handle
 #' the new dataset.
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' 
 #' @export
 expand_additional_doses <- function(model, flag=FALSE) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$expand_additional_doses(model, flag=flag)
 	return(py_to_r(func_out))
 }
@@ -1967,7 +1902,6 @@ expand_additional_doses <- function(model, flag=FALSE) {
 #' 
 #' @export
 find_clearance_parameters <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$find_clearance_parameters(model)
 	return(py_to_r(func_out))
 }
@@ -1990,7 +1924,6 @@ find_clearance_parameters <- function(model) {
 #' 
 #' @export
 find_volume_parameters <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$find_volume_parameters(model)
 	return(py_to_r(func_out))
 }
@@ -2006,13 +1939,13 @@ find_volume_parameters <- function(model) {
 #' @param model (Model) Pharmpy model
 #' @param parameters (list(str=logical)) Set fix/unfix for these parameters
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$parameters['PTVCL']
-#' fix_or_unfix_parameters(model, list('PTVCL'=TRUE))
+#' model <- fix_or_unfix_parameters(model, list('PTVCL'=TRUE))
 #' model$parameters['PTVCL']
 #' }
 #' @seealso
@@ -2031,7 +1964,6 @@ find_volume_parameters <- function(model) {
 #' 
 #' @export
 fix_or_unfix_parameters <- function(model, parameters) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$fix_or_unfix_parameters(model, parameters)
 	return(py_to_r(func_out))
 }
@@ -2047,13 +1979,13 @@ fix_or_unfix_parameters <- function(model, parameters) {
 #' @param model (Model) Pharmpy model
 #' @param parameter_names (array(str) or str) one parameter name or a vector of parameter names
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$parameters['PTVCL']
-#' fix_parameters(model, 'PTVCL')
+#' model <- fix_parameters(model, 'PTVCL')
 #' model$parameters['PTVCL']
 #' }
 #' @seealso
@@ -2070,7 +2002,6 @@ fix_or_unfix_parameters <- function(model, parameters) {
 #' 
 #' @export
 fix_parameters <- function(model, parameter_names) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	parameter_names <- convert_input(parameter_names, "list")
 	func_out <- pharmpy$modeling$fix_parameters(model, parameter_names)
 	return(py_to_r(func_out))
@@ -2087,13 +2018,13 @@ fix_parameters <- function(model, parameter_names) {
 #' @param model (Model) Pharmpy model
 #' @param inits (list(str=numeric)) Inits for all parameters to fix and set init
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$parameters['PTVCL']
-#' fix_parameters_to(model, {'PTVCL': 0.5})
+#' model <- fix_parameters_to(model, {'PTVCL': 0.5})
 #' model$parameters['PTVCL']
 #' }
 #' @seealso
@@ -2110,7 +2041,6 @@ fix_parameters <- function(model, parameter_names) {
 #' 
 #' @export
 fix_parameters_to <- function(model, inits) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$fix_parameters_to(model, inits)
 	return(py_to_r(func_out))
 }
@@ -2133,7 +2063,6 @@ fix_parameters_to <- function(model, inits) {
 #' 
 #' @export
 generate_model_code <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$generate_model_code(model)
 	return(py_to_r(func_out))
 }
@@ -2158,7 +2087,6 @@ generate_model_code <- function(model) {
 #' 
 #' @export
 get_baselines <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_baselines(model)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -2179,7 +2107,6 @@ get_baselines <- function(model) {
 #' 
 #' @export
 get_bioavailability <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_bioavailability(model)
 	return(py_to_r(func_out))
 }
@@ -2200,7 +2127,6 @@ get_bioavailability <- function(model) {
 #' 
 #' @export
 get_cmt <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_cmt(model)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -2228,7 +2154,6 @@ get_cmt <- function(model) {
 #' 
 #' @export
 get_concentration_parameters_from_data <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_concentration_parameters_from_data(model)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -2281,7 +2206,6 @@ get_config_path <- function() {
 #' 
 #' @export
 get_covariate_baselines <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_covariate_baselines(model)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -2310,7 +2234,6 @@ get_covariate_baselines <- function(model) {
 #' 
 #' @export
 get_doseid <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_doseid(model)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -2338,7 +2261,6 @@ get_doseid <- function(model) {
 #' 
 #' @export
 get_doses <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_doses(model)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -2362,7 +2284,6 @@ get_doses <- function(model) {
 #' 
 #' @export
 get_evid <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_evid(model)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -2388,7 +2309,6 @@ get_evid <- function(model) {
 #' 
 #' @export
 get_ids <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_ids(model)
 	return(py_to_r(func_out))
 }
@@ -2421,7 +2341,6 @@ get_ids <- function(model) {
 #' 
 #' @export
 get_individual_parameters <- function(model, level='all') {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_individual_parameters(model, level=level)
 	return(py_to_r(func_out))
 }
@@ -2449,7 +2368,6 @@ get_individual_parameters <- function(model, level='all') {
 #' 
 #' @export
 get_individual_prediction_expression <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_individual_prediction_expression(model)
 	return(py_to_r(func_out))
 }
@@ -2467,7 +2385,6 @@ get_individual_prediction_expression <- function(model) {
 #' 
 #' @export
 get_lag_times <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_lag_times(model)
 	return(py_to_r(func_out))
 }
@@ -2485,7 +2402,6 @@ get_lag_times <- function(model) {
 #' 
 #' @export
 get_mdv <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_mdv(model)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -2517,7 +2433,6 @@ get_mdv <- function(model) {
 #' 
 #' @export
 get_model_covariates <- function(model, strings=FALSE) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_model_covariates(model, strings=strings)
 	return(py_to_r(func_out))
 }
@@ -2550,7 +2465,6 @@ get_model_covariates <- function(model, strings=FALSE) {
 #' 
 #' @export
 get_number_of_individuals <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_number_of_individuals(model)
 	return(py_to_r(func_out))
 }
@@ -2583,7 +2497,6 @@ get_number_of_individuals <- function(model) {
 #' 
 #' @export
 get_number_of_observations <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_number_of_observations(model)
 	return(py_to_r(func_out))
 }
@@ -2616,7 +2529,6 @@ get_number_of_observations <- function(model) {
 #' 
 #' @export
 get_number_of_observations_per_individual <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_number_of_observations_per_individual(model)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -2645,7 +2557,6 @@ get_number_of_observations_per_individual <- function(model) {
 #' 
 #' @export
 get_observation_expression <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_observation_expression(model)
 	return(py_to_r(func_out))
 }
@@ -2673,7 +2584,6 @@ get_observation_expression <- function(model) {
 #' 
 #' @export
 get_observations <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_observations(model)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
@@ -2704,7 +2614,6 @@ get_observations <- function(model) {
 #' 
 #' @export
 get_omegas <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_omegas(model)
 	return(py_to_r(func_out))
 }
@@ -2737,7 +2646,6 @@ get_omegas <- function(model) {
 #' 
 #' @export
 get_pk_parameters <- function(model, kind='all') {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_pk_parameters(model, kind=kind)
 	return(py_to_r(func_out))
 }
@@ -2765,7 +2673,6 @@ get_pk_parameters <- function(model, kind='all') {
 #' 
 #' @export
 get_population_prediction_expression <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_population_prediction_expression(model)
 	return(py_to_r(func_out))
 }
@@ -2796,7 +2703,6 @@ get_population_prediction_expression <- function(model) {
 #' 
 #' @export
 get_rv_parameters <- function(model, rv) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_rv_parameters(model, rv)
 	return(py_to_r(func_out))
 }
@@ -2824,7 +2730,6 @@ get_rv_parameters <- function(model, rv) {
 #' 
 #' @export
 get_sigmas <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_sigmas(model)
 	return(py_to_r(func_out))
 }
@@ -2852,7 +2757,6 @@ get_sigmas <- function(model) {
 #' 
 #' @export
 get_thetas <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_thetas(model)
 	return(py_to_r(func_out))
 }
@@ -2882,7 +2786,6 @@ get_thetas <- function(model) {
 #' 
 #' @export
 get_unit_of <- function(model, variable) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$get_unit_of(model, variable)
 	return(py_to_r(func_out))
 }
@@ -2896,19 +2799,18 @@ get_unit_of <- function(model, variable) {
 #' @param model (Model) Pharmpy model
 #' @param named_subscripts (logical) Use previous parameter names as subscripts. Default is to use integer subscripts
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$statements
-#' greekify_model(cleanup_model(model))
+#' model <- greekify_model(cleanup_model(model))
 #' model$statements
 #' }
 #' 
 #' @export
 greekify_model <- function(model, named_subscripts=FALSE) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$greekify_model(model, named_subscripts=named_subscripts)
 	return(py_to_r(func_out))
 }
@@ -2936,7 +2838,6 @@ greekify_model <- function(model, named_subscripts=FALSE) {
 #' 
 #' @export
 has_additive_error_model <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$has_additive_error_model(model)
 	return(py_to_r(func_out))
 }
@@ -2964,7 +2865,6 @@ has_additive_error_model <- function(model) {
 #' 
 #' @export
 has_combined_error_model <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$has_combined_error_model(model)
 	return(py_to_r(func_out))
 }
@@ -2990,7 +2890,6 @@ has_combined_error_model <- function(model) {
 #' 
 #' @export
 has_covariate_effect <- function(model, parameter, covariate) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$has_covariate_effect(model, parameter, covariate)
 	return(py_to_r(func_out))
 }
@@ -3016,8 +2915,65 @@ has_covariate_effect <- function(model, parameter, covariate) {
 #' 
 #' @export
 has_first_order_elimination <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$has_first_order_elimination(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' has_linear_odes
+#' 
+#' @description
+#' Check if model has a linear ODE system
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (logical) TRUE if model has an ODE system that is linear
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' has_linear_odes(model)
+#' }
+#' @seealso
+#' has_odes
+#' 
+#' has_linear_odes_with_real_eigenvalues
+#' 
+#' 
+#' 
+#' 
+#' @export
+has_linear_odes <- function(model) {
+	func_out <- pharmpy$modeling$has_linear_odes(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' has_linear_odes_with_real_eigenvalues
+#' 
+#' @description
+#' Check if model has a linear ode system with real eigenvalues
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (logical) TRUE if model has an ODE system that is linear
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' has_linear_odes_with_real_eigenvalues(model)
+#' }
+#' @seealso
+#' has_odes
+#' 
+#' has_linear_odes
+#' 
+#' 
+#' 
+#' 
+#' @export
+has_linear_odes_with_real_eigenvalues <- function(model) {
+	func_out <- pharmpy$modeling$has_linear_odes_with_real_eigenvalues(model)
 	return(py_to_r(func_out))
 }
 
@@ -3038,13 +2994,12 @@ has_first_order_elimination <- function(model) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' has_michaelis_menten_elimination(model)
-#' set_michaelis_menten_elimination(model)
+#' model <- set_michaelis_menten_elimination(model)
 #' has_michaelis_menten_elimination(model)
 #' }
 #' 
 #' @export
 has_michaelis_menten_elimination <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$has_michaelis_menten_elimination(model)
 	return(py_to_r(func_out))
 }
@@ -3066,14 +3021,42 @@ has_michaelis_menten_elimination <- function(model) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' has_mixed_mm_fo_elimination(model)
-#' set_mixed_mm_fo_elimination(model)
+#' model <- set_mixed_mm_fo_elimination(model)
 #' has_mixed_mm_fo_elimination(model)
 #' }
 #' 
 #' @export
 has_mixed_mm_fo_elimination <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$has_mixed_mm_fo_elimination(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' has_odes
+#' 
+#' @description
+#' Check if model has an ODE system
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (logical) TRUE if model has an ODE system
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' has_odes(model)
+#' }
+#' @seealso
+#' has_linear_odes
+#' 
+#' has_linear_odes_with_real_eigenvalues
+#' 
+#' 
+#' 
+#' 
+#' @export
+has_odes <- function(model) {
+	func_out <- pharmpy$modeling$has_odes(model)
 	return(py_to_r(func_out))
 }
 
@@ -3100,7 +3083,6 @@ has_mixed_mm_fo_elimination <- function(model) {
 #' 
 #' @export
 has_proportional_error_model <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$has_proportional_error_model(model)
 	return(py_to_r(func_out))
 }
@@ -3133,7 +3115,6 @@ has_proportional_error_model <- function(model) {
 #' 
 #' @export
 has_random_effect <- function(model, parameter, level='all') {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$has_random_effect(model, parameter, level=level)
 	return(py_to_r(func_out))
 }
@@ -3158,7 +3139,6 @@ has_random_effect <- function(model, parameter, level='all') {
 #' 
 #' @export
 has_zero_order_absorption <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$has_zero_order_absorption(model)
 	return(py_to_r(func_out))
 }
@@ -3180,14 +3160,36 @@ has_zero_order_absorption <- function(model) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' has_zero_order_elimination(model)
-#' set_zero_order_elimination(model)
+#' model <- set_zero_order_elimination(model)
 #' has_zero_order_elimination(model)
 #' }
 #' 
 #' @export
 has_zero_order_elimination <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$has_zero_order_elimination(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' is_real
+#' 
+#' @description
+#' Determine if an expression is real valued given constraints of a model
+#' 
+#' @param model (Model) Pharmpy model
+#' @param expr (str) Expression to test
+#'  
+#' @return (logical or NULL) TRUE if expression is real, FALSE if not and NULL if unknown
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' is_real(model, "CL")
+#' }
+#' 
+#' @export
+is_real <- function(model, expr) {
+	func_out <- pharmpy$modeling$is_real(model, expr)
 	return(py_to_r(func_out))
 }
 
@@ -3214,7 +3216,6 @@ has_zero_order_elimination <- function(model) {
 #' 
 #' @export
 list_time_varying_covariates <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$list_time_varying_covariates(model)
 	return(py_to_r(func_out))
 }
@@ -3253,19 +3254,18 @@ load_example_model <- function(name) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$statements$before_odes
-#' make_declarative(model)
+#' model <- make_declarative(model)
 #' model$statements$before_odes
 #' }
 #' 
 #' @export
 make_declarative <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$make_declarative(model)
 	return(py_to_r(func_out))
 }
@@ -3283,17 +3283,17 @@ make_declarative <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model object
 #'  
-#' @return (Model) Reference to same object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' mu_reference_model(model).statements$before_odes
+#' model <- mu_reference_model(model)
+#' model$statements$before_odes
 #' }
 #' 
 #' @export
 mu_reference_model <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$mu_reference_model(model)
 	return(py_to_r(func_out))
 }
@@ -3332,7 +3332,6 @@ omit_data <- function(dataset_or_model, group, name_pattern='omitted_{}') {
 #' 
 #' @export
 plot_individual_predictions <- function(model, predictions, individuals=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	individuals <- convert_input(individuals, "list")
 	func_out <- pharmpy$modeling$plot_individual_predictions(model, predictions, individuals=individuals)
 	return(py_to_r(func_out))
@@ -3376,7 +3375,6 @@ plot_iofv_vs_iofv <- function(iofv1, iofv2, name1, name2) {
 #' 
 #' @export
 print_model_code <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$print_model_code(model)
 	return(py_to_r(func_out))
 }
@@ -3400,7 +3398,6 @@ print_model_code <- function(model) {
 #' 
 #' @export
 print_model_symbols <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$print_model_symbols(model)
 	return(py_to_r(func_out))
 }
@@ -3495,12 +3492,12 @@ read_model_from_string <- function(code) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' remove_covariance_step(model)
+#' model <- remove_covariance_step(model)
 #' ests <- model$estimation_steps
 #' ests[1]
 #' }
@@ -3520,7 +3517,6 @@ read_model_from_string <- function(code) {
 #' 
 #' @export
 remove_covariance_step <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$remove_covariance_step(model)
 	return(py_to_r(func_out))
 }
@@ -3535,19 +3531,18 @@ remove_covariance_step <- function(model) {
 #' @param parameter (str) Name of parameter.
 #' @param covariate (str) Name of covariate.
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' has_covariate_effect(model, "CL", "WGT")
-#' remove_covariate_effect(model, "CL", "WGT")
+#' model <- remove_covariate_effect(model, "CL", "WGT")
 #' has_covariate_effect(model, "CL", "WGT")
 #' }
 #' 
 #' @export
 remove_covariate_effect <- function(model, parameter, covariate) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$remove_covariate_effect(model, parameter, covariate)
 	return(py_to_r(func_out))
 }
@@ -3560,19 +3555,18 @@ remove_covariate_effect <- function(model, parameter, covariate) {
 #' 
 #' @param model (Model) Remove error model for this model
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$statements$find_assignment("Y")
-#' remove_error_model(model)
+#' model <- remove_error_model(model)
 #' model$statements$find_assignment("Y")
 #' }
 #' 
 #' @export
 remove_error_model <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$remove_error_model(model)
 	return(py_to_r(func_out))
 }
@@ -3586,12 +3580,12 @@ remove_error_model <- function(model) {
 #' @param model (Model) Pharmpy model
 #' @param idx (numeric) index of estimation step to remove (starting from 0)
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' remove_estimation_step(model, 0)
+#' model <- remove_estimation_step(model, 0)
 #' ests <- model$estimation_steps
 #' length(ests)
 #' }
@@ -3611,7 +3605,6 @@ remove_error_model <- function(model) {
 #' 
 #' @export
 remove_estimation_step <- function(model, idx) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	idx <- convert_input(idx, "int")
 	func_out <- pharmpy$modeling$remove_estimation_step(model, idx)
 	return(py_to_r(func_out))
@@ -3627,15 +3620,15 @@ remove_estimation_step <- function(model, idx) {
 #' @param to_remove (array(str) or str (optional)) Name/names of etas and/or name/names of individual parameters to remove.
 #' If NULL, all etas that are IIVs will be removed. NULL is default.
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' remove_iiv(model)
+#' model <- remove_iiv(model)
 #' model$statements$find_assignment("CL")
 #' model <- load_example_model("pheno")
-#' remove_iiv(model, "V")
+#' model <- remove_iiv(model, "V")
 #' model$statements$find_assignment("V")
 #' }
 #' @seealso
@@ -3650,7 +3643,6 @@ remove_estimation_step <- function(model, idx) {
 #' 
 #' @export
 remove_iiv <- function(model, to_remove=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	to_remove <- convert_input(to_remove, "list")
 	func_out <- pharmpy$modeling$remove_iiv(model, to_remove=to_remove)
 	return(py_to_r(func_out))
@@ -3664,13 +3656,14 @@ remove_iiv <- function(model, to_remove=NULL) {
 #' 
 #' @param model (Model) Pharmpy model to remove IOV from.
 #' @param to_remove (array(str) or str (optional)) Name/names of IOV etas to remove, e.g. 'ETA_IOV_1_1'.
-#' If NULL, all etas that are IOVs will be removed. NULL is default. 
-#' @return (Model) Reference to the same model
+#' If NULL, all etas that are IOVs will be removed. NULL is default.
+#'  
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' remove_iov(model)
+#' model <- remove_iov(model)
 #' }
 #' @seealso
 #' add_iiv
@@ -3684,7 +3677,6 @@ remove_iiv <- function(model, to_remove=NULL) {
 #' 
 #' @export
 remove_iov <- function(model, to_remove=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	to_remove <- convert_input(to_remove, "list")
 	func_out <- pharmpy$modeling$remove_iov(model, to_remove=to_remove)
 	return(py_to_r(func_out))
@@ -3698,12 +3690,12 @@ remove_iov <- function(model, to_remove=NULL) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Model) Reference to same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' remove_lag_time(model)
+#' model <- remove_lag_time(model)
 #' }
 #' @seealso
 #' set_transit_compartments
@@ -3713,7 +3705,6 @@ remove_iov <- function(model, to_remove=NULL) {
 #' 
 #' @export
 remove_lag_time <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$remove_lag_time(model)
 	return(py_to_r(func_out))
 }
@@ -3730,18 +3721,17 @@ remove_lag_time <- function(model) {
 #' @param lloq (numeric (optional)) Lower limit of quantification. Default not specified.
 #' @param uloq (numeric (optional)) Upper limit of quantification. Default not specified.
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' remove_loq_data(model, lloq=10, uloq=40)
+#' model <- remove_loq_data(model, lloq=10, uloq=40)
 #' length(model$dataset)
 #' }
 #' 
 #' @export
 remove_loq_data <- function(model, lloq=NULL, uloq=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$remove_loq_data(model, lloq=lloq, uloq=uloq)
 	return(py_to_r(func_out))
 }
@@ -3765,13 +3755,13 @@ remove_loq_data <- function(model, lloq=NULL, uloq=NULL) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Model) Reference to same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_peripheral_compartments(model, 2)
-#' remove_peripheral_compartment(model)
+#' model <- set_peripheral_compartments(model, 2)
+#' model <- remove_peripheral_compartment(model)
 #' model$statements$ode_system
 #' }
 #' @seealso
@@ -3782,7 +3772,6 @@ remove_loq_data <- function(model, lloq=NULL, uloq=NULL) {
 #' 
 #' @export
 remove_peripheral_compartment <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$remove_peripheral_compartment(model)
 	return(py_to_r(func_out))
 }
@@ -3795,12 +3784,11 @@ remove_peripheral_compartment <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model object
 #'  
-#' @return (Model) Reference to same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' 
 #' @export
 remove_unused_parameters_and_rvs <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$remove_unused_parameters_and_rvs(model)
 	return(py_to_r(func_out))
 }
@@ -3816,12 +3804,11 @@ remove_unused_parameters_and_rvs <- function(model) {
 #' @param model (Model) Pharmpy model object
 #' @param new_names (list(str=str)) From old name or symbol to new name or symbol
 #'  
-#' @return (Model) Reference to same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' 
 #' @export
 rename_symbols <- function(model, new_names) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$rename_symbols(model, new_names)
 	return(py_to_r(func_out))
 }
@@ -3897,7 +3884,6 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' 
 #' @export
 sample_individual_estimates <- function(model, individual_estimates, individual_estimates_covariance, parameters=NULL, samples_per_id=100, rng=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	parameters <- convert_input(parameters, "list")
 	samples_per_id <- convert_input(samples_per_id, "int")
 	rng <- convert_input(rng, "int")
@@ -3943,7 +3929,6 @@ sample_individual_estimates <- function(model, individual_estimates, individual_
 #' 
 #' @export
 sample_parameters_from_covariance_matrix <- function(model, parameter_estimates, covariance_matrix, force_posdef_samples=NULL, force_posdef_covmatrix=FALSE, n=1, rng=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
 	force_posdef_samples <- convert_input(force_posdef_samples, "int")
 	n <- convert_input(n, "int")
@@ -3991,7 +3976,6 @@ sample_parameters_from_covariance_matrix <- function(model, parameter_estimates,
 #' 
 #' @export
 sample_parameters_uniformly <- function(model, parameter_estimates, fraction=0.1, force_posdef_samples=NULL, n=1, rng=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
 	force_posdef_samples <- convert_input(force_posdef_samples, "int")
 	n <- convert_input(n, "int")
@@ -4026,17 +4010,17 @@ sample_parameters_uniformly <- function(model, parameter_estimates, fraction=0.1
 #' @param series_terms (numeric) Number of terms to use for the series expansion approximation for data
 #' transformation.
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$statements$find_assignment("Y")
-#' set_additive_error_model(model)
+#' model <- set_additive_error_model(model)
 #' model$statements$find_assignment("Y")
 #' model <- load_example_model("pheno")
 #' model$statements$find_assignment("Y")
-#' set_additive_error_model(model, data_trans="log(Y)")
+#' model <- set_additive_error_model(model, data_trans="log(Y)")
 #' model$statements$find_assignment("Y")
 #' }
 #' @seealso
@@ -4047,7 +4031,6 @@ sample_parameters_uniformly <- function(model, parameter_estimates, fraction=0.1
 #' 
 #' @export
 set_additive_error_model <- function(model, data_trans=NULL, series_terms=2) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	series_terms <- convert_input(series_terms, "int")
 	func_out <- pharmpy$modeling$set_additive_error_model(model, data_trans=data_trans, series_terms=series_terms)
 	return(py_to_r(func_out))
@@ -4063,12 +4046,12 @@ set_additive_error_model <- function(model, data_trans=NULL, series_terms=2) {
 #' 
 #' @param model (Model) Model to set or change absorption rate
 #'  
-#' @return (Model) Reference to same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_bolus_absorption(model)
+#' model <- set_bolus_absorption(model)
 #' model$statements$ode_system
 #' }
 #' @seealso
@@ -4079,7 +4062,6 @@ set_additive_error_model <- function(model, data_trans=NULL, series_terms=2) {
 #' 
 #' @export
 set_bolus_absorption <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$set_bolus_absorption(model)
 	return(py_to_r(func_out))
 }
@@ -4105,15 +4087,15 @@ set_bolus_absorption <- function(model) {
 #' @param data_trans (str (optional)) A data transformation expression or NULL (default) to use the transformation
 #' specified by the model.
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- remove_error_model(load_example_model("pheno"))
-#' set_combined_error_model(model)
+#' model <- set_combined_error_model(model)
 #' model$statements$find_assignment("Y")
 #' model <- remove_error_model(load_example_model("pheno"))
-#' set_combined_error_model(model, data_trans="log(Y)")
+#' model <- set_combined_error_model(model, data_trans="log(Y)")
 #' model$statements$find_assignment("Y")
 #' }
 #' @seealso
@@ -4124,7 +4106,6 @@ set_bolus_absorption <- function(model) {
 #' 
 #' @export
 set_combined_error_model <- function(model, data_trans=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$set_combined_error_model(model, data_trans=data_trans)
 	return(py_to_r(func_out))
 }
@@ -4138,12 +4119,11 @@ set_combined_error_model <- function(model, data_trans=NULL) {
 #' @param model (Model) Pharmpy model
 #' @param covariates (array(str)) List of column names
 #'  
-#' @return (Model) Reference to the same Pharmpy model object
+#' @return (Model) Pharmpy model object
 #' 
 #' 
 #' @export
 set_covariates <- function(model, covariates) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	covariates <- convert_input(covariates, "list")
 	func_out <- pharmpy$modeling$set_covariates(model, covariates)
 	return(py_to_r(func_out))
@@ -4158,17 +4138,16 @@ set_covariates <- function(model, covariates) {
 #' @param model (Model) Pharmpy model
 #' @param fix_to_log (logical) Set to TRUE to fix lambda and zeta to 0, i.e. emulating log-transformed data
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_dtbs_error_model(model)
+#' model <- set_dtbs_error_model(model)
 #' }
 #' 
 #' @export
 set_dtbs_error_model <- function(model, fix_to_log=FALSE) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$set_dtbs_error_model(model, fix_to_log=fix_to_log)
 	return(py_to_r(func_out))
 }
@@ -4187,13 +4166,13 @@ set_dtbs_error_model <- function(model, fix_to_log=FALSE) {
 #' @param idx (numeric) index of estimation step, default is 0 (first estimation step)
 #' @param ... Arguments to pass to EstimationStep (such as interaction, evaluation)
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' opts <- list('NITER'=1000, 'ISAMPLE'=100)
-#' set_estimation_step(model, "IMP", evaluation=TRUE, tool_options=opts)
+#' model <- set_estimation_step(model, "IMP", evaluation=TRUE, tool_options=opts)
 #' model$estimation_steps[1]
 #' }
 #' @seealso
@@ -4212,7 +4191,6 @@ set_dtbs_error_model <- function(model, fix_to_log=FALSE) {
 #' 
 #' @export
 set_estimation_step <- function(model, method, idx=0, ...) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	idx <- convert_input(idx, "int")
 	func_out <- pharmpy$modeling$set_estimation_step(model, method, idx=idx, ...)
 	return(py_to_r(func_out))
@@ -4230,12 +4208,12 @@ set_estimation_step <- function(model, method, idx=0, ...) {
 #' @param model (Model) Pharmpy model
 #' @param idx (numeric) index of estimation step, default is -1 (last estimation step)
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_evaluation_step(model)
+#' model <- set_evaluation_step(model)
 #' model$estimation_steps[1]
 #' }
 #' @seealso
@@ -4254,7 +4232,6 @@ set_estimation_step <- function(model, method, idx=0, ...) {
 #' 
 #' @export
 set_evaluation_step <- function(model, idx=-1) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	idx <- convert_input(idx, "int")
 	func_out <- pharmpy$modeling$set_evaluation_step(model, idx=idx)
 	return(py_to_r(func_out))
@@ -4271,12 +4248,12 @@ set_evaluation_step <- function(model, idx=-1) {
 #' 
 #' @param model (Model) Model to set or change to use first order absorption rate
 #'  
-#' @return (Model) Reference to same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_first_order_absorption(model)
+#' model <- set_first_order_absorption(model)
 #' model$statements$ode_system
 #' }
 #' @seealso
@@ -4287,7 +4264,6 @@ set_evaluation_step <- function(model, idx=-1) {
 #' 
 #' @export
 set_first_order_absorption <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$set_first_order_absorption(model)
 	return(py_to_r(func_out))
 }
@@ -4300,12 +4276,12 @@ set_first_order_absorption <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Model) Reference to same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_first_order_elimination(model)
+#' model <- set_first_order_elimination(model)
 #' model$statements$ode_system
 #' }
 #' @seealso
@@ -4316,7 +4292,6 @@ set_first_order_absorption <- function(model) {
 #' 
 #' @export
 set_first_order_elimination <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$set_first_order_elimination(model)
 	return(py_to_r(func_out))
 }
@@ -4336,12 +4311,12 @@ set_first_order_elimination <- function(model) {
 #' should be created for each RUV. TRUE is default.
 #' @param eta_names (array(str) or str (optional)) Custom names of new etas. Must be equal to the number epsilons or 1 if same eta.
 #'  
-#' @return (Model) Reference to same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_iiv_on_ruv(model)
+#' model <- set_iiv_on_ruv(model)
 #' model$statements$find_assignment("Y")
 #' }
 #' @seealso
@@ -4350,7 +4325,6 @@ set_first_order_elimination <- function(model) {
 #' 
 #' @export
 set_iiv_on_ruv <- function(model, list_of_eps=NULL, same_eta=TRUE, eta_names=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	list_of_eps <- convert_input(list_of_eps, "list")
 	eta_names <- convert_input(eta_names, "list")
 	func_out <- pharmpy$modeling$set_iiv_on_ruv(model, list_of_eps=list_of_eps, same_eta=same_eta, eta_names=eta_names)
@@ -4366,12 +4340,12 @@ set_iiv_on_ruv <- function(model, list_of_eps=NULL, same_eta=TRUE, eta_names=NUL
 #' @param model (Model) Pharmpy model
 #' @param inits (list(str=numeric)) A list of parameter init for parameters to change
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_initial_estimates(model, list('PTVCL'=2))
+#' model <- set_initial_estimates(model, list('PTVCL'=2))
 #' model$parameters['PTVCL']
 #' }
 #' @seealso
@@ -4382,7 +4356,6 @@ set_iiv_on_ruv <- function(model, list_of_eps=NULL, same_eta=TRUE, eta_names=NUL
 #' 
 #' @export
 set_initial_estimates <- function(model, inits) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$set_initial_estimates(model, inits)
 	return(py_to_r(func_out))
 }
@@ -4396,12 +4369,12 @@ set_initial_estimates <- function(model, inits) {
 #' @param model (Model) Pharmpy model
 #' @param bounds (list(str=numeric)) A list of parameter bounds for parameters to change
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_lower_bounds(model, {'PTVCL': -10})
+#' model <- set_lower_bounds(model, {'PTVCL': -10})
 #' model$parameters['PTVCL']
 #' }
 #' @seealso
@@ -4412,7 +4385,6 @@ set_initial_estimates <- function(model, inits) {
 #' 
 #' @export
 set_lower_bounds <- function(model, bounds) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$set_lower_bounds(model, bounds)
 	return(py_to_r(func_out))
 }
@@ -4427,12 +4399,12 @@ set_lower_bounds <- function(model, bounds) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_michaelis_menten_elimination(model)
+#' model <- set_michaelis_menten_elimination(model)
 #' model$statements$ode_system
 #' }
 #' @seealso
@@ -4443,7 +4415,6 @@ set_lower_bounds <- function(model, bounds) {
 #' 
 #' @export
 set_michaelis_menten_elimination <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$set_michaelis_menten_elimination(model)
 	return(py_to_r(func_out))
 }
@@ -4458,12 +4429,12 @@ set_michaelis_menten_elimination <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_mixed_mm_fo_elimination(model)
+#' model <- set_mixed_mm_fo_elimination(model)
 #' model$statements$ode_system
 #' }
 #' @seealso
@@ -4476,7 +4447,6 @@ set_michaelis_menten_elimination <- function(model) {
 #' 
 #' @export
 set_mixed_mm_fo_elimination <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$set_mixed_mm_fo_elimination(model)
 	return(py_to_r(func_out))
 }
@@ -4490,19 +4460,18 @@ set_mixed_mm_fo_elimination <- function(model) {
 #' @param model (Model) Pharmpy model
 #' @param new_name (str) New name of model
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$name
-#' set_name(model, "run2")
+#' model <- set_name(model, "run2")
 #' model$name
 #' }
 #' 
 #' @export
 set_name <- function(model, new_name) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$set_name(model, new_name)
 	return(py_to_r(func_out))
 }
@@ -4534,17 +4503,16 @@ set_name <- function(model, new_name) {
 #' @param model (Model) Pharmpy model
 #' @param solver (str) Solver to use or NULL for no preference
 #'  
-#' @return (Model) Reference to same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_ode_solver(model, 'LSODA')
+#' model <- set_ode_solver(model, 'LSODA')
 #' }
 #' 
 #' @export
 set_ode_solver <- function(model, solver) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$set_ode_solver(model, solver)
 	return(py_to_r(func_out))
 }
@@ -4558,12 +4526,12 @@ set_ode_solver <- function(model, solver) {
 #' @param model (Model) Pharmpy model
 #' @param n (numeric) Number of transit compartments
 #'  
-#' @return (Model) Reference to same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_peripheral_compartments(model, 2)
+#' model <- set_peripheral_compartments(model, 2)
 #' model$statements$ode_system
 #' }
 #' @seealso
@@ -4574,7 +4542,6 @@ set_ode_solver <- function(model, solver) {
 #' 
 #' @export
 set_peripheral_compartments <- function(model, n) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	n <- convert_input(n, "int")
 	func_out <- pharmpy$modeling$set_peripheral_compartments(model, n)
 	return(py_to_r(func_out))
@@ -4596,12 +4563,12 @@ set_peripheral_compartments <- function(model, n) {
 #' @param ipred (str (optional)) Symbol to use as IPRED. Default is to autodetect expression for IPRED.
 #' @param zero_protection (logical) Set to TRUE to add code protecting from IPRED=0
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_power_on_ruv(model)
+#' model <- set_power_on_ruv(model)
 #' model$statements$find_assignment("Y")
 #' }
 #' @seealso
@@ -4610,7 +4577,6 @@ set_peripheral_compartments <- function(model, n) {
 #' 
 #' @export
 set_power_on_ruv <- function(model, list_of_eps=NULL, lower_limit=0.01, ipred=NULL, zero_protection=FALSE) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$set_power_on_ruv(model, list_of_eps=list_of_eps, lower_limit=lower_limit, ipred=ipred, zero_protection=zero_protection)
 	return(py_to_r(func_out))
 }
@@ -4636,15 +4602,15 @@ set_power_on_ruv <- function(model, list_of_eps=NULL, lower_limit=0.01, ipred=NU
 #' specified by the model.
 #' @param zero_protection (logical) Set to TRUE to add code protecting from IPRED=0
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- remove_error_model(load_example_model("pheno"))
-#' set_proportional_error_model(model)
+#' model <- set_proportional_error_model(model)
 #' model$statements$after_odes
 #' model <- remove_error_model(load_example_model("pheno"))
-#' set_proportional_error_model(
+#' model <- set_proportional_error_model(
 #'     model,
 #'     data_trans="log(Y)"
 #' model$statements$after_odes
@@ -4657,7 +4623,6 @@ set_power_on_ruv <- function(model, list_of_eps=NULL, lower_limit=0.01, ipred=NU
 #' 
 #' @export
 set_proportional_error_model <- function(model, data_trans=NULL, zero_protection=TRUE) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$set_proportional_error_model(model, data_trans=data_trans, zero_protection=zero_protection)
 	return(py_to_r(func_out))
 }
@@ -4677,12 +4642,12 @@ set_proportional_error_model <- function(model, data_trans=NULL, zero_protection
 #' 
 #' @param model (Model) Model to set or change absorption rate
 #'  
-#' @return (Model) Reference to same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_seq_zo_fo_absorption(model)
+#' model <- set_seq_zo_fo_absorption(model)
 #' model$statements$ode_system
 #' }
 #' @seealso
@@ -4695,7 +4660,6 @@ set_proportional_error_model <- function(model, data_trans=NULL, zero_protection
 #' 
 #' @export
 set_seq_zo_fo_absorption <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$set_seq_zo_fo_absorption(model)
 	return(py_to_r(func_out))
 }
@@ -4710,18 +4674,17 @@ set_seq_zo_fo_absorption <- function(model) {
 #' @param cutoff (numeric) A value at the given quantile over idv column
 #' @param idv (str) Time or time after dose, default is Time
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_time_varying_error_model(model, cutoff=1.0)
+#' model <- set_time_varying_error_model(model, cutoff=1.0)
 #' model$statements$find_assignment("Y")
 #' }
 #' 
 #' @export
 set_time_varying_error_model <- function(model, cutoff, idv='TIME') {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$set_time_varying_error_model(model, cutoff, idv=idv)
 	return(py_to_r(func_out))
 }
@@ -4739,12 +4702,12 @@ set_time_varying_error_model <- function(model, cutoff, idv='TIME') {
 #' @param n (numeric) Number of transit compartments
 #' @param keep_depot (logical) FALSE to convert depot compartment into a transit compartment
 #'  
-#' @return (Model) Reference to same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_transit_compartments(model, 3)
+#' model <- set_transit_compartments(model, 3)
 #' model$statements$ode_system
 #' }
 #' @seealso
@@ -4753,7 +4716,6 @@ set_time_varying_error_model <- function(model, cutoff, idv='TIME') {
 #' 
 #' @export
 set_transit_compartments <- function(model, n, keep_depot=TRUE) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	n <- convert_input(n, "int")
 	func_out <- pharmpy$modeling$set_transit_compartments(model, n, keep_depot=keep_depot)
 	return(py_to_r(func_out))
@@ -4768,12 +4730,12 @@ set_transit_compartments <- function(model, n, keep_depot=TRUE) {
 #' @param model (Model) Pharmpy model
 #' @param bounds (list(str=numeric)) A list of parameter bounds for parameters to change
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_upper_bounds(model, list('PTVCL'=10))
+#' model <- set_upper_bounds(model, list('PTVCL'=10))
 #' model$parameters['PTVCL']
 #' }
 #' @seealso
@@ -4784,7 +4746,6 @@ set_transit_compartments <- function(model, n, keep_depot=TRUE) {
 #' 
 #' @export
 set_upper_bounds <- function(model, bounds) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$set_upper_bounds(model, bounds)
 	return(py_to_r(func_out))
 }
@@ -4797,12 +4758,12 @@ set_upper_bounds <- function(model, bounds) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_weighted_error_model(model)
+#' model <- set_weighted_error_model(model)
 #' }
 #' @seealso
 #' use_thetas_for_error_stdev : Use thetas to estimate error
@@ -4810,7 +4771,6 @@ set_upper_bounds <- function(model, bounds) {
 #' 
 #' @export
 set_weighted_error_model <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$set_weighted_error_model(model)
 	return(py_to_r(func_out))
 }
@@ -4826,12 +4786,12 @@ set_weighted_error_model <- function(model) {
 #' 
 #' @param model (Model) Model to set or change to first order absorption rate
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_zero_order_absorption(model)
+#' model <- set_zero_order_absorption(model)
 #' model$statements$ode_system
 #' }
 #' @seealso
@@ -4842,7 +4802,6 @@ set_weighted_error_model <- function(model) {
 #' 
 #' @export
 set_zero_order_absorption <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$set_zero_order_absorption(model)
 	return(py_to_r(func_out))
 }
@@ -4857,12 +4816,12 @@ set_zero_order_absorption <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Model) Reference to same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' set_zero_order_elimination(model)
+#' model <- set_zero_order_elimination(model)
 #' model$statements$ode_system
 #' }
 #' @seealso
@@ -4873,7 +4832,6 @@ set_zero_order_absorption <- function(model) {
 #' 
 #' @export
 set_zero_order_elimination <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$set_zero_order_elimination(model)
 	return(py_to_r(func_out))
 }
@@ -4899,7 +4857,6 @@ set_zero_order_elimination <- function(model) {
 #' 
 #' @export
 simplify_expression <- function(model, expr) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$simplify_expression(model, expr)
 	return(py_to_r(func_out))
 }
@@ -4915,18 +4872,17 @@ simplify_expression <- function(model, expr) {
 #' 
 #' @param model (Model) Pharmpy model object
 #'  
-#' @return (Model) Reference to the same pharmpy model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$statements$ode_system
-#' solve_ode_system(model)
+#' model <- solve_ode_system(model)
 #' }
 #' 
 #' @export
 solve_ode_system <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$solve_ode_system(model)
 	return(py_to_r(func_out))
 }
@@ -4941,14 +4897,14 @@ solve_ode_system <- function(model) {
 #' @param rvs (array(str) or str (optional)) Name/names of etas to separate. If NULL, all etas that are IIVs and
 #' non-fixed will become single. NULL is default.
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' create_joint_distribution(model, c('ETA_1', 'ETA_2'))
+#' model <- create_joint_distribution(model, c('ETA_1', 'ETA_2'))
 #' model$random_variables$etas
-#' split_joint_distribution(model, c('ETA_1', 'ETA_2'))
+#' model <- split_joint_distribution(model, c('ETA_1', 'ETA_2'))
 #' model$random_variables$etas
 #' }
 #' @seealso
@@ -4957,7 +4913,6 @@ solve_ode_system <- function(model) {
 #' 
 #' @export
 split_joint_distribution <- function(model, rvs=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	rvs <- convert_input(rvs, "list")
 	func_out <- pharmpy$modeling$split_joint_distribution(model, rvs=rvs)
 	return(py_to_r(func_out))
@@ -4974,12 +4929,12 @@ split_joint_distribution <- function(model, rvs=NULL) {
 #' @param model (Model) Pharmpy model to apply boxcox transformation to.
 #' @param list_of_etas (array(str) or str (optional)) Name/names of etas to transform. If NULL, all etas will be transformed (default).
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' transform_etas_boxcox(model, c("ETA_1"))
+#' model <- transform_etas_boxcox(model, c("ETA_1"))
 #' model$statements$before_odes$full_expression("CL")
 #' }
 #' @seealso
@@ -4990,7 +4945,6 @@ split_joint_distribution <- function(model, rvs=NULL) {
 #' 
 #' @export
 transform_etas_boxcox <- function(model, list_of_etas=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	list_of_etas <- convert_input(list_of_etas, "list")
 	func_out <- pharmpy$modeling$transform_etas_boxcox(model, list_of_etas=list_of_etas)
 	return(py_to_r(func_out))
@@ -5011,12 +4965,12 @@ transform_etas_boxcox <- function(model, list_of_etas=NULL) {
 #' @param model (Model) Pharmpy model to apply John Draper transformation to.
 #' @param list_of_etas (array(str) or str (optional)) Name/names of etas to transform. If NULL, all etas will be transformed (default).
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' transform_etas_john_draper(model, c("ETA_1"))
+#' model <- transform_etas_john_draper(model, c("ETA_1"))
 #' model$statements$before_odes$full_expression("CL")
 #' }
 #' @seealso
@@ -5027,7 +4981,6 @@ transform_etas_boxcox <- function(model, list_of_etas=NULL) {
 #' 
 #' @export
 transform_etas_john_draper <- function(model, list_of_etas=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	list_of_etas <- convert_input(list_of_etas, "list")
 	func_out <- pharmpy$modeling$transform_etas_john_draper(model, list_of_etas=list_of_etas)
 	return(py_to_r(func_out))
@@ -5044,12 +4997,12 @@ transform_etas_john_draper <- function(model, list_of_etas=NULL) {
 #' @param model (Model) Pharmpy model to apply t distribution transformation to.
 #' @param list_of_etas (array(str) or str (optional)) Name/names of etas to transform. If NULL, all etas will be transformed (default).
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' transform_etas_tdist(model, c("ETA_1"))
+#' model <- transform_etas_tdist(model, c("ETA_1"))
 #' model$statements$before_odes$full_expression("CL")
 #' }
 #' @seealso
@@ -5060,7 +5013,6 @@ transform_etas_john_draper <- function(model, list_of_etas=NULL) {
 #' 
 #' @export
 transform_etas_tdist <- function(model, list_of_etas=NULL) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	list_of_etas <- convert_input(list_of_etas, "list")
 	func_out <- pharmpy$modeling$transform_etas_tdist(model, list_of_etas=list_of_etas)
 	return(py_to_r(func_out))
@@ -5080,12 +5032,11 @@ transform_etas_tdist <- function(model, list_of_etas=NULL) {
 #' 
 #' @param model (Model) Pharmpy model object
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' 
 #' @export
 translate_nmtran_time <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$translate_nmtran_time(model)
 	return(py_to_r(func_out))
 }
@@ -5099,13 +5050,13 @@ translate_nmtran_time <- function(model) {
 #' @param model (Model) Pharmpy model
 #' @param parameter_names (array(str)) Remove all constraints for the listed parameters
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$parameters['PTVCL']
-#' unconstrain_parameters(model, c('PTVCL'))
+#' model <- unconstrain_parameters(model, c('PTVCL'))
 #' model$parameters['PTVCL']
 #' }
 #' @seealso
@@ -5118,7 +5069,6 @@ translate_nmtran_time <- function(model) {
 #' 
 #' @export
 unconstrain_parameters <- function(model, parameter_names) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	parameter_names <- convert_input(parameter_names, "list")
 	func_out <- pharmpy$modeling$unconstrain_parameters(model, parameter_names)
 	return(py_to_r(func_out))
@@ -5133,13 +5083,13 @@ unconstrain_parameters <- function(model, parameter_names) {
 #' @param model (Model) Pharmpy model object
 #' @param column_names (array(str) or str) List of column names or one column name to undrop
 #'  
-#' @return (Model) Reference to same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' drop_columns(model, c('WGT', 'APGR'), mark=TRUE)
-#' undrop_columns(model, 'WGT')
+#' model <- drop_columns(model, c('WGT', 'APGR'), mark=TRUE)
+#' model <- undrop_columns(model, 'WGT')
 #' }
 #' @seealso
 #' drop_dropped_columns : Drop all columns marked as drop
@@ -5149,7 +5099,6 @@ unconstrain_parameters <- function(model, parameter_names) {
 #' 
 #' @export
 undrop_columns <- function(model, column_names) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	column_names <- convert_input(column_names, "list")
 	func_out <- pharmpy$modeling$undrop_columns(model, column_names)
 	return(py_to_r(func_out))
@@ -5166,14 +5115,14 @@ undrop_columns <- function(model, column_names) {
 #' @param model (Model) Pharmpy model
 #' @param parameter_names (array(str) or str) one parameter name or a vector of parameter names
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' fix_parameters(model, c('PTVCL', 'PTVV', 'THETA_3'))
+#' model <- fix_parameters(model, c('PTVCL', 'PTVV', 'THETA_3'))
 #' model$parameters$fix
-#' unfix_parameters(model, 'PTVCL')
+#' model <- unfix_parameters(model, 'PTVCL')
 #' model$parameters$fix
 #' }
 #' @seealso
@@ -5192,7 +5141,6 @@ undrop_columns <- function(model, column_names) {
 #' 
 #' @export
 unfix_parameters <- function(model, parameter_names) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	parameter_names <- convert_input(parameter_names, "list")
 	func_out <- pharmpy$modeling$unfix_parameters(model, parameter_names)
 	return(py_to_r(func_out))
@@ -5209,14 +5157,14 @@ unfix_parameters <- function(model, parameter_names) {
 #' @param model (Model) Pharmpy model
 #' @param inits (list(str=numeric)) Inits for all parameters to unfix and change init
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' fix_parameters(model, c('PTVCL', 'PTVV', 'THETA_3'))
+#' model <- fix_parameters(model, c('PTVCL', 'PTVV', 'THETA_3'))
 #' model$parameters$fix
-#' unfix_parameters_to(model, {'PTVCL': 0.5})
+#' model <- unfix_parameters_to(model, {'PTVCL': 0.5})
 #' model$parameters$fix
 #' model$parameters['PTVCL']
 #' }
@@ -5234,7 +5182,6 @@ unfix_parameters <- function(model, parameter_names) {
 #' 
 #' @export
 unfix_parameters_to <- function(model, inits) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$unfix_parameters_to(model, inits)
 	return(py_to_r(func_out))
 }
@@ -5251,7 +5198,7 @@ unfix_parameters_to <- function(model, inits) {
 #' @param individual_estimates (array) Individual estimates to use
 #' @param force (logical) Set to FALSE to only update if the model had initial individual estimates before
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
@@ -5262,7 +5209,6 @@ unfix_parameters_to <- function(model, inits) {
 #' 
 #' @export
 update_initial_individual_estimates <- function(model, individual_estimates, force=TRUE) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	individual_estimates <- convert_input(individual_estimates, "pd.Series")
 	func_out <- pharmpy$modeling$update_initial_individual_estimates(model, individual_estimates, force=force)
 	return(py_to_r(func_out))
@@ -5282,19 +5228,18 @@ update_initial_individual_estimates <- function(model, individual_estimates, for
 #' @param move_est_close_to_bounds (logical) Move estimates that are close to bounds. If correlation >0.99 the correlation will
 #' be set to 0.9, if variance is <0.001 the variance will be set to 0.01.
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")   # This model was previously fitted to its data
 #' model$parameters$inits
-#' update_inits(model, model$modelfit_results$parameter_estimates)
+#' model <- update_inits(model, model$modelfit_results$parameter_estimates)
 #' model$parameters$inits
 #' }
 #' 
 #' @export
 update_inits <- function(model, parameter_estimates, move_est_close_to_bounds=FALSE) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
 	func_out <- pharmpy$modeling$update_inits(model, parameter_estimates, move_est_close_to_bounds=move_est_close_to_bounds)
 	return(py_to_r(func_out))
@@ -5308,12 +5253,12 @@ update_inits <- function(model, parameter_estimates, move_est_close_to_bounds=FA
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Model) Reference to the same model
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' use_thetas_for_error_stdev(model)
+#' model <- use_thetas_for_error_stdev(model)
 #' model$statements$find_assignment("Y")
 #' }
 #' @seealso
@@ -5322,7 +5267,6 @@ update_inits <- function(model, parameter_estimates, move_est_close_to_bounds=FA
 #' 
 #' @export
 use_thetas_for_error_stdev <- function(model) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$use_thetas_for_error_stdev(model)
 	return(py_to_r(func_out))
 }
@@ -5337,17 +5281,16 @@ use_thetas_for_error_stdev <- function(model) {
 #' @param path (str (optional)) Destination path. Default is to use original path with .csv suffix.
 #' @param force (logical) Overwrite file with same path. Default is FALSE.
 #'  
-#' @return (Path) path to the written file.
+#' @return (Model) Updated model object
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' write_csv(model, path="newdataset$csv")
+#' model <- write_csv(model, path="newdataset$csv")
 #' }
 #' 
 #' @export
 write_csv <- function(model, path=NULL, force=FALSE) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$write_csv(model, path=path, force=force)
 	return(py_to_r(func_out))
 }
@@ -5362,7 +5305,7 @@ write_csv <- function(model, path=NULL, force=FALSE) {
 #' @param path (str) Destination path
 #' @param force (logical) Force overwrite, default is TRUE
 #'  
-#' @return (Model) Reference to the same model object
+#' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
@@ -5372,7 +5315,6 @@ write_csv <- function(model, path=NULL, force=FALSE) {
 #' 
 #' @export
 write_model <- function(model, path='', force=TRUE) {
-	model <- convert_input(model, "pharmpy.model.Model")
 	func_out <- pharmpy$modeling$write_model(model, path=path, force=force)
 	return(py_to_r(func_out))
 }
@@ -5493,7 +5435,6 @@ fit <- function(model_or_models, tool=NULL) {
 predict_influential_individuals <- function(model, results, cutoff=3.84) {
 	tryCatch(
 	{
-		model <- convert_input(model, "pharmpy.model.Model")
 		func_out <- pharmpy$tools$predict_influential_individuals(model, results, cutoff=cutoff)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
@@ -5545,7 +5486,6 @@ predict_influential_individuals <- function(model, results, cutoff=3.84) {
 predict_influential_outliers <- function(model, results, outlier_cutoff=3.0, influential_cutoff=3.84) {
 	tryCatch(
 	{
-		model <- convert_input(model, "pharmpy.model.Model")
 		func_out <- pharmpy$tools$predict_influential_outliers(model, results, outlier_cutoff=outlier_cutoff, influential_cutoff=influential_cutoff)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
@@ -5604,7 +5544,6 @@ predict_influential_outliers <- function(model, results, outlier_cutoff=3.0, inf
 predict_outliers <- function(model, results, cutoff=3.0) {
 	tryCatch(
 	{
-		model <- convert_input(model, "pharmpy.model.Model")
 		func_out <- pharmpy$tools$predict_outliers(model, results, cutoff=cutoff)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
@@ -5645,7 +5584,6 @@ predict_outliers <- function(model, results, cutoff=3.0) {
 print_fit_summary <- function(model) {
 	tryCatch(
 	{
-		model <- convert_input(model, "pharmpy.model.Model")
 		func_out <- pharmpy$tools$print_fit_summary(model)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
@@ -5702,7 +5640,6 @@ print_fit_summary <- function(model) {
 rank_models <- function(base_model, models, errors_allowed=NULL, rank_type='ofv', cutoff=NULL, bic_type='mixed') {
 	tryCatch(
 	{
-		base_model <- convert_input(base_model, "pharmpy.model.Model")
 		models <- convert_input(models, "list")
 		errors_allowed <- convert_input(errors_allowed, "list")
 		func_out <- pharmpy$tools$rank_models(base_model, models, errors_allowed=errors_allowed, rank_type=rank_type, cutoff=cutoff, bic_type=bic_type)
@@ -5793,6 +5730,50 @@ read_results <- function(path) {
 	tryCatch(
 	{
 		func_out <- pharmpy$tools$read_results(path)
+		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+			func_out <- reset_indices_results(func_out)
+		}
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
+#' resume_tool
+#' 
+#' @description
+#' Resume tool workflow from tool database path
+#' 
+#' @param path (str) The path to the tool database
+#'  
+#' @return (Results) Results object for tool
+#' 
+#' @examples
+#' \dontrun{
+#' res <- resume_tool("resmod_dir1")
+#' }
+#' 
+#' @export
+resume_tool <- function(path) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$resume_tool(path)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -5948,7 +5929,6 @@ retrieve_models <- function(source, names=NULL) {
 run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', reference_value=70, parameters=NULL, initials=NULL, lower_bounds=NULL, upper_bounds=NULL, fixed=TRUE, ...) {
 	tryCatch(
 	{
-		model <- convert_input(model, "pharmpy.model.Model")
 		parameters <- convert_input(parameters, "list")
 		initials <- convert_input(initials, "list")
 		lower_bounds <- convert_input(lower_bounds, "list")
@@ -6044,12 +6024,62 @@ run_amd <- function(input, results=NULL, modeltype='pk_oral', cl_init=0.01, vc_i
 }
 
 #' @title
+#' run_bootstrap
+#' 
+#' @description
+#' Run bootstrap tool
+#' 
+#' @param model (Model) Pharmpy model
+#' @param results (ModelfitResults (optional)) Results for model
+#' @param resamples (numeric) Number of bootstrap resample
+#' @param ... Arguments to pass to tool
+#'  
+#' @return (BootstrapResults) Bootstrap tool result object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' res <- model$modelfit_results
+#' run_bootstrap(model, res, resamples=500)
+#' }
+#' 
+#' @export
+run_bootstrap <- function(model, results=NULL, resamples=1, ...) {
+	tryCatch(
+	{
+		resamples <- convert_input(resamples, "int")
+		func_out <- pharmpy$tools$run_bootstrap(model, results=results, resamples=resamples, ...)
+		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+			func_out <- reset_indices_results(func_out)
+		}
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
 #' run_covsearch
 #' 
 #' @description
 #' Run COVsearch tool. For more details, see :ref:`covsearch`.
 #' 
-#' @param effects (str) MFL of covariate effects to try
+#' @param effects (str or array(array(str or array(str)))) MFL of covariate effects to try
 #' @param p_forward (numeric) The p-value to use in the likelihood ratio test for forward steps
 #' @param p_backward (numeric) The p-value to use in the likelihood ratio test for backward steps
 #' @param max_steps (numeric) The maximum number of search steps to make
@@ -6073,7 +6103,6 @@ run_covsearch <- function(effects, p_forward=0.05, p_backward=0.01, max_steps=-1
 	tryCatch(
 	{
 		max_steps <- convert_input(max_steps, "int")
-		model <- convert_input(model, "pharmpy.model.Model")
 		func_out <- pharmpy$tools$run_covsearch(effects, p_forward=p_forward, p_backward=p_backward, max_steps=max_steps, algorithm=algorithm, results=results, model=model, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
@@ -6130,7 +6159,6 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, results=NULL, m
 	{
 		methods <- convert_input(methods, "list")
 		solvers <- convert_input(solvers, "list")
-		model <- convert_input(model, "pharmpy.model.Model")
 		func_out <- pharmpy$tools$run_estmethod(algorithm, methods=methods, solvers=solvers, results=results, model=model, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
@@ -6184,7 +6212,6 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, results=NULL, m
 run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cutoff=NULL, results=NULL, model=NULL, ...) {
 	tryCatch(
 	{
-		model <- convert_input(model, "pharmpy.model.Model")
 		func_out <- pharmpy$tools$run_iivsearch(algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, cutoff=cutoff, results=results, model=model, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
@@ -6239,7 +6266,6 @@ run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='bic'
 	tryCatch(
 	{
 		list_of_parameters <- convert_input(list_of_parameters, "list")
-		model <- convert_input(model, "pharmpy.model.Model")
 		func_out <- pharmpy$tools$run_iovsearch(column=column, list_of_parameters=list_of_parameters, rank_type=rank_type, cutoff=cutoff, distribution=distribution, results=results, model=model, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
@@ -6271,7 +6297,7 @@ run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='bic'
 #' @description
 #' Run modelfit tool.
 #' 
-#' @param models (array(Model) or Model (optional)) A vector of models or one single model object
+#' @param model_or_models (Model or array(Model) (optional)) A vector of models are one single model object
 #' @param n (numeric (optional)) Number of models to fit. This is only used if the tool is going to be combined with other tools.
 #' @param tool (str (optional)) Which tool to use for fitting. Currently 'nonmem' or 'nlmixr' can be used
 #' @param ... Arguments to pass to tool
@@ -6285,11 +6311,11 @@ run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='bic'
 #' }
 #' 
 #' @export
-run_modelfit <- function(models=NULL, n=NULL, tool=NULL, ...) {
+run_modelfit <- function(model_or_models=NULL, n=NULL, tool=NULL, ...) {
 	tryCatch(
 	{
 		n <- convert_input(n, "int")
-		func_out <- pharmpy$tools$run_modelfit(models=models, n=n, tool=tool, ...)
+		func_out <- pharmpy$tools$run_modelfit(model_or_models=model_or_models, n=n, tool=tool, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -6344,7 +6370,6 @@ run_modelfit <- function(models=NULL, n=NULL, tool=NULL, ...) {
 run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_delay', rank_type='bic', cutoff=NULL, results=NULL, model=NULL, ...) {
 	tryCatch(
 	{
-		model <- convert_input(model, "pharmpy.model.Model")
 		func_out <- pharmpy$tools$run_modelsearch(search_space, algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, cutoff=cutoff, results=results, model=model, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
@@ -6395,7 +6420,6 @@ run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_de
 run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.05, skip=NULL, ...) {
 	tryCatch(
 	{
-		model <- convert_input(model, "pharmpy.model.Model")
 		groups <- convert_input(groups, "int")
 		skip <- convert_input(skip, "list")
 		func_out <- pharmpy$tools$run_ruvsearch(model=model, results=results, groups=groups, p_value=p_value, skip=skip, ...)

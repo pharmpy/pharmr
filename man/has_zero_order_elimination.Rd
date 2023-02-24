@@ -22,7 +22,7 @@ possible ways of coding the zero-order elimination.
 \dontrun{
 model <- load_example_model("pheno")
 has_zero_order_elimination(model)
-set_zero_order_elimination(model)
+model <- set_zero_order_elimination(model)
 has_zero_order_elimination(model)
 }
 

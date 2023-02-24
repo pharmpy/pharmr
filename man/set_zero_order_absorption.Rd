@@ -10,7 +10,7 @@ set_zero_order_absorption(model)
 \item{model}{(Model) Model to set or change to first order absorption rate}
 }
 \value{
-(Model) Reference to the same model
+(Model) Pharmpy model object
 }
 \description{
 Set or change to zero order absorption rate.
@@ -21,7 +21,7 @@ the previous rate if available, otherwise it is set to the time of first observa
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-set_zero_order_absorption(model)
+model <- set_zero_order_absorption(model)
 model$statements$ode_system
 }
 }

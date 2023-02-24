@@ -4,10 +4,10 @@
 \alias{run_modelfit}
 \title{run_modelfit}
 \usage{
-run_modelfit(models = NULL, n = NULL, tool = NULL, ...)
+run_modelfit(model_or_models = NULL, n = NULL, tool = NULL, ...)
 }
 \arguments{
-\item{models}{(array(Model) or Model (optional)) A vector of models or one single model object}
+\item{model_or_models}{(Model or array(Model) (optional)) A vector of models are one single model object}
 
 \item{n}{(numeric (optional)) Number of models to fit. This is only used if the tool is going to be combined with other tools.}
 

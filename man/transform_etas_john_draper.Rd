@@ -12,7 +12,7 @@ transform_etas_john_draper(model, list_of_etas = NULL)
 \item{list_of_etas}{(array(str) or str (optional)) Name/names of etas to transform. If NULL, all etas will be transformed (default).}
 }
 \value{
-(Model) Reference to the same model
+(Model) Pharmpy model object
 }
 \description{
 Applies a John Draper transformation (1) to spelected etas
@@ -26,7 +26,7 @@ Journal of the Royal Statistical Society. Series C (Applied Statistics),
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-transform_etas_john_draper(model, c("ETA_1"))
+model <- transform_etas_john_draper(model, c("ETA_1"))
 model$statements$before_odes$full_expression("CL")
 }
 }

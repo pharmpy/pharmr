@@ -10,7 +10,7 @@ set_first_order_elimination(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Reference to same model
+(Model) Pharmpy model object
 }
 \description{
 Sets elimination to first order
@@ -18,7 +18,7 @@ Sets elimination to first order
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-set_first_order_elimination(model)
+model <- set_first_order_elimination(model)
 model$statements$ode_system
 }
 }

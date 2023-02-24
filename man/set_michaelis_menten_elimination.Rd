@@ -10,7 +10,7 @@ set_michaelis_menten_elimination(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Reference to the same model
+(Model) Pharmpy model object
 }
 \description{
 Sets elimination to Michaelis-Menten.
@@ -20,7 +20,7 @@ Initial estimate for CLMM is set to CL and KM is set to :math:\code{2*max(DV)}.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-set_michaelis_menten_elimination(model)
+model <- set_michaelis_menten_elimination(model)
 model$statements$ode_system
 }
 }

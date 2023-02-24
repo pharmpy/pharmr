@@ -10,7 +10,7 @@ set_weighted_error_model(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Reference to the same model
+(Model) Pharmpy model object
 }
 \description{
 Encode error model with one epsilon and W as weight
@@ -18,7 +18,7 @@ Encode error model with one epsilon and W as weight
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-set_weighted_error_model(model)
+model <- set_weighted_error_model(model)
 }
 }
 \seealso{

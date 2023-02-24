@@ -10,7 +10,7 @@ mu_reference_model(model)
 \item{model}{(Model) Pharmpy model object}
 }
 \value{
-(Model) Reference to same object
+(Model) Pharmpy model object
 }
 \description{
 Convert model to use mu-referencing
@@ -23,7 +23,8 @@ normal distribution would give :math:\verb{\\mu_1 = log\{\\theta_1\}} and
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-mu_reference_model(model).statements$before_odes
+model <- mu_reference_model(model)
+model$statements$before_odes
 }
 
 }

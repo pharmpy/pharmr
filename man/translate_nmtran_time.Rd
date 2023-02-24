@@ -10,7 +10,7 @@ translate_nmtran_time(model)
 \item{model}{(Model) Pharmpy model object}
 }
 \value{
-(Model) Reference to the same model object
+(Model) Pharmpy model object
 }
 \description{
 Translate NM-TRAN TIME and DATE column into one TIME column

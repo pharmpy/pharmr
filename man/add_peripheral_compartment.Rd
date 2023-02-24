@@ -10,7 +10,7 @@ add_peripheral_compartment(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Reference to same model
+(Model) Pharmpy model object
 }
 \description{
 Add a peripheral distribution compartment to model
@@ -35,7 +35,7 @@ n
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-add_peripheral_compartment(model)
+model <- add_peripheral_compartment(model)
 model$statements$ode_system
 }
 }

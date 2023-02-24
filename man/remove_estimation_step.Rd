@@ -12,7 +12,7 @@ remove_estimation_step(model, idx)
 \item{idx}{(numeric) index of estimation step to remove (starting from 0)}
 }
 \value{
-(Model) Reference to the same model object
+(Model) Pharmpy model object
 }
 \description{
 Remove estimation step
@@ -20,7 +20,7 @@ Remove estimation step
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-remove_estimation_step(model, 0)
+model <- remove_estimation_step(model, 0)
 ests <- model$estimation_steps
 length(ests)
 }

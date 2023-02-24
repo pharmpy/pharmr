@@ -15,7 +15,7 @@ specified by the model.}
 \item{zero_protection}{(logical) Set to TRUE to add code protecting from IPRED=0}
 }
 \value{
-(Model) Reference to the same model object
+(Model) Pharmpy model object
 }
 \description{
 Set a proportional error model. Initial estimate for new sigma is 0.09.
@@ -33,10 +33,10 @@ The error function being applied depends on the data transformation.
 \examples{
 \dontrun{
 model <- remove_error_model(load_example_model("pheno"))
-set_proportional_error_model(model)
+model <- set_proportional_error_model(model)
 model$statements$after_odes
 model <- remove_error_model(load_example_model("pheno"))
-set_proportional_error_model(
+model <- set_proportional_error_model(
     model,
     data_trans="log(Y)"
 model$statements$after_odes

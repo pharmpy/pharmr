@@ -12,7 +12,7 @@ add_pk_iiv(model, initial_estimate = 0.09)
 \item{initial_estimate}{(numeric) Value of initial estimate of parameter. Default is 0.09}
 }
 \value{
-(Model) Reference to the same model
+(Model) Pharmpy model object
 }
 \description{
 Adds IIVs to all PK parameters in :class:\code{pharmpy.model}.
@@ -22,9 +22,9 @@ Will add exponential IIVs to all parameters that are included in the ODE.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-set_first_order_absorption(model)
+model <- set_first_order_absorption(model)
 model$statements$find_assignment("MAT")
-add_pk_iiv(model)
+model <- add_pk_iiv(model)
 model$statements$find_assignment("MAT")
 }
 }

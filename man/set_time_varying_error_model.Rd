@@ -14,7 +14,7 @@ set_time_varying_error_model(model, cutoff, idv = "TIME")
 \item{idv}{(str) Time or time after dose, default is Time}
 }
 \value{
-(Model) Reference to the same model object
+(Model) Pharmpy model object
 }
 \description{
 Set a time varying error model per time cutoff
@@ -22,7 +22,7 @@ Set a time varying error model per time cutoff
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-set_time_varying_error_model(model, cutoff=1.0)
+model <- set_time_varying_error_model(model, cutoff=1.0)
 model$statements$find_assignment("Y")
 }
 

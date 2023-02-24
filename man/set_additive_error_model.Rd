@@ -16,7 +16,7 @@ specified by the model. Series expansion will be used for approximation.}
 transformation.}
 }
 \value{
-(Model) Reference to the same model object
+(Model) Pharmpy model object
 }
 \description{
 Set an additive error model. Initial estimate for new sigma is :math:\verb{(min(DV)/2)²}.
@@ -36,11 +36,11 @@ some examples.
 \dontrun{
 model <- load_example_model("pheno")
 model$statements$find_assignment("Y")
-set_additive_error_model(model)
+model <- set_additive_error_model(model)
 model$statements$find_assignment("Y")
 model <- load_example_model("pheno")
 model$statements$find_assignment("Y")
-set_additive_error_model(model, data_trans="log(Y)")
+model <- set_additive_error_model(model, data_trans="log(Y)")
 model$statements$find_assignment("Y")
 }
 }

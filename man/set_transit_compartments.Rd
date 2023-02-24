@@ -14,7 +14,7 @@ set_transit_compartments(model, n, keep_depot = TRUE)
 \item{keep_depot}{(logical) FALSE to convert depot compartment into a transit compartment}
 }
 \value{
-(Model) Reference to same model
+(Model) Pharmpy model object
 }
 \description{
 Set the number of transit compartments of model.
@@ -25,7 +25,7 @@ set the previous rate if available, otherwise it is set to the time of first obs
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-set_transit_compartments(model, 3)
+model <- set_transit_compartments(model, 3)
 model$statements$ode_system
 }
 }

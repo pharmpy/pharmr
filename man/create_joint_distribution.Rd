@@ -15,7 +15,7 @@ non-fixed will be used (full block). NULL is default.}
 \item{individual_estimates}{(data.frame (optional)) Optional individual estimates to use for calculation of initial estimates}
 }
 \value{
-(Model) Reference to the same model
+(Model) Pharmpy model object
 }
 \description{
 Combines some or all etas into a joint distribution.
@@ -29,7 +29,7 @@ be calculated from individual estimates, otherwise correlation will be set to 10
 \dontrun{
 model <- load_example_model("pheno")
 model$random_variables$etas
-create_joint_distribution(model, c('ETA_1', 'ETA_2'))
+model <- create_joint_distribution(model, c('ETA_1', 'ETA_2'))
 model$random_variables$etas
 }
 }

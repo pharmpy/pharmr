@@ -25,7 +25,7 @@ NULL is default.}
 \item{zero_protection}{(logical) Set to TRUE to add code protecting from IPRED=0}
 }
 \value{
-(Model) Reference to the same model
+(Model) Pharmpy model object
 }
 \description{
 Applies a power effect to provided epsilons.
@@ -36,7 +36,7 @@ model is proportional, otherwise they are 0.1.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-set_power_on_ruv(model)
+model <- set_power_on_ruv(model)
 model$statements$find_assignment("Y")
 }
 }

@@ -10,7 +10,7 @@ use_thetas_for_error_stdev(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Reference to the same model
+(Model) Pharmpy model object
 }
 \description{
 Use thetas to estimate standard deviation of error
@@ -18,7 +18,7 @@ Use thetas to estimate standard deviation of error
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-use_thetas_for_error_stdev(model)
+model <- use_thetas_for_error_stdev(model)
 model$statements$find_assignment("Y")
 }
 }

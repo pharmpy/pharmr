@@ -12,7 +12,7 @@ greekify_model(model, named_subscripts = FALSE)
 \item{named_subscripts}{(logical) Use previous parameter names as subscripts. Default is to use integer subscripts}
 }
 \value{
-(Model) Reference to the same model
+(Model) Pharmpy model object
 }
 \description{
 Convert to using greek letters for all population parameters
@@ -21,7 +21,7 @@ Convert to using greek letters for all population parameters
 \dontrun{
 model <- load_example_model("pheno")
 model$statements
-greekify_model(cleanup_model(model))
+model <- greekify_model(cleanup_model(model))
 model$statements
 }
 

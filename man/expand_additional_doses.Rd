@@ -14,7 +14,7 @@ columns in the original dataset will be kept. Care needs to be taken to handle
 the new dataset.}
 }
 \value{
-(Model) Reference to the same model object
+(Model) Pharmpy model object
 }
 \description{
 Expand additional doses into separate dose records

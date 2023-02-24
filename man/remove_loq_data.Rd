@@ -14,7 +14,7 @@ remove_loq_data(model, lloq = NULL, uloq = NULL)
 \item{uloq}{(numeric (optional)) Upper limit of quantification. Default not specified.}
 }
 \value{
-(Model) Reference to the same model object
+(Model) Pharmpy model object
 }
 \description{
 Remove loq data records from the dataset
@@ -24,7 +24,7 @@ Does nothing if none of the limits is specified.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-remove_loq_data(model, lloq=10, uloq=40)
+model <- remove_loq_data(model, lloq=10, uloq=40)
 length(model$dataset)
 }
 

@@ -10,7 +10,7 @@ add_covariance_step(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Reference to the same model object
+(Model) Pharmpy model object
 }
 \description{
 Adds covariance step to the final estimation step
@@ -18,8 +18,8 @@ Adds covariance step to the final estimation step
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-set_estimation_step(model, 'FOCE', cov=FALSE)
-add_covariance_step(model)
+model <- set_estimation_step(model, 'FOCE', cov=FALSE)
+model <- add_covariance_step(model)
 ests <- model$estimation_steps
 ests[1]
 }

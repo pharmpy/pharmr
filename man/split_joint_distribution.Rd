@@ -13,7 +13,7 @@ split_joint_distribution(model, rvs = NULL)
 non-fixed will become single. NULL is default.}
 }
 \value{
-(Model) Reference to the same model
+(Model) Pharmpy model object
 }
 \description{
 Splits etas following a joint distribution into separate distributions.
@@ -21,9 +21,9 @@ Splits etas following a joint distribution into separate distributions.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-create_joint_distribution(model, c('ETA_1', 'ETA_2'))
+model <- create_joint_distribution(model, c('ETA_1', 'ETA_2'))
 model$random_variables$etas
-split_joint_distribution(model, c('ETA_1', 'ETA_2'))
+model <- split_joint_distribution(model, c('ETA_1', 'ETA_2'))
 model$random_variables$etas
 }
 }

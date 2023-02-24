@@ -12,7 +12,7 @@ set_covariates(model, covariates)
 \item{covariates}{(array(str)) List of column names}
 }
 \value{
-(Model) Reference to the same Pharmpy model object
+(Model) Pharmpy model object
 }
 \description{
 Set columns in the dataset to be covariates in the datainfo

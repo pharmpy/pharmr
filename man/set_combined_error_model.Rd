@@ -13,7 +13,7 @@ set_combined_error_model(model, data_trans = NULL)
 specified by the model.}
 }
 \value{
-(Model) Reference to the same model
+(Model) Pharmpy model object
 }
 \description{
 Set a combined error model. Initial estimates for new sigmas are :math:\verb{(min(DV)/2)²} for
@@ -32,10 +32,10 @@ The error function being applied depends on the data transformation.
 \examples{
 \dontrun{
 model <- remove_error_model(load_example_model("pheno"))
-set_combined_error_model(model)
+model <- set_combined_error_model(model)
 model$statements$find_assignment("Y")
 model <- remove_error_model(load_example_model("pheno"))
-set_combined_error_model(model, data_trans="log(Y)")
+model <- set_combined_error_model(model, data_trans="log(Y)")
 model$statements$find_assignment("Y")
 }
 }

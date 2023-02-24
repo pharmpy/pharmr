@@ -28,7 +28,7 @@ add_covariate_effect(
 the input parameter-covariate pair.}
 }
 \value{
-(Model) Reference to the same model
+(Model) Pharmpy model object
 }
 \description{
 Adds covariate effect to :class:\code{pharmpy.model}.
@@ -140,7 +140,7 @@ math::
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-add_covariate_effect(model, "CL", "APGR", "exp")
+model <- add_covariate_effect(model, "CL", "APGR", "exp")
 model$statements$before_odes$full_expression("CL")
 }
 

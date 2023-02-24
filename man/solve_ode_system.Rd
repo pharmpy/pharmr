@@ -10,7 +10,7 @@ solve_ode_system(model)
 \item{model}{(Model) Pharmpy model object}
 }
 \value{
-(Model) Reference to the same pharmpy model object
+(Model) Pharmpy model object
 }
 \description{
 Replace ODE system with analytical solution if possible
@@ -22,7 +22,7 @@ This function can currently only handle the most simple of ODE systems.
 \dontrun{
 model <- load_example_model("pheno")
 model$statements$ode_system
-solve_ode_system(model)
+model <- solve_ode_system(model)
 }
 
 }

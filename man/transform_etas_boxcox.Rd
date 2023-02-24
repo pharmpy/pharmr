@@ -12,7 +12,7 @@ transform_etas_boxcox(model, list_of_etas = NULL)
 \item{list_of_etas}{(array(str) or str (optional)) Name/names of etas to transform. If NULL, all etas will be transformed (default).}
 }
 \value{
-(Model) Reference to the same model
+(Model) Pharmpy model object
 }
 \description{
 Applies a boxcox transformation to selected etas
@@ -22,7 +22,7 @@ Initial estimate for lambda is 0.1 with bounds (-3, 3).
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-transform_etas_boxcox(model, c("ETA_1"))
+model <- transform_etas_boxcox(model, c("ETA_1"))
 model$statements$before_odes$full_expression("CL")
 }
 }

@@ -14,7 +14,7 @@ remove_covariate_effect(model, parameter, covariate)
 \item{covariate}{(str) Name of covariate.}
 }
 \value{
-(Model) Reference to the same model
+(Model) Pharmpy model object
 }
 \description{
 Remove a covariate effect from an instance of :class:\code{pharmpy.model}.
@@ -23,7 +23,7 @@ Remove a covariate effect from an instance of :class:\code{pharmpy.model}.
 \dontrun{
 model <- load_example_model("pheno")
 has_covariate_effect(model, "CL", "WGT")
-remove_covariate_effect(model, "CL", "WGT")
+model <- remove_covariate_effect(model, "CL", "WGT")
 has_covariate_effect(model, "CL", "WGT")
 }
 

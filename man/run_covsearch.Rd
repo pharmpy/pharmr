@@ -16,7 +16,7 @@ run_covsearch(
 )
 }
 \arguments{
-\item{effects}{(str) MFL of covariate effects to try}
+\item{effects}{(str or array(array(str or array(str)))) MFL of covariate effects to try}
 
 \item{p_forward}{(numeric) The p-value to use in the likelihood ratio test for forward steps}
 

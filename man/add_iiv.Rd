@@ -27,7 +27,7 @@ add_iiv(
 \item{eta_names}{(array(str) (optional)) Custom name/names of new eta}
 }
 \value{
-(Model) Reference to the same model
+(Model) Pharmpy model object
 }
 \description{
 Adds IIVs to :class:\code{pharmpy.model}.
@@ -46,8 +46,8 @@ input is supported. Initial estimates for new etas are 0.09.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-remove_iiv(model, "CL")
-add_iiv(model, "CL", "add")
+model <- remove_iiv(model, "CL")
+model <- add_iiv(model, "CL", "add")
 model$statements$find_assignment("CL")
 }
 }

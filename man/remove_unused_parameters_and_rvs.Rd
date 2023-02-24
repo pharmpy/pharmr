@@ -10,7 +10,7 @@ remove_unused_parameters_and_rvs(model)
 \item{model}{(Model) Pharmpy model object}
 }
 \value{
-(Model) Reference to same model object
+(Model) Pharmpy model object
 }
 \description{
 Remove any parameters and rvs that are not used in the model statements

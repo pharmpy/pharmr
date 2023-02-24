@@ -10,7 +10,7 @@ drop_dropped_columns(model)
 \item{model}{(Model) Pharmpy model object}
 }
 \value{
-(Model) Reference to same model object
+(Model) Pharmpy model object
 }
 \description{
 Drop columns marked as dropped from the dataset
@@ -23,7 +23,7 @@ will also be dropped from the dataset.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-drop_dropped_columns(model)
+model <- drop_dropped_columns(model)
 vector(model$dataset$columns)
 }
 }

@@ -10,7 +10,7 @@ set_seq_zo_fo_absorption(model)
 \item{model}{(Model) Model to set or change absorption rate}
 }
 \value{
-(Model) Reference to same model
+(Model) Pharmpy model object
 }
 \description{
 Set or change to sequential zero order first order absorption rate.
@@ -25,7 +25,7 @@ supported.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-set_seq_zo_fo_absorption(model)
+model <- set_seq_zo_fo_absorption(model)
 model$statements$ode_system
 }
 }

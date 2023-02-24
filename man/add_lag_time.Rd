@@ -10,7 +10,7 @@ add_lag_time(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Reference to same model
+(Model) Pharmpy model object
 }
 \description{
 Add lag time to the dose compartment of model.
@@ -21,7 +21,7 @@ previous lag time if available, otherwise it is set to the time of first observa
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-add_lag_time(model)
+model <- add_lag_time(model)
 }
 }
 \seealso{

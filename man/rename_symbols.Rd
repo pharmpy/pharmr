@@ -12,7 +12,7 @@ rename_symbols(model, new_names)
 \item{new_names}{(list(str=str)) From old name or symbol to new name or symbol}
 }
 \value{
-(Model) Reference to same model object
+(Model) Pharmpy model object
 }
 \description{
 Rename symbols in the model

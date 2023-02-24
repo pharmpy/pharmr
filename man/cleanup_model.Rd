@@ -7,7 +7,7 @@
 cleanup_model(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model}
+\item{model}{(Model) Pharmpy model object}
 }
 \value{
 (Model) Reference to the same model
@@ -28,7 +28,7 @@ When creating NONMEM code from the cleaned model Pharmpy might need toadd certai
 \dontrun{
 model <- load_example_model("pheno")
 model$statements
-cleanup_model(model)
+model <- cleanup_model(model)
 model$statements
 }
 }

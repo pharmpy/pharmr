@@ -12,7 +12,7 @@ set_initial_estimates(model, inits)
 \item{inits}{(list(str=numeric)) A list of parameter init for parameters to change}
 }
 \value{
-(Model) Reference to the same model object
+(Model) Pharmpy model object
 }
 \description{
 Set initial estimates
@@ -20,7 +20,7 @@ Set initial estimates
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-set_initial_estimates(model, list('PTVCL'=2))
+model <- set_initial_estimates(model, list('PTVCL'=2))
 model$parameters['PTVCL']
 }
 }

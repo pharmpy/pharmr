@@ -10,7 +10,7 @@ remove_covariance_step(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Reference to the same model object
+(Model) Pharmpy model object
 }
 \description{
 Removes covariance step to the final estimation step
@@ -18,7 +18,7 @@ Removes covariance step to the final estimation step
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-remove_covariance_step(model)
+model <- remove_covariance_step(model)
 ests <- model$estimation_steps
 ests[1]
 }

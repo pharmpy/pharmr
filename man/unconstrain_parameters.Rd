@@ -12,7 +12,7 @@ unconstrain_parameters(model, parameter_names)
 \item{parameter_names}{(array(str)) Remove all constraints for the listed parameters}
 }
 \value{
-(Model) Reference to the same model object
+(Model) Pharmpy model object
 }
 \description{
 Remove all constraints from parameters
@@ -21,7 +21,7 @@ Remove all constraints from parameters
 \dontrun{
 model <- load_example_model("pheno")
 model$parameters['PTVCL']
-unconstrain_parameters(model, c('PTVCL'))
+model <- unconstrain_parameters(model, c('PTVCL'))
 model$parameters['PTVCL']
 }
 }
