@@ -25,4 +25,6 @@ has_additive_error_model(model)
 has_proportional_error_model : Check if a model has a proportional error model
 
 has_combined_error_model : Check if a model has a combined error model
+
+has_weighted_error_model : Check if a model has a weighted error model
 }

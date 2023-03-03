@@ -396,6 +396,31 @@ add_lag_time <- function(model) {
 }
 
 #' @title
+#' add_metabolite
+#' 
+#' @description
+#' Adds a metabolite compartment to a model
+#' 
+#' The flow from the central compartment to the metabolite compartment
+#' will be unidirectional.
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- add_metabolite(model)
+#' }
+#' 
+#' @export
+add_metabolite <- function(model) {
+	func_out <- pharmpy$modeling$add_metabolite(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' add_peripheral_compartment
 #' 
 #' @description
@@ -1408,6 +1433,31 @@ cleanup_model <- function(model) {
 #' @export
 convert_model <- function(model, to_format) {
 	func_out <- pharmpy$modeling$convert_model(model, to_format)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' create_basic_pk_model
+#' 
+#' @description
+#' Creates a basic pk model of given type
+#' 
+#' @param modeltype (str) Type of PK model to create. Supported are 'oral' and 'iv'
+#' @param dataset_path (str (optional)) Optional path to a dataset
+#' @param cl_init (numeric) Initial estimate of the clearance parameter
+#' @param vc_init (numeric) Initial estimate of the central volume parameter
+#' @param mat_init (numeric) Initial estimate of the mean absorption time parameter (if applicable)
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- create_basic_pk_model('oral')
+#' }
+#' 
+#' @export
+create_basic_pk_model <- function(modeltype, dataset_path=NULL, cl_init=0.01, vc_init=1.0, mat_init=0.1) {
+	func_out <- pharmpy$modeling$create_basic_pk_model(modeltype, dataset_path=dataset_path, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init)
 	return(py_to_r(func_out))
 }
 
@@ -2835,6 +2885,8 @@ greekify_model <- function(model, named_subscripts=FALSE) {
 #' 
 #' has_combined_error_model : Check if a model has a combined error model
 #' 
+#' has_weighted_error_model : Check if a model has a weighted error model
+#' 
 #' 
 #' @export
 has_additive_error_model <- function(model) {
@@ -2861,6 +2913,8 @@ has_additive_error_model <- function(model) {
 #' has_additive_error_model : Check if a model has an additive error model
 #' 
 #' has_proportional_error_model : Check if a model has a proportional error model
+#' 
+#' has_weighted_error_model : Check if a model has a weighted error model
 #' 
 #' 
 #' @export
@@ -3080,6 +3134,8 @@ has_odes <- function(model) {
 #' 
 #' has_combined_error_model : Check if a model has a combined error model
 #' 
+#' has_weighted_error_model : Check if a model has a weighted error model
+#' 
 #' 
 #' @export
 has_proportional_error_model <- function(model) {
@@ -3116,6 +3172,35 @@ has_proportional_error_model <- function(model) {
 #' @export
 has_random_effect <- function(model, parameter, level='all') {
 	func_out <- pharmpy$modeling$has_random_effect(model, parameter, level=level)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' has_weighted_error_model
+#' 
+#' @description
+#' Check if a model has a weighted error model
+#' 
+#' @param model (Model) The model to check
+#'  
+#' @return (logical) TRUE if the model has a weighted error model and FALSE otherwise
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' has_weighted_error_model(model)
+#' }
+#' @seealso
+#' has_additive_error_model : Check if a model has an additive error model
+#' 
+#' has_combined_error_model : Check if a model has a combined error model
+#' 
+#' has_proportional_error_model : Check if a model has a proportional error model
+#' 
+#' 
+#' @export
+has_weighted_error_model <- function(model) {
+	func_out <- pharmpy$modeling$has_weighted_error_model(model)
 	return(py_to_r(func_out))
 }
 
@@ -4149,6 +4234,24 @@ set_covariates <- function(model, covariates) {
 #' @export
 set_dtbs_error_model <- function(model, fix_to_log=FALSE) {
 	func_out <- pharmpy$modeling$set_dtbs_error_model(model, fix_to_log=fix_to_log)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' set_dvid
+#' 
+#' @description
+#' Set a column to act as DVID. Replace DVID if one is already set.
+#' 
+#' @param model (Model) Pharmpy model
+#' @param name (str) Name of DVID column
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' 
+#' @export
+set_dvid <- function(model, name) {
+	func_out <- pharmpy$modeling$set_dvid(model, name)
 	return(py_to_r(func_out))
 }
 
