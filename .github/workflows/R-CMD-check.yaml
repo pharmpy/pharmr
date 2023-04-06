@@ -84,7 +84,7 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
-          remotes::install_github('rstudio/reticulate')
+          install.packages('reticulate')
         shell: Rscript {0}
 
       - name: Install pharmr
