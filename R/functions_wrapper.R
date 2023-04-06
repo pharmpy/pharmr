@@ -405,6 +405,7 @@ add_lag_time <- function(model) {
 #' will be unidirectional.
 #' 
 #' @param model (Model) Pharmpy model
+#' @param drug_dvid (numeric) DVID for drug (assuming all other DVIDs being for metabolites)
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -415,8 +416,9 @@ add_lag_time <- function(model) {
 #' }
 #' 
 #' @export
-add_metabolite <- function(model) {
-	func_out <- pharmpy$modeling$add_metabolite(model)
+add_metabolite <- function(model, drug_dvid=1) {
+	drug_dvid <- convert_input(drug_dvid, "int")
+	func_out <- pharmpy$modeling$add_metabolite(model, drug_dvid=drug_dvid)
 	return(py_to_r(func_out))
 }
 
@@ -1462,6 +1464,25 @@ create_basic_pk_model <- function(modeltype, dataset_path=NULL, cl_init=0.01, vc
 }
 
 #' @title
+#' create_config_template
+#' 
+#' @description
+#' Create a basic config file template
+#' 
+#' If a configuration file already exists it will not be overwritten
+#' 
+#' @examples
+#' \dontrun{
+#' create_config_template()
+#' }
+#' 
+#' @export
+create_config_template <- function() {
+	func_out <- pharmpy$modeling$create_config_template()
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' create_joint_distribution
 #' 
 #' @description
@@ -2319,6 +2340,31 @@ get_doses <- function(model) {
 }
 
 #' @title
+#' get_dv_symbol
+#' 
+#' @description
+#' Get the symbol for a certain dvid or dv and check that it is valid
+#' 
+#' @param model (Model) Pharmpy model
+#' @param dv (str or numeric (optional)) Either a dv symbol, str or dvid. If NULL (default) return the
+#' only or first dv.
+#'  
+#' @return (sympy.Symbol) DV symbol
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' get_dv_symbol(model, "Y")
+#' get_dv_symbol(model, 1)
+#' }
+#' 
+#' @export
+get_dv_symbol <- function(model, dv=NULL) {
+	func_out <- pharmpy$modeling$get_dv_symbol(model, dv=dv)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' get_evid
 #' 
 #' @description
@@ -2419,6 +2465,32 @@ get_individual_parameters <- function(model, level='all') {
 #' @export
 get_individual_prediction_expression <- function(model) {
 	func_out <- pharmpy$modeling$get_individual_prediction_expression(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' get_initial_conditions
+#' 
+#' @description
+#' Get initial conditions for the ode system
+#' 
+#' Default initial conditions at t=0 for amounts is 0
+#' 
+#' @param model (Model) Pharmpy model
+#' @param dosing (logical) Set to TRUE to add dosing as initial conditions
+#'  
+#' @return (list) Initial conditions
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' get_initial_conditions(model)
+#' get_initial_conditions(model, dosing=TRUE)
+#' }
+#' 
+#' @export
+get_initial_conditions <- function(model, dosing=FALSE) {
+	func_out <- pharmpy$modeling$get_initial_conditions(model, dosing=dosing)
 	return(py_to_r(func_out))
 }
 
@@ -2871,7 +2943,11 @@ greekify_model <- function(model, named_subscripts=FALSE) {
 #' @description
 #' Check if a model has an additive error model
 #' 
+#' Multiple dependent variables are supported. By default the only (in case of one) or the
+#' first (in case of many) dependent variable is going to be checked.
+#' 
 #' @param model (Model) The model to check
+#' @param dv (str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
 #'  
 #' @return (logical) TRUE if the model has an additive error model and FALSE otherwise
 #' 
@@ -2889,8 +2965,8 @@ greekify_model <- function(model, named_subscripts=FALSE) {
 #' 
 #' 
 #' @export
-has_additive_error_model <- function(model) {
-	func_out <- pharmpy$modeling$has_additive_error_model(model)
+has_additive_error_model <- function(model, dv=NULL) {
+	func_out <- pharmpy$modeling$has_additive_error_model(model, dv=dv)
 	return(py_to_r(func_out))
 }
 
@@ -2898,9 +2974,13 @@ has_additive_error_model <- function(model) {
 #' has_combined_error_model
 #' 
 #' @description
-#' Check if a model has a combined additive and proportinal error model
+#' Check if a model has a combined additive and proportional error model
+#' 
+#' Multiple dependent variables are supported. By default the only (in case of one) or the
+#' first (in case of many) dependent variable is going to be checked.
 #' 
 #' @param model (Model) The model to check
+#' @param dv (str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
 #'  
 #' @return (logical) TRUE if the model has a combined error model and FALSE otherwise
 #' 
@@ -2918,8 +2998,8 @@ has_additive_error_model <- function(model) {
 #' 
 #' 
 #' @export
-has_combined_error_model <- function(model) {
-	func_out <- pharmpy$modeling$has_combined_error_model(model)
+has_combined_error_model <- function(model, dv=NULL) {
+	func_out <- pharmpy$modeling$has_combined_error_model(model, dv=dv)
 	return(py_to_r(func_out))
 }
 
@@ -3120,7 +3200,11 @@ has_odes <- function(model) {
 #' @description
 #' Check if a model has a proportional error model
 #' 
+#' Multiple dependent variables are supported. By default the only (in case of one) or the
+#' first (in case of many) dependent variable is going to be checked.
+#' 
 #' @param model (Model) The model to check
+#' @param dv (str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
 #'  
 #' @return (logical) TRUE if the model has a proportional error model and FALSE otherwise
 #' 
@@ -3138,8 +3222,8 @@ has_odes <- function(model) {
 #' 
 #' 
 #' @export
-has_proportional_error_model <- function(model) {
-	func_out <- pharmpy$modeling$has_proportional_error_model(model)
+has_proportional_error_model <- function(model, dv=NULL) {
+	func_out <- pharmpy$modeling$has_proportional_error_model(model, dv=dv)
 	return(py_to_r(func_out))
 }
 
@@ -3252,6 +3336,30 @@ has_zero_order_absorption <- function(model) {
 #' @export
 has_zero_order_elimination <- function(model) {
 	func_out <- pharmpy$modeling$has_zero_order_elimination(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' is_linearized
+#' 
+#' @description
+#' Determine if a model is linearized
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (logical) TRUE if model has been linearized and FALSE otherwise
+#' 
+#' @examples
+#' \dontrun{
+#' model1 <- load_example_model("pheno")
+#' is_linearized(model1)
+#' model2 <- load_example_model("pheno_linear")
+#' is_linearized(model2)
+#' }
+#' 
+#' @export
+is_linearized <- function(model) {
+	func_out <- pharmpy$modeling$is_linearized(model)
 	return(py_to_r(func_out))
 }
 
@@ -3441,6 +3549,25 @@ plot_iofv_vs_iofv <- function(iofv1, iofv2, name1, name2) {
 	iofv1 <- convert_input(iofv1, "pd.Series")
 	iofv2 <- convert_input(iofv2, "pd.Series")
 	func_out <- pharmpy$modeling$plot_iofv_vs_iofv(iofv1, iofv2, name1, name2)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' plot_transformed_eta_distributions
+#' 
+#' @description
+#' Plot transformed eta distributions for all transformed etas
+#' 
+#' @param model (Model) Previously run Pharmpy model.
+#' @param parameter_estimates (<class 'dict'>) Parameter estimates of model fit
+#' @param individual_estimates (data.frame) Individual estimates for etas
+#'  
+#' @return (alt.Chart) Plot
+#' 
+#' 
+#' @export
+plot_transformed_eta_distributions <- function(model, parameter_estimates, individual_estimates) {
+	func_out <- pharmpy$modeling$plot_transformed_eta_distributions(model, parameter_estimates, individual_estimates)
 	return(py_to_r(func_out))
 }
 
@@ -4090,6 +4217,7 @@ sample_parameters_uniformly <- function(model, parameter_estimates, fraction=0.1
 #' +------------------------+----------------------------------------+
 #' 
 #' @param model (Model) Set error model for this model
+#' @param dv (str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
 #' @param data_trans (str (optional)) A data transformation expression or NULL (default) to use the transformation
 #' specified by the model. Series expansion will be used for approximation.
 #' @param series_terms (numeric) Number of terms to use for the series expansion approximation for data
@@ -4115,9 +4243,9 @@ sample_parameters_uniformly <- function(model, parameter_estimates, fraction=0.1
 #' 
 #' 
 #' @export
-set_additive_error_model <- function(model, data_trans=NULL, series_terms=2) {
+set_additive_error_model <- function(model, dv=NULL, data_trans=NULL, series_terms=2) {
 	series_terms <- convert_input(series_terms, "int")
-	func_out <- pharmpy$modeling$set_additive_error_model(model, data_trans=data_trans, series_terms=series_terms)
+	func_out <- pharmpy$modeling$set_additive_error_model(model, dv=dv, data_trans=data_trans, series_terms=series_terms)
 	return(py_to_r(func_out))
 }
 
@@ -4169,6 +4297,7 @@ set_bolus_absorption <- function(model) {
 #' +------------------------+-----------------------------------------------------+
 #' 
 #' @param model (Model) Set error model for this model
+#' @param dv (str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
 #' @param data_trans (str (optional)) A data transformation expression or NULL (default) to use the transformation
 #' specified by the model.
 #'  
@@ -4190,8 +4319,8 @@ set_bolus_absorption <- function(model) {
 #' 
 #' 
 #' @export
-set_combined_error_model <- function(model, data_trans=NULL) {
-	func_out <- pharmpy$modeling$set_combined_error_model(model, data_trans=data_trans)
+set_combined_error_model <- function(model, dv=NULL, data_trans=NULL) {
+	func_out <- pharmpy$modeling$set_combined_error_model(model, dv=dv, data_trans=data_trans)
 	return(py_to_r(func_out))
 }
 
@@ -4431,6 +4560,35 @@ set_iiv_on_ruv <- function(model, list_of_eps=NULL, same_eta=TRUE, eta_names=NUL
 	list_of_eps <- convert_input(list_of_eps, "list")
 	eta_names <- convert_input(eta_names, "list")
 	func_out <- pharmpy$modeling$set_iiv_on_ruv(model, list_of_eps=list_of_eps, same_eta=same_eta, eta_names=eta_names)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' set_initial_condition
+#' 
+#' @description
+#' Set an initial condition for the ode system
+#' 
+#' If the initial condition is already set it will be updated. If the initial condition
+#' is set to zero at time zero it will be removed (since the default is 0).
+#' 
+#' @param model (Model) Pharmpy model
+#' @param compartment (str) Name of the compartment
+#' @param expression (str or numeric) The expression of the initial condition
+#' @param time (str or numeric) Time point. Default 0
+#'  
+#' @return (model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- set_initial_condition(model, "CENTRAL", 10)
+#' get_initial_conditions(model)
+#' }
+#' 
+#' @export
+set_initial_condition <- function(model, compartment, expression, time=0) {
+	func_out <- pharmpy$modeling$set_initial_condition(model, compartment, expression, time=time)
 	return(py_to_r(func_out))
 }
 
@@ -4701,6 +4859,7 @@ set_power_on_ruv <- function(model, list_of_eps=NULL, lower_limit=0.01, ipred=NU
 #' +------------------------+----------------------------------------+
 #' 
 #' @param model (Model) Set error model for this model
+#' @param dv (str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
 #' @param data_trans (str (optional)) A data transformation expression or NULL (default) to use the transformation
 #' specified by the model.
 #' @param zero_protection (logical) Set to TRUE to add code protecting from IPRED=0
@@ -4725,8 +4884,8 @@ set_power_on_ruv <- function(model, list_of_eps=NULL, lower_limit=0.01, ipred=NU
 #' 
 #' 
 #' @export
-set_proportional_error_model <- function(model, data_trans=NULL, zero_protection=TRUE) {
-	func_out <- pharmpy$modeling$set_proportional_error_model(model, data_trans=data_trans, zero_protection=zero_protection)
+set_proportional_error_model <- function(model, dv=NULL, data_trans=NULL, zero_protection=TRUE) {
+	func_out <- pharmpy$modeling$set_proportional_error_model(model, dv=dv, data_trans=data_trans, zero_protection=zero_protection)
 	return(py_to_r(func_out))
 }
 
@@ -5018,6 +5177,44 @@ solve_ode_system <- function(model) {
 split_joint_distribution <- function(model, rvs=NULL) {
 	rvs <- convert_input(rvs, "list")
 	func_out <- pharmpy$modeling$split_joint_distribution(model, rvs=rvs)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' transform_blq
+#' 
+#' @description
+#' Transform for BLQ data
+#' 
+#' Transform a given model, methods available are m1, m3, and m4 (1). Current limits of the
+#' m3 and m4 method:
+#' 
+#' * Does not support covariance between epsilons
+#' * Only supports additive, proportional, and combined error model
+#' 
+#' (1) Beal SL. Ways to fit a PK model with some data below the quantification
+#' limit. J Pharmacokinet Pharmacodyn. 2001 Oct;28(5):481-504. doi: 10.1023/a:1012299115260.
+#' Erratum in: J Pharmacokinet Pharmacodyn 2002 Jun;29(3):309. PMID: 11768292.
+#' 
+#' @param model (Model) Pharmpy model
+#' @param method (str) Which BLQ method to use
+#' @param lloq (numeric (optional)) LLOQ limit to use, if NULL Pharmpy will use the BLQ/LLOQ column in the dataset
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- transform_blq(model, method='m4', lloq=0.1)
+#' model$statements$find_assignment("Y")
+#' }
+#' @seealso
+#' remove_loq_data
+#' 
+#' 
+#' @export
+transform_blq <- function(model, method='m4', lloq=NULL) {
+	func_out <- pharmpy$modeling$transform_blq(model, method=method, lloq=lloq)
 	return(py_to_r(func_out))
 }
 
@@ -5362,6 +5559,7 @@ update_inits <- function(model, parameter_estimates, move_est_close_to_bounds=FA
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model <- use_thetas_for_error_stdev(model)
+#' model$statements$find_assignment("W")
 #' model$statements$find_assignment("Y")
 #' }
 #' @seealso
@@ -6076,7 +6274,8 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' @param vc_init (numeric) Initial estimate for the central compartment population volume
 #' @param mat_init (numeric) Initial estimate for the mean absorption time (not for iv models)
 #' @param search_space (str (optional)) MFL for search space for structural model
-#' @param lloq (numeric (optional)) Lower limit of quantification. LOQ data will be removed.
+#' @param lloq_method (str (optional)) Method for how to remove LOQ data. See `transform_blq` for vector of available methods
+#' @param lloq_limit (str (optional)) Lower limit of quantification. If NULL LLOQ column from dataset will be used
 #' @param order (array(str) (optional)) Runorder of components
 #' @param allometric_variable (str (optional)) Variable to use for allometry
 #' @param occasion (str (optional)) Name of occasion column
@@ -6097,11 +6296,11 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' 
 #' 
 #' @export
-run_amd <- function(input, results=NULL, modeltype='pk_oral', cl_init=0.01, vc_init=1.0, mat_init=0.1, search_space=NULL, lloq=NULL, order=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE) {
+run_amd <- function(input, results=NULL, modeltype='pk_oral', cl_init=0.01, vc_init=1.0, mat_init=0.1, search_space=NULL, lloq_method=NULL, lloq_limit=NULL, order=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE) {
 	tryCatch(
 	{
 		order <- convert_input(order, "list")
-		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, search_space=search_space, lloq=lloq, order=order, allometric_variable=allometric_variable, occasion=occasion, path=path, resume=resume)
+		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, search_space=search_space, lloq_method=lloq_method, lloq_limit=lloq_limit, order=order, allometric_variable=allometric_variable, occasion=occasion, path=path, resume=resume)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}

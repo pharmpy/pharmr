@@ -4,10 +4,12 @@
 \alias{set_additive_error_model}
 \title{set_additive_error_model}
 \usage{
-set_additive_error_model(model, data_trans = NULL, series_terms = 2)
+set_additive_error_model(model, dv = NULL, data_trans = NULL, series_terms = 2)
 }
 \arguments{
 \item{model}{(Model) Set error model for this model}
+
+\item{dv}{(str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)}
 
 \item{data_trans}{(str (optional)) A data transformation expression or NULL (default) to use the transformation
 specified by the model. Series expansion will be used for approximation.}

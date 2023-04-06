@@ -12,7 +12,8 @@ run_amd(
   vc_init = 1,
   mat_init = 0.1,
   search_space = NULL,
-  lloq = NULL,
+  lloq_method = NULL,
+  lloq_limit = NULL,
   order = NULL,
   allometric_variable = NULL,
   occasion = NULL,
@@ -35,7 +36,9 @@ run_amd(
 
 \item{search_space}{(str (optional)) MFL for search space for structural model}
 
-\item{lloq}{(numeric (optional)) Lower limit of quantification. LOQ data will be removed.}
+\item{lloq_method}{(str (optional)) Method for how to remove LOQ data. See \code{transform_blq} for vector of available methods}
+
+\item{lloq_limit}{(str (optional)) Lower limit of quantification. If NULL LLOQ column from dataset will be used}
 
 \item{order}{(array(str) (optional)) Runorder of components}
 

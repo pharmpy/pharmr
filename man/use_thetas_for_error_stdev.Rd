@@ -19,6 +19,7 @@ Use thetas to estimate standard deviation of error
 \dontrun{
 model <- load_example_model("pheno")
 model <- use_thetas_for_error_stdev(model)
+model$statements$find_assignment("W")
 model$statements$find_assignment("Y")
 }
 }

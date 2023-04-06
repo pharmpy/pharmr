@@ -4,10 +4,12 @@
 \alias{add_metabolite}
 \title{add_metabolite}
 \usage{
-add_metabolite(model)
+add_metabolite(model, drug_dvid = 1)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
+
+\item{drug_dvid}{(numeric) DVID for drug (assuming all other DVIDs being for metabolites)}
 }
 \value{
 (Model) Pharmpy model object
