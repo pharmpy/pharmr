@@ -1422,7 +1422,7 @@ cleanup_model <- function(model) {
 #' Note that the operation is not done inplace.
 #' 
 #' @param model (Model) Model to convert
-#' @param to_format (str) Name of format to convert into. Currently supported 'generic', 'nlmixr' and 'nonmem'
+#' @param to_format (str) Name of format to convert into. Currently supported 'generic', 'nlmixr', 'nonmem', and 'rxode'
 #'  
 #' @return (Model) New model object with new underlying model format
 #' 
@@ -2117,28 +2117,6 @@ fix_parameters_to <- function(model, inits) {
 }
 
 #' @title
-#' generate_model_code
-#' 
-#' @description
-#' Get the model code of the underlying model language
-#' 
-#' @param model (Model) Pharmpy model
-#'  
-#' @return (str) Model code
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' generate_model_code(model)
-#' }
-#' 
-#' @export
-generate_model_code <- function(model) {
-	func_out <- pharmpy$modeling$generate_model_code(model)
-	return(py_to_r(func_out))
-}
-
-#' @title
 #' get_baselines
 #' 
 #' @description
@@ -2532,6 +2510,28 @@ get_mdv <- function(model) {
 }
 
 #' @title
+#' get_model_code
+#' 
+#' @description
+#' Get the model code of the underlying model language
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (str) Model code
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' get_model_code(model)
+#' }
+#' 
+#' @export
+get_model_code <- function(model) {
+	func_out <- pharmpy$modeling$get_model_code(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' get_model_covariates
 #' 
 #' @description
@@ -2909,6 +2909,28 @@ get_thetas <- function(model) {
 #' @export
 get_unit_of <- function(model, variable) {
 	func_out <- pharmpy$modeling$get_unit_of(model, variable)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' get_zero_order_inputs
+#' 
+#' @description
+#' Get zero order inputs for all compartments
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (sympy.Matrix) Vector of inputs
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' get_zero_order_inputs(model)
+#' }
+#' 
+#' @export
+get_zero_order_inputs <- function(model) {
+	func_out <- pharmpy$modeling$get_zero_order_inputs(model)
 	return(py_to_r(func_out))
 }
 
@@ -4952,6 +4974,31 @@ set_time_varying_error_model <- function(model, cutoff, idv='TIME') {
 }
 
 #' @title
+#' set_tmdd
+#' 
+#' @description
+#' Sets target mediated drug disposition
+#' 
+#' Sets target mediated drug disposition to a PK model.
+#' 
+#' @param model (Model) Pharmpy model
+#' @param type (str) Type of TMDD model
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- set_tmdd(model, "full")
+#' }
+#' 
+#' @export
+set_tmdd <- function(model, type) {
+	func_out <- pharmpy$modeling$set_tmdd(model, type)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' set_transit_compartments
 #' 
 #' @description
@@ -5095,6 +5142,33 @@ set_zero_order_absorption <- function(model) {
 #' @export
 set_zero_order_elimination <- function(model) {
 	func_out <- pharmpy$modeling$set_zero_order_elimination(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' set_zero_order_input
+#' 
+#' @description
+#' Set a zero order input for the ode system
+#' 
+#' If the zero order input is already set it will be updated.
+#' 
+#' @param model (Model) Pharmpy model
+#' @param compartment (str) Name of the compartment
+#' @param expression (str or numeric) The expression of the zero order input
+#'  
+#' @return (model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- set_zero_order_input(model, "CENTRAL", 10)
+#' get_zero_order_inputs(model)
+#' }
+#' 
+#' @export
+set_zero_order_input <- function(model, compartment, expression) {
+	func_out <- pharmpy$modeling$set_zero_order_input(model, compartment, expression)
 	return(py_to_r(func_out))
 }
 

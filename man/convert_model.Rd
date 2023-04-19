@@ -9,7 +9,7 @@ convert_model(model, to_format)
 \arguments{
 \item{model}{(Model) Model to convert}
 
-\item{to_format}{(str) Name of format to convert into. Currently supported 'generic', 'nlmixr' and 'nonmem'}
+\item{to_format}{(str) Name of format to convert into. Currently supported 'generic', 'nlmixr', 'nonmem', and 'rxode'}
 }
 \value{
 (Model) New model object with new underlying model format
