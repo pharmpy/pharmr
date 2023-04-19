@@ -31,7 +31,7 @@ knit_print.pharmpy.model.random_variables.RandomVariables <- function(x, ...) {
     structure(res, class='knit_asis')
 }
 
-#' @exportS3Method knitr::knit_print pharmpy.model.statements.ExplicitODESystem
+#' @exportS3Method knitr::knit_print pharmpy.modeling.odes.ODEDisplayer
 knit_print.pharmpy.modeling.odes.ODEDisplayer <- function(x, ...) {
     res <- x$`_repr_latex_`()
     structure(res, class='knit_asis')
@@ -47,7 +47,7 @@ repr_html.pharmpy.model.statements.Statements <- function(obj, ...) {
     obj$`_repr_html_`()
 }
 
-#' @exportS3Method repr::repr_latex pharmpy.model.statements.ExplicitODESystem
+#' @exportS3Method repr::repr_latex pharmpy.modeling.odes.ODEDisplayer
 repr_latex.pharmpy.modeling.odes.ODEDisplayer <- function(obj, ...) {
     obj$`_repr_latex_`()
 }
