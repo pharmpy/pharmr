@@ -13,7 +13,7 @@ plot_transformed_eta_distributions(
 \arguments{
 \item{model}{(Model) Previously run Pharmpy model.}
 
-\item{parameter_estimates}{() Parameter estimates of model fit}
+\item{parameter_estimates}{(list) Parameter estimates of model fit}
 
 \item{individual_estimates}{(data.frame) Individual estimates for etas}
 }

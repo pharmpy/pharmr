@@ -3581,7 +3581,7 @@ plot_iofv_vs_iofv <- function(iofv1, iofv2, name1, name2) {
 #' Plot transformed eta distributions for all transformed etas
 #' 
 #' @param model (Model) Previously run Pharmpy model.
-#' @param parameter_estimates () Parameter estimates of model fit
+#' @param parameter_estimates (list) Parameter estimates of model fit
 #' @param individual_estimates (data.frame) Individual estimates for etas
 #'  
 #' @return (alt.Chart) Plot
