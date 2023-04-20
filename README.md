@@ -31,18 +31,20 @@ function is also available via the `help`-function (or `?`).
 
 pharmr uses the package [**reticulate**](https://rstudio.github.io/reticulate/) for calling 
 Python from R. When installing pharmr, reticulate will give a prompt to set up the reticulate 
-environment. In order to use pharmr, you need to have Python 3.8 or 3.9. To make reticulate use 
-Python 3.9 in its environment, run the following: 
+environment. In order to use pharmr, you need to have Python 3.8, 3.9, 3.10 or 3.11.
 
-```R
-Sys.setenv(RETICULATE_MINICONDA_PYTHON_VERSION="3.9")
-```
-
-Then install pharmr and Pharmpy:
+To install pharmr and Pharmpy:
 
 ```R
 remotes::install_github("pharmpy/pharmr", ref="main")
 pharmr::install_pharmpy()
+```
+
+Sometimes it is necessary to specify which version of Python to use. To make reticulate use 
+Python 3.9 in its environment, run the following: 
+
+```R
+Sys.setenv(RETICULATE_MINICONDA_PYTHON_VERSION="3.9")
 ```
 
 ### Install from CRAN
@@ -60,10 +62,11 @@ Note that pharmr and Pharmpy are under rapid development and the version on gith
 
 ```R
 >>> library(pharmr)
->>> model <- read_model("run1.mod")
->>> model$modelfit_results$parameter_estimates
+>>> res <- read_modelfit_results("run1.mod")
+>>> res$parameter_estimates
   THETA(1)   THETA(2)   THETA(3) OMEGA(1,1) OMEGA(2,2) SIGMA(1,1)
 0.00469555 0.98425800 0.15892000 0.02935080 0.02790600 0.01324100
+>>> model <- read_model("run1.mod")
 >>> model$parameters
        name     value  lower    upper    fix
    THETA(1)  0.004693   0.00  1000000  False
@@ -81,11 +84,4 @@ A simple example of reading a model, performing a simple transformation, and run
 model <- load_example_model('pheno') %>%
   add_peripheral_compartment() %>%
   fit()
-```
-
-Note: If you try to access data frames belonging to a Pharmpy object you often need to reset the index. All functions available in pharmr do this automatically, it is only when you have data frames nested in objects (such as a model object) that you need to do this. An example:
-
-```R
-model <- load_example_model('pheno')
-residuals <- reset_index(model$modelfit_results$residuals)
 ```
