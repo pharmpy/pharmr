@@ -90,7 +90,7 @@ def _convert_types_from_typehints(type_hints):
         except NotImplementedError:
             raise
         if r_type == '':
-            raise ValueError('Could not translate')
+            warnings.warn('Could not translate')
         type_dict[var_name] = r_type
 
     return type_dict
