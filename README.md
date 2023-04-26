@@ -31,7 +31,7 @@ function is also available via the `help`-function (or `?`).
 
 pharmr uses the package [**reticulate**](https://rstudio.github.io/reticulate/) for calling 
 Python from R. When installing pharmr, reticulate will give a prompt to set up the reticulate 
-environment. In order to use pharmr, you need to have Python 3.8, 3.9, 3.10 or 3.11.
+environment. In order to use pharmr, you need to have Python 3.9, 3.10 or 3.11.
 
 To install pharmr and Pharmpy:
 

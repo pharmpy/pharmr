@@ -19,7 +19,7 @@ Depends:
     R (>= 3.6.0),
     altair (>= 4.0.0)
 SystemRequirements:
-    Python (>= 3.8.0)
+    Python (>= 3.9.0)
 Imports:
     reticulate (>= 1.19),
     utils
