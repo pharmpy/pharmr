@@ -14,6 +14,12 @@ pharmpy <- NULL
 #' @import altair
 #' @importFrom reticulate py_to_r
 .onLoad <- function(libname, pkgname) {
+    # Lazy loading cannot currently be avoided even for the case when pharmpy
+    # is already installed.
+    # This is because R attempts to load the package at installation time
+    # Also testing to import by tryCatch breaks the delay_load fallback
+    # because Python will be setup by reticulate and then lazy will be skipped
+    # if Python was already setup.
     pharmpy <<- reticulate::import("pharmpy", convert=FALSE,
                                    delay_load=list(on_load=on_load_pharmpy,
                                                    on_error=on_error_pharmpy))
