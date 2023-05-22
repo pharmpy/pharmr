@@ -608,7 +608,7 @@ append_estimation_step_options <- function(model, tool_options, idx) {
 #' If model name does not end in a number do nothing.
 #' 
 #' @param model (Model) Pharmpy model object
-#' @param path (str (optional)) Default is to not look for files.
+#' @param path (str) Default is to not look for files.
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -1515,23 +1515,6 @@ create_config_template <- function() {
 create_joint_distribution <- function(model, rvs=NULL, individual_estimates=NULL) {
 	rvs <- convert_input(rvs, "list")
 	func_out <- pharmpy$modeling$create_joint_distribution(model, rvs=rvs, individual_estimates=individual_estimates)
-	return(py_to_r(func_out))
-}
-
-#' @title
-#' create_report
-#' 
-#' @description
-#' Create standard report for results
-#' 
-#' The report will be an html created at specified path.
-#' 
-#' @param results (Results) Results for which to create report
-#' @param path (str) Path to report file 
-#' 
-#' @export
-create_report <- function(results, path) {
-	func_out <- pharmpy$modeling$create_report(results, path)
 	return(py_to_r(func_out))
 }
 
@@ -5185,10 +5168,8 @@ set_zero_order_input <- function(model, compartment, expression) {
 #' 
 #' @examples
 #' \dontrun{
-#' conf$parameter_names <- c('comment', 'basic')
 #' model <- load_example_model("pheno")
 #' simplify_expression(model, "Abs(PTVCL)")
-#' conf$parameter_names <- c('basic')
 #' }
 #' 
 #' @export
@@ -5692,6 +5673,46 @@ write_csv <- function(model, path=NULL, force=FALSE) {
 write_model <- function(model, path='', force=TRUE) {
 	func_out <- pharmpy$modeling$write_model(model, path=path, force=force)
 	return(py_to_r(func_out))
+}
+
+#' @title
+#' create_report
+#' 
+#' @description
+#' Create standard report for results
+#' 
+#' The report will be an html created at specified path.
+#' 
+#' @param results (Results) Results for which to create report
+#' @param path (str) Path to report file 
+#' 
+#' @export
+create_report <- function(results, path) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$create_report(results, path)
+		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+			func_out <- reset_indices_results(func_out)
+		}
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
 }
 
 #' @title
@@ -7015,7 +7036,7 @@ summarize_individuals <- function(models) {
 #' +-------------------------+------------------------------------------------------------------------------------------------+
 #' 
 #' @param models (array(Model) (optional)) List of models to summarize.
-#' @param df (data.frame (optional)) Output from a previous call to summarize_individuals.
+#' @param df (data.frame) Output from a previous call to summarize_individuals.
 #'  
 #' @return (data.frame) Table with one row per model.
 #' 

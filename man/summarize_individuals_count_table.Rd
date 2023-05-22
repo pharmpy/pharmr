@@ -9,7 +9,7 @@ summarize_individuals_count_table(models = NULL, df = NULL)
 \arguments{
 \item{models}{(array(Model) (optional)) List of models to summarize.}
 
-\item{df}{(data.frame (optional)) Output from a previous call to summarize_individuals.}
+\item{df}{(data.frame) Output from a previous call to summarize_individuals.}
 }
 \value{
 (data.frame) Table with one row per model.
