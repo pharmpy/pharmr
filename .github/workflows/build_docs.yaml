@@ -4,7 +4,7 @@ name: Build docs
 
 jobs:
   deploy:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -31,6 +31,10 @@ jobs:
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
         shell: Rscript {0}
 
+      - uses: actions/setup-python@v2
+        with:
+            python-version: "3.11"
+
       - name: Restore R package cache
         if: runner.os != 'Windows'
         uses: actions/cache@v2
@@ -46,7 +50,7 @@ jobs:
           while read -r cmd
           do
             eval sudo $cmd
-          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "22.04"))')
+          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
 
       - name: Install R dependencies
         working-directory: pharmr_repo
@@ -79,7 +83,7 @@ jobs:
       - name: Install Pharmpy in venv
         working-directory: pharmpy_repo
         run: |
-          python -m venv pharmpy_venv
+          python3.11 -m venv pharmpy_venv
           source pharmpy_venv/bin/activate
           pip install .
 
