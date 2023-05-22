@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 from pathlib import Path
+from typing import Any
 
 from pharmpy.deps import sympy
 from pharmpy.deps import numpy as np
@@ -16,6 +17,7 @@ TYPE_DICT = {
     None: 'NULL',
     pd.DataFrame: 'data.frame',
     pd.Series: 'array',
+    Any: 'any'
 }
 
 SKIP = [
