@@ -42,8 +42,9 @@ Run COVsearch tool. For more details, see :ref:\code{covsearch}.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
+results <- load_example_modelfit_results("pheno")
 effects <- 'COVARIATE(c(CL, V), c(AGE, WT), EXP)'
-res <- run_covsearch(effects, model=model, results=model$modelfit_results)
+res <- run_covsearch(effects, model=model, results=results)
 }
 
 }

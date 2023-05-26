@@ -29,7 +29,8 @@ Check if any estimated parameter value is close to its bounds
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-check_parameters_near_bounds(model, model$modelfit_results$parameter_estimates)
+results <- load_example_modelfit_results("pheno")
+check_parameters_near_bounds(model, results$parameter_estimates)
 }
 
 }

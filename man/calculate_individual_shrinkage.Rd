@@ -28,8 +28,9 @@ Definition: ieta_shr = (var(eta) / omega)
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-pe <- model$modelfit_results$parameter_estimates
-covs <- model$modelfit_results$individual_estimates_covariance
+results <- load_example_modelfit_results("pheno")
+pe <- results$parameter_estimates
+covs <- results$individual_estimates_covariance
 calculate_individual_shrinkage(model, pe, covs)
 }
 }

@@ -37,9 +37,9 @@ Run estmethod tool.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-res <- model$modelfit_results
+results <- load_example_modelfit_results("pheno")
 methods <- c('imp', 'saem')
-run_estmethod('reduced', methods=methods, solvers='all', results=res, model=model)
+run_estmethod('reduced', methods=methods, solvers='all', results=results, model=model)
 }
 
 }

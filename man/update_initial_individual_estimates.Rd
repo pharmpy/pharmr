@@ -24,7 +24,8 @@ Updates initial individual estimates for a model.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-ie <- model$modelfit_results$individual_estimates
+results <- load_example_modelfit_results("pheno")
+ie <- results$individual_estimates
 model <- update_initial_individual_estimates(model, ie)
 }
 

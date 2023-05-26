@@ -27,7 +27,8 @@ will be used. Initial estimates will be used for non-estimated parameters.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-pe <- model$modelfit_results$parameter_estimates
+results <- load_example_modelfit_results("pheno")
+pe <- results$parameter_estimates
 evaluate_expression(model, "TVCL*1000", parameter_estimates=pe)
 }
 

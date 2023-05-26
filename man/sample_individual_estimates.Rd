@@ -35,9 +35,10 @@ Sample individual estimates given their covariance.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
+results <- load_example_modelfit_results("pheno")
 rng <- create_rng(23)
-ie <- model$modelfit_results$individual_estimates
-iec <- model$modelfit_results$individual_estimates_covariance
+ie <- results$individual_estimates
+iec <- results$individual_estimates_covariance
 sample_individual_estimates(model, ie, iec, samples_per_id=2, rng=rng)
 }
 }

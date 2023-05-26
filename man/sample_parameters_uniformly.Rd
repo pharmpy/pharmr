@@ -39,8 +39,9 @@ with the bounds being estimate ± estimate * fraction.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
+results <- load_example_modelfit_results("pheno")
 rng <- create_rng(23)
-pe <- model$modelfit_results$parameter_estimates
+pe <- results$parameter_estimates
 sample_parameters_uniformly(model, pe, n=3, rng=rng)
 }
 }

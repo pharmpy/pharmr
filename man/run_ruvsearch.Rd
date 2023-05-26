@@ -35,7 +35,8 @@ Run the ruvsearch tool. For more details, see :ref:\code{ruvsearch}.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-run_ruvsearch(model=model, results=model$modelfit_results)
+results <- load_example_modelfit_results("pheno")
+run_ruvsearch(model=model, results=results)
 }
 
 }

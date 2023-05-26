@@ -43,8 +43,8 @@ Run Modelsearch tool. For more details, see :ref:\code{modelsearch}.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-res <- model$modelfit_results
-run_modelsearch('ABSORPTION(ZO);PERIPHERALS(1)', 'exhaustive', results=res, model=model)
+results <- load_example_modelfit_results("pheno")
+run_modelsearch('ABSORPTION(ZO);PERIPHERALS(1)', 'exhaustive', results=results, model=model)
 }
 
 }

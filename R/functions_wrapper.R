@@ -673,7 +673,8 @@ calculate_aic <- function(model, likelihood) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' ofv <- model$modelfit_results$ofv
+#' results <- load_example_modelfit_results("pheno")
+#' ofv <- results$ofv
 #' calculate_bic(model, ofv)
 #' calculate_bic(model, ofv, type='fixed')
 #' calculate_bic(model, ofv, type='random')
@@ -698,25 +699,25 @@ calculate_bic <- function(model, likelihood, type=NULL) {
 #' 
 #' @examples
 #' \dontrun{
-#' model <- load_example_model("pheno")
-#' cov <- model$modelfit_results$covariance_matrix
+#' results <- load_example_modelfit_results("pheno")
+#' cov <- results$covariance_matrix
 #' cov
 #' calculate_corr_from_cov(cov)
 #' }
 #' @seealso
 #' calculate_se_from_cov : Standard errors from covariance matrix
 #' 
-#' calculate_se_from_inf : Standard errors from information matrix
+#' calculate_se_from_prec : Standard errors from precision matrix
 #' 
-#' calculate_cov_from_inf : Covariance matrix from information matrix
+#' calculate_cov_from_prec : Covariance matrix from precision matrix
 #' 
 #' calculate_cov_from_corrse : Covariance matrix from correlation matrix and standard errors
 #' 
-#' calculate_inf_from_cov : Information matrix from covariance matrix
+#' calculate_prec_from_cov : Precision matrix from covariance matrix
 #' 
-#' calculate_inf_from_corrse : Information matrix from correlation matrix and standard errors
+#' calculate_prec_from_corrse : Precision matrix from correlation matrix and standard errors
 #' 
-#' calculate_corr_from_inf : Correlation matrix from information matrix
+#' calculate_corr_from_prec : Correlation matrix from precision matrix
 #' 
 #' 
 #' @export
@@ -729,41 +730,41 @@ calculate_corr_from_cov <- function(cov) {
 }
 
 #' @title
-#' calculate_corr_from_inf
+#' calculate_corr_from_prec
 #' 
 #' @description
-#' Calculate correlation matrix from an information matrix
+#' Calculate correlation matrix from a precision matrix
 #' 
-#' @param information_matrix (data.frame) Information matrix
+#' @param precision_matrix (data.frame) Precision matrix
 #'  
 #' @return (data.frame) Correlation matrix
 #' 
 #' @examples
 #' \dontrun{
-#' model <- load_example_model("pheno")
-#' inf <- model$modelfit_results$information_matrix
-#' inf
-#' calculate_corr_from_inf(inf)
+#' results <- load_example_modelfit_results("pheno")
+#' prec <- results$precision_matrix
+#' prec
+#' calculate_corr_from_prec(prec)
 #' }
 #' @seealso
 #' calculate_se_from_cov : Standard errors from covariance matrix
 #' 
-#' calculate_se_from_inf : Standard errors from information matrix
+#' calculate_se_from_prec : Standard errors from precision matrix
 #' 
 #' calculate_corr_from_cov : Correlation matrix from covariance matrix
 #' 
-#' calculate_cov_from_inf : Covariance matrix from information matrix
+#' calculate_cov_from_prec : Covariance matrix from precision matrix
 #' 
 #' calculate_cov_from_corrse : Covariance matrix from correlation matrix and standard errors
 #' 
-#' calculate_inf_from_cov : Information matrix from covariance matrix
+#' calculate_prec_from_cov : Precision matrix from covariance matrix
 #' 
-#' calculate_inf_from_corrse : Information matrix from correlation matrix and standard errors
+#' calculate_prec_from_corrse : Precision matrix from correlation matrix and standard errors
 #' 
 #' 
 #' @export
-calculate_corr_from_inf <- function(information_matrix) {
-	func_out <- pharmpy$modeling$calculate_corr_from_inf(information_matrix)
+calculate_corr_from_prec <- function(precision_matrix) {
+	func_out <- pharmpy$modeling$calculate_corr_from_prec(precision_matrix)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
 	}
@@ -783,26 +784,26 @@ calculate_corr_from_inf <- function(information_matrix) {
 #' 
 #' @examples
 #' \dontrun{
-#' model <- load_example_model("pheno")
-#' corr <- model$modelfit_results$correlation_matrix
-#' se <- model$modelfit_results$standard_errors
+#' results <- load_example_modelfit_results("pheno")
+#' corr <- results$correlation_matrix
+#' se <- results$standard_errors
 #' corr
 #' calculate_cov_from_corrse(corr, se)
 #' }
 #' @seealso
 #' calculate_se_from_cov : Standard errors from covariance matrix
 #' 
-#' calculate_se_from_inf : Standard errors from information matrix
+#' calculate_se_from_prec : Standard errors from precision matrix
 #' 
 #' calculate_corr_from_cov : Correlation matrix from covariance matrix
 #' 
-#' calculate_cov_from_inf : Covariance matrix from information matrix
+#' calculate_cov_from_prec : Covariance matrix from precision matrix
 #' 
-#' calculate_inf_from_cov : Information matrix from covariance matrix
+#' calculate_prec_from_cov : Precision matrix from covariance matrix
 #' 
-#' calculate_inf_from_corrse : Information matrix from correlation matrix and standard errors
+#' calculate_prec_from_corrse : Precision matrix from correlation matrix and standard errors
 #' 
-#' calculate_corr_from_inf : Correlation matrix from information matrix
+#' calculate_corr_from_prec : Correlation matrix from precision matrix
 #' 
 #' 
 #' @export
@@ -816,41 +817,41 @@ calculate_cov_from_corrse <- function(corr, se) {
 }
 
 #' @title
-#' calculate_cov_from_inf
+#' calculate_cov_from_prec
 #' 
 #' @description
-#' Calculate covariance matrix from an information matrix
+#' Calculate covariance matrix from a precision matrix
 #' 
-#' @param information_matrix (data.frame) Information matrix
+#' @param precision_matrix (data.frame) Precision matrix
 #'  
 #' @return (data.frame) Covariance matrix
 #' 
 #' @examples
 #' \dontrun{
-#' model <- load_example_model("pheno")
-#' inf <- model$modelfit_results$information_matrix
-#' inf
-#' calculate_cov_from_inf(inf)
+#' results <- load_example_modelfit_results("pheno")
+#' prec <- results$precision_matrix
+#' prec
+#' calculate_cov_from_prec(prec)
 #' }
 #' @seealso
 #' calculate_se_from_cov : Standard errors from covariance matrix
 #' 
-#' calculate_se_from_inf : Standard errors from information matrix
+#' calculate_se_from_prec : Standard errors from precision matrix
 #' 
 #' calculate_corr_from_cov : Correlation matrix from covariance matrix
 #' 
 #' calculate_cov_from_corrse : Covariance matrix from correlation matrix and standard errors
 #' 
-#' calculate_inf_from_cov : Information matrix from covariance matrix
+#' calculate_prec_from_cov : Precision matrix from covariance matrix
 #' 
-#' calculate_inf_from_corrse : Information matrix from correlation matrix and standard errors
+#' calculate_prec_from_corrse : Precision matrix from correlation matrix and standard errors
 #' 
-#' calculate_corr_from_inf : Correlation matrix from information matrix
+#' calculate_corr_from_prec : Correlation matrix from precision matrix
 #' 
 #' 
 #' @export
-calculate_cov_from_inf <- function(information_matrix) {
-	func_out <- pharmpy$modeling$calculate_cov_from_inf(information_matrix)
+calculate_cov_from_prec <- function(precision_matrix) {
+	func_out <- pharmpy$modeling$calculate_cov_from_prec(precision_matrix)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
 	}
@@ -928,8 +929,9 @@ calculate_eta_gradient_expression <- function(model) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' pe <- model$modelfit_results$parameter_estimates
-#' ie <- model$modelfit_results$individual_estimates
+#' results <- load_example_modelfit_results("pheno")
+#' pe <- results$parameter_estimates
+#' ie <- results$individual_estimates
 #' calculate_eta_shrinkage(model, pe, ie)
 #' calculate_eta_shrinkage(model, pe, ie, sd=TRUE)
 #' }
@@ -976,9 +978,10 @@ calculate_eta_shrinkage <- function(model, parameter_estimates, individual_estim
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
+#' results <- load_example_modelfit_results("pheno")
 #' rng <- create_rng(23)
-#' pe <- model$modelfit_results$parameter_estimates
-#' cov <- model$modelfit_results$covariance_matrix
+#' pe <- results$parameter_estimates
+#' cov <- results$covariance_matrix
 #' calculate_individual_parameter_statistics(model, "K=CL/V", pe, cov, rng=rng)
 #' }
 #' 
@@ -1010,8 +1013,9 @@ calculate_individual_parameter_statistics <- function(model, expr_or_exprs, para
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' pe <- model$modelfit_results$parameter_estimates
-#' covs <- model$modelfit_results$individual_estimates_covariance
+#' results <- load_example_modelfit_results("pheno")
+#' pe <- results$parameter_estimates
+#' covs <- results$individual_estimates_covariance
 #' calculate_individual_shrinkage(model, pe, covs)
 #' }
 #' @seealso
@@ -1022,93 +1026,6 @@ calculate_individual_parameter_statistics <- function(model, expr_or_exprs, para
 calculate_individual_shrinkage <- function(model, parameter_estimates, individual_estimates_covariance) {
 	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
 	func_out <- pharmpy$modeling$calculate_individual_shrinkage(model, parameter_estimates, individual_estimates_covariance)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
-	return(py_to_r(func_out))
-}
-
-#' @title
-#' calculate_inf_from_corrse
-#' 
-#' @description
-#' Calculate information matrix from a correlation matrix and standard errors
-#' 
-#' @param corr (data.frame) Correlation matrix
-#' @param se (array) Standard errors
-#'  
-#' @return (data.frame) Information matrix
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' corr <- model$modelfit_results$correlation_matrix
-#' se <- model$modelfit_results$standard_errors
-#' corr
-#' calculate_inf_from_corrse(corr, se)
-#' }
-#' @seealso
-#' calculate_se_from_cov : Standard errors from covariance matrix
-#' 
-#' calculate_se_from_inf : Standard errors from information matrix
-#' 
-#' calculate_corr_from_cov : Correlation matrix from covariance matrix
-#' 
-#' calculate_cov_from_inf : Covariance matrix from information matrix
-#' 
-#' calculate_cov_from_corrse : Covariance matrix from correlation matrix and standard errors
-#' 
-#' calculate_inf_from_cov : Information matrix from covariance matrix
-#' 
-#' calculate_corr_from_inf : Correlation matrix from information matrix
-#' 
-#' 
-#' @export
-calculate_inf_from_corrse <- function(corr, se) {
-	se <- convert_input(se, "pd.Series")
-	func_out <- pharmpy$modeling$calculate_inf_from_corrse(corr, se)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
-	return(py_to_r(func_out))
-}
-
-#' @title
-#' calculate_inf_from_cov
-#' 
-#' @description
-#' Calculate information matrix from a covariance matrix
-#' 
-#' @param cov (data.frame) Covariance matrix
-#'  
-#' @return (data.frame) Information matrix
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' cov <- model$modelfit_results$covariance_matrix
-#' cov
-#' calculate_inf_from_cov(cov)
-#' }
-#' @seealso
-#' calculate_se_from_cov : Standard errors from covariance matrix
-#' 
-#' calculate_se_from_inf : Standard errors from information matrix
-#' 
-#' calculate_corr_from_cov : Correlation matrix from covariance matrix
-#' 
-#' calculate_cov_from_inf : Covariance matrix from information matrix
-#' 
-#' calculate_cov_from_corrse : Covariance matrix from correlation matrix and standard errors
-#' 
-#' calculate_inf_from_corrse : Information matrix from correlation matrix and standard errors
-#' 
-#' calculate_corr_from_inf : Correlation matrix from information matrix
-#' 
-#' 
-#' @export
-calculate_inf_from_cov <- function(cov) {
-	func_out <- pharmpy$modeling$calculate_inf_from_cov(cov)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
 	}
@@ -1167,9 +1084,10 @@ calculate_parameters_from_ucp <- function(model, scale, ucps) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
+#' results <- load_example_modelfit_results("pheno")
 #' rng <- create_rng(23)
-#' pe <- model$modelfit_results$parameter_estimates
-#' cov <- model$modelfit_results$covariance_matrix
+#' pe <- results$parameter_estimates
+#' cov <- results$covariance_matrix
 #' calculate_pk_parameters_statistics(model, pe, cov, rng=rng)
 #' }
 #' @seealso
@@ -1188,6 +1106,93 @@ calculate_pk_parameters_statistics <- function(model, parameter_estimates, covar
 }
 
 #' @title
+#' calculate_prec_from_corrse
+#' 
+#' @description
+#' Calculate precision matrix from a correlation matrix and standard errors
+#' 
+#' @param corr (data.frame) Correlation matrix
+#' @param se (array) Standard errors
+#'  
+#' @return (data.frame) Precision matrix
+#' 
+#' @examples
+#' \dontrun{
+#' results <- load_example_modelfit_results("pheno")
+#' corr <- results$correlation_matrix
+#' se <- results$standard_errors
+#' corr
+#' calculate_prec_from_corrse(corr, se)
+#' }
+#' @seealso
+#' calculate_se_from_cov : Standard errors from covariance matrix
+#' 
+#' calculate_se_from_prec : Standard errors from precision matrix
+#' 
+#' calculate_corr_from_cov : Correlation matrix from covariance matrix
+#' 
+#' calculate_cov_from_prec : Covariance matrix from precision matrix
+#' 
+#' calculate_cov_from_corrse : Covariance matrix from correlation matrix and standard errors
+#' 
+#' calculate_prec_from_cov : Precision matrix from covariance matrix
+#' 
+#' calculate_corr_from_prec : Correlation matrix from precision matrix
+#' 
+#' 
+#' @export
+calculate_prec_from_corrse <- function(corr, se) {
+	se <- convert_input(se, "pd.Series")
+	func_out <- pharmpy$modeling$calculate_prec_from_corrse(corr, se)
+	if (func_out$index$nlevels > 1) {
+		func_out <- func_out$reset_index()
+	}
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' calculate_prec_from_cov
+#' 
+#' @description
+#' Calculate precision matrix from a covariance matrix
+#' 
+#' @param cov (data.frame) Covariance matrix
+#'  
+#' @return (data.frame) Precision matrix
+#' 
+#' @examples
+#' \dontrun{
+#' results <- load_example_modelfit_results("pheno")
+#' cov <- results$covariance_matrix
+#' cov
+#' calculate_prec_from_cov(cov)
+#' }
+#' @seealso
+#' calculate_se_from_cov : Standard errors from covariance matrix
+#' 
+#' calculate_se_from_prec : Standard errors from precision matrix
+#' 
+#' calculate_corr_from_cov : Correlation matrix from covariance matrix
+#' 
+#' calculate_cov_from_prec : Covariance matrix from precision matrix
+#' 
+#' calculate_cov_from_corrse : Covariance matrix from correlation matrix and standard errors
+#' 
+#' calculate_prec_from_corrse : Precision matrix from correlation matrix and standard errors
+#' 
+#' calculate_corr_from_prec : Correlation matrix from precision matrix
+#' 
+#' 
+#' @export
+calculate_prec_from_cov <- function(cov) {
+	func_out <- pharmpy$modeling$calculate_prec_from_cov(cov)
+	if (func_out$index$nlevels > 1) {
+		func_out <- func_out$reset_index()
+	}
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' calculate_se_from_cov
 #' 
 #' @description
@@ -1199,25 +1204,25 @@ calculate_pk_parameters_statistics <- function(model, parameter_estimates, covar
 #' 
 #' @examples
 #' \dontrun{
-#' model <- load_example_model("pheno")
-#' cov <- model$modelfit_results$covariance_matrix
+#' results <- load_example_modelfit_results("pheno")
+#' cov <- results$covariance_matrix
 #' cov
 #' calculate_se_from_cov(cov)
 #' }
 #' @seealso
-#' calculate_se_from_inf : Standard errors from information matrix
+#' calculate_se_from_prec : Standard errors from precision matrix
 #' 
 #' calculate_corr_from_cov : Correlation matrix from covariance matrix
 #' 
-#' calculate_cov_from_inf : Covariance matrix from information matrix
+#' calculate_cov_from_prec : Covariance matrix from precision matrix
 #' 
 #' calculate_cov_from_corrse : Covariance matrix from correlation matrix and standard errors
 #' 
-#' calculate_inf_from_cov : Information matrix from covariance matrix
+#' calculate_prec_from_cov : Precision matrix from covariance matrix
 #' 
-#' calculate_inf_from_corrse : Information matrix from correlation matrix and standard errors
+#' calculate_prec_from_corrse : Precision matrix from correlation matrix and standard errors
 #' 
-#' calculate_corr_from_inf : Correlation matrix from information matrix
+#' calculate_corr_from_prec : Correlation matrix from precision matrix
 #' 
 #' 
 #' @export
@@ -1230,41 +1235,41 @@ calculate_se_from_cov <- function(cov) {
 }
 
 #' @title
-#' calculate_se_from_inf
+#' calculate_se_from_prec
 #' 
 #' @description
-#' Calculate standard errors from an information matrix
+#' Calculate standard errors from a precision matrix
 #' 
-#' @param information_matrix (data.frame) Input information matrix
+#' @param precision_matrix (data.frame) Input precision matrix
 #'  
 #' @return (data.frame) Standard errors
 #' 
 #' @examples
 #' \dontrun{
-#' model <- load_example_model("pheno")
-#' inf <- model$modelfit_results$information_matrix
-#' inf
-#' calculate_se_from_inf(inf)
+#' results <- load_example_modelfit_results("pheno")
+#' prec <- results$precision_matrix
+#' prec
+#' calculate_se_from_prec(prec)
 #' }
 #' @seealso
 #' calculate_se_from_cov : Standard errors from covariance matrix
 #' 
 #' calculate_corr_from_cov : Correlation matrix from covariance matrix
 #' 
-#' calculate_cov_from_inf : Covariance matrix from information matrix
+#' calculate_cov_from_prec : Covariance matrix from precision matrix
 #' 
 #' calculate_cov_from_corrse : Covariance matrix from correlation matrix and standard errors
 #' 
-#' calculate_inf_from_cov : Information matrix from covariance matrix
+#' calculate_prec_from_cov : Precision matrix from covariance matrix
 #' 
-#' calculate_inf_from_corrse : Information matrix from correlation matrix and standard errors
+#' calculate_prec_from_corrse : Precision matrix from correlation matrix and standard errors
 #' 
-#' calculate_corr_from_inf : Correlation matrix from information matrix
+#' calculate_corr_from_prec : Correlation matrix from precision matrix
 #' 
 #' 
 #' @export
-calculate_se_from_inf <- function(information_matrix) {
-	func_out <- pharmpy$modeling$calculate_se_from_inf(information_matrix)
+calculate_se_from_prec <- function(precision_matrix) {
+	func_out <- pharmpy$modeling$calculate_se_from_prec(precision_matrix)
 	if (func_out$index$nlevels > 1) {
 		func_out <- func_out$reset_index()
 	}
@@ -1338,7 +1343,8 @@ check_dataset <- function(model, dataframe=FALSE, verbose=FALSE) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' cor <- model$modelfit_results$correlation_matrix
+#' results <- load_example_modelfit_results("pheno")
+#' cor <- results$correlation_matrix
 #' check_high_correlations(model, cor, limit=0.3)
 #' }
 #' 
@@ -1367,7 +1373,8 @@ check_high_correlations <- function(model, cor, limit=0.9) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' check_parameters_near_bounds(model, model$modelfit_results$parameter_estimates)
+#' results <- load_example_modelfit_results("pheno")
+#' check_parameters_near_bounds(model, results$parameter_estimates)
 #' }
 #' 
 #' @export
@@ -1714,7 +1721,8 @@ drop_dropped_columns <- function(model) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno_linear")
-#' etas <- model$modelfit_results$individual_estimates
+#' results <- load_example_modelfit_results("pheno_linear")
+#' etas <- results$individual_estimates
 #' evaluate_epsilon_gradient(model, etas=etas)
 #' }
 #' @seealso
@@ -1755,7 +1763,8 @@ evaluate_epsilon_gradient <- function(model, etas=NULL, parameters=NULL, dataset
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno_linear")
-#' etas <- model$modelfit_results$individual_estimates
+#' results <- load_example_modelfit_results("pheno_linear")
+#' etas <- results$individual_estimates
 #' evaluate_eta_gradient(model, etas=etas)
 #' }
 #' @seealso
@@ -1791,7 +1800,8 @@ evaluate_eta_gradient <- function(model, etas=NULL, parameters=NULL, dataset=NUL
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' pe <- model$modelfit_results$parameter_estimates
+#' results <- load_example_modelfit_results("pheno")
+#' pe <- results$parameter_estimates
 #' evaluate_expression(model, "TVCL*1000", parameter_estimates=pe)
 #' }
 #' 
@@ -1829,7 +1839,8 @@ evaluate_expression <- function(model, expression, parameter_estimates=NULL) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno_linear")
-#' etas <- model$modelfit_results$individual_estimates
+#' results <- load_example_modelfit_results("pheno_linear")
+#' etas <- results$individual_estimates
 #' evaluate_individual_prediction(model, etas=etas)
 #' }
 #' @seealso
@@ -1867,7 +1878,8 @@ evaluate_individual_prediction <- function(model, etas=NULL, parameters=NULL, da
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno_linear")
-#' pe <- model$modelfit_results$parameter_estimates
+#' results <- load_example_modelfit_results("pheno_linear")
+#' pe <- results$parameter_estimates
 #' evaluate_population_prediction(model, parameters=list(pe))
 #' }
 #' @seealso
@@ -1905,7 +1917,8 @@ evaluate_population_prediction <- function(model, parameters=NULL, dataset=NULL)
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno_linear")
-#' parameters <- model$modelfit_results$parameter_estimates
+#' results <- load_example_modelfit_results("pheno_linear")
+#' parameters <- results$parameter_estimates
 #' evaluate_weighted_residuals(model, parameters=list(parameters))
 #' }
 #' 
@@ -4086,9 +4099,10 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
+#' results <- load_example_modelfit_results("pheno")
 #' rng <- create_rng(23)
-#' ie <- model$modelfit_results$individual_estimates
-#' iec <- model$modelfit_results$individual_estimates_covariance
+#' ie <- results$individual_estimates
+#' iec <- results$individual_estimates_covariance
 #' sample_individual_estimates(model, ie, iec, samples_per_id=2, rng=rng)
 #' }
 #' @seealso
@@ -4133,9 +4147,10 @@ sample_individual_estimates <- function(model, individual_estimates, individual_
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
+#' results <- load_example_modelfit_results("pheno")
 #' rng <- create_rng(23)
-#' cov <- model$modelfit_results$covariance_matrix
-#' pe <- model$modelfit_results$parameter_estimates
+#' cov <- results$covariance_matrix
+#' pe <- results$parameter_estimates
 #' sample_parameters_from_covariance_matrix(model, pe, cov, n=3, rng=rng)
 #' }
 #' @seealso
@@ -4179,8 +4194,9 @@ sample_parameters_from_covariance_matrix <- function(model, parameter_estimates,
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
+#' results <- load_example_modelfit_results("pheno")
 #' rng <- create_rng(23)
-#' pe <- model$modelfit_results$parameter_estimates
+#' pe <- results$parameter_estimates
 #' sample_parameters_uniformly(model, pe, n=3, rng=rng)
 #' }
 #' @seealso
@@ -5558,7 +5574,8 @@ unfix_parameters_to <- function(model, inits) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' ie <- model$modelfit_results$individual_estimates
+#' results <- load_example_modelfit_results("pheno")
+#' ie <- results$individual_estimates
 #' model <- update_initial_individual_estimates(model, ie)
 #' }
 #' 
@@ -5587,9 +5604,10 @@ update_initial_individual_estimates <- function(model, individual_estimates, for
 #' 
 #' @examples
 #' \dontrun{
-#' model <- load_example_model("pheno")   # This model was previously fitted to its data
+#' model <- load_example_model("pheno")
+#' results <- load_example_modelfit_results("pheno")
 #' model$parameters$inits
-#' model <- update_inits(model, model$modelfit_results$parameter_estimates)
+#' model <- update_inits(model, results$parameter_estimates)
 #' model$parameters$inits
 #' }
 #' 
@@ -5788,6 +5806,53 @@ fit <- function(model_or_models, tool=NULL) {
 	tryCatch(
 	{
 		func_out <- pharmpy$tools$fit(model_or_models, tool=tool)
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
+#' load_example_modelfit_results
+#' 
+#' @description
+#' Load the modelfit results of an example model
+#' 
+#' Load the modelfit results of an example model built into Pharmpy
+#' 
+#' @param name (str) Name of the model. Currently available models are "pheno" and "pheno_linear"
+#'  
+#' @return (ModelfitResults) Loaded modelfit results object
+#' 
+#' @examples
+#' \dontrun{
+#' results <- load_example_modelfit_results("pheno")
+#' results$parameter_estimates
+#' }
+#' 
+#' @export
+load_example_modelfit_results <- function(name) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$load_example_modelfit_results(name)
+		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+			func_out <- reset_indices_results(func_out)
+		}
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -6318,7 +6383,8 @@ retrieve_models <- function(source, names=NULL) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' run_allometry(model=model, results=model$modelfit_results, allometric_variable='WGT')
+#' results <- load_example_modelfit_results("pheno")
+#' run_allometry(model=model, results=results, allometric_variable='WGT')
 #' }
 #' 
 #' @export
@@ -6382,7 +6448,8 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' run_amd(model, results=model$modelfit_results)
+#' results <- load_example_modelfit_results("pheno")
+#' run_amd(model, results=results)
 #' }
 #' @seealso
 #' run_iiv
@@ -6436,7 +6503,7 @@ run_amd <- function(input, results=NULL, modeltype='pk_oral', cl_init=0.01, vc_i
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' res <- model$modelfit_results
+#' results <- load_example_modelfit_results("pheno")
 #' run_bootstrap(model, res, resamples=500)
 #' }
 #' 
@@ -6491,8 +6558,9 @@ run_bootstrap <- function(model, results=NULL, resamples=1, ...) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
+#' results <- load_example_modelfit_results("pheno")
 #' effects <- 'COVARIATE(c(CL, V), c(AGE, WT), EXP)'
-#' res <- run_covsearch(effects, model=model, results=model$modelfit_results)
+#' res <- run_covsearch(effects, model=model, results=results)
 #' }
 #' 
 #' @export
@@ -6545,9 +6613,9 @@ run_covsearch <- function(effects, p_forward=0.05, p_backward=0.01, max_steps=-1
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' res <- model$modelfit_results
+#' results <- load_example_modelfit_results("pheno")
 #' methods <- c('imp', 'saem')
-#' run_estmethod('reduced', methods=methods, solvers='all', results=res, model=model)
+#' run_estmethod('reduced', methods=methods, solvers='all', results=results, model=model)
 #' }
 #' 
 #' @export
@@ -6602,7 +6670,8 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, results=NULL, m
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' run_iivsearch('brute_force', results=model$modelfit_results, model=model)
+#' results <- load_example_modelfit_results("pheno")
+#' run_iivsearch('brute_force', results=results, model=model)
 #' }
 #' 
 #' @export
@@ -6655,7 +6724,8 @@ run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cut
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' run_iovsearch('OCC', results=model$modelfit_results, model=model)
+#' results <- load_example_modelfit_results("pheno")
+#' run_iovsearch('OCC', results=results, model=model)
 #' }
 #' 
 #' @export
@@ -6759,8 +6829,8 @@ run_modelfit <- function(model_or_models=NULL, n=NULL, tool=NULL, ...) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' res <- model$modelfit_results
-#' run_modelsearch('ABSORPTION(ZO);PERIPHERALS(1)', 'exhaustive', results=res, model=model)
+#' results <- load_example_modelfit_results("pheno")
+#' run_modelsearch('ABSORPTION(ZO);PERIPHERALS(1)', 'exhaustive', results=results, model=model)
 #' }
 #' 
 #' @export
@@ -6810,7 +6880,8 @@ run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_de
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' run_ruvsearch(model=model, results=model$modelfit_results)
+#' results <- load_example_modelfit_results("pheno")
+#' run_ruvsearch(model=model, results=results)
 #' }
 #' 
 #' @export
@@ -6898,7 +6969,7 @@ run_tool <- function(name, ...) {
 #' 
 #' Summarize the errors and warnings found after running the model/models.
 #' 
-#' @param models (Model or array(Model)) List of models or single model
+#' @param results (ModelfitResults or array(ModelfitResults)) List of ModelfitResults or single ModelfitResults
 #'  
 #' @return (data.frame) A DataFrame of errors with model name, category (error or warning), and an integer as index, an empty DataFrame if there were no errors or warnings found.
 #' 
@@ -6909,10 +6980,10 @@ run_tool <- function(name, ...) {
 #' }
 #' 
 #' @export
-summarize_errors <- function(models) {
+summarize_errors <- function(results) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$summarize_errors(models)
+		func_out <- pharmpy$tools$summarize_errors(results)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}

@@ -24,7 +24,7 @@ Run bootstrap tool
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-res <- model$modelfit_results
+results <- load_example_modelfit_results("pheno")
 run_bootstrap(model, res, resamples=500)
 }
 

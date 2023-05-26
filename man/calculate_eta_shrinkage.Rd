@@ -30,8 +30,9 @@ Calculate eta shrinkage for each eta
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-pe <- model$modelfit_results$parameter_estimates
-ie <- model$modelfit_results$individual_estimates
+results <- load_example_modelfit_results("pheno")
+pe <- results$parameter_estimates
+ie <- results$individual_estimates
 calculate_eta_shrinkage(model, pe, ie)
 calculate_eta_shrinkage(model, pe, ie, sd=TRUE)
 }

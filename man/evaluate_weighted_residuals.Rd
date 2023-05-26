@@ -29,7 +29,8 @@ This function currently only support models without ODE systems
 \examples{
 \dontrun{
 model <- load_example_model("pheno_linear")
-parameters <- model$modelfit_results$parameter_estimates
+results <- load_example_modelfit_results("pheno_linear")
+parameters <- results$parameter_estimates
 evaluate_weighted_residuals(model, parameters=list(parameters))
 }
 

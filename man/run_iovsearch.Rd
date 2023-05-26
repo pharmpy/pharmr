@@ -42,7 +42,8 @@ Run IOVsearch tool. For more details, see :ref:\code{iovsearch}.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-run_iovsearch('OCC', results=model$modelfit_results, model=model)
+results <- load_example_modelfit_results("pheno")
+run_iovsearch('OCC', results=results, model=model)
 }
 
 }

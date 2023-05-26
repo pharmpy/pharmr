@@ -61,7 +61,8 @@ Runs structural modelsearch, IIV building, and ruvsearch
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-run_amd(model, results=model$modelfit_results)
+results <- load_example_modelfit_results("pheno")
+run_amd(model, results=results)
 }
 }
 \seealso{

@@ -35,7 +35,8 @@ Different variations of the BIC can be calculated:
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-ofv <- model$modelfit_results$ofv
+results <- load_example_modelfit_results("pheno")
+ofv <- results$ofv
 calculate_bic(model, ofv)
 calculate_bic(model, ofv, type='fixed')
 calculate_bic(model, ofv, type='random')

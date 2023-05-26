@@ -25,9 +25,10 @@ If the new initial estimates are out of bounds or NaN this function will raise.
 }
 \examples{
 \dontrun{
-model <- load_example_model("pheno")   # This model was previously fitted to its data
+model <- load_example_model("pheno")
+results <- load_example_modelfit_results("pheno")
 model$parameters$inits
-model <- update_inits(model, model$modelfit_results$parameter_estimates)
+model <- update_inits(model, results$parameter_estimates)
 model$parameters$inits
 }
 

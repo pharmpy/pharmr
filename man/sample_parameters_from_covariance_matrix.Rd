@@ -41,9 +41,10 @@ If parameters is not provided all estimated parameters will be used
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
+results <- load_example_modelfit_results("pheno")
 rng <- create_rng(23)
-cov <- model$modelfit_results$covariance_matrix
-pe <- model$modelfit_results$parameter_estimates
+cov <- results$covariance_matrix
+pe <- results$parameter_estimates
 sample_parameters_from_covariance_matrix(model, pe, cov, n=3, rng=rng)
 }
 }

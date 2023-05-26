@@ -22,7 +22,8 @@ Check for highly correlated parameter estimates
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-cor <- model$modelfit_results$correlation_matrix
+results <- load_example_modelfit_results("pheno")
+cor <- results$correlation_matrix
 check_high_correlations(model, cor, limit=0.3)
 }
 

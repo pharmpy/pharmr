@@ -40,7 +40,8 @@ Run IIVsearch tool. For more details, see :ref:\code{iivsearch}.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-run_iivsearch('brute_force', results=model$modelfit_results, model=model)
+results <- load_example_modelfit_results("pheno")
+run_iivsearch('brute_force', results=results, model=model)
 }
 
 }

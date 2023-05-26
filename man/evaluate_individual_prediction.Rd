@@ -38,7 +38,8 @@ This function currently only support models without ODE systems
 \examples{
 \dontrun{
 model <- load_example_model("pheno_linear")
-etas <- model$modelfit_results$individual_estimates
+results <- load_example_modelfit_results("pheno_linear")
+etas <- results$individual_estimates
 evaluate_individual_prediction(model, etas=etas)
 }
 }

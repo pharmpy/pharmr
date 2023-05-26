@@ -44,9 +44,10 @@ for the model the standard error will not be calculated.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
+results <- load_example_modelfit_results("pheno")
 rng <- create_rng(23)
-pe <- model$modelfit_results$parameter_estimates
-cov <- model$modelfit_results$covariance_matrix
+pe <- results$parameter_estimates
+cov <- results$covariance_matrix
 calculate_individual_parameter_statistics(model, "K=CL/V", pe, cov, rng=rng)
 }
 

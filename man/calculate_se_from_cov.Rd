@@ -17,24 +17,24 @@ Calculate standard errors from a covariance matrix
 }
 \examples{
 \dontrun{
-model <- load_example_model("pheno")
-cov <- model$modelfit_results$covariance_matrix
+results <- load_example_modelfit_results("pheno")
+cov <- results$covariance_matrix
 cov
 calculate_se_from_cov(cov)
 }
 }
 \seealso{
-calculate_se_from_inf : Standard errors from information matrix
+calculate_se_from_prec : Standard errors from precision matrix
 
 calculate_corr_from_cov : Correlation matrix from covariance matrix
 
-calculate_cov_from_inf : Covariance matrix from information matrix
+calculate_cov_from_prec : Covariance matrix from precision matrix
 
 calculate_cov_from_corrse : Covariance matrix from correlation matrix and standard errors
 
-calculate_inf_from_cov : Information matrix from covariance matrix
+calculate_prec_from_cov : Precision matrix from covariance matrix
 
-calculate_inf_from_corrse : Information matrix from correlation matrix and standard errors
+calculate_prec_from_corrse : Precision matrix from correlation matrix and standard errors
 
-calculate_corr_from_inf : Correlation matrix from information matrix
+calculate_corr_from_prec : Correlation matrix from precision matrix
 }

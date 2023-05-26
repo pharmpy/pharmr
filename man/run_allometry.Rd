@@ -47,7 +47,8 @@ Run allometry tool. For more details, see :ref:\code{allometry}.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-run_allometry(model=model, results=model$modelfit_results, allometric_variable='WGT')
+results <- load_example_modelfit_results("pheno")
+run_allometry(model=model, results=results, allometric_variable='WGT')
 }
 
 }
