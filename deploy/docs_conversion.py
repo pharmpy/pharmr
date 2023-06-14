@@ -159,6 +159,7 @@ def _create_r_example(doc_list):
     pattern_list_idx = re.compile(r'\w\[(\d+)]')
     pattern_list = re.compile(r'\[([\'\"\w(),\s]+)]')
     pattern_dict = re.compile(r'{(([\'\"]*[\w\d()]+[\'\"]*: [\'\"]*[\w\d]+\'*,*\s*)+)}')
+    pattern_ws = re.compile(r'\s{2,}')
     pattern_doctest = re.compile(r'\s+# doctest:.*')
 
     doc_code = [row for row in doc_list if row.startswith('>>>') or re.match(r'^\.\.\.\s+[$\w\d]', row)]
@@ -200,6 +201,10 @@ def _create_r_example(doc_list):
 
         # Remove doctest comments
         row_r = re.sub(pattern_doctest, '', row_r)
+
+        # Replace multiple spaces
+        row_r = re.sub(pattern_ws, ' ', row_r)
+
         doc_code_r += row_r + '\n'
 
     return '@examples\n\\dontrun{\n' + doc_code_r + '}'
