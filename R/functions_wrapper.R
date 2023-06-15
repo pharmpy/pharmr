@@ -723,9 +723,7 @@ calculate_bic <- function(model, likelihood, type=NULL) {
 #' @export
 calculate_corr_from_cov <- function(cov) {
 	func_out <- pharmpy$modeling$calculate_corr_from_cov(cov)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -765,9 +763,7 @@ calculate_corr_from_cov <- function(cov) {
 #' @export
 calculate_corr_from_prec <- function(precision_matrix) {
 	func_out <- pharmpy$modeling$calculate_corr_from_prec(precision_matrix)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -810,9 +806,7 @@ calculate_corr_from_prec <- function(precision_matrix) {
 calculate_cov_from_corrse <- function(corr, se) {
 	se <- convert_input(se, "pd.Series")
 	func_out <- pharmpy$modeling$calculate_cov_from_corrse(corr, se)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -852,9 +846,7 @@ calculate_cov_from_corrse <- function(corr, se) {
 #' @export
 calculate_cov_from_prec <- function(precision_matrix) {
 	func_out <- pharmpy$modeling$calculate_cov_from_prec(precision_matrix)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -943,9 +935,7 @@ calculate_eta_gradient_expression <- function(model) {
 calculate_eta_shrinkage <- function(model, parameter_estimates, individual_estimates, sd=FALSE) {
 	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
 	func_out <- pharmpy$modeling$calculate_eta_shrinkage(model, parameter_estimates, individual_estimates, sd=sd)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -990,9 +980,7 @@ calculate_individual_parameter_statistics <- function(model, expr_or_exprs, para
 	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
 	rng <- convert_input(rng, "int")
 	func_out <- pharmpy$modeling$calculate_individual_parameter_statistics(model, expr_or_exprs, parameter_estimates, covariance_matrix=covariance_matrix, rng=rng)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -1026,9 +1014,7 @@ calculate_individual_parameter_statistics <- function(model, expr_or_exprs, para
 calculate_individual_shrinkage <- function(model, parameter_estimates, individual_estimates_covariance) {
 	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
 	func_out <- pharmpy$modeling$calculate_individual_shrinkage(model, parameter_estimates, individual_estimates_covariance)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -1048,7 +1034,7 @@ calculate_individual_shrinkage <- function(model, parameter_estimates, individua
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' scale <- calculate_ucp_scale(model)
-#' values <- {'PTVCL': 0.1, 'PTVV': 0.1, 'THETA_3': 0.1,                   'IVCL': 0.1, 'IVV': 0.1, 'SIGMA_1_1': 0.1}
+#' values <- {'PTVCL': 0.1, 'PTVV': 0.1, 'THETA_3': 0.1, 'IVCL': 0.1, 'IVV': 0.1, 'SIGMA_1_1': 0.1}
 #' calculate_parameters_from_ucp(model, scale, values)
 #' }
 #' @seealso
@@ -1058,9 +1044,7 @@ calculate_individual_shrinkage <- function(model, parameter_estimates, individua
 #' @export
 calculate_parameters_from_ucp <- function(model, scale, ucps) {
 	func_out <- pharmpy$modeling$calculate_parameters_from_ucp(model, scale, ucps)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -1099,9 +1083,7 @@ calculate_pk_parameters_statistics <- function(model, parameter_estimates, covar
 	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
 	rng <- convert_input(rng, "int")
 	func_out <- pharmpy$modeling$calculate_pk_parameters_statistics(model, parameter_estimates, covariance_matrix=covariance_matrix, rng=rng)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -1144,9 +1126,7 @@ calculate_pk_parameters_statistics <- function(model, parameter_estimates, covar
 calculate_prec_from_corrse <- function(corr, se) {
 	se <- convert_input(se, "pd.Series")
 	func_out <- pharmpy$modeling$calculate_prec_from_corrse(corr, se)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -1186,9 +1166,7 @@ calculate_prec_from_corrse <- function(corr, se) {
 #' @export
 calculate_prec_from_cov <- function(cov) {
 	func_out <- pharmpy$modeling$calculate_prec_from_cov(cov)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -1228,9 +1206,7 @@ calculate_prec_from_cov <- function(cov) {
 #' @export
 calculate_se_from_cov <- function(cov) {
 	func_out <- pharmpy$modeling$calculate_se_from_cov(cov)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -1270,9 +1246,7 @@ calculate_se_from_cov <- function(cov) {
 #' @export
 calculate_se_from_prec <- function(precision_matrix) {
 	func_out <- pharmpy$modeling$calculate_se_from_prec(precision_matrix)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -1322,9 +1296,7 @@ calculate_ucp_scale <- function(model) {
 #' @export
 check_dataset <- function(model, dataframe=FALSE, verbose=FALSE) {
 	func_out <- pharmpy$modeling$check_dataset(model, dataframe=dataframe, verbose=verbose)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -1351,9 +1323,7 @@ check_dataset <- function(model, dataframe=FALSE, verbose=FALSE) {
 #' @export
 check_high_correlations <- function(model, cor, limit=0.9) {
 	func_out <- pharmpy$modeling$check_high_correlations(model, cor, limit=limit)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -1382,9 +1352,7 @@ check_parameters_near_bounds <- function(model, values, zero_limit=0.001, signif
 	values <- convert_input(values, "pd.Series")
 	significant_digits <- convert_input(significant_digits, "int")
 	func_out <- pharmpy$modeling$check_parameters_near_bounds(model, values, zero_limit=zero_limit, significant_digits=significant_digits)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -1606,9 +1574,7 @@ create_symbol <- function(model, stem, force_numbering=FALSE) {
 deidentify_data <- function(df, id_column='ID', date_columns=NULL) {
 	date_columns <- convert_input(date_columns, "list")
 	func_out <- pharmpy$modeling$deidentify_data(df, id_column=id_column, date_columns=date_columns)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -1732,9 +1698,7 @@ drop_dropped_columns <- function(model) {
 #' @export
 evaluate_epsilon_gradient <- function(model, etas=NULL, parameters=NULL, dataset=NULL) {
 	func_out <- pharmpy$modeling$evaluate_epsilon_gradient(model, etas=etas, parameters=parameters, dataset=dataset)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -1774,9 +1738,7 @@ evaluate_epsilon_gradient <- function(model, etas=NULL, parameters=NULL, dataset
 #' @export
 evaluate_eta_gradient <- function(model, etas=NULL, parameters=NULL, dataset=NULL) {
 	func_out <- pharmpy$modeling$evaluate_eta_gradient(model, etas=etas, parameters=parameters, dataset=dataset)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -1808,9 +1770,7 @@ evaluate_eta_gradient <- function(model, etas=NULL, parameters=NULL, dataset=NUL
 #' @export
 evaluate_expression <- function(model, expression, parameter_estimates=NULL) {
 	func_out <- pharmpy$modeling$evaluate_expression(model, expression, parameter_estimates=parameter_estimates)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -1850,9 +1810,7 @@ evaluate_expression <- function(model, expression, parameter_estimates=NULL) {
 #' @export
 evaluate_individual_prediction <- function(model, etas=NULL, parameters=NULL, dataset=NULL) {
 	func_out <- pharmpy$modeling$evaluate_individual_prediction(model, etas=etas, parameters=parameters, dataset=dataset)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -1889,9 +1847,7 @@ evaluate_individual_prediction <- function(model, etas=NULL, parameters=NULL, da
 #' @export
 evaluate_population_prediction <- function(model, parameters=NULL, dataset=NULL) {
 	func_out <- pharmpy$modeling$evaluate_population_prediction(model, parameters=parameters, dataset=dataset)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -1925,9 +1881,7 @@ evaluate_population_prediction <- function(model, parameters=NULL, dataset=NULL)
 #' @export
 evaluate_weighted_residuals <- function(model, parameters=NULL, dataset=NULL) {
 	func_out <- pharmpy$modeling$evaluate_weighted_residuals(model, parameters=parameters, dataset=dataset)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -2133,9 +2087,7 @@ fix_parameters_to <- function(model, inits) {
 #' @export
 get_baselines <- function(model) {
 	func_out <- pharmpy$modeling$get_baselines(model)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -2173,9 +2125,7 @@ get_bioavailability <- function(model) {
 #' @export
 get_cmt <- function(model) {
 	func_out <- pharmpy$modeling$get_cmt(model)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -2200,9 +2150,7 @@ get_cmt <- function(model) {
 #' @export
 get_concentration_parameters_from_data <- function(model) {
 	func_out <- pharmpy$modeling$get_concentration_parameters_from_data(model)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -2252,9 +2200,7 @@ get_config_path <- function() {
 #' @export
 get_covariate_baselines <- function(model) {
 	func_out <- pharmpy$modeling$get_covariate_baselines(model)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -2280,9 +2226,7 @@ get_covariate_baselines <- function(model) {
 #' @export
 get_doseid <- function(model) {
 	func_out <- pharmpy$modeling$get_doseid(model)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -2307,9 +2251,7 @@ get_doseid <- function(model) {
 #' @export
 get_doses <- function(model) {
 	func_out <- pharmpy$modeling$get_doses(model)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -2355,9 +2297,7 @@ get_dv_symbol <- function(model, dv=NULL) {
 #' @export
 get_evid <- function(model) {
 	func_out <- pharmpy$modeling$get_evid(model)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -2499,9 +2439,7 @@ get_lag_times <- function(model) {
 #' @export
 get_mdv <- function(model) {
 	func_out <- pharmpy$modeling$get_mdv(model)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -2648,9 +2586,7 @@ get_number_of_observations <- function(model) {
 #' @export
 get_number_of_observations_per_individual <- function(model) {
 	func_out <- pharmpy$modeling$get_number_of_observations_per_individual(model)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -2703,9 +2639,7 @@ get_observation_expression <- function(model) {
 #' @export
 get_observations <- function(model) {
 	func_out <- pharmpy$modeling$get_observations(model)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -3647,9 +3581,7 @@ print_model_symbols <- function(model) {
 #' @export
 read_dataset_from_datainfo <- function(datainfo, datatype=NULL) {
 	func_out <- pharmpy$modeling$read_dataset_from_datainfo(datainfo, datatype=datatype)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -4119,9 +4051,7 @@ sample_individual_estimates <- function(model, individual_estimates, individual_
 	samples_per_id <- convert_input(samples_per_id, "int")
 	rng <- convert_input(rng, "int")
 	func_out <- pharmpy$modeling$sample_individual_estimates(model, individual_estimates, individual_estimates_covariance, parameters=parameters, samples_per_id=samples_per_id, rng=rng)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -4166,9 +4096,7 @@ sample_parameters_from_covariance_matrix <- function(model, parameter_estimates,
 	n <- convert_input(n, "int")
 	rng <- convert_input(rng, "int")
 	func_out <- pharmpy$modeling$sample_parameters_from_covariance_matrix(model, parameter_estimates, covariance_matrix, force_posdef_samples=force_posdef_samples, force_posdef_covmatrix=force_posdef_covmatrix, n=n, rng=rng)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -4214,9 +4142,7 @@ sample_parameters_uniformly <- function(model, parameter_estimates, fraction=0.1
 	n <- convert_input(n, "int")
 	rng <- convert_input(rng, "int")
 	func_out <- pharmpy$modeling$sample_parameters_uniformly(model, parameter_estimates, fraction=fraction, force_posdef_samples=force_posdef_samples, n=n, rng=rng)
-	if (func_out$index$nlevels > 1) {
-		func_out <- func_out$reset_index()
-	}
+	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
 
@@ -4894,8 +4820,8 @@ set_power_on_ruv <- function(model, list_of_eps=NULL, lower_limit=0.01, ipred=NU
 #' model$statements$after_odes
 #' model <- remove_error_model(load_example_model("pheno"))
 #' model <- set_proportional_error_model(
-#'     model,
-#'     data_trans="log(Y)"
+#'  model,
+#'  data_trans="log(Y)"
 #' model$statements$after_odes
 #' }
 #' @seealso
@@ -5900,9 +5826,7 @@ predict_influential_individuals <- function(model, results, cutoff=3.84) {
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
-		if (func_out$index$nlevels > 1) {
-			func_out <- func_out$reset_index()
-		}
+		func_out <- reset_index_df(func_out)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -5951,9 +5875,7 @@ predict_influential_outliers <- function(model, results, outlier_cutoff=3.0, inf
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
-		if (func_out$index$nlevels > 1) {
-			func_out <- func_out$reset_index()
-		}
+		func_out <- reset_index_df(func_out)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -6009,9 +5931,7 @@ predict_outliers <- function(model, results, cutoff=3.0) {
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
-		if (func_out$index$nlevels > 1) {
-			func_out <- func_out$reset_index()
-		}
+		func_out <- reset_index_df(func_out)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -6093,8 +6013,8 @@ print_fit_summary <- function(model) {
 #' model_1 <- load_example_model("pheno")
 #' model_2 <- load_example_model("pheno_linear")
 #' rank_models(model_1, c(model_2),
-#'             errors_allowed=c('rounding_errors'),
-#'             rank_type='lrt')
+#'  errors_allowed=c('rounding_errors'),
+#'  rank_type='lrt')
 #' }
 #' 
 #' @export
@@ -6107,9 +6027,7 @@ rank_models <- function(base_model, models, errors_allowed=NULL, rank_type='ofv'
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
-		if (func_out$index$nlevels > 1) {
-			func_out <- func_out$reset_index()
-		}
+		func_out <- reset_index_df(func_out)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -6987,9 +6905,7 @@ summarize_errors <- function(results) {
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
-		if (func_out$index$nlevels > 1) {
-			func_out <- func_out$reset_index()
-		}
+		func_out <- reset_index_df(func_out)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -7043,9 +6959,9 @@ summarize_errors <- function(results) {
 #' model <- load_example_model("pheno")
 #' fit_results <- fit(model)
 #' results <- run_tool(
-#'     model=model,
-#'     mfl='ABSORPTION(ZO);PERIPHERALS(c(1, 2))',
-#'     algorithm='reduced_stepwise'
+#'  model=model,
+#'  mfl='ABSORPTION(ZO);PERIPHERALS(c(1, 2))',
+#'  algorithm='reduced_stepwise'
 #' summarize_individuals([results$start_model, *results$models])
 #' }
 #' 
@@ -7058,9 +6974,7 @@ summarize_individuals <- function(models) {
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
-		if (func_out$index$nlevels > 1) {
-			func_out <- func_out$reset_index()
-		}
+		func_out <- reset_index_df(func_out)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -7124,9 +7038,7 @@ summarize_individuals_count_table <- function(models=NULL, df=NULL) {
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
-		if (func_out$index$nlevels > 1) {
-			func_out <- func_out$reset_index()
-		}
+		func_out <- reset_index_df(func_out)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -7180,9 +7092,7 @@ summarize_modelfit_results <- function(results, include_all_estimation_steps=FAL
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
-		if (func_out$index$nlevels > 1) {
-			func_out <- func_out$reset_index()
-		}
+		func_out <- reset_index_df(func_out)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {

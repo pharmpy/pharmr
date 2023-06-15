@@ -44,8 +44,8 @@ model <- set_proportional_error_model(model)
 model$statements$after_odes
 model <- remove_error_model(load_example_model("pheno"))
 model <- set_proportional_error_model(
-    model,
-    data_trans="log(Y)"
+ model,
+ data_trans="log(Y)"
 model$statements$after_odes
 }
 }

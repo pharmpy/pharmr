@@ -23,7 +23,7 @@ Scale parameter values from ucp to normal scale
 \dontrun{
 model <- load_example_model("pheno")
 scale <- calculate_ucp_scale(model)
-values <- {'PTVCL': 0.1, 'PTVV': 0.1, 'THETA_3': 0.1,                   'IVCL': 0.1, 'IVV': 0.1, 'SIGMA_1_1': 0.1}
+values <- {'PTVCL': 0.1, 'PTVV': 0.1, 'THETA_3': 0.1, 'IVCL': 0.1, 'IVV': 0.1, 'SIGMA_1_1': 0.1}
 calculate_parameters_from_ucp(model, scale, values)
 }
 }

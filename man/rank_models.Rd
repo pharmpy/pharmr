@@ -40,8 +40,8 @@ Ranks a vector of models with a given ranking function
 model_1 <- load_example_model("pheno")
 model_2 <- load_example_model("pheno_linear")
 rank_models(model_1, c(model_2),
-            errors_allowed=c('rounding_errors'),
-            rank_type='lrt')
+ errors_allowed=c('rounding_errors'),
+ rank_type='lrt')
 }
 
 }
