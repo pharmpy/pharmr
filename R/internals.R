@@ -22,9 +22,7 @@ reset_indices_results <- function(res) {
     }
     if ('pandas.core.frame.DataFrame' %in% py_attr_class) {
       # Reset index if dataframe has multiindex
-      if (py_attr$index$nlevels > 1) {
-        py_attr <- py_attr$reset_index()
-      }
+      py_attr <- reset_index_df(py_attr)
     }
     
     attrs_new[[py_attr_name]] <- py_attr
@@ -45,6 +43,14 @@ reset_indices_results <- function(res) {
   constructor_str <- paste(res_class_r, '(', input_args, ')', sep = '')
   res_new <- eval(parse(text=constructor_str))
   return(res_new)
+}
+
+reset_index_df <- function(df) {
+      nlevels <- as.integer(as.character(df$index$nlevels)) # nlevels is of environment type
+      if (nlevels > 1) {
+        df <- df$reset_index()
+      }
+      return(df)
 }
 
 

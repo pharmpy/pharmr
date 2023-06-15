@@ -152,9 +152,7 @@ def _create_func_return(func):
     func_return = []
     if _has_return_type_pd(inspect.getdoc(func)):
         r_reset_index = [
-            'if (func_out$index$nlevels > 1) {',
-            'func_out <- func_out$reset_index()',
-            '}'
+            'func_out <- reset_index_df(func_out)'
         ]
         func_return.extend(r_reset_index)
     func_return += [
