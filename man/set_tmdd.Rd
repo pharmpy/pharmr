@@ -18,6 +18,8 @@ set_tmdd(model, type)
 Sets target mediated drug disposition
 
 Sets target mediated drug disposition to a PK model.
+
+Supported models are full, ib, cr, crib, qss, wagner and mmapp.
 }
 \examples{
 \dontrun{

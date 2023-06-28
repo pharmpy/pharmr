@@ -10,6 +10,7 @@ run_ruvsearch(
   groups = 4,
   p_value = 0.05,
   skip = NULL,
+  max_iter = 3,
   ...
 )
 }
@@ -22,7 +23,9 @@ run_ruvsearch(
 
 \item{p_value}{(numeric) The p-value to use for the likelihood ratio test}
 
-\item{skip}{(array(str) (optional)) A vector of models to not attempt}
+\item{skip}{(array(str) (optional)) A vector of models to not attempt.}
+
+\item{max_iter}{(numeric (optional)) Number of iterations to run (1, 2, or 3). For models with BLQ only one iteration is supported}
 
 \item{...}{Arguments to pass to tool}
 }

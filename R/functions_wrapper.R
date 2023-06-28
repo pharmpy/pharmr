@@ -200,6 +200,37 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 }
 
 #' @title
+#' add_effect_compartment
+#' 
+#' @description
+#' Add an effect compartment
+#' 
+#' @param model (Model) Pharmpy model
+#' @param expr (str) Name of PD effect function. The function can either be
+#' * baseline: E = E0
+#' * step effect: Emax = theta if C > 0 else 0, E = E0 + Emax
+#' * linear: E = E0 + S * C
+#' * Emax: E = E0 + Emax * C / (EC50 + C)
+#' * sigmoidal: E = Emax * C^n / (EC50^n + C^n)
+#' * log-lin: E = m * log(C + C0)
+#' Valid strings are: baseline, linear, Emax, sigmoid, step, loglin
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- add_effect_compartment(model, "linear")
+#' model$statements$ode_system$find_compartment("EFFECT")
+#' }
+#' 
+#' @export
+add_effect_compartment <- function(model, expr) {
+	func_out <- pharmpy$modeling$add_effect_compartment(model, expr)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' add_estimation_step
 #' 
 #' @description
@@ -4291,6 +4322,34 @@ set_covariates <- function(model, covariates) {
 }
 
 #' @title
+#' set_direct_effect
+#' 
+#' @description
+#' Add an effect to a model
+#' 
+#' @param model (Model) Pharmpy model
+#' @param expr (str) Name of PD effect function. The function can either be
+#' * baseline: E = E0
+#' * step effect: Emax = theta if C > 0 else 0, E = E0 + Emax
+#' * linear: E = E0 + S * C
+#' * Emax: E = E0 + Emax * C / (EC50 + C)
+#' * sigmoidal: E = Emax * C^n / (EC50^n + C^n)
+#' * log-lin: E = m * log(C + C0)
+#' Valid strings are: baseline, linear, Emax, sigmoid, step, loglin
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' }
+#' 
+#' @export
+set_direct_effect <- function(model, expr) {
+	func_out <- pharmpy$modeling$set_direct_effect(model, expr)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' set_dtbs_error_model
 #' 
 #' @description
@@ -4905,6 +4964,8 @@ set_time_varying_error_model <- function(model, cutoff, idv='TIME') {
 #' Sets target mediated drug disposition
 #' 
 #' Sets target mediated drug disposition to a PK model.
+#' 
+#' Supported models are full, ib, cr, crib, qss, wagner and mmapp.
 #' 
 #' @param model (Model) Pharmpy model
 #' @param type (str) Type of TMDD model
@@ -6348,7 +6409,8 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' 
 #' @param input (Model or str) Read model object/Path to a dataset
 #' @param results (ModelfitResults (optional)) Reults of input if input is a model
-#' @param modeltype (str) Type of model to build. Either 'pk_oral' or 'pk_iv'
+#' @param modeltype (str) Type of model to build. Either 'basic_pl' or 'tmdd'
+#' @param administraton (str) Route of administration. Either 'iv' or 'oral'
 #' @param cl_init (numeric) Initial estimate for the population clearance
 #' @param vc_init (numeric) Initial estimate for the central compartment population volume
 #' @param mat_init (numeric) Initial estimate for the mean absorption time (not for iv models)
@@ -6376,11 +6438,11 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' 
 #' 
 #' @export
-run_amd <- function(input, results=NULL, modeltype='pk_oral', cl_init=0.01, vc_init=1.0, mat_init=0.1, search_space=NULL, lloq_method=NULL, lloq_limit=NULL, order=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE) {
+run_amd <- function(input, results=NULL, modeltype='basic_pk', administraton='oral', cl_init=0.01, vc_init=1.0, mat_init=0.1, search_space=NULL, lloq_method=NULL, lloq_limit=NULL, order=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE) {
 	tryCatch(
 	{
 		order <- convert_input(order, "list")
-		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, search_space=search_space, lloq_method=lloq_method, lloq_limit=lloq_limit, order=order, allometric_variable=allometric_variable, occasion=occasion, path=path, resume=resume)
+		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, administraton=administraton, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, search_space=search_space, lloq_method=lloq_method, lloq_limit=lloq_limit, order=order, allometric_variable=allometric_variable, occasion=occasion, path=path, resume=resume)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -6790,7 +6852,8 @@ run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_de
 #' @param results (ModelfitResults (optional)) Results of model
 #' @param groups (numeric) The number of bins to use for the time varying models
 #' @param p_value (numeric) The p-value to use for the likelihood ratio test
-#' @param skip (array(str) (optional)) A vector of models to not attempt
+#' @param skip (array(str) (optional)) A vector of models to not attempt.
+#' @param max_iter (numeric (optional)) Number of iterations to run (1, 2, or 3). For models with BLQ only one iteration is supported
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (RUVSearchResults) Ruvsearch tool result object
@@ -6803,12 +6866,63 @@ run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_de
 #' }
 #' 
 #' @export
-run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.05, skip=NULL, ...) {
+run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.05, skip=NULL, max_iter=3, ...) {
 	tryCatch(
 	{
 		groups <- convert_input(groups, "int")
 		skip <- convert_input(skip, "list")
-		func_out <- pharmpy$tools$run_ruvsearch(model=model, results=results, groups=groups, p_value=p_value, skip=skip, ...)
+		max_iter <- convert_input(max_iter, "int")
+		func_out <- pharmpy$tools$run_ruvsearch(model=model, results=results, groups=groups, p_value=p_value, skip=skip, max_iter=max_iter, ...)
+		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+			func_out <- reset_indices_results(func_out)
+		}
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
+#' run_structsearch
+#' 
+#' @description
+#' Run the structsearch tool. For more details, see :ref:`structsearch`.
+#' 
+#' @param route (str) Route of administration. Either 'pk' or 'oral'
+#' @param type (str) Type of model. Currently only 'tmdd'
+#' @param results (ModelfitResults (optional)) Results for the start model
+#' @param model (Model (optional)) Pharmpy start mode
+#' @param ... Arguments to pass to tool
+#'  
+#' @return (StructSearchResult) structsearch tool result object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' results <- load_example_modelfit_results("pheno")
+#' run_structsearch(model_type='tmdd', results=results, model=model)
+#' }
+#' 
+#' @export
+run_structsearch <- function(route, type, results=NULL, model=NULL, ...) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$run_structsearch(route, type, results=results, model=model, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
