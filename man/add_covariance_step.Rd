@@ -4,10 +4,12 @@
 \alias{add_covariance_step}
 \title{add_covariance_step}
 \usage{
-add_covariance_step(model)
+add_covariance_step(model, cov)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
+
+\item{cov}{(str) covariance method to use}
 }
 \value{
 (Model) Pharmpy model object
@@ -18,8 +20,8 @@ Adds covariance step to the final estimation step
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-model <- set_estimation_step(model, 'FOCE', cov=FALSE)
-model <- add_covariance_step(model)
+model <- set_estimation_step(model, 'FOCE', cov=NULL)
+model <- add_covariance_step(model, 'SANDWICH')
 ests <- model$estimation_steps
 ests[1]
 }

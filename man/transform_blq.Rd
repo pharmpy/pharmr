@@ -23,7 +23,7 @@ Transform a given model, methods available are m1, m3, and m4 (1). Current limit
 m3 and m4 method:
 \itemize{
 \item Does not support covariance between epsilons
-\item Only supports additive, proportional, and combined error model
+\item Supports additive, proportional, combined, and power error model
 }
 
 (1) Beal SL. Ways to fit a PK model with some data below the quantification

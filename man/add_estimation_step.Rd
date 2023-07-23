@@ -28,7 +28,7 @@ FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM
 \dontrun{
 model <- load_example_model("pheno")
 opts <- list('NITER'=1000, 'ISAMPLE'=100)
-model <- add_estimation_step(model, "IMP", tool_options=opts)
+model <- add_estimation_step(model, 'IMP', tool_options=opts)
 ests <- model$estimation_steps
 length(ests)
 ests[2]

@@ -11,6 +11,7 @@ run_iivsearch(
   cutoff = NULL,
   results = NULL,
   model = NULL,
+  keep = NULL,
   ...
 )
 }
@@ -27,7 +28,9 @@ is NULL (all models will be ranked)}
 
 \item{results}{(ModelfitResults (optional)) Results for model}
 
-\item{model}{(Model (optional)) Pharmpy mode}
+\item{model}{(Model (optional)) Pharmpy model}
+
+\item{keep}{(array(str) (optional)) List of IIVs to kee}
 
 \item{...}{Arguments to pass to tool}
 }

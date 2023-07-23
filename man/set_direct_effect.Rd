@@ -9,25 +9,29 @@ set_direct_effect(model, expr)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{expr}{(str) Name of PD effect function. The function can either be
-\itemize{
-\item baseline: E = E0
-\item step effect: Emax = theta if C > 0 else 0, E = E0 + Emax
-\item linear: E = E0 + S * C
-\item Emax: E = E0 + Emax * C / (EC50 + C)
-\item sigmoidal: E = Emax * C^n / (EC50^n + C^n)
-\item log-lin: E = m * log(C + C0)
-Valid strings are: baseline, linear, Emax, sigmoid, step, loglin
-}}
+\item{expr}{(str) Name of PD effect function. Valid names are: baseline, linear, Emax, sigmoid, step, loglin}
 }
 \value{
 (Model) Pharmpy model object
 }
 \description{
-Add an effect to a model
+Add an effect to a model.
+
+Implemented PD models are:
+\itemize{
+\item Baseline: :math:\code{E = E_0}
+\item Linear: :math:\code{E = E_0 + S * C}
+\item Emax: :math:\verb{E = E_0 + frac \{E_\{max\} * C \} \{ EC_\{50\} + C \}}
+\item Step effect: :math:\verb{E = \\Biggl \\lbrace \{ E_0 \\quad  \{ if C \} < 0 \\atop E_0 + E_\{max\} \\quad  \{else\}\}}
+\item Sigmoidal: :math:\verb{E = frac \{E_\{max\} C^n\} \{ EC_\{50\}^n + C^n\}}
+\item Log-linear: :math:\code{E = m *  {log}(C + C_0)}
+}
 }
 \examples{
 \dontrun{
+model <- load_example_model("pheno")
+model <- set_direct_effect(model, "linear")
+model$statements$find_assignment("E")
 }
 
 }

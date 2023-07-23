@@ -8,6 +8,7 @@ run_estmethod(
   algorithm,
   methods = NULL,
   solvers = NULL,
+  covs = NULL,
   results = NULL,
   model = NULL,
   ...
@@ -21,6 +22,9 @@ NULL (to not test any estimation method)}
 
 \item{solvers}{(array(str) or str (optional)) List of solver to test. Can be specified as 'all', a vector of solvers, or NULL (to
 not test any solver)}
+
+\item{covs}{(array(str) or str (optional)) List of covariance to test. Can be specified as 'all', a vector of covs, or NULL (to
+not evaluate any covariance)}
 
 \item{results}{(ModelfitResults (optional)) Results for model}
 
@@ -39,7 +43,10 @@ Run estmethod tool.
 model <- load_example_model("pheno")
 results <- load_example_modelfit_results("pheno")
 methods <- c('imp', 'saem')
-run_estmethod('reduced', methods=methods, solvers='all', results=results, model=model)
+covs <- NULL
+run_estmethod(
+ 'reduced', methods=methods, solvers='all', covs=covs, results=results, model=model
+)
 }
 
 }

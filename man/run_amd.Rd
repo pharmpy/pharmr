@@ -8,7 +8,7 @@ run_amd(
   input,
   results = NULL,
   modeltype = "basic_pk",
-  administraton = "oral",
+  administration = "oral",
   cl_init = 0.01,
   vc_init = 1,
   mat_init = 0.1,
@@ -27,9 +27,9 @@ run_amd(
 
 \item{results}{(ModelfitResults (optional)) Reults of input if input is a model}
 
-\item{modeltype}{(str) Type of model to build. Either 'basic_pl' or 'tmdd'}
+\item{modeltype}{(str) Type of model to build. Either 'basic_pk' or 'tmdd'}
 
-\item{administraton}{(str) Route of administration. Either 'iv' or 'oral'}
+\item{administration}{(str) Route of administration. Either 'iv' or 'oral'}
 
 \item{cl_init}{(numeric) Initial estimate for the population clearance}
 

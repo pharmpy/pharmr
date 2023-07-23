@@ -9,7 +9,7 @@ run_structsearch(route, type, results = NULL, model = NULL, ...)
 \arguments{
 \item{route}{(str) Route of administration. Either 'pk' or 'oral'}
 
-\item{type}{(str) Type of model. Currently only 'tmdd'}
+\item{type}{(str) Type of model. Currently only 'tmdd' and 'pkpd'}
 
 \item{results}{(ModelfitResults (optional)) Results for the start model}
 

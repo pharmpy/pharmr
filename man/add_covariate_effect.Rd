@@ -67,8 +67,8 @@ math::
 {coveff} = 1 + {theta}
 \itemize{
 \item Init: :math:\code{0.001}
-\item Upper: :math:\verb{100,000}
-\item Lower: :math:\verb{-100,000}
+\item Upper: :math:\code{5}
+\item Lower: :math:\code{-1}
 \item Piecewise linear function/"hockey-stick", continuous covariates only (\emph{piece_lin})
 \item Function:
 \item If cov <= median:

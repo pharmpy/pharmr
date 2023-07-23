@@ -16,7 +16,7 @@ get_pk_parameters(model, kind = "all")
 (vector\link{str}) A vector of the PK parameter names of the given model
 }
 \description{
-Retrieves PK parameters in :class:\code{pharmpy.model}.
+Retrieves PK parameters in :class:\code{pharmpy.model.Model}.
 }
 \examples{
 \dontrun{
