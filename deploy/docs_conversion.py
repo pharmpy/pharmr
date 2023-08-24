@@ -29,6 +29,10 @@ def create_r_doc(func):
             row = re.sub(r'^\.\. ', '', row)
         doc_str += f'{py_to_r_str(row)}\n'
 
+    # Replace LaTeX math code
+    math_pattern = re.compile(r'((:math:)|(math::))\s*`*.+(\\\n)*.+`*')
+    doc_str = re.sub(math_pattern, '(equation could not be rendered, see API doc on website)', doc_str)
+
     if 'params' in doc_dict.keys():
         doc_str += _create_r_params(doc_dict['params'], func)
     if 'returns' in doc_dict.keys():
@@ -102,8 +106,7 @@ def _translate_type_hints(var_type):
         if var_type.__module__.startswith('pharmpy'):
             return var_type.__name__
         elif var_type not in TYPE_DICT:
-            warnings.warn(f'Could not translate type: {var_type}')
-            return var_type
+            raise ValueError(f'Could not translate type: {var_type}')
         return TYPE_DICT[var_type]
     elif var_type == Any:
         return 'any'

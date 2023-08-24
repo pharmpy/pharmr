@@ -63,17 +63,7 @@ def py_to_r_str(arg, example=False):
              r'\w+\[Model\]': 'vector of Model',  # FIXME: more general pattern
              r'\w+\[ModelfitResults\]': 'vector of ModelfitResults'}  # FIXME: more general pattern
 
-    latex = {r'\\mathsf': '',
-             r'\\cdot': '*',
-             r'\\text': '',
-             r'\\frac': 'frac',
-             r'\\log': 'log',
-             r'\\exp': 'exp',
-             r'\\min': 'min',
-             r'\\max': 'max',
-             r'\\epsilon': 'epsilon'}
-
-    py_to_r_dict = {**args, **types, **latex}
+    py_to_r_dict = {**args, **types}
 
     if not example:
         py_to_r_dict = {**py_to_r_dict, **{r'\[([0-9]+)\]_*': r'(\1)'}}
