@@ -95,13 +95,6 @@ jobs:
           path: pharmpy_repo
           fetch-depth: 0
 
-      - name: Set up Pharmpy release version
-        working-directory: pharmpy_repo
-        run: |
-          git checkout -b release_latest "$(git rev-list --tags --max-count=1)"
-          echo "pharmpy_version=`git describe --tags`" >> $GITHUB_ENV 
-          git branch -v
-
       - name: Install Pharmpy in venv
         working-directory: pharmpy_repo
         run: |
@@ -125,13 +118,7 @@ jobs:
       - name: Update DESCRIPTION and documentation
         working-directory: pharmr_repo/deploy
         run: |
-          reticulate::use_python('../../pharmpy_repo/pharmpy_venv/bin')
-
-          pharmpy <- reticulate::import("pharmpy")
-          pharmpy_version <- pharmpy$`__version__`
-          desc::desc_set('Version', pharmpy_version)
-          desc::desc_set('Date', Sys.Date())
-          
+          reticulate::use_python('../../pharmpy_repo/pharmpy_venv/bin')          
           reticulate::py_run_file('build_functions.py')
           devtools::document()
         shell: Rscript {0}
