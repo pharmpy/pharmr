@@ -30,7 +30,7 @@ def create_r_doc(func):
         doc_str += f'{py_to_r_str(row)}\n'
 
     # Replace LaTeX math code
-    math_pattern = re.compile(r'((:math:)|(math::))\s*`*.+(\\\n)*.+`*')
+    math_pattern = re.compile(r'((:math:)|(math::))\s*`*.+((\\|,)\n)*.+`*')
     doc_str = re.sub(math_pattern, '(equation could not be rendered, see API doc on website)', doc_str)
 
     if 'params' in doc_dict.keys():
