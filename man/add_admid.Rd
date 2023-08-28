@@ -15,8 +15,9 @@ add_admid(model)
 \description{
 Add an admid column to the model dataset and datainfo. Dependent on the
 presence of a CMT column in order to add admid correctly.
-1 : Oral dose
-2 : IV dose
+
+When generated, admids of events in between doses is set to the last used
+admid.
 }
 \seealso{
 get_admid : Get or create an admid column

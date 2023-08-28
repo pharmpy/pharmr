@@ -16,7 +16,9 @@ get_admid(model)
 Get the admid from model dataset
 
 If an administration column is present this will be extracted otherwise
-an admid column will be created.
-1 : Oral dose
-2 : IV dose
+an admid column will be created based on the admids of the present doses.
+This is dependent on the presence of a CMT column to be generated correctly.
+
+When generated, admids of events in between doses is set to the last used
+admid.
 }

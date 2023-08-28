@@ -15,7 +15,7 @@ set_michaelis_menten_elimination(model)
 \description{
 Sets elimination to Michaelis-Menten.
 
-Initial estimate for CLMM is set to CL and KM is set to :math:\code{2*max(DV)}.
+Initial estimate for CLMM is set to CL and KM is set to (equation could not be rendered, see API doc on website)
 }
 \examples{
 \dontrun{

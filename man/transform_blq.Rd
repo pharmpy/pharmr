@@ -19,8 +19,31 @@ transform_blq(model, method = "m4", lloq = NULL)
 \description{
 Transform for BLQ data
 
-Transform a given model, methods available are m1, m3, and m4 (1). Current limits of the
-m3 and m4 method:
+Transform a given model, methods available are m1, m3, m4, m5, m6 and m7 (1).
+The blq information can come from the dataset, the lloq option or a combination. Both LLOQ and BLQ
+columns are supported. The table below explains which columns are used for the various cases:
+
++-------------+-------------+------------+-------------------+---------------+-------------------+
+| lloq option | LLOQ column | BLQ column | Used as indicator | Used as level | Note              |
++=============+=============+============+===================+===============+===================+
+| Available   | NA          | NA         | DV < lloq         | lloq          |                   |
++-------------+-------------+------------+-------------------+---------------+-------------------+
+| NA          | Available   | NA         | DV < LLOQ         | LLOQ          |                   |
++-------------+-------------+------------+-------------------+---------------+-------------------+
+| NA          | NA          | Available  | BLQ               | nothing       | Only for M1 and M7|
++-------------+-------------+------------+-------------------+---------------+-------------------+
+| NA          | NA          | NA         | NA                | NA            | No BLQ handling   |
++-------------+-------------+------------+-------------------+---------------+-------------------+
+| NA          | Available   | Available  | BLQ               | LLOQ          | DV column not used|
++-------------+-------------+------------+-------------------+---------------+-------------------+
+| Available   | NA          | Available  | BLQ               | lloq          |                   |
++-------------+-------------+------------+-------------------+---------------+-------------------+
+| Available   | Available   | NA         | DV < lloq         | lloq          | Column overridden |
++-------------+-------------+------------+-------------------+---------------+-------------------+
+| Available   | Available   | Available  | DV < lloq         | lloq          | Columns overridden|
++-------------+-------------+------------+-------------------+---------------+-------------------+
+
+Current limitations of the m3 and m4 method:
 \itemize{
 \item Does not support covariance between epsilons
 \item Supports additive, proportional, combined, and power error model
@@ -39,4 +62,6 @@ model$statements$find_assignment("Y")
 }
 \seealso{
 remove_loq_data
+
+set_lloq_data
 }

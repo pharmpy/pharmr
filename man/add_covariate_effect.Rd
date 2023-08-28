@@ -39,102 +39,82 @@ The following effects have templates:
 \item Function:
 }
 
-math::
-
-{coveff} = 1 + {theta} * ({cov} - {median})
+(equation could not be rendered, see API doc on website)
 \itemize{
 \item Init:  0.001
 \item Upper:
-\item If median of covariate equals minimum: :math:\verb{100,000}
-\item Otherwise: :math:\verb{frac\{1\}\{\{median\} - \{min\}\}}
+\item If median of covariate equals minimum: 100,000
+\item Otherwise: (equation could not be rendered, see API doc on website)
 \item Lower:
-\item If median of covariate equals maximum: :math:\verb{-100,000}
-\item Otherwise: :math:\verb{frac\{1\}\{\{median\} - \{max\}\}}
+\item If median of covariate equals maximum: -100,000
+\item Otherwise: (equation could not be rendered, see API doc on website)
 \item Linear function for categorical covariates (\emph{cat})
 \item Function:
 \item If covariate is most common category:
 }
 
-math::
-
-{coveff} = 1
+(equation could not be rendered, see API doc on website)
 \itemize{
 \item For each additional category:
 }
 
-math::
-
-{coveff} = 1 + {theta}
+(equation could not be rendered, see API doc on website)
 \itemize{
-\item Init: :math:\code{0.001}
-\item Upper: :math:\code{5}
-\item Lower: :math:\code{-1}
+\item Init: 0.001
+\item Upper: 5
+\item Lower: -1
 \item Piecewise linear function/"hockey-stick", continuous covariates only (\emph{piece_lin})
 \item Function:
 \item If cov <= median:
 }
 
-math::
-
-{coveff} = 1 + {theta1} * ({cov} - {median})
+(equation could not be rendered, see API doc on website)
 \itemize{
 \item If cov > median:
 }
 
-math::
-
-{coveff} = 1 + {theta2} * ({cov} - {median})
+(equation could not be rendered, see API doc on website)
 \itemize{
-\item Init: :math:\code{0.001}
+\item Init: 0.001
 \item Upper:
-\item For first state: :math:\verb{frac\{1\}\{\{median\} - \{min\}\}}
-\item Otherwise: :math:\verb{100,000}
+\item For first state: (equation could not be rendered, see API doc on website)
+\item Otherwise: 100,000
 \item Lower:
-\item For first state: :math:\verb{-100,000}
-\item Otherwise: :math:\verb{frac\{1\}\{\{median\} - \{max\}\}}
+\item For first state: -100,000
+\item Otherwise: (equation could not be rendered, see API doc on website)
 \item Exponential function, continuous covariates only (\emph{exp})
 \item Function:
 }
 
-math::
-
-{coveff} = exp({theta} * ({cov} - {median}))
+(equation could not be rendered, see API doc on website)
 \itemize{
 \item Init:
-\item If lower > 0.001 or upper < 0.001: :math:\verb{frac\{\{upper\} - \{lower\}\}\{2\}}
-\item If estimated init is 0: :math:\verb{frac\{\{upper\}\}\{2\}}
-\item Otherwise: :math:\code{0.001}
+\item If lower > 0.001 or upper < 0.001: (equation could not be rendered, see API doc on website)
+\item If estimated init is 0: (equation could not be rendered, see API doc on website)
+\item Otherwise: 0.001
 \item Upper:
-\item If min - median = 0 or max - median = 0: :math:\code{100}
+\item If min - median = 0 or max - median = 0: 100
 \item Otherwise:
 }
 
-math::
-
-min(frac{log(0.01)}{{min} - {median}},
-frac{log(100)}{{max} - {median}})
+(equation could not be rendered, see API doc on website)
 \itemize{
 \item Lower:
-\item If min - median = 0 or max - median = 0: :math:\code{0.01}
+\item If min - median = 0 or max - median = 0: 0.01
 \item Otherwise:
 }
 
-math::
-
-max(frac{log(0.01)}{{max} - {median}},
-frac{log(100)}{{min} - {median}})
+(equation could not be rendered, see API doc on website)
 \itemize{
 \item Power function, continuous covariates only (\emph{pow})
 \item Function:
 }
 
-math::
-
-{coveff} = (frac{{cov}}{{median}})^{theta}
+(equation could not be rendered, see API doc on website)
 \itemize{
-\item Init: :math:\code{0.001}
-\item Upper: :math:\verb{100,000}
-\item Lower: :math:\code{-100}
+\item Init: 0.001
+\item Upper: 100,000
+\item Lower: -100
 }
 }
 \examples{

@@ -11,6 +11,7 @@ run_ruvsearch(
   p_value = 0.05,
   skip = NULL,
   max_iter = 3,
+  dv = NULL,
   ...
 )
 }
@@ -25,7 +26,9 @@ run_ruvsearch(
 
 \item{skip}{(array(str) (optional)) A vector of models to not attempt.}
 
-\item{max_iter}{(numeric (optional)) Number of iterations to run (1, 2, or 3). For models with BLQ only one iteration is supported}
+\item{max_iter}{(numeric (optional)) Number of iterations to run (1, 2, or 3). For models with BLQ only one iteration is supported.}
+
+\item{dv}{(numeric (optional)) Which DV to assess the error model for}
 
 \item{...}{Arguments to pass to tool}
 }

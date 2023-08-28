@@ -32,9 +32,9 @@ The error function being applied depends on the data transformation.
 +------------------------+----------------------------------------+
 | Data transformation    | Proportional error                     |
 +========================+========================================+
-| :math:\code{y}              | :math:\verb{f + f epsilon_1}               |
+| (equation could not be rendered, see API doc on website)
 +------------------------+----------------------------------------+
-| :math:\code{log(y)}         | :math:\code{log(f) + epsilon_1}           |
+| (equation could not be rendered, see API doc on website)
 +------------------------+----------------------------------------+
 }
 \examples{

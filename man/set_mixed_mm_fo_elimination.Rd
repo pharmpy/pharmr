@@ -15,7 +15,7 @@ set_mixed_mm_fo_elimination(model)
 \description{
 Sets elimination to mixed Michaelis-Menten and first order.
 
-Initial estimate for CLMM is set to CL/2 and KM is set to :math:\code{2*max(DV)}.
+Initial estimate for CLMM is set to CL/2 and KM is set to (equation could not be rendered, see API doc on website)
 }
 \examples{
 \dontrun{

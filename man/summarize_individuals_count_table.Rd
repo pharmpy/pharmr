@@ -23,8 +23,8 @@ Content of the various columns:
 | Column                  | Description                                                                                    |
 +=========================+================================================================================================+
 | \code{inf_selection}       | Number of subjects influential on model selection.                                             |
-|                         | :math:\verb{\\mathrm\{OFV\}_\{parent\} - \\mathrm\{OFV\} > 3.84 \\veebar}                                    |
-|                         | :math:\verb{\\mathrm\{OFV\}_\{parent\} - \\mathrm\{iOFV\}_\{parent\} - (\\mathrm\{OFV\} - \\mathrm\{iOFV\}) > 3.84} |
+|                         | (equation could not be rendered, see API doc on website)
+|                         | (equation could not be rendered, see API doc on website)
 +-------------------------+------------------------------------------------------------------------------------------------+
 | \code{inf_params}          | Number of subjects influential on parameters. predicted_dofv > 3.84                            |
 +-------------------------+------------------------------------------------------------------------------------------------+

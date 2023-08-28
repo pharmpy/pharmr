@@ -4,8 +4,9 @@
 #' @description
 #' Add an admid column to the model dataset and datainfo. Dependent on the
 #' presence of a CMT column in order to add admid correctly.
-#' 1 : Oral dose
-#' 2 : IV dose
+#' 
+#' When generated, admids of events in between doses is set to the last used
+#' admid.
 #' 
 #' @param model (Model) Pharmpy model
 #'  
@@ -138,95 +139,75 @@ add_covariance_step <- function(model, cov) {
 #' * Linear function for continuous covariates (*lin*)
 #' * Function:
 #' 
-#' math::
-#' 
-#' {coveff} = 1 + {theta} * ({cov} - {median})
+#' (equation could not be rendered, see API doc on website)
 #' 
 #' * Init:  0.001
 #' * Upper:
-#' * If median of covariate equals minimum: :math:`100,000`
-#' * Otherwise: :math:`frac{1}{{median} - {min}}`
+#' * If median of covariate equals minimum: 100,000
+#' * Otherwise: (equation could not be rendered, see API doc on website)
 #' * Lower:
-#' * If median of covariate equals maximum: :math:`-100,000`
-#' * Otherwise: :math:`frac{1}{{median} - {max}}`
+#' * If median of covariate equals maximum: -100,000
+#' * Otherwise: (equation could not be rendered, see API doc on website)
 #' * Linear function for categorical covariates (*cat*)
 #' * Function:
 #' 
 #' * If covariate is most common category:
 #' 
-#' math::
-#' 
-#' {coveff} = 1
+#' (equation could not be rendered, see API doc on website)
 #' 
 #' * For each additional category:
 #' 
-#' math::
+#' (equation could not be rendered, see API doc on website)
 #' 
-#' {coveff} = 1 + {theta}
-#' 
-#' * Init: :math:`0.001`
-#' * Upper: :math:`5`
-#' * Lower: :math:`-1`
+#' * Init: 0.001
+#' * Upper: 5
+#' * Lower: -1
 #' * Piecewise linear function/"hockey-stick", continuous covariates only (*piece_lin*)
 #' * Function:
 #' * If cov <= median:
 #' 
-#' math::
-#' 
-#' {coveff} = 1 + {theta1} * ({cov} - {median})
+#' (equation could not be rendered, see API doc on website)
 #' 
 #' * If cov > median:
 #' 
-#' math::
-#' 
-#' {coveff} = 1 + {theta2} * ({cov} - {median})
+#' (equation could not be rendered, see API doc on website)
 #' 
 #' 
-#' * Init: :math:`0.001`
+#' * Init: 0.001
 #' * Upper:
-#' * For first state: :math:`frac{1}{{median} - {min}}`
-#' * Otherwise: :math:`100,000`
+#' * For first state: (equation could not be rendered, see API doc on website)
+#' * Otherwise: 100,000
 #' * Lower:
-#' * For first state: :math:`-100,000`
-#' * Otherwise: :math:`frac{1}{{median} - {max}}`
+#' * For first state: -100,000
+#' * Otherwise: (equation could not be rendered, see API doc on website)
 #' * Exponential function, continuous covariates only (*exp*)
 #' * Function:
 #' 
-#' math::
-#' 
-#' {coveff} = exp({theta} * ({cov} - {median}))
+#' (equation could not be rendered, see API doc on website)
 #' 
 #' * Init:
-#' * If lower > 0.001 or upper < 0.001: :math:`frac{{upper} - {lower}}{2}`
-#' * If estimated init is 0: :math:`frac{{upper}}{2}`
-#' * Otherwise: :math:`0.001`
+#' * If lower > 0.001 or upper < 0.001: (equation could not be rendered, see API doc on website)
+#' * If estimated init is 0: (equation could not be rendered, see API doc on website)
+#' * Otherwise: 0.001
 #' * Upper:
-#' * If min - median = 0 or max - median = 0: :math:`100`
+#' * If min - median = 0 or max - median = 0: 100
 #' * Otherwise:
 #' 
-#' math::
-#' 
-#' min(frac{log(0.01)}{{min} - {median}},
-#' frac{log(100)}{{max} - {median}})
+#' (equation could not be rendered, see API doc on website)
 #' * Lower:
-#' * If min - median = 0 or max - median = 0: :math:`0.01`
+#' * If min - median = 0 or max - median = 0: 0.01
 #' * Otherwise:
 #' 
-#' math::
-#' 
-#' max(frac{log(0.01)}{{max} - {median}},
-#' frac{log(100)}{{min} - {median}})
+#' (equation could not be rendered, see API doc on website)
 #' 
 #' * Power function, continuous covariates only (*pow*)
 #' * Function:
 #' 
-#' math::
+#' (equation could not be rendered, see API doc on website)
 #' 
-#' {coveff} = (frac{{cov}}{{median}})^{theta}
-#' 
-#' * Init: :math:`0.001`
-#' * Upper: :math:`100,000`
-#' * Lower: :math:`-100`
+#' * Init: 0.001
+#' * Upper: 100,000
+#' * Lower: -100
 #' 
 #' 
 #' @param model (Model) Pharmpy model to add covariate effect to.
@@ -260,12 +241,18 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' 
 #' Implemented PD models are:
 #' 
-#' * Baseline: :math:`E = E_0`
-#' * Linear: :math:`E = E_0 + S * C`
-#' * Emax: :math:`E = E_0 + frac {E_{max} * C } { EC_{50} + C }`
-#' * Step effect: :math:`E = \Biggl \lbrace { E_0 \quad  { if C } < 0 \atop E_0 + E_{max} \quad  {else}}`
-#' * Sigmoidal: :math:`E = frac {E_{max} C^n} { EC_{50}^n + C^n}`
-#' * Log-linear: :math:`E = m *  {log}(C + C_0)`
+#' * Baseline:
+#' (equation could not be rendered, see API doc on website)
+#' * Linear:
+#' (equation could not be rendered, see API doc on website)
+#' * Emax:
+#' (equation could not be rendered, see API doc on website)
+#' * Step effect:
+#' (equation could not be rendered, see API doc on website)
+#' * Sigmoidal:
+#' (equation could not be rendered, see API doc on website)
+#' * Log-linear:
+#' (equation could not be rendered, see API doc on website)
 #' 
 #' @param model (Model) Pharmpy model
 #' @param expr (str) Name of the PD effect function. Valid names are: baseline, linear, Emax, sigmoid, step, loglin
@@ -343,6 +330,7 @@ add_estimation_step <- function(model, method, idx=NULL, ...) {
 #' * Proportional (*prop*)
 #' * Exponential (*exp*)
 #' * Logit (*log*)
+#' * Rescaled logit (*re_log*)
 #' 
 #' For all except exponential the operation input is not needed. Otherwise user specified
 #' input is supported. Initial estimates for new etas are 0.09.
@@ -525,10 +513,8 @@ add_metabolite <- function(model, drug_dvid=1) {
 #' ==  ===================================================
 #' n
 #' ==  ===================================================
-#' 1   :math:`{CL} = {CL'}`, :math:`{VC} = {VC'}`,
-#' :math:`{QP1} = {CL'}` and :math:`{VP1} = {VC'} * 0.05`
-#' 2   :math:`{QP1} = {QP1' * 0.1}`, :math:`{VP1} = {VP1'}`,
-#' :math:`{QP2} = {QP1' * 0.9}` and :math:`{VP2} = {VP1'}`
+#' 1   (equation could not be rendered, see API doc on website)
+#' 2   (equation could not be rendered, see API doc on website)
 #' ==  ===================================================
 #' 
 #' @param model (Model) Pharmpy model
@@ -1615,7 +1601,7 @@ create_rng <- function(seed=NULL) {
 #' @param model (Model) Pharmpy model object
 #' @param stem (str) First part of the new variable name
 #' @param force_numbering (logical) Forces addition of number to name even if variable does not exist, e.g.
-#' COVEFF --> COVEFF1
+#' COVEFF → COVEFF1
 #'  
 #' @return (Symbol) Created symbol with unique name
 #' 
@@ -2159,9 +2145,11 @@ fix_parameters_to <- function(model, inits) {
 #' Get the admid from model dataset
 #' 
 #' If an administration column is present this will be extracted otherwise
-#' an admid column will be created.
-#' 1 : Oral dose
-#' 2 : IV dose
+#' an admid column will be created based on the admids of the present doses.
+#' This is dependent on the presence of a CMT column to be generated correctly.
+#' 
+#' When generated, admids of events in between doses is set to the last used
+#' admid.
 #' 
 #' @param model (Model) Pharmpy model
 #'  
@@ -2225,7 +2213,8 @@ get_bioavailability <- function(model) {
 #' 
 #' If a cmt column is present this will be extracted otherwise
 #' a cmt column will be created. If created, multiple dose compartments are
-#' not supported.
+#' dependent on the presence of an admid type column, otherwise, dose/non-dose
+#' will be considered.
 #' 
 #' @param model (Model) Pharmpy model
 #'  
@@ -3558,9 +3547,9 @@ make_declarative <- function(model) {
 #' Convert model to use mu-referencing
 #' 
 #' Mu-referencing an eta is to separately define its actual mu (mean) parameter.
-#' For example: :math:`CL = \theta_1 e^{\eta_1}` with :math:`\eta_1` following a zero-mean
-#' normal distribution would give :math:`\mu_1 = log{\theta_1}` and
-#' :math:`CL = e^{\mu_1 + \eta_1}`
+#' For example: (equation could not be rendered, see API doc on website)
+#' normal distribution would give (equation could not be rendered, see API doc on website)
+#' (equation could not be rendered, see API doc on website)
 #' 
 #' @param model (Model) Pharmpy model object
 #'  
@@ -4038,11 +4027,14 @@ remove_lag_time <- function(model) {
 #' @description
 #' Remove loq data records from the dataset
 #' 
-#' Does nothing if none of the limits is specified.
+#' Does nothing if none of the limits are specified.
 #' 
 #' @param model (Model) Pharmpy model object
-#' @param lloq (numeric (optional)) Lower limit of quantification. Default not specified.
-#' @param uloq (numeric (optional)) Upper limit of quantification. Default not specified.
+#' @param lloq (numeric or str (optional)) Value or column name for lower limit of quantification.
+#' @param uloq (numeric or str (optional)) Value or column name for upper limit of quantification.
+#' @param blq (str (optional)) Column name for below limit of quantification indicator.
+#' @param alq (str (optional)) Column name for above limit of quantification indicator.
+#' @param keep (numeric (optional)) Number of loq records to keep for each run of consecutive loq records.
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -4052,10 +4044,16 @@ remove_lag_time <- function(model) {
 #' model <- remove_loq_data(model, lloq=10, uloq=40)
 #' length(model$dataset)
 #' }
+#' @seealso
+#' set_lloq_data
+#' 
+#' transform_blq
+#' 
 #' 
 #' @export
-remove_loq_data <- function(model, lloq=NULL, uloq=NULL) {
-	func_out <- pharmpy$modeling$remove_loq_data(model, lloq=lloq, uloq=uloq)
+remove_loq_data <- function(model, lloq=NULL, uloq=NULL, blq=NULL, alq=NULL, keep=0) {
+	keep <- convert_input(keep, "int")
+	func_out <- pharmpy$modeling$remove_loq_data(model, lloq=lloq, uloq=uloq, blq=blq, alq=alq, keep=keep)
 	return(py_to_r(func_out))
 }
 
@@ -4070,10 +4068,8 @@ remove_loq_data <- function(model, lloq=NULL, uloq=NULL) {
 #' ==  ===================================================
 #' n
 #' ==  ===================================================
-#' 2   :math:`{CL} = {CL'}`,
-#' :math:`{QP1} = {CL'}` and :math:`{VP1} = {VC'} * 0.05`
-#' 3   :math:`{QP1} = ({QP1'} + {QP2'}) / 2`,
-#' :math:`{VP1} = {VP1'} + {VP2'}`
+#' 2   (equation could not be rendered, see API doc on website)
+#' 3   (equation could not be rendered, see API doc on website)
 #' ==  ===================================================
 #' 
 #' @param model (Model) Pharmpy model
@@ -4311,7 +4307,7 @@ sample_parameters_uniformly <- function(model, parameter_estimates, fraction=0.1
 #' set_additive_error_model
 #' 
 #' @description
-#' Set an additive error model. Initial estimate for new sigma is :math:`(min(DV)/2)²`.
+#' Set an additive error model. Initial estimate for new sigma is (equation could not be rendered, see API doc on website)
 #' 
 #' The error function being applied depends on the data transformation. The table displays
 #' some examples.
@@ -4319,9 +4315,9 @@ sample_parameters_uniformly <- function(model, parameter_estimates, fraction=0.1
 #' +------------------------+----------------------------------------+
 #' | Data transformation    | Additive error                         |
 #' +========================+========================================+
-#' | :math:`y`              | :math:`f + epsilon_1`                 |
+#' | (equation could not be rendered, see API doc on website)
 #' +------------------------+----------------------------------------+
-#' | :math:`log(y)`         | :math:`log(f) + frac{epsilon_1}{f}` |
+#' | (equation could not be rendered, see API doc on website)
 #' +------------------------+----------------------------------------+
 #' 
 #' @param model (Model) Set error model for this model
@@ -4391,7 +4387,7 @@ set_bolus_absorption <- function(model) {
 #' set_combined_error_model
 #' 
 #' @description
-#' Set a combined error model. Initial estimates for new sigmas are :math:`(min(DV)/2)²` for
+#' Set a combined error model. Initial estimates for new sigmas are (equation could not be rendered, see API doc on website)
 #' proportional and 0.09 for additive.
 #' 
 #' The error function being applied depends on the data transformation.
@@ -4399,9 +4395,9 @@ set_bolus_absorption <- function(model) {
 #' +------------------------+-----------------------------------------------------+
 #' | Data transformation    | Combined error                                      |
 #' +========================+=====================================================+
-#' | :math:`y`              | :math:`f + f epsilon_1 + epsilon_2`               |
+#' | (equation could not be rendered, see API doc on website)
 #' +------------------------+-----------------------------------------------------+
-#' | :math:`log(y)`         | :math:`log(f) + epsilon_1 + frac{epsilon_2}{f}` |
+#' | (equation could not be rendered, see API doc on website)
 #' +------------------------+-----------------------------------------------------+
 #' 
 #' @param model (Model) Set error model for this model
@@ -4459,12 +4455,18 @@ set_covariates <- function(model, covariates) {
 #' 
 #' Implemented PD models are:
 #' 
-#' * Baseline: :math:`E = E_0`
-#' * Linear: :math:`E = E_0 + S * C`
-#' * Emax: :math:`E = E_0 + frac {E_{max} * C } { EC_{50} + C }`
-#' * Step effect: :math:`E = \Biggl \lbrace { E_0 \quad  { if C } < 0 \atop E_0 + E_{max} \quad  {else}}`
-#' * Sigmoidal: :math:`E = frac {E_{max} C^n} { EC_{50}^n + C^n}`
-#' * Log-linear: :math:`E = m *  {log}(C + C_0)`
+#' * Baseline:
+#' (equation could not be rendered, see API doc on website)
+#' * Linear:
+#' (equation could not be rendered, see API doc on website)
+#' * Emax:
+#' (equation could not be rendered, see API doc on website)
+#' * Step effect:
+#' (equation could not be rendered, see API doc on website)
+#' * Sigmoidal:
+#' (equation could not be rendered, see API doc on website)
+#' * Log-linear:
+#' (equation could not be rendered, see API doc on website)
 #' 
 #' @param model (Model) Pharmpy model
 #' @param expr (str) Name of PD effect function. Valid names are: baseline, linear, Emax, sigmoid, step, loglin
@@ -4619,6 +4621,9 @@ set_evaluation_step <- function(model, idx=-1) {
 #' Initial estimate for absorption rate is set to
 #' the previous rate if available, otherwise it is set to the time of first observation/2.
 #' 
+#' If multiple doses is set to the affected compartment, currently only iv+oral
+#' doses (one of each) is supported
+#' 
 #' @param model (Model) Model to set or change to use first order absorption rate
 #'  
 #' @return (Model) Pharmpy model object
@@ -4764,6 +4769,36 @@ set_initial_estimates <- function(model, inits) {
 }
 
 #' @title
+#' set_lloq_data
+#' 
+#' @description
+#' Set a dv value for lloq data records
+#' 
+#' @param model (Model) Pharmpy model object
+#' @param value (str or numeric) The new dv value
+#' @param lloq (numeric or str (optional)) Value or column name for lower limit of quantification.
+#' @param blq (str (optional)) Column name for below limit of quantification indicator.
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- set_lloq_data(model, 0, lloq=10)
+#' }
+#' @seealso
+#' remove_loq_data
+#' 
+#' transform_blq
+#' 
+#' 
+#' @export
+set_lloq_data <- function(model, value, lloq=NULL, blq=NULL) {
+	func_out <- pharmpy$modeling$set_lloq_data(model, value, lloq=lloq, blq=blq)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' set_lower_bounds
 #' 
 #' @description
@@ -4798,7 +4833,7 @@ set_lower_bounds <- function(model, bounds) {
 #' @description
 #' Sets elimination to Michaelis-Menten.
 #' 
-#' Initial estimate for CLMM is set to CL and KM is set to :math:`2*max(DV)`.
+#' Initial estimate for CLMM is set to CL and KM is set to (equation could not be rendered, see API doc on website)
 #' 
 #' @param model (Model) Pharmpy model
 #'  
@@ -4828,7 +4863,7 @@ set_michaelis_menten_elimination <- function(model) {
 #' @description
 #' Sets elimination to mixed Michaelis-Menten and first order.
 #' 
-#' Initial estimate for CLMM is set to CL/2 and KM is set to :math:`2*max(DV)`.
+#' Initial estimate for CLMM is set to CL/2 and KM is set to (equation could not be rendered, see API doc on website)
 #' 
 #' @param model (Model) Pharmpy model
 #'  
@@ -4954,14 +4989,21 @@ set_peripheral_compartments <- function(model, n) {
 #' set_power_on_ruv
 #' 
 #' @description
-#' Applies a power effect to provided epsilons.
+#' Applies a power effect to provided epsilons. If a dependent variable
+#' is provided, then only said epsilons affecting said variable will be changed.
 #' 
 #' Initial estimates for new thetas are 1 if the error
 #' model is proportional, otherwise they are 0.1.
 #' 
+#' NOTE : If no DVs or epsilons are specified, all epsilons with the same name
+#' will be connected to the same theta. Running the function per DV will give
+#' each epsilon a specific theta.
+#' 
 #' @param model (Model) Pharmpy model to create block effect on.
 #' @param list_of_eps (str or array (optional)) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
 #' NULL is default.
+#' @param dv (str or numeric (optional)) Name or DVID of dependent variable. NULL will change the epsilon on all occurences
+#' regardless of affected dependent variable.
 #' @param lower_limit (numeric (optional)) Lower limit of power (theta). NULL for no limit.
 #' @param ipred (str (optional)) Symbol to use as IPRED. Default is to autodetect expression for IPRED.
 #' @param zero_protection (logical) Set to TRUE to add code protecting from IPRED=0
@@ -4979,8 +5021,8 @@ set_peripheral_compartments <- function(model, n) {
 #' 
 #' 
 #' @export
-set_power_on_ruv <- function(model, list_of_eps=NULL, lower_limit=0.01, ipred=NULL, zero_protection=FALSE) {
-	func_out <- pharmpy$modeling$set_power_on_ruv(model, list_of_eps=list_of_eps, lower_limit=lower_limit, ipred=ipred, zero_protection=zero_protection)
+set_power_on_ruv <- function(model, list_of_eps=NULL, dv=NULL, lower_limit=0.01, ipred=NULL, zero_protection=FALSE) {
+	func_out <- pharmpy$modeling$set_power_on_ruv(model, list_of_eps=list_of_eps, dv=dv, lower_limit=lower_limit, ipred=ipred, zero_protection=zero_protection)
 	return(py_to_r(func_out))
 }
 
@@ -4995,9 +5037,9 @@ set_power_on_ruv <- function(model, list_of_eps=NULL, lower_limit=0.01, ipred=NU
 #' +------------------------+----------------------------------------+
 #' | Data transformation    | Proportional error                     |
 #' +========================+========================================+
-#' | :math:`y`              | :math:`f + f epsilon_1`               |
+#' | (equation could not be rendered, see API doc on website)
 #' +------------------------+----------------------------------------+
-#' | :math:`log(y)`         | :math:`log(f) + epsilon_1`           |
+#' | (equation could not be rendered, see API doc on website)
 #' +------------------------+----------------------------------------+
 #' 
 #' @param model (Model) Set error model for this model
@@ -5028,6 +5070,33 @@ set_power_on_ruv <- function(model, list_of_eps=NULL, lower_limit=0.01, ipred=NU
 #' @export
 set_proportional_error_model <- function(model, dv=NULL, data_trans=NULL, zero_protection=TRUE) {
 	func_out <- pharmpy$modeling$set_proportional_error_model(model, dv=dv, data_trans=data_trans, zero_protection=zero_protection)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' set_reference_values
+#' 
+#' @description
+#' Set reference values for selected columns
+#' 
+#' All values for each selected column will be replaced. For dose columns
+#' only the values for dosing events will be replaced.
+#' 
+#' @param model (Model) Pharmpy model object
+#' @param refs (list(str=numeric)) Pairs of column names and reference values
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- set_reference_values(model, {'WGT': 0.5, 'AMT': 4.0})
+#' model$dataset
+#' }
+#' 
+#' @export
+set_reference_values <- function(model, refs) {
+	func_out <- pharmpy$modeling$set_reference_values(model, refs)
 	return(py_to_r(func_out))
 }
 
@@ -5381,8 +5450,31 @@ split_joint_distribution <- function(model, rvs=NULL) {
 #' @description
 #' Transform for BLQ data
 #' 
-#' Transform a given model, methods available are m1, m3, and m4 (1). Current limits of the
-#' m3 and m4 method:
+#' Transform a given model, methods available are m1, m3, m4, m5, m6 and m7 (1).
+#' The blq information can come from the dataset, the lloq option or a combination. Both LLOQ and BLQ
+#' columns are supported. The table below explains which columns are used for the various cases:
+#' 
+#' +-------------+-------------+------------+-------------------+---------------+-------------------+
+#' | lloq option | LLOQ column | BLQ column | Used as indicator | Used as level | Note              |
+#' +=============+=============+============+===================+===============+===================+
+#' | Available   | NA          | NA         | DV < lloq         | lloq          |                   |
+#' +-------------+-------------+------------+-------------------+---------------+-------------------+
+#' | NA          | Available   | NA         | DV < LLOQ         | LLOQ          |                   |
+#' +-------------+-------------+------------+-------------------+---------------+-------------------+
+#' | NA          | NA          | Available  | BLQ               | nothing       | Only for M1 and M7|
+#' +-------------+-------------+------------+-------------------+---------------+-------------------+
+#' | NA          | NA          | NA         | NA                | NA            | No BLQ handling   |
+#' +-------------+-------------+------------+-------------------+---------------+-------------------+
+#' | NA          | Available   | Available  | BLQ               | LLOQ          | DV column not used|
+#' +-------------+-------------+------------+-------------------+---------------+-------------------+
+#' | Available   | NA          | Available  | BLQ               | lloq          |                   |
+#' +-------------+-------------+------------+-------------------+---------------+-------------------+
+#' | Available   | Available   | NA         | DV < lloq         | lloq          | Column overridden |
+#' +-------------+-------------+------------+-------------------+---------------+-------------------+
+#' | Available   | Available   | Available  | DV < lloq         | lloq          | Columns overridden|
+#' +-------------+-------------+------------+-------------------+---------------+-------------------+
+#' 
+#' Current limitations of the m3 and m4 method:
 #' 
 #' * Does not support covariance between epsilons
 #' * Supports additive, proportional, combined, and power error model
@@ -5405,6 +5497,8 @@ split_joint_distribution <- function(model, rvs=NULL) {
 #' }
 #' @seealso
 #' remove_loq_data
+#' 
+#' set_lloq_data
 #' 
 #' 
 #' @export
@@ -6998,7 +7092,8 @@ run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_de
 #' @param groups (numeric) The number of bins to use for the time varying models
 #' @param p_value (numeric) The p-value to use for the likelihood ratio test
 #' @param skip (array(str) (optional)) A vector of models to not attempt.
-#' @param max_iter (numeric (optional)) Number of iterations to run (1, 2, or 3). For models with BLQ only one iteration is supported
+#' @param max_iter (numeric (optional)) Number of iterations to run (1, 2, or 3). For models with BLQ only one iteration is supported.
+#' @param dv (numeric (optional)) Which DV to assess the error model for
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (RUVSearchResults) Ruvsearch tool result object
@@ -7011,13 +7106,14 @@ run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_de
 #' }
 #' 
 #' @export
-run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.05, skip=NULL, max_iter=3, ...) {
+run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.05, skip=NULL, max_iter=3, dv=NULL, ...) {
 	tryCatch(
 	{
 		groups <- convert_input(groups, "int")
 		skip <- convert_input(skip, "list")
 		max_iter <- convert_input(max_iter, "int")
-		func_out <- pharmpy$tools$run_ruvsearch(model=model, results=results, groups=groups, p_value=p_value, skip=skip, max_iter=max_iter, ...)
+		dv <- convert_input(dv, "int")
+		func_out <- pharmpy$tools$run_ruvsearch(model=model, results=results, groups=groups, p_value=p_value, skip=skip, max_iter=max_iter, dv=dv, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -7267,8 +7363,8 @@ summarize_individuals <- function(models) {
 #' | Column                  | Description                                                                                    |
 #' +=========================+================================================================================================+
 #' | ``inf_selection``       | Number of subjects influential on model selection.                                             |
-#' |                         | :math:`\mathrm{OFV}_{parent} - \mathrm{OFV} > 3.84 \veebar`                                    |
-#' |                         | :math:`\mathrm{OFV}_{parent} - \mathrm{iOFV}_{parent} - (\mathrm{OFV} - \mathrm{iOFV}) > 3.84` |
+#' |                         | (equation could not be rendered, see API doc on website)
+#' |                         | (equation could not be rendered, see API doc on website)
 #' +-------------------------+------------------------------------------------------------------------------------------------+
 #' | ``inf_params``          | Number of subjects influential on parameters. predicted_dofv > 3.84                            |
 #' +-------------------------+------------------------------------------------------------------------------------------------+

@@ -38,6 +38,7 @@ Effects that currently have templates are:
 \item Proportional (\emph{prop})
 \item Exponential (\emph{exp})
 \item Logit (\emph{log})
+\item Rescaled logit (\emph{re_log})
 }
 
 For all except exponential the operation input is not needed. Otherwise user specified

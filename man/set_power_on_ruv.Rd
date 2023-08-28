@@ -7,6 +7,7 @@
 set_power_on_ruv(
   model,
   list_of_eps = NULL,
+  dv = NULL,
   lower_limit = 0.01,
   ipred = NULL,
   zero_protection = FALSE
@@ -18,6 +19,9 @@ set_power_on_ruv(
 \item{list_of_eps}{(str or array (optional)) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
 NULL is default.}
 
+\item{dv}{(str or numeric (optional)) Name or DVID of dependent variable. NULL will change the epsilon on all occurences
+regardless of affected dependent variable.}
+
 \item{lower_limit}{(numeric (optional)) Lower limit of power (theta). NULL for no limit.}
 
 \item{ipred}{(str (optional)) Symbol to use as IPRED. Default is to autodetect expression for IPRED.}
@@ -28,10 +32,15 @@ NULL is default.}
 (Model) Pharmpy model object
 }
 \description{
-Applies a power effect to provided epsilons.
+Applies a power effect to provided epsilons. If a dependent variable
+is provided, then only said epsilons affecting said variable will be changed.
 
 Initial estimates for new thetas are 1 if the error
 model is proportional, otherwise they are 0.1.
+
+NOTE : If no DVs or epsilons are specified, all epsilons with the same name
+will be connected to the same theta. Running the function per DV will give
+each epsilon a specific theta.
 }
 \examples{
 \dontrun{

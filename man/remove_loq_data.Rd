@@ -4,14 +4,27 @@
 \alias{remove_loq_data}
 \title{remove_loq_data}
 \usage{
-remove_loq_data(model, lloq = NULL, uloq = NULL)
+remove_loq_data(
+  model,
+  lloq = NULL,
+  uloq = NULL,
+  blq = NULL,
+  alq = NULL,
+  keep = 0
+)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model object}
 
-\item{lloq}{(numeric (optional)) Lower limit of quantification. Default not specified.}
+\item{lloq}{(numeric or str (optional)) Value or column name for lower limit of quantification.}
 
-\item{uloq}{(numeric (optional)) Upper limit of quantification. Default not specified.}
+\item{uloq}{(numeric or str (optional)) Value or column name for upper limit of quantification.}
+
+\item{blq}{(str (optional)) Column name for below limit of quantification indicator.}
+
+\item{alq}{(str (optional)) Column name for above limit of quantification indicator.}
+
+\item{keep}{(numeric (optional)) Number of loq records to keep for each run of consecutive loq records.}
 }
 \value{
 (Model) Pharmpy model object
@@ -19,7 +32,7 @@ remove_loq_data(model, lloq = NULL, uloq = NULL)
 \description{
 Remove loq data records from the dataset
 
-Does nothing if none of the limits is specified.
+Does nothing if none of the limits are specified.
 }
 \examples{
 \dontrun{
@@ -27,5 +40,9 @@ model <- load_example_model("pheno")
 model <- remove_loq_data(model, lloq=10, uloq=40)
 length(model$dataset)
 }
+}
+\seealso{
+set_lloq_data
 
+transform_blq
 }

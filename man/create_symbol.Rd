@@ -12,7 +12,7 @@ create_symbol(model, stem, force_numbering = FALSE)
 \item{stem}{(str) First part of the new variable name}
 
 \item{force_numbering}{(logical) Forces addition of number to name even if variable does not exist, e.g.
-COVEFF --> COVEFF1}
+COVEFF → COVEFF1}
 }
 \value{
 (Symbol) Created symbol with unique name

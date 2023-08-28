@@ -16,9 +16,9 @@ mu_reference_model(model)
 Convert model to use mu-referencing
 
 Mu-referencing an eta is to separately define its actual mu (mean) parameter.
-For example: :math:\verb{CL = \\theta_1 e^\{\\eta_1\}} with :math:\verb{\\eta_1} following a zero-mean
-normal distribution would give :math:\verb{\\mu_1 = log\{\\theta_1\}} and
-:math:\verb{CL = e^\{\\mu_1 + \\eta_1\}}
+For example: (equation could not be rendered, see API doc on website)
+normal distribution would give (equation could not be rendered, see API doc on website)
+(equation could not be rendered, see API doc on website)
 }
 \examples{
 \dontrun{

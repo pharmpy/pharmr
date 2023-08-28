@@ -19,12 +19,18 @@ Add an effect compartment.
 
 Implemented PD models are:
 \itemize{
-\item Baseline: :math:\code{E = E_0}
-\item Linear: :math:\code{E = E_0 + S * C}
-\item Emax: :math:\verb{E = E_0 + frac \{E_\{max\} * C \} \{ EC_\{50\} + C \}}
-\item Step effect: :math:\verb{E = \\Biggl \\lbrace \{ E_0 \\quad  \{ if C \} < 0 \\atop E_0 + E_\{max\} \\quad  \{else\}\}}
-\item Sigmoidal: :math:\verb{E = frac \{E_\{max\} C^n\} \{ EC_\{50\}^n + C^n\}}
-\item Log-linear: :math:\code{E = m *  {log}(C + C_0)}
+\item Baseline:
+(equation could not be rendered, see API doc on website)
+\item Linear:
+(equation could not be rendered, see API doc on website)
+\item Emax:
+(equation could not be rendered, see API doc on website)
+\item Step effect:
+(equation could not be rendered, see API doc on website)
+\item Sigmoidal:
+(equation could not be rendered, see API doc on website)
+\item Log-linear:
+(equation could not be rendered, see API doc on website)
 }
 }
 \examples{

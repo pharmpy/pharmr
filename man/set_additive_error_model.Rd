@@ -21,7 +21,7 @@ transformation.}
 (Model) Pharmpy model object
 }
 \description{
-Set an additive error model. Initial estimate for new sigma is :math:\verb{(min(DV)/2)²}.
+Set an additive error model. Initial estimate for new sigma is (equation could not be rendered, see API doc on website)
 
 The error function being applied depends on the data transformation. The table displays
 some examples.
@@ -29,9 +29,9 @@ some examples.
 +------------------------+----------------------------------------+
 | Data transformation    | Additive error                         |
 +========================+========================================+
-| :math:\code{y}              | :math:\code{f + epsilon_1}                 |
+| (equation could not be rendered, see API doc on website)
 +------------------------+----------------------------------------+
-| :math:\code{log(y)}         | :math:\verb{log(f) + frac\{epsilon_1\}\{f\}} |
+| (equation could not be rendered, see API doc on website)
 +------------------------+----------------------------------------+
 }
 \examples{

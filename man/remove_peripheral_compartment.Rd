@@ -20,10 +20,8 @@ Initial estimates:
 ==  ===================================================
 n
 ==  ===================================================
-2   :math:\verb{\{CL\} = \{CL'\}},
-:math:\verb{\{QP1\} = \{CL'\}} and :math:\verb{\{VP1\} = \{VC'\} * 0.05}
-3   :math:\verb{\{QP1\} = (\{QP1'\} + \{QP2'\}) / 2},
-:math:\verb{\{VP1\} = \{VP1'\} + \{VP2'\}}
+2   (equation could not be rendered, see API doc on website)
+3   (equation could not be rendered, see API doc on website)
 ==  ===================================================
 }
 \examples{
