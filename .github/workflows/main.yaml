@@ -95,10 +95,18 @@ jobs:
 
       - name: Install Pharmpy in venv
         working-directory: pharmpy_repo
+        if: runner.os != 'Windows'
         run: |
-          python3 --version 
           python3 -m venv pharmpy_venv
           source pharmpy_venv/bin/activate
+          pip install .
+
+      - name: Install Pharmpy in venv
+        working-directory: pharmpy_repo
+        if: runner.os == 'Windows'
+        run: |
+          python -m venv pharmpy_venv
+          pharmpy_venv\Scripts\activate
           pip install .
 
       - name: Test Pharmpy
