@@ -96,10 +96,10 @@ jobs:
       - name: Install Pharmpy in venv
         working-directory: pharmpy_repo
         run: |
-          python3.11 -m venv pharmpy_venv
+          python3 --version 
+          python3 -m venv pharmpy_venv
           source pharmpy_venv/bin/activate
           pip install .
-        shell: bash
 
       - name: Test Pharmpy
         working-directory: pharmr_repo
