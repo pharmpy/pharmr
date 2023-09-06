@@ -4,19 +4,22 @@
 \alias{add_bioavailability}
 \title{add_bioavailability}
 \usage{
-add_bioavailability(model, add_parameter = TRUE)
+add_bioavailability(model, add_parameter = TRUE, logit_transform = FALSE)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{add_parameter}{(logical) Add new parameter representing bioavailability or not}
+
+\item{logit_transform}{(logical) Logit transform the added bioavailability parameter.}
 }
 \value{
 (Model) Pharmpy model object
 }
 \description{
 Add bioavailability statement for the first dose compartment of the model.
-Can be added as a new parameter or otherwise it will be set to 1.
+Can be added as a new parameter or otherwise it will be set to 1. If added as a parameter,
+a logit transformation can also be applied.
 }
 \examples{
 \dontrun{

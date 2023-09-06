@@ -5,7 +5,7 @@
 \title{create_basic_pk_model}
 \usage{
 create_basic_pk_model(
-  modeltype,
+  administration = "iv",
   dataset_path = NULL,
   cl_init = 0.01,
   vc_init = 1,
@@ -13,7 +13,7 @@ create_basic_pk_model(
 )
 }
 \arguments{
-\item{modeltype}{(str) Type of PK model to create. Supported are 'oral' and 'iv'}
+\item{administration}{(str) Type of PK model to create. Supported are 'iv', 'oral' and 'ivoral'}
 
 \item{dataset_path}{(str (optional)) Optional path to a dataset}
 

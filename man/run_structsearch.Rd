@@ -4,12 +4,24 @@
 \alias{run_structsearch}
 \title{run_structsearch}
 \usage{
-run_structsearch(route, type, results = NULL, model = NULL, ...)
+run_structsearch(
+  route,
+  type,
+  emax_init = NULL,
+  ec50_init = NULL,
+  results = NULL,
+  model = NULL,
+  ...
+)
 }
 \arguments{
 \item{route}{(str) Route of administration. Either 'pk' or 'oral'}
 
 \item{type}{(str) Type of model. Currently only 'tmdd' and 'pkpd'}
+
+\item{emax_init}{(numeric (optional)) Initial estimate for E_MAX. The default value is 0.1}
+
+\item{ec50_init}{(numeric (optional)) Initial estimate for EC_50. The default value is 0.1}
 
 \item{results}{(ModelfitResults (optional)) Results for the start model}
 

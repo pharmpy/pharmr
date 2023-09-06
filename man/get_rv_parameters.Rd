@@ -15,7 +15,7 @@ get_rv_parameters(model, rv)
 (vector\link{str}) A vector of parameter names for the given random variable
 }
 \description{
-Retrieves parameters in :class:\code{pharmpy.model} given a random variable.
+Retrieves parameters in :class:\code{pharmpy.model.Model} given a random variable.
 }
 \examples{
 \dontrun{

@@ -67,10 +67,12 @@ add_allometry <- function(model, allometric_variable='WT', reference_value=70, p
 #' 
 #' @description
 #' Add bioavailability statement for the first dose compartment of the model.
-#' Can be added as a new parameter or otherwise it will be set to 1.
+#' Can be added as a new parameter or otherwise it will be set to 1. If added as a parameter,
+#' a logit transformation can also be applied.
 #' 
 #' @param model (Model) Pharmpy model
 #' @param add_parameter (logical) Add new parameter representing bioavailability or not
+#' @param logit_transform (logical) Logit transform the added bioavailability parameter.
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -84,8 +86,8 @@ add_allometry <- function(model, allometric_variable='WT', reference_value=70, p
 #' 
 #' 
 #' @export
-add_bioavailability <- function(model, add_parameter=TRUE) {
-	func_out <- pharmpy$modeling$add_bioavailability(model, add_parameter=add_parameter)
+add_bioavailability <- function(model, add_parameter=TRUE, logit_transform=FALSE) {
+	func_out <- pharmpy$modeling$add_bioavailability(model, add_parameter=add_parameter, logit_transform=logit_transform)
 	return(py_to_r(func_out))
 }
 
@@ -150,7 +152,6 @@ add_covariance_step <- function(model, cov) {
 #' * Otherwise: (equation could not be rendered, see API doc on website)
 #' * Linear function for categorical covariates (*cat*)
 #' * Function:
-#' 
 #' * If covariate is most common category:
 #' 
 #' (equation could not be rendered, see API doc on website)
@@ -1491,7 +1492,7 @@ convert_model <- function(model, to_format) {
 #' @description
 #' Creates a basic pk model of given type
 #' 
-#' @param modeltype (str) Type of PK model to create. Supported are 'oral' and 'iv'
+#' @param administration (str) Type of PK model to create. Supported are 'iv', 'oral' and 'ivoral'
 #' @param dataset_path (str (optional)) Optional path to a dataset
 #' @param cl_init (numeric) Initial estimate of the clearance parameter
 #' @param vc_init (numeric) Initial estimate of the central volume parameter
@@ -1505,8 +1506,8 @@ convert_model <- function(model, to_format) {
 #' }
 #' 
 #' @export
-create_basic_pk_model <- function(modeltype, dataset_path=NULL, cl_init=0.01, vc_init=1.0, mat_init=0.1) {
-	func_out <- pharmpy$modeling$create_basic_pk_model(modeltype, dataset_path=dataset_path, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init)
+create_basic_pk_model <- function(administration='iv', dataset_path=NULL, cl_init=0.01, vc_init=1.0, mat_init=0.1) {
+	func_out <- pharmpy$modeling$create_basic_pk_model(administration=administration, dataset_path=dataset_path, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init)
 	return(py_to_r(func_out))
 }
 
@@ -2770,6 +2771,39 @@ get_omegas <- function(model) {
 }
 
 #' @title
+#' get_parameter_rv
+#' 
+#' @description
+#' Retrieves name of random variable in :class:`pharmpy.model.Model` given a parameter.
+#' 
+#' @param model (Model) Pharmpy model to retrieve parameters from
+#' @param parameter (str) Name of parameter to retrieve random variable from
+#' @param var_type (str) Variability type: iiv (default) or iov
+#'  
+#' @return (vector[str]) A vector of random variable names for the given parameter
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' get_parameter_rv(model, 'CL')
+#' }
+#' @seealso
+#' get_rv_parameters
+#' 
+#' has_random_effect
+#' 
+#' get_pk_parameters
+#' 
+#' get_individual_parameters
+#' 
+#' 
+#' @export
+get_parameter_rv <- function(model, parameter, var_type='iiv') {
+	func_out <- pharmpy$modeling$get_parameter_rv(model, parameter, var_type=var_type)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' get_pd_parameters
 #' 
 #' @description
@@ -2858,7 +2892,7 @@ get_population_prediction_expression <- function(model) {
 #' get_rv_parameters
 #' 
 #' @description
-#' Retrieves parameters in :class:`pharmpy.model` given a random variable.
+#' Retrieves parameters in :class:`pharmpy.model.Model` given a random variable.
 #' 
 #' @param model (Model) Pharmpy model to retrieve parameters from
 #' @param rv (str) Name of random variable to retrieve
@@ -3487,6 +3521,31 @@ is_real <- function(model, expr) {
 #' @export
 list_time_varying_covariates <- function(model) {
 	func_out <- pharmpy$modeling$list_time_varying_covariates(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' load_dataset
+#' 
+#' @description
+#' Load the dataset given datainfo
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (Model) Pharmpy model with dataset removed
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- unload_dataset(model)
+#' model$dataset is NULL
+#' model <- load_dataset(model)
+#' model$dataset
+#' }
+#' 
+#' @export
+load_dataset <- function(model) {
+	func_out <- pharmpy$modeling$load_dataset(model)
 	return(py_to_r(func_out))
 }
 
@@ -5776,6 +5835,29 @@ unfix_parameters_to <- function(model, inits) {
 }
 
 #' @title
+#' unload_dataset
+#' 
+#' @description
+#' Unload the dataset from a model
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (Model) Pharmpy model with dataset removed
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- unload_dataset(model)
+#' model$dataset is NULL
+#' }
+#' 
+#' @export
+unload_dataset <- function(model) {
+	func_out <- pharmpy$modeling$unload_dataset(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' update_initial_individual_estimates
 #' 
 #' @description
@@ -6640,8 +6722,8 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' 
 #' @param input (Model or str) Read model object/Path to a dataset
 #' @param results (ModelfitResults (optional)) Reults of input if input is a model
-#' @param modeltype (str) Type of model to build. Either 'basic_pk' or 'tmdd'
-#' @param administration (str) Route of administration. Either 'iv' or 'oral'
+#' @param modeltype (str) Type of model to build. Either 'basic_pk'
+#' @param administration (str) Route of administration. Either 'iv', 'oral' or 'ivoral'
 #' @param cl_init (numeric) Initial estimate for the population clearance
 #' @param vc_init (numeric) Initial estimate for the central compartment population volume
 #' @param mat_init (numeric) Initial estimate for the mean absorption time (not for iv models)
@@ -7146,6 +7228,8 @@ run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.05, skip
 #' 
 #' @param route (str) Route of administration. Either 'pk' or 'oral'
 #' @param type (str) Type of model. Currently only 'tmdd' and 'pkpd'
+#' @param emax_init (numeric (optional)) Initial estimate for E_MAX. The default value is 0.1
+#' @param ec50_init (numeric (optional)) Initial estimate for EC_50. The default value is 0.1
 #' @param results (ModelfitResults (optional)) Results for the start model
 #' @param model (Model (optional)) Pharmpy start mode
 #' @param ... Arguments to pass to tool
@@ -7160,10 +7244,10 @@ run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.05, skip
 #' }
 #' 
 #' @export
-run_structsearch <- function(route, type, results=NULL, model=NULL, ...) {
+run_structsearch <- function(route, type, emax_init=NULL, ec50_init=NULL, results=NULL, model=NULL, ...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_structsearch(route, type, results=results, model=model, ...)
+		func_out <- pharmpy$tools$run_structsearch(route, type, emax_init=emax_init, ec50_init=ec50_init, results=results, model=model, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
