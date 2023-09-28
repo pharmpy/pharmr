@@ -14,7 +14,7 @@ omit_data(dataset_or_model, group, name_pattern = "omitted_{}")
 \item{name_pattern}{(str) Name to use for generated datasets. A number starting from 1 will be put in the placeholder.}
 }
 \value{
-(iterator) Iterator yielding tuples of models/dataframes and the omited group
+(iterator) Iterator yielding tuples of models/dataframes and the omitted group
 }
 \description{
 Iterate over omissions of a certain group in a dataset. One group is omitted at a time.

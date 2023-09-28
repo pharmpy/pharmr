@@ -21,7 +21,7 @@ run_iivsearch(
 \item{iiv_strategy}{(str) If/how IIV should be added to start model. Possible strategies are 'no_add', 'add_diagonal',
 or 'fullblock'. Default is 'no_add'}
 
-\item{rank_type}{(str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC}
+\item{rank_type}{(str) Which ranking type should be used (OFV, AIC, BIC, mBIC). Default is BIC}
 
 \item{cutoff}{(numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 is NULL (all models will be ranked)}

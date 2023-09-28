@@ -9,7 +9,7 @@ bump_model_number(model, path = NULL)
 \arguments{
 \item{model}{(Model) Pharmpy model object}
 
-\item{path}{(str) Default is to not look for files.}
+\item{path}{(str (optional)) Default is to not look for files.}
 }
 \value{
 (Model) Pharmpy model object

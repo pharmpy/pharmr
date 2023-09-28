@@ -9,7 +9,7 @@ set_evaluation_step(model, idx = -1)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{idx}{(numeric) index of estimation step, default is -1 (last estimation step)}
+\item{idx}{(numeric) Index of estimation step, default is -1 (last estimation step)}
 }
 \value{
 (Model) Pharmpy model object
@@ -36,7 +36,7 @@ remove_estimation_step
 
 append_estimation_step_options
 
-add_covariance_step
+add_parameter_uncertainty_step
 
-remove_covariance_step
+remove_parameter_uncertainty_step
 }

@@ -5,23 +5,29 @@
 \title{run_structsearch}
 \usage{
 run_structsearch(
-  route,
   type,
+  search_space = NULL,
+  b_init = NULL,
   emax_init = NULL,
   ec50_init = NULL,
+  met_init = NULL,
   results = NULL,
   model = NULL,
   ...
 )
 }
 \arguments{
-\item{route}{(str) Route of administration. Either 'pk' or 'oral'}
+\item{type}{(str) Type of model. Currently only 'drug_metabolite' and 'pkpd'}
 
-\item{type}{(str) Type of model. Currently only 'tmdd' and 'pkpd'}
+\item{search_space}{(str (optional)) Search space to test}
 
-\item{emax_init}{(numeric (optional)) Initial estimate for E_MAX. The default value is 0.1}
+\item{b_init}{(numeric (optional)) Initial estimate for the baseline for pkpd models. The default value is 0.1}
 
-\item{ec50_init}{(numeric (optional)) Initial estimate for EC_50. The default value is 0.1}
+\item{emax_init}{(numeric (optional)) Initial estimate for E_MAX (for pkpd models only). The default value is 0.1}
+
+\item{ec50_init}{(numeric (optional)) Initial estimate for EC_50 (for pkpd models only). The default value is 0.1}
+
+\item{met_init}{(numeric (optional)) Initial estimate for MET (for pkpd models only). The default value is 0.1}
 
 \item{results}{(ModelfitResults (optional)) Results for the start model}
 
@@ -39,7 +45,7 @@ Run the structsearch tool. For more details, see :ref:\code{structsearch}.
 \dontrun{
 model <- load_example_model("pheno")
 results <- load_example_modelfit_results("pheno")
-run_structsearch(model_type='tmdd', results=results, model=model)
+run_structsearch(model_type='pkpd', results=results, model=model)
 }
 
 }

@@ -9,7 +9,7 @@ set_direct_effect(model, expr)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{expr}{(str) Name of PD effect function. Valid names are: baseline, linear, Emax, sigmoid, step, loglin}
+\item{expr}{(str) Name of PD effect function. Valid names are: baseline, linear, emax, sigmoid, step and loglin}
 }
 \value{
 (Model) Pharmpy model object
@@ -32,6 +32,8 @@ Implemented PD models are:
 \item Log-linear:
 (equation could not be rendered, see API doc on website)
 }
+
+(equation could not be rendered, see API doc on website)
 }
 \examples{
 \dontrun{

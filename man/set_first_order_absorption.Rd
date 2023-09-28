@@ -29,7 +29,7 @@ model$statements$ode_system
 }
 }
 \seealso{
-set_bolus_order_absorption
+set_instantaneous_absorption
 
 set_zero_order_absorption
 }

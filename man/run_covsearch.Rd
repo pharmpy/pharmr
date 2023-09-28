@@ -6,8 +6,8 @@
 \usage{
 run_covsearch(
   effects,
-  p_forward = 0.05,
-  p_backward = 0.01,
+  p_forward = 0.01,
+  p_backward = 0.001,
   max_steps = -1,
   algorithm = "scm-forward-then-backward",
   results = NULL,
@@ -24,7 +24,7 @@ run_covsearch(
 
 \item{max_steps}{(numeric) The maximum number of search steps to make}
 
-\item{algorithm}{(str) The search algorithm to use. Currently 'scm-forward' and
+\item{algorithm}{(str) The search algorithm to use. Currently, 'scm-forward' and
 'scm-forward-then-backward' are supported.}
 
 \item{results}{(ModelfitResults (optional)) Results of model}

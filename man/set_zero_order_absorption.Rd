@@ -26,7 +26,7 @@ model$statements$ode_system
 }
 }
 \seealso{
-set_bolus_order_absorption
+set_instantaneous_absorption
 
 set_first_order_absorption
 }

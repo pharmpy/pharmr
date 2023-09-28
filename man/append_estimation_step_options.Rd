@@ -37,9 +37,9 @@ set_estimation_step
 
 remove_estimation_step
 
-add_covariance_step
+add_parameter_uncertainty_step
 
-remove_covariance_step
+remove_parameter_uncertainty_step
 
 set_evaluation_step
 }

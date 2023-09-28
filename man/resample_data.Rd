@@ -28,8 +28,8 @@ can be uniquely determined. A ValueError exception will be raised otherwise.}
 
 \item{sample_size}{(numeric (optional)) The number of groups that should be sampled. The default is
 the number of groups. If using stratification the default is to sample using the
-proportion of the stratas in the dataset. A list of specific sample sizes
-for each strata can also be supplied.}
+proportion of the strata in the dataset. A list of specific sample sizes
+for each stratum can also be supplied.}
 
 \item{replace}{(logical) A boolean controlling whether sampling should be done with or
 without replacement}

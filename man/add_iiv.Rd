@@ -43,6 +43,16 @@ Effects that currently have templates are:
 
 For all except exponential the operation input is not needed. Otherwise user specified
 input is supported. Initial estimates for new etas are 0.09.
+
+Assuming a statement (equation could not be rendered, see API doc on website)
+\itemize{
+\item Additive: (equation could not be rendered, see API doc on website)
+\item Proportional: (equation could not be rendered, see API doc on website)
+\item Exponential: (equation could not be rendered, see API doc on website)
+\item Logit: (equation could not be rendered, see API doc on website)
+\item Rescaled logit: (equation could not be rendered, see API doc on website)
+with (equation could not be rendered, see API doc on website)
+}
 }
 \examples{
 \dontrun{

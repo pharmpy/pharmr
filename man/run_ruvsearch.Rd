@@ -8,7 +8,7 @@ run_ruvsearch(
   model = NULL,
   results = NULL,
   groups = 4,
-  p_value = 0.05,
+  p_value = 0.001,
   skip = NULL,
   max_iter = 3,
   dv = NULL,

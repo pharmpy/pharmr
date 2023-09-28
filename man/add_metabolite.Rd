@@ -4,12 +4,14 @@
 \alias{add_metabolite}
 \title{add_metabolite}
 \usage{
-add_metabolite(model, drug_dvid = 1)
+add_metabolite(model, drug_dvid = 1, presystemic = FALSE)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{drug_dvid}{(numeric) DVID for drug (assuming all other DVIDs being for metabolites)}
+
+\item{presystemic}{(logical) Decide wether or not to add metabolite as a presystemetic fixed drug.}
 }
 \value{
 (Model) Pharmpy model object
@@ -19,6 +21,10 @@ Adds a metabolite compartment to a model
 
 The flow from the central compartment to the metabolite compartment
 will be unidirectional.
+
+Presystemic indicate that the metabolite compartment will be
+directly connected to the DEPOT. If a depot compartment is not present,
+one will be created.
 }
 \examples{
 \dontrun{

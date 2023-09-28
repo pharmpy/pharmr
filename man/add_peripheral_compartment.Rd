@@ -4,10 +4,12 @@
 \alias{add_peripheral_compartment}
 \title{add_peripheral_compartment}
 \usage{
-add_peripheral_compartment(model)
+add_peripheral_compartment(model, name = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
+
+\item{name}{(str) Name of compartment to add peripheral to.}
 }
 \value{
 (Model) Pharmpy model object
@@ -20,6 +22,9 @@ will be parameterized as QPn / VC where VC is the volume of the central compartm
 The rate of flow from the peripheral to the central compartment
 will be parameterized as QPn / VPn where VPn is the volumne of the added peripheral
 compartment.
+
+If name is set, the peripheral compartment will be added to the compartment
+with the specified name instead.
 
 Initial estimates:
 

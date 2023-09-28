@@ -10,7 +10,8 @@ rank_models(
   errors_allowed = NULL,
   rank_type = "ofv",
   cutoff = NULL,
-  bic_type = "mixed"
+  bic_type = "mixed",
+  ...
 )
 }
 \arguments{
@@ -26,6 +27,8 @@ maxevals_exceeded. Default is NULL}
 \item{cutoff}{(numeric (optional)) Value to use as cutoff. If using LRT, cutoff denotes p-value. Default is NULL}
 
 \item{bic_type}{(str) Type of BIC to calculate. Default is the mixed effects.}
+
+\item{...}{Arguments to pass to calculate BIC (such as \code{mult_test_p} and \code{mult_test_p})}
 }
 \value{
 (data.frame) DataFrame of the ranked models

@@ -16,7 +16,7 @@ predict_influential_outliers(
 
 \item{results}{(ModelfitResults) Results for model}
 
-\item{outlier_cutoff}{(numeric) Cutoff threshold for a residual singalling an outlier}
+\item{outlier_cutoff}{(numeric) Cutoff threshold for a residual signalling an outlier}
 
 \item{influential_cutoff}{(numeric) Cutoff threshold for a dofv signalling an influential individual}
 }

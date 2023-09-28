@@ -4,16 +4,21 @@
 \alias{remove_peripheral_compartment}
 \title{remove_peripheral_compartment}
 \usage{
-remove_peripheral_compartment(model)
+remove_peripheral_compartment(model, name = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
+
+\item{name}{(str) Name of compartment to remove peripheral compartment from.}
 }
 \value{
 (Model) Pharmpy model object
 }
 \description{
 Remove a peripheral distribution compartment from model
+
+If name is set, a peripheral compartment will be removed from the compartment
+with the specified name.
 
 Initial estimates:
 

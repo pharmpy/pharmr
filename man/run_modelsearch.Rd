@@ -16,14 +16,14 @@ run_modelsearch(
 )
 }
 \arguments{
-\item{search_space}{(str) Search space to test}
+\item{search_space}{(str or ModelFeatures) Search space to test. Either as a string or a ModelFeatures object.}
 
 \item{algorithm}{(str) Algorithm to use (e.g. exhaustive)}
 
 \item{iiv_strategy}{(str) If/how IIV should be added to candidate models. Possible strategies are 'no_add',
 'add_diagonal', 'fullblock', or 'absorption_delay'. Default is 'absorption_delay'}
 
-\item{rank_type}{(str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC}
+\item{rank_type}{(str) Which ranking type should be used (OFV, AIC, BIC, mBIC). Default is BIC}
 
 \item{cutoff}{(numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 is NULL (all models will be ranked)}

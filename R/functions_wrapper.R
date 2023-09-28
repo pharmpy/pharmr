@@ -92,45 +92,6 @@ add_bioavailability <- function(model, add_parameter=TRUE, logit_transform=FALSE
 }
 
 #' @title
-#' add_covariance_step
-#' 
-#' @description
-#' Adds covariance step to the final estimation step
-#' 
-#' @param model (Model) Pharmpy model
-#' @param cov (str) covariance method to use
-#'  
-#' @return (Model) Pharmpy model object
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' model <- set_estimation_step(model, 'FOCE', cov=NULL)
-#' model <- add_covariance_step(model, 'SANDWICH')
-#' ests <- model$estimation_steps
-#' ests[1]
-#' }
-#' @seealso
-#' add_estimation_step
-#' 
-#' set_estimation_step
-#' 
-#' remove_estimation_step
-#' 
-#' append_estimation_step_options
-#' 
-#' remove_covariance_step
-#' 
-#' set_evaluation_step
-#' 
-#' 
-#' @export
-add_covariance_step <- function(model, cov) {
-	func_out <- pharmpy$modeling$add_covariance_step(model, cov)
-	return(py_to_r(func_out))
-}
-
-#' @title
 #' add_covariate_effect
 #' 
 #' @description
@@ -152,7 +113,7 @@ add_covariance_step <- function(model, cov) {
 #' * Otherwise: (equation could not be rendered, see API doc on website)
 #' * Linear function for categorical covariates (*cat*)
 #' * Function:
-#' * If covariate is most common category:
+#' * If covariate is the most common category:
 #' 
 #' (equation could not be rendered, see API doc on website)
 #' 
@@ -255,8 +216,10 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' * Log-linear:
 #' (equation could not be rendered, see API doc on website)
 #' 
+#' (equation could not be rendered, see API doc on website)
+#' 
 #' @param model (Model) Pharmpy model
-#' @param expr (str) Name of the PD effect function. Valid names are: baseline, linear, Emax, sigmoid, step, loglin
+#' @param expr (str) Name of the PD effect function. Valid names are: baseline, linear, emax, sigmoid, step and loglin
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -305,9 +268,9 @@ add_effect_compartment <- function(model, expr) {
 #' 
 #' append_estimation_step_options
 #' 
-#' add_covariance_step
+#' add_parameter_uncertainty_step
 #' 
-#' remove_covariance_step
+#' remove_parameter_uncertainty_step
 #' 
 #' set_evaluation_step
 #' 
@@ -335,6 +298,17 @@ add_estimation_step <- function(model, method, idx=NULL, ...) {
 #' 
 #' For all except exponential the operation input is not needed. Otherwise user specified
 #' input is supported. Initial estimates for new etas are 0.09.
+#' 
+#' 
+#' 
+#' Assuming a statement (equation could not be rendered, see API doc on website)
+#' 
+#' * Additive: (equation could not be rendered, see API doc on website)
+#' * Proportional: (equation could not be rendered, see API doc on website)
+#' * Exponential: (equation could not be rendered, see API doc on website)
+#' * Logit: (equation could not be rendered, see API doc on website)
+#' * Rescaled logit: (equation could not be rendered, see API doc on website)
+#' with (equation could not be rendered, see API doc on website)
 #' 
 #' @param model (Model) Pharmpy model to add new IIVs to.
 #' @param list_of_parameters (array(str) or str) Name/names of parameter to add new IIVs to.
@@ -368,6 +342,50 @@ add_iiv <- function(model, list_of_parameters, expression, operation='*', initia
 	expression <- convert_input(expression, "list")
 	eta_names <- convert_input(eta_names, "list")
 	func_out <- pharmpy$modeling$add_iiv(model, list_of_parameters, expression, operation=operation, initial_estimate=initial_estimate, eta_names=eta_names)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' add_indirect_effect
+#' 
+#' @description
+#' Add indirect (turnover) effect
+#' 
+#' The concentration (equation could not be rendered, see API doc on website)
+#' 
+#' * Production:
+#' (equation could not be rendered, see API doc on website)
+#' * Degradation:
+#' (equation could not be rendered, see API doc on website)
+#' 
+#' (equation could not be rendered, see API doc on website)
+#' Baseline (equation could not be rendered, see API doc on website)
+#' 
+#' Models:
+#' 
+#' * Linear:
+#' (equation could not be rendered, see API doc on website)
+#' * Emax:
+#' (equation could not be rendered, see API doc on website)
+#' * Sigmoidal:
+#' (equation could not be rendered, see API doc on website)
+#' 
+#' 
+#' @param model (Model) Pharmpy model
+#' @param expr (str) Production (TRUE) (default) or degradation (FALSE)
+#' @param prod (logical) Name of PD effect function. Valid names are: linear, emax, sigmoid and step
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- add_indirect_effect(model, expr='linear', prod=TRUE)
+#' }
+#' 
+#' @export
+add_indirect_effect <- function(model, expr, prod=TRUE) {
+	func_out <- pharmpy$modeling$add_indirect_effect(model, expr, prod=prod)
 	return(py_to_r(func_out))
 }
 
@@ -479,8 +497,13 @@ add_lag_time <- function(model) {
 #' The flow from the central compartment to the metabolite compartment
 #' will be unidirectional.
 #' 
+#' Presystemic indicate that the metabolite compartment will be
+#' directly connected to the DEPOT. If a depot compartment is not present,
+#' one will be created.
+#' 
 #' @param model (Model) Pharmpy model
 #' @param drug_dvid (numeric) DVID for drug (assuming all other DVIDs being for metabolites)
+#' @param presystemic (logical) Decide wether or not to add metabolite as a presystemetic fixed drug.
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -491,9 +514,83 @@ add_lag_time <- function(model) {
 #' }
 #' 
 #' @export
-add_metabolite <- function(model, drug_dvid=1) {
+add_metabolite <- function(model, drug_dvid=1, presystemic=FALSE) {
 	drug_dvid <- convert_input(drug_dvid, "int")
-	func_out <- pharmpy$modeling$add_metabolite(model, drug_dvid=drug_dvid)
+	func_out <- pharmpy$modeling$add_metabolite(model, drug_dvid=drug_dvid, presystemic=presystemic)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' add_parameter_uncertainty_step
+#' 
+#' @description
+#' Adds parameter uncertainty step to the final estimation step
+#' 
+#' @param model (Model) Pharmpy model
+#' @param parameter_uncertainty_method (str) Parameter uncertainty method to use
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- set_estimation_step(model, 'FOCE', parameter_uncertainty_method=NULL)
+#' model <- add_parameter_uncertainty_step(model, 'SANDWICH')
+#' ests <- model$estimation_steps
+#' ests[1]
+#' }
+#' @seealso
+#' add_estimation_step
+#' 
+#' set_estimation_step
+#' 
+#' remove_estimation_step
+#' 
+#' append_estimation_step_options
+#' 
+#' remove_parameter_uncertainty_step
+#' 
+#' set_evaluation_step
+#' 
+#' 
+#' @export
+add_parameter_uncertainty_step <- function(model, parameter_uncertainty_method) {
+	func_out <- pharmpy$modeling$add_parameter_uncertainty_step(model, parameter_uncertainty_method)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' add_pd_iiv
+#' 
+#' @description
+#' Adds IIVs to all PD parameters in :class:`pharmpy.model`.
+#' 
+#' @param model (Model) Pharmpy model to add new IIVs to.
+#' @param initial_estimate (numeric) Value of initial estimate of parameter. Default is 0.09
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- set_direct_effect(model, 'emax')
+#' model$statements$find_assignment("EC_50")
+#' model <- add_pd_iiv(model)
+#' model$statements$find_assignment("EC_50")
+#' }
+#' @seealso
+#' add_iiv
+#' 
+#' add_iov
+#' 
+#' remove_iiv
+#' 
+#' remove_iov
+#' 
+#' 
+#' @export
+add_pd_iiv <- function(model, initial_estimate=0.09) {
+	func_out <- pharmpy$modeling$add_pd_iiv(model, initial_estimate=initial_estimate)
 	return(py_to_r(func_out))
 }
 
@@ -509,6 +606,9 @@ add_metabolite <- function(model, drug_dvid=1) {
 #' will be parameterized as QPn / VPn where VPn is the volumne of the added peripheral
 #' compartment.
 #' 
+#' If name is set, the peripheral compartment will be added to the compartment
+#' with the specified name instead.
+#' 
 #' Initial estimates:
 #' 
 #' ==  ===================================================
@@ -519,6 +619,7 @@ add_metabolite <- function(model, drug_dvid=1) {
 #' ==  ===================================================
 #' 
 #' @param model (Model) Pharmpy model
+#' @param name (str) Name of compartment to add peripheral to.
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -535,8 +636,8 @@ add_metabolite <- function(model, drug_dvid=1) {
 #' 
 #' 
 #' @export
-add_peripheral_compartment <- function(model) {
-	func_out <- pharmpy$modeling$add_peripheral_compartment(model)
+add_peripheral_compartment <- function(model, name=NULL) {
+	func_out <- pharmpy$modeling$add_peripheral_compartment(model, name=name)
 	return(py_to_r(func_out))
 }
 
@@ -656,9 +757,9 @@ add_time_after_dose <- function(model) {
 #' 
 #' remove_estimation_step
 #' 
-#' add_covariance_step
+#' add_parameter_uncertainty_step
 #' 
-#' remove_covariance_step
+#' remove_parameter_uncertainty_step
 #' 
 #' set_evaluation_step
 #' 
@@ -681,7 +782,7 @@ append_estimation_step_options <- function(model, tool_options, idx) {
 #' If model name does not end in a number do nothing.
 #' 
 #' @param model (Model) Pharmpy model object
-#' @param path (str) Default is to not look for files.
+#' @param path (str (optional)) Default is to not look for files.
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -737,9 +838,16 @@ calculate_aic <- function(model, likelihood) {
 #' * | iiv
 #' | BIC = -2LL + n_estimated_iiv_omega_parameters * log(n_individals)
 #' 
+#' If multiple_testing option is set to true an additional penalty will be added:
+#' 
+#' * | mBIC = BIC + 2*(n_estimated_parameters)*log(n_predictors/n_expected_models)
+#' 
 #' @param model (Model) Pharmpy model object
 #' @param likelihood (numeric) -2LL to use
 #' @param type (str (optional)) Type of BIC to calculate. Default is the mixed effects.
+#' @param multiple_testing (logical) Whether to use penalty for multiple testing (default is FALSE)
+#' @param mult_test_p (numeric) Number of predictors if using type `mult_test`
+#' @param mult_test_e (numeric) Number of expected models if using type `mult_test`
 #'  
 #' @return (numeric) BIC of model fit
 #' 
@@ -755,8 +863,10 @@ calculate_aic <- function(model, likelihood) {
 #' }
 #' 
 #' @export
-calculate_bic <- function(model, likelihood, type=NULL) {
-	func_out <- pharmpy$modeling$calculate_bic(model, likelihood, type=type)
+calculate_bic <- function(model, likelihood, type=NULL, multiple_testing=FALSE, mult_test_p=1, mult_test_e=1) {
+	mult_test_p <- convert_input(mult_test_p, "int")
+	mult_test_e <- convert_input(mult_test_e, "int")
+	func_out <- pharmpy$modeling$calculate_bic(model, likelihood, type=type, multiple_testing=multiple_testing, mult_test_p=mult_test_p, mult_test_e=mult_test_e)
 	return(py_to_r(func_out))
 }
 
@@ -1979,6 +2089,27 @@ expand_additional_doses <- function(model, flag=FALSE) {
 }
 
 #' @title
+#' filter_dataset
+#' 
+#' @description
+#' Filter dataset according to expr.
+#' 
+#' Example: expr = "DVID == 1" will filter the dataset so that
+#' only the rows with DVID = 1 remain.
+#' 
+#' @param model (Model) Pharmpy model object
+#' @param expr (str) expression for dataset query
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' 
+#' @export
+filter_dataset <- function(model, expr) {
+	func_out <- pharmpy$modeling$filter_dataset(model, expr)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' find_clearance_parameters
 #' 
 #' @description
@@ -2691,6 +2822,41 @@ get_number_of_observations_per_individual <- function(model) {
 }
 
 #' @title
+#' get_number_of_peripheral_compartments
+#' 
+#' @description
+#' Return the number of peripherals compartments connected to the central
+#' compartment
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (integer) Number of peripherals compartments
+#' 
+#' 
+#' @export
+get_number_of_peripheral_compartments <- function(model) {
+	func_out <- pharmpy$modeling$get_number_of_peripheral_compartments(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' get_number_of_transit_compartments
+#' 
+#' @description
+#' Return the number of transit compartments in the model
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (integer) Number of transit compartments
+#' 
+#' 
+#' @export
+get_number_of_transit_compartments <- function(model) {
+	func_out <- pharmpy$modeling$get_number_of_transit_compartments(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' get_observation_expression
 #' 
 #' @description
@@ -3140,6 +3306,26 @@ has_covariate_effect <- function(model, parameter, covariate) {
 }
 
 #' @title
+#' has_first_order_absorption
+#' 
+#' @description
+#' Check if ode system describes a first order absorption
+#' 
+#' Currently defined as the central compartment having a unidirectional input
+#' flow from another compartment (such as depot or transit)
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (Bool : TRUE if model has first order absorption) 
+#' 
+#' 
+#' @export
+has_first_order_absorption <- function(model) {
+	func_out <- pharmpy$modeling$has_first_order_absorption(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' has_first_order_elimination
 #' 
 #' @description
@@ -3161,6 +3347,25 @@ has_covariate_effect <- function(model, parameter, covariate) {
 #' @export
 has_first_order_elimination <- function(model) {
 	func_out <- pharmpy$modeling$has_first_order_elimination(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' has_instantaneous_absorption
+#' 
+#' @description
+#' Check if ode system describes a instantaneous absorption
+#' 
+#' Defined as being a instantaneous dose directly into the central compartment
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (Bool : TRUE if model has instantaneous absorption) 
+#' 
+#' 
+#' @export
+has_instantaneous_absorption <- function(model) {
+	func_out <- pharmpy$modeling$has_instantaneous_absorption(model)
 	return(py_to_r(func_out))
 }
 
@@ -3306,6 +3511,32 @@ has_odes <- function(model) {
 }
 
 #' @title
+#' has_presystemic_metabolite
+#' 
+#' @description
+#' Checks whether a model has a presystemic metabolite
+#' 
+#' If pre-systemic drug there will be a flow from DEPOT to METABOLITE as well
+#' as being a flow from the CENTRAL to METABOLITE
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (logical) Whether a model has presystemic metabolite
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- add_metabolite(model, presystemic=TRUE)
+#' has_presystemic_metabolite(model)
+#' }
+#' 
+#' @export
+has_presystemic_metabolite <- function(model) {
+	func_out <- pharmpy$modeling$has_presystemic_metabolite(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' has_proportional_error_model
 #' 
 #' @description
@@ -3367,6 +3598,28 @@ has_proportional_error_model <- function(model, dv=NULL) {
 #' @export
 has_random_effect <- function(model, parameter, level='all') {
 	func_out <- pharmpy$modeling$has_random_effect(model, parameter, level=level)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' has_seq_zo_fo_absorption
+#' 
+#' @description
+#' Check if ode system describes a sequential zero-order, first-order absorption
+#' 
+#' Defined as the model having both zero- and first-order absorption.
+#' 
+#' @param model (Model) DPharmpy model
+#'  
+#' @seealso
+#' has_zero_order_absorption
+#' 
+#' has_first_order_absorption
+#' 
+#' 
+#' @export
+has_seq_zo_fo_absorption <- function(model) {
+	func_out <- pharmpy$modeling$has_seq_zo_fo_absorption(model)
 	return(py_to_r(func_out))
 }
 
@@ -3637,12 +3890,48 @@ mu_reference_model <- function(model) {
 #' @param group (str) Name of the column to use for grouping
 #' @param name_pattern (str) Name to use for generated datasets. A number starting from 1 will be put in the placeholder.
 #'  
-#' @return (iterator) Iterator yielding tuples of models/dataframes and the omited group
+#' @return (iterator) Iterator yielding tuples of models/dataframes and the omitted group
 #' 
 #' 
 #' @export
 omit_data <- function(dataset_or_model, group, name_pattern='omitted_{}') {
 	func_out <- pharmpy$modeling$omit_data(dataset_or_model, group, name_pattern=name_pattern)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' plot_cwres_vs_idv
+#' 
+#' @description
+#' Plot CWRES vs idv
+#' 
+#' @param model (Model) Pharmpy model
+#' @param residuals (data.frame) DataFrame containing CWRES
+#'  
+#' @return (alt.Chart) Plot
+#' 
+#' 
+#' @export
+plot_cwres_vs_idv <- function(model, residuals) {
+	func_out <- pharmpy$modeling$plot_cwres_vs_idv(model, residuals)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' plot_dv_vs_ipred
+#' 
+#' @description
+#' Plot DV vs IPRED
+#' 
+#' @param model (Model) Pharmpy model
+#' @param predictions (data.frame) DataFrame containing the predictions
+#'  
+#' @return (alt.Chart) Plot
+#' 
+#' 
+#' @export
+plot_dv_vs_ipred <- function(model, predictions) {
+	func_out <- pharmpy$modeling$plot_dv_vs_ipred(model, predictions)
 	return(py_to_r(func_out))
 }
 
@@ -3856,43 +4145,6 @@ remove_bioavailability <- function(model) {
 }
 
 #' @title
-#' remove_covariance_step
-#' 
-#' @description
-#' Removes covariance step to the final estimation step
-#' 
-#' @param model (Model) Pharmpy model
-#'  
-#' @return (Model) Pharmpy model object
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' model <- remove_covariance_step(model)
-#' ests <- model$estimation_steps
-#' ests[1]
-#' }
-#' @seealso
-#' add_estimation_step
-#' 
-#' set_estimation_step
-#' 
-#' remove_estimation_step
-#' 
-#' append_estimation_step_options
-#' 
-#' add_covariance_step
-#' 
-#' set_evaluation_step
-#' 
-#' 
-#' @export
-remove_covariance_step <- function(model) {
-	func_out <- pharmpy$modeling$remove_covariance_step(model)
-	return(py_to_r(func_out))
-}
-
-#' @title
 #' remove_covariate_effect
 #' 
 #' @description
@@ -3967,9 +4219,9 @@ remove_error_model <- function(model) {
 #' 
 #' append_estimation_step_options
 #' 
-#' add_covariance_step
+#' add_parameter_uncertainty_step
 #' 
-#' remove_covariance_step
+#' remove_parameter_uncertainty_step
 #' 
 #' set_evaluation_step
 #' 
@@ -4117,10 +4369,50 @@ remove_loq_data <- function(model, lloq=NULL, uloq=NULL, blq=NULL, alq=NULL, kee
 }
 
 #' @title
+#' remove_parameter_uncertainty_step
+#' 
+#' @description
+#' Removes parameter uncertainty step from the final estimation step
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- remove_parameter_uncertainty_step(model)
+#' ests <- model$estimation_steps
+#' ests[1]
+#' }
+#' @seealso
+#' add_estimation_step
+#' 
+#' set_estimation_step
+#' 
+#' remove_estimation_step
+#' 
+#' append_estimation_step_options
+#' 
+#' add_parameter_uncertainty_step
+#' 
+#' set_evaluation_step
+#' 
+#' 
+#' @export
+remove_parameter_uncertainty_step <- function(model) {
+	func_out <- pharmpy$modeling$remove_parameter_uncertainty_step(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' remove_peripheral_compartment
 #' 
 #' @description
 #' Remove a peripheral distribution compartment from model
+#' 
+#' If name is set, a peripheral compartment will be removed from the compartment
+#' with the specified name.
 #' 
 #' Initial estimates:
 #' 
@@ -4132,6 +4424,7 @@ remove_loq_data <- function(model, lloq=NULL, uloq=NULL, blq=NULL, alq=NULL, kee
 #' ==  ===================================================
 #' 
 #' @param model (Model) Pharmpy model
+#' @param name (str) Name of compartment to remove peripheral compartment from.
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -4149,8 +4442,8 @@ remove_loq_data <- function(model, lloq=NULL, uloq=NULL, blq=NULL, alq=NULL, kee
 #' 
 #' 
 #' @export
-remove_peripheral_compartment <- function(model) {
-	func_out <- pharmpy$modeling$remove_peripheral_compartment(model)
+remove_peripheral_compartment <- function(model, name=NULL) {
+	func_out <- pharmpy$modeling$remove_peripheral_compartment(model, name=name)
 	return(py_to_r(func_out))
 }
 
@@ -4210,8 +4503,8 @@ rename_symbols <- function(model, new_names) {
 #' can be uniquely determined. A ValueError exception will be raised otherwise.
 #' @param sample_size (numeric (optional)) The number of groups that should be sampled. The default is
 #' the number of groups. If using stratification the default is to sample using the
-#' proportion of the stratas in the dataset. A list of specific sample sizes
-#' for each strata can also be supplied.
+#' proportion of the strata in the dataset. A list of specific sample sizes
+#' for each stratum can also be supplied.
 #' @param replace (logical) A boolean controlling whether sampling should be done with or
 #' without replacement
 #' @param name_pattern (str) Name to use for generated datasets. A number starting from 1 will
@@ -4413,36 +4706,6 @@ set_additive_error_model <- function(model, dv=NULL, data_trans=NULL, series_ter
 }
 
 #' @title
-#' set_bolus_absorption
-#' 
-#' @description
-#' Set or change to bolus absorption rate.
-#' 
-#' Currently lagtime together with bolus absorption is not supported.
-#' 
-#' @param model (Model) Model to set or change absorption rate
-#'  
-#' @return (Model) Pharmpy model object
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' model <- set_bolus_absorption(model)
-#' model$statements$ode_system
-#' }
-#' @seealso
-#' set_zero_order_absorption
-#' 
-#' set_first_order_absorption
-#' 
-#' 
-#' @export
-set_bolus_absorption <- function(model) {
-	func_out <- pharmpy$modeling$set_bolus_absorption(model)
-	return(py_to_r(func_out))
-}
-
-#' @title
 #' set_combined_error_model
 #' 
 #' @description
@@ -4527,8 +4790,10 @@ set_covariates <- function(model, covariates) {
 #' * Log-linear:
 #' (equation could not be rendered, see API doc on website)
 #' 
+#' (equation could not be rendered, see API doc on website)
+#' 
 #' @param model (Model) Pharmpy model
-#' @param expr (str) Name of PD effect function. Valid names are: baseline, linear, Emax, sigmoid, step, loglin
+#' @param expr (str) Name of PD effect function. Valid names are: baseline, linear, emax, sigmoid, step and loglin
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -4616,9 +4881,9 @@ set_dvid <- function(model, name) {
 #' 
 #' append_estimation_step_options
 #' 
-#' add_covariance_step
+#' add_parameter_uncertainty_step
 #' 
-#' remove_covariance_step
+#' remove_parameter_uncertainty_step
 #' 
 #' set_evaluation_step
 #' 
@@ -4640,7 +4905,7 @@ set_estimation_step <- function(model, method, idx=0, ...) {
 #' FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM, BAYES
 #' 
 #' @param model (Model) Pharmpy model
-#' @param idx (numeric) index of estimation step, default is -1 (last estimation step)
+#' @param idx (numeric) Index of estimation step, default is -1 (last estimation step)
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -4659,9 +4924,9 @@ set_estimation_step <- function(model, method, idx=0, ...) {
 #' 
 #' append_estimation_step_options
 #' 
-#' add_covariance_step
+#' add_parameter_uncertainty_step
 #' 
-#' remove_covariance_step
+#' remove_parameter_uncertainty_step
 #' 
 #' 
 #' @export
@@ -4694,7 +4959,7 @@ set_evaluation_step <- function(model, idx=-1) {
 #' model$statements$ode_system
 #' }
 #' @seealso
-#' set_bolus_order_absorption
+#' set_instantaneous_absorption
 #' 
 #' set_zero_order_absorption
 #' 
@@ -4824,6 +5089,36 @@ set_initial_condition <- function(model, compartment, expression, time=0) {
 #' @export
 set_initial_estimates <- function(model, inits) {
 	func_out <- pharmpy$modeling$set_initial_estimates(model, inits)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' set_instantaneous_absorption
+#' 
+#' @description
+#' Set or change to instantaneous absorption rate.
+#' 
+#' Currently lagtime together with instantaneous absorption is not supported.
+#' 
+#' @param model (Model) Model to set or change absorption rate
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- set_instantaneous_absorption(model)
+#' model$statements$ode_system
+#' }
+#' @seealso
+#' set_zero_order_absorption
+#' 
+#' set_first_order_absorption
+#' 
+#' 
+#' @export
+set_instantaneous_absorption <- function(model) {
+	func_out <- pharmpy$modeling$set_instantaneous_absorption(model)
 	return(py_to_r(func_out))
 }
 
@@ -5183,7 +5478,7 @@ set_reference_values <- function(model, refs) {
 #' model$statements$ode_system
 #' }
 #' @seealso
-#' set_bolus_order_absorption
+#' set_instantaneous_absorption
 #' 
 #' set_zero_order_absorption
 #' 
@@ -5355,7 +5650,7 @@ set_weighted_error_model <- function(model) {
 #' model$statements$ode_system
 #' }
 #' @seealso
-#' set_bolus_order_absorption
+#' set_instantaneous_absorption
 #' 
 #' set_first_order_absorption
 #' 
@@ -6128,6 +6423,52 @@ fit <- function(model_or_models, tool=NULL) {
 }
 
 #' @title
+#' get_model_features
+#' 
+#' @description
+#' Create an MFL representation of an input model
+#' 
+#' Given an input model. Create a model feature language (MFL) string
+#' representation. Can currently extract absorption, elimination, transits,
+#' peripherals and lagtime.
+#' 
+#' @param model (Model) Model to extract features from.
+#' @param supress_warnings (logical) Choose to supress warnings if absorption/elimination type cannot be
+#' determined. The default is FALSE.
+#'  
+#' @return (str) A MFL string representation of the input model.
+#' 
+#' 
+#' @export
+get_model_features <- function(model, supress_warnings=FALSE) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$get_model_features(model, supress_warnings=supress_warnings)
+		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+			func_out <- reset_indices_results(func_out)
+		}
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
 #' load_example_modelfit_results
 #' 
 #' @description
@@ -6230,7 +6571,7 @@ predict_influential_individuals <- function(model, results, cutoff=3.84) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param results (ModelfitResults) Results for model
-#' @param outlier_cutoff (numeric) Cutoff threshold for a residual singalling an outlier
+#' @param outlier_cutoff (numeric) Cutoff threshold for a residual signalling an outlier
 #' @param influential_cutoff (numeric) Cutoff threshold for a dofv signalling an influential individual
 #'  
 #' @return (data.frame) Dataframe over the individuals with a `outliers` and `dofv` columns containing the raw predictions and `influential`, `outlier` and `influential_outlier` boolean columns.
@@ -6379,6 +6720,7 @@ print_fit_summary <- function(model) {
 #' @param rank_type (str) Name of ranking type. Available options are 'ofv', 'aic', 'bic', 'lrt' (OFV with LRT)
 #' @param cutoff (numeric (optional)) Value to use as cutoff. If using LRT, cutoff denotes p-value. Default is NULL
 #' @param bic_type (str) Type of BIC to calculate. Default is the mixed effects.
+#' @param ... Arguments to pass to calculate BIC (such as `mult_test_p` and `mult_test_p`)
 #'  
 #' @return (data.frame) DataFrame of the ranked models
 #' 
@@ -6392,12 +6734,12 @@ print_fit_summary <- function(model) {
 #' }
 #' 
 #' @export
-rank_models <- function(base_model, models, errors_allowed=NULL, rank_type='ofv', cutoff=NULL, bic_type='mixed') {
+rank_models <- function(base_model, models, errors_allowed=NULL, rank_type='ofv', cutoff=NULL, bic_type='mixed', ...) {
 	tryCatch(
 	{
 		models <- convert_input(models, "list")
 		errors_allowed <- convert_input(errors_allowed, "list")
-		func_out <- pharmpy$tools$rank_models(base_model, models, errors_allowed=errors_allowed, rank_type=rank_type, cutoff=cutoff, bic_type=bic_type)
+		func_out <- pharmpy$tools$rank_models(base_model, models, errors_allowed=errors_allowed, rank_type=rank_type, cutoff=cutoff, bic_type=bic_type, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -6722,11 +7064,15 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' 
 #' @param input (Model or str) Read model object/Path to a dataset
 #' @param results (ModelfitResults (optional)) Reults of input if input is a model
-#' @param modeltype (str) Type of model to build. Either 'basic_pk'
+#' @param modeltype (str) Type of model to build. Valid strings are 'basic_pk', 'pkpd', 'drug_metabolite'
 #' @param administration (str) Route of administration. Either 'iv', 'oral' or 'ivoral'
 #' @param cl_init (numeric) Initial estimate for the population clearance
 #' @param vc_init (numeric) Initial estimate for the central compartment population volume
 #' @param mat_init (numeric) Initial estimate for the mean absorption time (not for iv models)
+#' @param b_init (numeric (optional)) Initial estimate for the baseline (PKPD model)
+#' @param emax_init (numeric (optional)) Initial estimate for E_max (PKPD model)
+#' @param ec50_init (numeric (optional)) Initial estimate for EC_50 (PKPD model)
+#' @param met_init (numeric (optional)) Initial estimate for mean equilibration time (PKPD model)
 #' @param search_space (str (optional)) MFL for search space for structural model
 #' @param lloq_method (str (optional)) Method for how to remove LOQ data. See `transform_blq` for vector of available methods
 #' @param lloq_limit (str (optional)) Lower limit of quantification. If NULL LLOQ column from dataset will be used
@@ -6751,11 +7097,11 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' 
 #' 
 #' @export
-run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='oral', cl_init=0.01, vc_init=1.0, mat_init=0.1, search_space=NULL, lloq_method=NULL, lloq_limit=NULL, order=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE) {
+run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='oral', cl_init=0.01, vc_init=1.0, mat_init=0.1, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, search_space=NULL, lloq_method=NULL, lloq_limit=NULL, order=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE) {
 	tryCatch(
 	{
 		order <- convert_input(order, "list")
-		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, administration=administration, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, search_space=search_space, lloq_method=lloq_method, lloq_limit=lloq_limit, order=order, allometric_variable=allometric_variable, occasion=occasion, path=path, resume=resume)
+		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, administration=administration, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, search_space=search_space, lloq_method=lloq_method, lloq_limit=lloq_limit, order=order, allometric_variable=allometric_variable, occasion=occasion, path=path, resume=resume)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -6840,7 +7186,7 @@ run_bootstrap <- function(model, results=NULL, resamples=1, ...) {
 #' @param p_forward (numeric) The p-value to use in the likelihood ratio test for forward steps
 #' @param p_backward (numeric) The p-value to use in the likelihood ratio test for backward steps
 #' @param max_steps (numeric) The maximum number of search steps to make
-#' @param algorithm (str) The search algorithm to use. Currently 'scm-forward' and
+#' @param algorithm (str) The search algorithm to use. Currently, 'scm-forward' and
 #' 'scm-forward-then-backward' are supported.
 #' @param results (ModelfitResults (optional)) Results of model
 #' @param model (Model (optional)) Pharmpy mode
@@ -6857,7 +7203,7 @@ run_bootstrap <- function(model, results=NULL, resamples=1, ...) {
 #' }
 #' 
 #' @export
-run_covsearch <- function(effects, p_forward=0.05, p_backward=0.01, max_steps=-1, algorithm='scm-forward-then-backward', results=NULL, model=NULL, ...) {
+run_covsearch <- function(effects, p_forward=0.01, p_backward=0.001, max_steps=-1, algorithm='scm-forward-then-backward', results=NULL, model=NULL, ...) {
 	tryCatch(
 	{
 		max_steps <- convert_input(max_steps, "int")
@@ -6893,12 +7239,12 @@ run_covsearch <- function(effects, p_forward=0.05, p_backward=0.01, max_steps=-1
 #' Run estmethod tool.
 #' 
 #' @param algorithm (str) The algorithm to use (can be 'exhaustive', 'exhaustive_with_update' or 'exhaustive_only_eval')
-#' @param methods (array(str) or str (optional)) List of estimation methods to test. Can be specified as 'all', a vector of methods, or
-#' NULL (to not test any estimation method)
+#' @param methods (array(str) or str (optional)) List of estimation methods to test.
+#' Can be specified as 'all', a vector of estimation methods, or NULL (to not test any estimation method)
 #' @param solvers (array(str) or str (optional)) List of solver to test. Can be specified as 'all', a vector of solvers, or NULL (to
 #' not test any solver)
-#' @param covs (array(str) or str (optional)) List of covariance to test. Can be specified as 'all', a vector of covs, or NULL (to
-#' not evaluate any covariance)
+#' @param parameter_uncertainty_methods (array(str) or str (optional)) List of parameter uncertainty methods to test.
+#' Can be specified as 'all', a vector of uncertainty methods, or NULL (to not evaluate any uncertainty)
 #' @param results (ModelfitResults (optional)) Results for model
 #' @param model (Model (optional)) Pharmpy mode
 #' @param ... Arguments to pass to tool
@@ -6910,20 +7256,21 @@ run_covsearch <- function(effects, p_forward=0.05, p_backward=0.01, max_steps=-1
 #' model <- load_example_model("pheno")
 #' results <- load_example_modelfit_results("pheno")
 #' methods <- c('imp', 'saem')
-#' covs <- NULL
+#' parameter_uncertainty_methods <- NULL
 #' run_estmethod(
-#'  'reduced', methods=methods, solvers='all', covs=covs, results=results, model=model
+#'  'reduced', methods=methods, solvers='all',
+#'  parameter_uncertainty_methods=parameter_uncertainty_methods, results=results, model=model
 #' )
 #' }
 #' 
 #' @export
-run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, covs=NULL, results=NULL, model=NULL, ...) {
+run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncertainty_methods=NULL, results=NULL, model=NULL, ...) {
 	tryCatch(
 	{
 		methods <- convert_input(methods, "list")
 		solvers <- convert_input(solvers, "list")
-		covs <- convert_input(covs, "list")
-		func_out <- pharmpy$tools$run_estmethod(algorithm, methods=methods, solvers=solvers, covs=covs, results=results, model=model, ...)
+		parameter_uncertainty_methods <- convert_input(parameter_uncertainty_methods, "list")
+		func_out <- pharmpy$tools$run_estmethod(algorithm, methods=methods, solvers=solvers, parameter_uncertainty_methods=parameter_uncertainty_methods, results=results, model=model, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -6957,7 +7304,7 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, covs=NULL, resu
 #' @param algorithm (str) Which algorithm to run (brute_force, brute_force_no_of_etas, brute_force_block_structure)
 #' @param iiv_strategy (str) If/how IIV should be added to start model. Possible strategies are 'no_add', 'add_diagonal',
 #' or 'fullblock'. Default is 'no_add'
-#' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC
+#' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC, mBIC). Default is BIC
 #' @param cutoff (numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 #' is NULL (all models will be ranked)
 #' @param results (ModelfitResults (optional)) Results for model
@@ -7067,7 +7414,7 @@ run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='bic'
 #' 
 #' @param model_or_models (Model or array(Model) (optional)) A vector of models are one single model object
 #' @param n (numeric (optional)) Number of models to fit. This is only used if the tool is going to be combined with other tools.
-#' @param tool (str (optional)) Which tool to use for fitting. Currently 'nonmem' or 'nlmixr' can be used
+#' @param tool (str (optional)) Which tool to use for fitting. Currently, 'nonmem' or 'nlmixr' can be used
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (ModelfitResults) Modelfit tool result object
@@ -7114,11 +7461,11 @@ run_modelfit <- function(model_or_models=NULL, n=NULL, tool=NULL, ...) {
 #' @description
 #' Run Modelsearch tool. For more details, see :ref:`modelsearch`.
 #' 
-#' @param search_space (str) Search space to test
+#' @param search_space (str or ModelFeatures) Search space to test. Either as a string or a ModelFeatures object.
 #' @param algorithm (str) Algorithm to use (e.g. exhaustive)
 #' @param iiv_strategy (str) If/how IIV should be added to candidate models. Possible strategies are 'no_add',
 #' 'add_diagonal', 'fullblock', or 'absorption_delay'. Default is 'absorption_delay'
-#' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC
+#' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC, mBIC). Default is BIC
 #' @param cutoff (numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 #' is NULL (all models will be ranked)
 #' @param results (ModelfitResults (optional)) Results for model
@@ -7188,7 +7535,7 @@ run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_de
 #' }
 #' 
 #' @export
-run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.05, skip=NULL, max_iter=3, dv=NULL, ...) {
+run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.001, skip=NULL, max_iter=3, dv=NULL, ...) {
 	tryCatch(
 	{
 		groups <- convert_input(groups, "int")
@@ -7226,10 +7573,12 @@ run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.05, skip
 #' @description
 #' Run the structsearch tool. For more details, see :ref:`structsearch`.
 #' 
-#' @param route (str) Route of administration. Either 'pk' or 'oral'
-#' @param type (str) Type of model. Currently only 'tmdd' and 'pkpd'
-#' @param emax_init (numeric (optional)) Initial estimate for E_MAX. The default value is 0.1
-#' @param ec50_init (numeric (optional)) Initial estimate for EC_50. The default value is 0.1
+#' @param type (str) Type of model. Currently only 'drug_metabolite' and 'pkpd'
+#' @param search_space (str (optional)) Search space to test
+#' @param b_init (numeric (optional)) Initial estimate for the baseline for pkpd models. The default value is 0.1
+#' @param emax_init (numeric (optional)) Initial estimate for E_MAX (for pkpd models only). The default value is 0.1
+#' @param ec50_init (numeric (optional)) Initial estimate for EC_50 (for pkpd models only). The default value is 0.1
+#' @param met_init (numeric (optional)) Initial estimate for MET (for pkpd models only). The default value is 0.1
 #' @param results (ModelfitResults (optional)) Results for the start model
 #' @param model (Model (optional)) Pharmpy start mode
 #' @param ... Arguments to pass to tool
@@ -7240,14 +7589,14 @@ run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.05, skip
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' results <- load_example_modelfit_results("pheno")
-#' run_structsearch(model_type='tmdd', results=results, model=model)
+#' run_structsearch(model_type='pkpd', results=results, model=model)
 #' }
 #' 
 #' @export
-run_structsearch <- function(route, type, emax_init=NULL, ec50_init=NULL, results=NULL, model=NULL, ...) {
+run_structsearch <- function(type, search_space=NULL, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, results=NULL, model=NULL, ...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_structsearch(route, type, emax_init=emax_init, ec50_init=ec50_init, results=results, model=model, ...)
+		func_out <- pharmpy$tools$run_structsearch(type, search_space=search_space, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, results=results, model=model, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}

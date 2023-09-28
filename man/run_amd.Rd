@@ -12,6 +12,10 @@ run_amd(
   cl_init = 0.01,
   vc_init = 1,
   mat_init = 0.1,
+  b_init = NULL,
+  emax_init = NULL,
+  ec50_init = NULL,
+  met_init = NULL,
   search_space = NULL,
   lloq_method = NULL,
   lloq_limit = NULL,
@@ -27,7 +31,7 @@ run_amd(
 
 \item{results}{(ModelfitResults (optional)) Reults of input if input is a model}
 
-\item{modeltype}{(str) Type of model to build. Either 'basic_pk'}
+\item{modeltype}{(str) Type of model to build. Valid strings are 'basic_pk', 'pkpd', 'drug_metabolite'}
 
 \item{administration}{(str) Route of administration. Either 'iv', 'oral' or 'ivoral'}
 
@@ -36,6 +40,14 @@ run_amd(
 \item{vc_init}{(numeric) Initial estimate for the central compartment population volume}
 
 \item{mat_init}{(numeric) Initial estimate for the mean absorption time (not for iv models)}
+
+\item{b_init}{(numeric (optional)) Initial estimate for the baseline (PKPD model)}
+
+\item{emax_init}{(numeric (optional)) Initial estimate for E_max (PKPD model)}
+
+\item{ec50_init}{(numeric (optional)) Initial estimate for EC_50 (PKPD model)}
+
+\item{met_init}{(numeric (optional)) Initial estimate for mean equilibration time (PKPD model)}
 
 \item{search_space}{(str (optional)) MFL for search space for structural model}
 

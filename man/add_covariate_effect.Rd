@@ -50,7 +50,7 @@ The following effects have templates:
 \item Otherwise: (equation could not be rendered, see API doc on website)
 \item Linear function for categorical covariates (\emph{cat})
 \item Function:
-\item If covariate is most common category:
+\item If covariate is the most common category:
 }
 
 (equation could not be rendered, see API doc on website)
