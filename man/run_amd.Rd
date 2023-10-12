@@ -31,7 +31,7 @@ run_amd(
 
 \item{results}{(ModelfitResults (optional)) Reults of input if input is a model}
 
-\item{modeltype}{(str) Type of model to build. Valid strings are 'basic_pk', 'pkpd', 'drug_metabolite'}
+\item{modeltype}{(str) Type of model to build. Valid strings are 'basic_pk', 'pkpd', 'drug_metabolite' and 'tmdd'}
 
 \item{administration}{(str) Route of administration. Either 'iv', 'oral' or 'ivoral'}
 

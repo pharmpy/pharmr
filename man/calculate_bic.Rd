@@ -7,7 +7,7 @@
 calculate_bic(
   model,
   likelihood,
-  type = NULL,
+  type = "mixed",
   multiple_testing = FALSE,
   mult_test_p = 1,
   mult_test_e = 1
@@ -18,13 +18,13 @@ calculate_bic(
 
 \item{likelihood}{(numeric) -2LL to use}
 
-\item{type}{(str (optional)) Type of BIC to calculate. Default is the mixed effects.}
+\item{type}{(str) Type of BIC to calculate. Default is the mixed effects.}
 
 \item{multiple_testing}{(logical) Whether to use penalty for multiple testing (default is FALSE)}
 
-\item{mult_test_p}{(numeric) Number of predictors if using type \code{mult_test}}
+\item{mult_test_p}{(numeric) Number of expected models if using type \code{mult_test}}
 
-\item{mult_test_e}{(numeric) Number of expected models if using type \code{mult_test}}
+\item{mult_test_e}{(numeric) E value if using type \code{mult_test}}
 }
 \value{
 (numeric) BIC of model fit

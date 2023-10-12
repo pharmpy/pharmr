@@ -4,18 +4,25 @@
 \alias{get_individual_parameters}
 \title{get_individual_parameters}
 \usage{
-get_individual_parameters(model, level = "all")
+get_individual_parameters(model, level = "all", dv = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model to retrieve the individuals parameters from}
 
-\item{level}{(str) The variability level to look for: 'iiv', 'iov', or 'all' (default)}
+\item{level}{(str) The variability level to look for: 'iiv', 'iov', 'random' or 'all' (default)}
+
+\item{dv}{(str or numeric (optional)) Name or DVID of dependent variable. NULL for all (default)}
 }
 \value{
 (vector\link{str}) A vector of the parameter names as strings
 }
 \description{
-Retrieves all parameters with IIV or IOV in :class:\code{pharmpy.model}.
+Retrieves all individual parameters in a :class:\code{pharmpy.model}.
+
+By default all individual parameters will be found even ones having no random effect. The level
+arguments makes it possible to find only those having any random effect or only those having a certain
+random effect. Using the dv option will give all individual parameters affecting a certain dv. Note that
+the DV for PD in a PKPD model often also is affected by the PK parameters.
 }
 \examples{
 \dontrun{
@@ -26,6 +33,8 @@ get_individual_parameters(model, 'iov')
 }
 }
 \seealso{
+get_pd_parameters
+
 get_pk_parameters
 
 get_rv_parameters

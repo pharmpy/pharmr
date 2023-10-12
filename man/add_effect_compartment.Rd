@@ -20,18 +20,34 @@ Add an effect compartment.
 Implemented PD models are:
 \itemize{
 \item Baseline:
-(equation could not be rendered, see API doc on website)
-\item Linear:
-(equation could not be rendered, see API doc on website)
-\item Emax:
-(equation could not be rendered, see API doc on website)
-\item Step effect:
-(equation could not be rendered, see API doc on website)
-\item Sigmoidal:
-(equation could not be rendered, see API doc on website)
-\item Log-linear:
-(equation could not be rendered, see API doc on website)
 }
+
+(equation could not be rendered, see API doc on website)
+\itemize{
+\item Linear:
+}
+
+(equation could not be rendered, see API doc on website)
+\itemize{
+\item Emax:
+}
+
+(equation could not be rendered, see API doc on website)
+\itemize{
+\item Step effect:
+}
+
+(equation could not be rendered, see API doc on website)
+\itemize{
+\item Sigmoidal:
+}
+
+(equation could not be rendered, see API doc on website)
+\itemize{
+\item Log-linear:
+}
+
+(equation could not be rendered, see API doc on website)
 
 (equation could not be rendered, see API doc on website)
 }

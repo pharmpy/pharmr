@@ -92,6 +92,34 @@ add_bioavailability <- function(model, add_parameter=TRUE, logit_transform=FALSE
 }
 
 #' @title
+#' add_cmt
+#' 
+#' @description
+#' Add a CMT column to the model dataset and datainfo if not existed
+#' 
+#' In case of multiple doses, this method is dependent on the presence of an
+#' admid column to correctly number each dose.
+#' 
+#' NOTE : Existing CMT is based on datainfo type being set to 'compartment'
+#' and a column named 'CMT' can be replaced
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (model : Model) Pharmpy model
+#' 
+#' @seealso
+#' get_admid : Get or create an admid column
+#' 
+#' get_cmt : Get or create a cmt column
+#' 
+#' 
+#' @export
+add_cmt <- function(model) {
+	func_out <- pharmpy$modeling$add_cmt(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' add_covariate_effect
 #' 
 #' @description
@@ -204,16 +232,27 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' Implemented PD models are:
 #' 
 #' * Baseline:
+#' 
 #' (equation could not be rendered, see API doc on website)
+#' 
 #' * Linear:
+#' 
 #' (equation could not be rendered, see API doc on website)
+#' 
 #' * Emax:
+#' 
 #' (equation could not be rendered, see API doc on website)
+#' 
 #' * Step effect:
+#' 
 #' (equation could not be rendered, see API doc on website)
+#' 
 #' * Sigmoidal:
+#' 
 #' (equation could not be rendered, see API doc on website)
+#' 
 #' * Log-linear:
+#' 
 #' (equation could not be rendered, see API doc on website)
 #' 
 #' (equation could not be rendered, see API doc on website)
@@ -354,8 +393,11 @@ add_iiv <- function(model, list_of_parameters, expression, operation='*', initia
 #' The concentration (equation could not be rendered, see API doc on website)
 #' 
 #' * Production:
+#' 
 #' (equation could not be rendered, see API doc on website)
+#' 
 #' * Degradation:
+#' 
 #' (equation could not be rendered, see API doc on website)
 #' 
 #' (equation could not be rendered, see API doc on website)
@@ -364,10 +406,15 @@ add_iiv <- function(model, list_of_parameters, expression, operation='*', initia
 #' Models:
 #' 
 #' * Linear:
+#' 
 #' (equation could not be rendered, see API doc on website)
+#' 
 #' * Emax:
+#' 
 #' (equation could not be rendered, see API doc on website)
+#' 
 #' * Sigmoidal:
+#' 
 #' (equation could not be rendered, see API doc on website)
 #' 
 #' 
@@ -844,10 +891,10 @@ calculate_aic <- function(model, likelihood) {
 #' 
 #' @param model (Model) Pharmpy model object
 #' @param likelihood (numeric) -2LL to use
-#' @param type (str (optional)) Type of BIC to calculate. Default is the mixed effects.
+#' @param type (str) Type of BIC to calculate. Default is the mixed effects.
 #' @param multiple_testing (logical) Whether to use penalty for multiple testing (default is FALSE)
-#' @param mult_test_p (numeric) Number of predictors if using type `mult_test`
-#' @param mult_test_e (numeric) Number of expected models if using type `mult_test`
+#' @param mult_test_p (numeric) Number of expected models if using type `mult_test`
+#' @param mult_test_e (numeric) E value if using type `mult_test`
 #'  
 #' @return (numeric) BIC of model fit
 #' 
@@ -863,7 +910,7 @@ calculate_aic <- function(model, likelihood) {
 #' }
 #' 
 #' @export
-calculate_bic <- function(model, likelihood, type=NULL, multiple_testing=FALSE, mult_test_p=1, mult_test_e=1) {
+calculate_bic <- function(model, likelihood, type='mixed', multiple_testing=FALSE, mult_test_p=1, mult_test_e=1) {
 	mult_test_p <- convert_input(mult_test_p, "int")
 	mult_test_e <- convert_input(mult_test_e, "int")
 	func_out <- pharmpy$modeling$calculate_bic(model, likelihood, type=type, multiple_testing=multiple_testing, mult_test_p=mult_test_p, mult_test_e=mult_test_e)
@@ -2558,10 +2605,16 @@ get_ids <- function(model) {
 #' get_individual_parameters
 #' 
 #' @description
-#' Retrieves all parameters with IIV or IOV in :class:`pharmpy.model`.
+#' Retrieves all individual parameters in a :class:`pharmpy.model`.
+#' 
+#' By default all individual parameters will be found even ones having no random effect. The level
+#' arguments makes it possible to find only those having any random effect or only those having a certain
+#' random effect. Using the dv option will give all individual parameters affecting a certain dv. Note that
+#' the DV for PD in a PKPD model often also is affected by the PK parameters.
 #' 
 #' @param model (Model) Pharmpy model to retrieve the individuals parameters from
-#' @param level (str) The variability level to look for: 'iiv', 'iov', or 'all' (default)
+#' @param level (str) The variability level to look for: 'iiv', 'iov', 'random' or 'all' (default)
+#' @param dv (str or numeric (optional)) Name or DVID of dependent variable. NULL for all (default)
 #'  
 #' @return (vector[str]) A vector of the parameter names as strings
 #' 
@@ -2573,6 +2626,8 @@ get_ids <- function(model) {
 #' get_individual_parameters(model, 'iov')
 #' }
 #' @seealso
+#' get_pd_parameters
+#' 
 #' get_pk_parameters
 #' 
 #' get_rv_parameters
@@ -2581,8 +2636,8 @@ get_ids <- function(model) {
 #' 
 #' 
 #' @export
-get_individual_parameters <- function(model, level='all') {
-	func_out <- pharmpy$modeling$get_individual_parameters(model, level=level)
+get_individual_parameters <- function(model, level='all', dv=NULL) {
+	func_out <- pharmpy$modeling$get_individual_parameters(model, level=level, dv=dv)
 	return(py_to_r(func_out))
 }
 
@@ -4778,16 +4833,27 @@ set_covariates <- function(model, covariates) {
 #' Implemented PD models are:
 #' 
 #' * Baseline:
+#' 
 #' (equation could not be rendered, see API doc on website)
+#' 
 #' * Linear:
+#' 
 #' (equation could not be rendered, see API doc on website)
+#' 
 #' * Emax:
+#' 
 #' (equation could not be rendered, see API doc on website)
+#' 
 #' * Step effect:
+#' 
 #' (equation could not be rendered, see API doc on website)
+#' 
 #' * Sigmoidal:
+#' 
 #' (equation could not be rendered, see API doc on website)
+#' 
 #' * Log-linear:
+#' 
 #' (equation could not be rendered, see API doc on website)
 #' 
 #' (equation could not be rendered, see API doc on website)
@@ -5828,10 +5894,48 @@ split_joint_distribution <- function(model, rvs=NULL) {
 #' | Available   | Available   | Available  | DV < lloq         | lloq          | Columns overridden|
 #' +-------------+-------------+------------+-------------------+---------------+-------------------+
 #' 
+#' BLQ observations are defined as shown in the table above.
+#' If both a BLQ and an LLOQ column exist in the dataset and no lloq is specified then all dv values in
+#' rows with BLQ = 1 are counted as BLQ observations. If instead an lloq value is specified then all rows with
+#' dv values below the lloq value are counted as BLQ observations.
+#' If no lloq is specified and no BLQ column exists in the dataset then all rows with dv values below the value
+#' specified in the DV column are counted as BLQ observations.
+#' 
+#' 
+#' M1 method:
+#' All BLQ observations are discarded.
+#' This may affect the size of the dataset.
+#' M3 method:
+#' Including the probability that the BLQ observations are below the LLOQ
+#' as part of the maximum likelihood estimation.
+#' For more details see :ref:`(1)<ref_article>`.
+#' This method modifies the Y statement of the model (see examples below).
+#' M4 method:
+#' Including the probability that the BLQ observations are below the LLOQ and positive
+#' as part of the maximum likelihood estimation.
+#' For more details see :ref:`(1)<ref_article>`.
+#' This method modifies the Y statement of the model (see examples below).
+#' M5 method:
+#' All BLQ observations are replaced by level/2, where level = lloq if lloq is specified.
+#' Else level = value specified in LLOQ column (see table above).
+#' This method may change entries in the dataset.
+#' M6 method:
+#' Every BLQ observation in a consecutive series of BLQ observations is discarded except for the first one.
+#' The remaining BLQ observations are replaced by level/2, where level = lloq if lloq is specified.
+#' Else level = value specified in LLOQ column (see table above).
+#' This method may change entries in the dataset as well as the size of the dataset.
+#' M7 method:
+#' All BLQ observations are replaced by 0.
+#' This method may change entries in the dataset.
+#' 
+#' 
+#' 
 #' Current limitations of the m3 and m4 method:
 #' 
 #' * Does not support covariance between epsilons
 #' * Supports additive, proportional, combined, and power error model
+#' 
+#' _ref_article:
 #' 
 #' (1) Beal SL. Ways to fit a PK model with some data below the quantification
 #' limit. J Pharmacokinet Pharmacodyn. 2001 Oct;28(5):481-504. doi: 10.1023/a:1012299115260.
@@ -7064,7 +7168,7 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' 
 #' @param input (Model or str) Read model object/Path to a dataset
 #' @param results (ModelfitResults (optional)) Reults of input if input is a model
-#' @param modeltype (str) Type of model to build. Valid strings are 'basic_pk', 'pkpd', 'drug_metabolite'
+#' @param modeltype (str) Type of model to build. Valid strings are 'basic_pk', 'pkpd', 'drug_metabolite' and 'tmdd'
 #' @param administration (str) Route of administration. Either 'iv', 'oral' or 'ivoral'
 #' @param cl_init (numeric) Initial estimate for the population clearance
 #' @param vc_init (numeric) Initial estimate for the central compartment population volume
@@ -7574,13 +7678,15 @@ run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.001, ski
 #' Run the structsearch tool. For more details, see :ref:`structsearch`.
 #' 
 #' @param type (str) Type of model. Currently only 'drug_metabolite' and 'pkpd'
+#' @param route (str (optional)) Type of administration. Currently 'oral', 'iv' and 'ivoral'
 #' @param search_space (str (optional)) Search space to test
 #' @param b_init (numeric (optional)) Initial estimate for the baseline for pkpd models. The default value is 0.1
 #' @param emax_init (numeric (optional)) Initial estimate for E_MAX (for pkpd models only). The default value is 0.1
 #' @param ec50_init (numeric (optional)) Initial estimate for EC_50 (for pkpd models only). The default value is 0.1
 #' @param met_init (numeric (optional)) Initial estimate for MET (for pkpd models only). The default value is 0.1
 #' @param results (ModelfitResults (optional)) Results for the start model
-#' @param model (Model (optional)) Pharmpy start mode
+#' @param model (Model (optional)) Pharmpy start model
+#' @param extra_model (Model (optional)) Optional extra Pharmpy model to use in TMDD structsearc
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (StructSearchResult) structsearch tool result object
@@ -7593,10 +7699,10 @@ run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.001, ski
 #' }
 #' 
 #' @export
-run_structsearch <- function(type, search_space=NULL, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, results=NULL, model=NULL, ...) {
+run_structsearch <- function(type, route='oral', search_space=NULL, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, results=NULL, model=NULL, extra_model=NULL, ...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_structsearch(type, search_space=search_space, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, results=results, model=model, ...)
+		func_out <- pharmpy$tools$run_structsearch(type, route=route, search_space=search_space, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, results=results, model=model, extra_model=extra_model, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}

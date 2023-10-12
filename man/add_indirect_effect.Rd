@@ -22,10 +22,14 @@ Add indirect (turnover) effect
 The concentration (equation could not be rendered, see API doc on website)
 \itemize{
 \item Production:
-(equation could not be rendered, see API doc on website)
-\item Degradation:
-(equation could not be rendered, see API doc on website)
 }
+
+(equation could not be rendered, see API doc on website)
+\itemize{
+\item Degradation:
+}
+
+(equation could not be rendered, see API doc on website)
 
 (equation could not be rendered, see API doc on website)
 Baseline (equation could not be rendered, see API doc on website)
@@ -33,12 +37,19 @@ Baseline (equation could not be rendered, see API doc on website)
 Models:
 \itemize{
 \item Linear:
-(equation could not be rendered, see API doc on website)
-\item Emax:
-(equation could not be rendered, see API doc on website)
-\item Sigmoidal:
-(equation could not be rendered, see API doc on website)
 }
+
+(equation could not be rendered, see API doc on website)
+\itemize{
+\item Emax:
+}
+
+(equation could not be rendered, see API doc on website)
+\itemize{
+\item Sigmoidal:
+}
+
+(equation could not be rendered, see API doc on website)
 }
 \examples{
 \dontrun{

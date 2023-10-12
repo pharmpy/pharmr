@@ -6,6 +6,7 @@
 \usage{
 run_structsearch(
   type,
+  route = "oral",
   search_space = NULL,
   b_init = NULL,
   emax_init = NULL,
@@ -13,11 +14,14 @@ run_structsearch(
   met_init = NULL,
   results = NULL,
   model = NULL,
+  extra_model = NULL,
   ...
 )
 }
 \arguments{
 \item{type}{(str) Type of model. Currently only 'drug_metabolite' and 'pkpd'}
+
+\item{route}{(str (optional)) Type of administration. Currently 'oral', 'iv' and 'ivoral'}
 
 \item{search_space}{(str (optional)) Search space to test}
 
@@ -31,7 +35,9 @@ run_structsearch(
 
 \item{results}{(ModelfitResults (optional)) Results for the start model}
 
-\item{model}{(Model (optional)) Pharmpy start mode}
+\item{model}{(Model (optional)) Pharmpy start model}
+
+\item{extra_model}{(Model (optional)) Optional extra Pharmpy model to use in TMDD structsearc}
 
 \item{...}{Arguments to pass to tool}
 }
