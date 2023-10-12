@@ -98,6 +98,7 @@ jobs:
       - name: Install deploy dependencies
         run: |
           install.packages("devtools")
+          install.packages("promises")
         shell: Rscript {0}
         
       - name: Update DESCRIPTION and documentation
