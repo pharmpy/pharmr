@@ -110,7 +110,12 @@ jobs:
         working-directory: pharmr_repo
         run: |
           reticulate::py_discover_config()
-          reticulate::use_python('../pharmpy_repo/pharmpy_venv/bin')
+          if(.Platform$OS.type == "unix") {
+              venv_path = file.path('..', 'pharmpy_repo', 'pharmpy_venv', 'bin')
+          } else {
+              venv_path = file.path('..', 'pharmpy_repo', 'pharmpy_venv', 'Scripts')          
+          }
+          reticulate::use_python(venv_path)
           pharmr::print_pharmpy_version()
         shell: Rscript {0}
 
@@ -118,7 +123,12 @@ jobs:
       - name: Update DESCRIPTION and documentation
         working-directory: pharmr_repo/deploy
         run: |
-          pharmr::print_pharmpy_version()
+          if(.Platform$OS.type == "unix") {
+              venv_path = file.path('..', '..', 'pharmpy_repo', 'pharmpy_venv', 'bin')
+          } else {
+              venv_path = file.path('..', '..', 'pharmpy_repo', 'pharmpy_venv', 'Scripts')          
+          }
+          reticulate::use_python(venv_path)
           reticulate::py_run_file('build_functions.py')
           devtools::document()
         shell: Rscript {0}
