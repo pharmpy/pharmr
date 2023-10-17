@@ -110,10 +110,11 @@ jobs:
         working-directory: pharmr_repo
         run: |
           reticulate::py_discover_config()
+          venv_path = file.path('..', 'pharmpy_repo', 'pharmpy_venv')
           if(.Platform$OS.type == "unix") {
-              venv_path = file.path('..', 'pharmpy_repo', 'pharmpy_venv', 'bin')
+              venv_path = file.path(venv_path, 'bin')
           } else {
-              venv_path = file.path('..', 'pharmpy_repo', 'pharmpy_venv', 'Scripts')          
+              venv_path = file.path(venv_path, 'Scripts')          
           }
           reticulate::use_python(venv_path)
           pharmr::print_pharmpy_version()
@@ -123,10 +124,11 @@ jobs:
       - name: Update DESCRIPTION and documentation
         working-directory: pharmr_repo/deploy
         run: |
+          venv_path = file.path('..', '..', 'pharmpy_repo', 'pharmpy_venv')
           if(.Platform$OS.type == "unix") {
-              venv_path = file.path('..', '..', 'pharmpy_repo', 'pharmpy_venv', 'bin')
+              venv_path = file.path(venv_path, 'bin')
           } else {
-              venv_path = file.path('..', '..', 'pharmpy_repo', 'pharmpy_venv', 'Scripts')          
+              venv_path = file.path(venv_path, 'Scripts')          
           }
           reticulate::use_python(venv_path)
           reticulate::py_run_file('build_functions.py')
@@ -138,11 +140,13 @@ jobs:
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: |
+          venv_path = file.path('..', 'pharmpy_repo', 'pharmpy_venv')
           if(.Platform$OS.type == "unix") {
-              venv_path = file.path('..', 'pharmpy_repo', 'pharmpy_venv', 'bin')
+              venv_path = file.path(venv_path, 'bin')
           } else {
-              venv_path = file.path('..', 'pharmpy_repo', 'pharmpy_venv', 'Scripts')          
+              venv_path = file.path(venv_path, 'Scripts')          
           }
+          reticulate::use_python(venv_path)
           pharmr::print_pharmpy_version()
           options(crayon.enabled = TRUE)
           rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
