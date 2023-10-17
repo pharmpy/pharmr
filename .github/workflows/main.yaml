@@ -106,11 +106,18 @@ jobs:
           pharmpy_venv\Scripts\activate
           pip install .
 
-      - name: Document Pharmpy
+      - name: Start Pharmpy venv
         working-directory: pharmr_repo
         run: |
           reticulate::py_discover_config()
           reticulate::use_python('../pharmpy_repo/pharmpy_venv/bin')
+          pharmr::print_pharmpy_version()
+        shell: Rscript {0}
+
+
+      - name: Update DESCRIPTION and documentation
+        working-directory: pharmr_repo/deploy
+        run: |
           pharmr::print_pharmpy_version()
           reticulate::py_run_file('build_functions.py')
           devtools::document()
@@ -121,8 +128,6 @@ jobs:
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: |
-          reticulate::py_discover_config()
-          reticulate::use_python('../pharmpy_repo/pharmpy_venv/bin')
           pharmr::print_pharmpy_version()
           options(crayon.enabled = TRUE)
           rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
