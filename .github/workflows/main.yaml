@@ -98,6 +98,7 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           python3 -m venv pharmpy_venv
+          echo "venv_path=$(pwd)/pharmpy_venv" >> $GITHUB_ENV
           source pharmpy_venv/bin/activate
           pip install .
 
@@ -106,6 +107,7 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           python -m venv pharmpy_venv
+          echo "venv_path=$(pwd)\pharmpy_venv" >> $GITHUB_ENV
           pharmpy_venv\Scripts\activate
           pip install .
 
@@ -113,7 +115,7 @@ jobs:
         working-directory: pharmr_repo
         run: |
           reticulate::py_discover_config()
-          reticulate::use_python('../pharmpy_repo/pharmpy_venv/bin')
+          reticulate::use_python(env.venv_path)
           pharmr::print_pharmpy_version()
         shell: Rscript {0}
 
