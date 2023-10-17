@@ -139,7 +139,7 @@ jobs:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: |
           if(.Platform$OS.type == "unix") {
-              venv_path = file.path('..', '..', 'pharmpy_repo', 'pharmpy_venv', 'bin')
+              venv_path = file.path('..', 'pharmpy_repo', 'pharmpy_venv', 'bin')
           } else {
               venv_path = file.path('..', 'pharmpy_repo', 'pharmpy_venv', 'Scripts')          
           }
