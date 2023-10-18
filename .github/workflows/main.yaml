@@ -1,6 +1,9 @@
 on:
-  workflow_dispatch:
   workflow_call:
+    inputs:
+      as-release:
+        required: true
+        type: boolean
 
 name: Main CI workflow
 
@@ -72,17 +75,14 @@ jobs:
           install.packages('png', repos='https://mran.microsoft.com/snapshot/2022-11-27')
         shell: Rscript {0}
 
-      - name: Install R dependencies
+      - name: Install R packages
         working-directory: pharmr_repo
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
           install.packages('reticulate')
-        shell: Rscript {0}
-
-      - name: Install pharmr
-        working-directory: pharmr_repo
-        run: |
+          install.packages('devtools')
+          install.packages('promises')
           remotes::install_local(force=TRUE)
         shell: Rscript {0}
 
@@ -93,42 +93,71 @@ jobs:
           path: pharmpy_repo
           fetch-depth: 0
 
+      - name: Set up Pharmpy release version
+        working-directory: pharmpy_repo
+        if: ${{ inputs.as-release }} == true
+        run: |
+          git checkout -b release_latest "$(git rev-list --tags --max-count=1)"
+          echo "pharmpy_version=`git describe --tags`" >> $GITHUB_ENV 
+          git branch -v
+
       - name: Install Pharmpy in venv
         working-directory: pharmpy_repo
+        if: runner.os != 'Windows'
         run: |
-          python3.11 -m venv pharmpy_venv
+          python3 -m venv pharmpy_venv
           source pharmpy_venv/bin/activate
           pip install .
 
-      - name: Test Pharmpy
+      - name: Install Pharmpy in venv
+        working-directory: pharmpy_repo
+        if: runner.os == 'Windows'
+        run: |
+          python -m venv pharmpy_venv
+          pharmpy_venv\Scripts\activate
+          pip install .
+
+      - name: Start Pharmpy venv
         working-directory: pharmr_repo
         run: |
           reticulate::py_discover_config()
-          reticulate::use_python('../pharmpy_repo/pharmpy_venv/bin')
+          venv_path = file.path('..', 'pharmpy_repo', 'pharmpy_venv')
+          if(.Platform$OS.type == "unix") {
+              venv_path = file.path(venv_path, 'bin')
+          } else {
+              venv_path = file.path(venv_path, 'Scripts')          
+          }
+          reticulate::use_python(venv_path)
           pharmr::print_pharmpy_version()
         shell: Rscript {0}
 
-      - name: Install deploy dependencies
-        run: |
-          install.packages("devtools")
-          install.packages("promises")
-        shell: Rscript {0}
 
       - name: Update DESCRIPTION and documentation
         working-directory: pharmr_repo/deploy
         run: |
-          reticulate::use_python('../../pharmpy_repo/pharmpy_venv/bin')          
+          venv_path = file.path('..', '..', 'pharmpy_repo', 'pharmpy_venv')
+          if(.Platform$OS.type == "unix") {
+              venv_path = file.path(venv_path, 'bin')
+          } else {
+              venv_path = file.path(venv_path, 'Scripts')          
+          }
+          reticulate::use_python(venv_path)
           reticulate::py_run_file('build_functions.py')
           devtools::document()
         shell: Rscript {0}
 
-      - name: Check
+      - name: Check pharmr
         working-directory: pharmr_repo
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: |
-          reticulate::py_discover_config()
-          reticulate::use_python('../pharmpy_repo/pharmpy_venv/bin')
+          venv_path = file.path('..', 'pharmpy_repo', 'pharmpy_venv')
+          if(.Platform$OS.type == "unix") {
+              venv_path = file.path(venv_path, 'bin')
+          } else {
+              venv_path = file.path(venv_path, 'Scripts')          
+          }
+          reticulate::use_python(venv_path)
           pharmr::print_pharmpy_version()
           options(crayon.enabled = TRUE)
           rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
@@ -141,4 +170,3 @@ jobs:
         with:
           name: results-cran
           path: check
-

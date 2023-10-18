@@ -1,0 +1,11 @@
+on:
+  workflow_dispatch:
+  workflow_call:
+
+name: Check Pharmpy development version
+
+jobs:
+  check-pharmr:
+    uses: pharmpy/pharmr/.github/workflows/main.yaml@main
+    with:
+      as-release: false
