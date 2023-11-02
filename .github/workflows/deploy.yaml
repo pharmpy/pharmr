@@ -14,6 +14,12 @@ jobs:
     runs-on: ubuntu-20.04
     needs: check-pharmr
     steps:
+      - name: Download pharmr repo artifact
+        uses: actions/download-artifact@master
+        with:
+          name: pharmr_repo
+          path: pharmr_repo
+
       - name: Print path
         working-directory: pharmr_repo
         run: |

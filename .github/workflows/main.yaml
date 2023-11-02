@@ -167,3 +167,10 @@ jobs:
         with:
           name: results-cran
           path: check
+
+      - name: Upload pharmr directory
+        uses: actions/upload-artifact@v3
+        if: ${{ inputs.as-release == true && runner.os == 'Linux'}}
+        with:
+          name: pharmr_repo
+          path: pharmr_repo
