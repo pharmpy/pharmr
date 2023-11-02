@@ -12,8 +12,15 @@ jobs:
 
   build-docs:
     runs-on: ubuntu-20.04
+    needs: check-pharmr
     steps:
       - name: Print path
         working-directory: pharmr_repo
         run: |
           pwd
+
+      - name: Get Pharmpy version
+        working-directory: pharmpy_repo
+        run: |
+          echo "pharmpy_version=`git describe --tags`" >> $GITHUB_ENV 
+          git branch -v
