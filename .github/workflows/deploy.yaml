@@ -20,7 +20,7 @@ jobs:
           name: pharmr_repo
           path: pharmr_repo
 
-      - name: Check git
+      - name: Print Pharmpy tag version
         working-directory: pharmr_repo
         run: |
-          git status
+          echo ${{ needs.check-pharmr.outputs.pharmpy_version }} ${{ 

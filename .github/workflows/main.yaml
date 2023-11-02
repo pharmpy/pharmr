@@ -4,14 +4,21 @@ on:
       as-release:
         required: true
         type: boolean
+    outputs:
+      pharmpy_version:
+        description: "Version of Pharmpy used"
+        value: ${{ jobs.run-tests.outputs.output }}
 
 name: Main CI workflow
 
 jobs:
-  deploy:
+  run-tests:
     runs-on: ${{ matrix.config.os }}
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+
+    outputs:
+      output: ${{ steps.get_pharmpy_version.outputs.pharmpy_version }}
 
     strategy:
       fail-fast: false
@@ -98,6 +105,12 @@ jobs:
         if: ${{ inputs.as-release == true }}
         run: |
           git checkout -b release_latest "$(git rev-list --tags --max-count=1)"
+
+      - id: get_pharmpy_version
+        working-directory: pharmpy_repo
+        if: ${{ inputs.as-release == true && runner.os == 'Linux'}}
+        run: |
+          echo "pharmpy_version=`git describe --tags`" >> $GITHUB_OUTPUT 
 
       - name: Install Pharmpy in venv
         working-directory: pharmpy_repo
