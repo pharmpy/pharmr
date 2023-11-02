@@ -20,7 +20,6 @@ jobs:
           - {os: windows-2022, r: 'release'}
           - {os: macOS-12, r: 'release'}
           - {os: ubuntu-20.04, r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: ubuntu-20.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -98,6 +97,11 @@ jobs:
         if: ${{ inputs.as-release == true }}
         run: |
           git checkout -b release_latest "$(git rev-list --tags --max-count=1)"
+
+      - name: Store version as GHA environment variable
+        working-directory: pharmpy_repo
+        if: runner.os == 'Linux'
+        run: |
           echo "pharmpy_version=`git describe --tags`" >> $GITHUB_ENV 
           git branch -v
 
