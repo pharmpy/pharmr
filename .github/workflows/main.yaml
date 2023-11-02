@@ -129,7 +129,7 @@ jobs:
           pharmr::print_pharmpy_version()
         shell: Rscript {0}
 
-      - name: Update documentation
+      - name: Update DESCRIPTION and documentation
         working-directory: pharmr_repo/deploy
         run: |
           venv_path = file.path('..', '..', 'pharmpy_repo', 'pharmpy_venv')
@@ -139,6 +139,12 @@ jobs:
               venv_path = file.path(venv_path, 'Scripts')          
           }
           reticulate::use_python(venv_path)
+          
+          pharmpy <- reticulate::import("pharmpy")
+          pharmpy_version <- pharmpy$`__version__`
+          desc::desc_set('Version', pharmpy_version)
+          desc::desc_set('Date', Sys.Date())
+          
           reticulate::py_run_file('build_functions.py')
           devtools::document()
         shell: Rscript {0}

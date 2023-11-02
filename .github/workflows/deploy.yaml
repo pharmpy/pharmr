@@ -20,13 +20,7 @@ jobs:
           name: pharmr_repo
           path: pharmr_repo
 
-      - name: Print path
+      - name: Check git
         working-directory: pharmr_repo
         run: |
-          pwd
-
-      - name: Get Pharmpy version
-        working-directory: pharmpy_repo
-        run: |
-          echo "pharmpy_version=`git describe --tags`" >> $GITHUB_ENV 
-          git branch -v
+          git status
