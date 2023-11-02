@@ -3,7 +3,7 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/pharmr)](https://cran.r-project.org/package=pharmr)
 [![](https://img.shields.io/github/r-package/v/pharmpy/pharmr?label=github%20version&logo=github)](https://github.com/pharmpy/pharmr)
-[![R-CMD-check](https://github.com/pharmpy/pharmr/workflows/check/badge.svg)](https://github.com/pharmpy/pharmr/actions)
+[![check](https://github.com/pharmpy/pharmr/workflows/check/badge.svg)](https://github.com/pharmpy/pharmr/actions)
 <!-- badges: end -->
 
 # ![](https://github.com/pharmpy/pharmpy/blob/master/docs/pharmr_logo.svg)
