@@ -1,0 +1,19 @@
+on:
+  workflow_dispatch:
+  workflow_call:
+
+name: Check Pharmpy development version
+
+jobs:
+  check-pharmr:
+    uses: pharmpy/pharmr/.github/workflows/main.yaml@main
+    with:
+      as-release: true
+
+  build-docs:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Print path
+        working-directory: pharmr_repo
+        run: |
+          pwd
