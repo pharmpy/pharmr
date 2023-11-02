@@ -98,6 +98,11 @@ jobs:
         if: ${{ inputs.as-release == true }}
         run: |
           git checkout -b release_latest "$(git rev-list --tags --max-count=1)"
+
+      - name: Set up Pharmpy release version
+        working-directory: pharmpy_repo
+        if: ${{ inputs.as-release == true && runner.os == 'Linux' }} 
+        run: |
           echo "pharmpy_version=`git describe --tags`" >> $GITHUB_ENV 
           git branch -v
 
@@ -131,8 +136,7 @@ jobs:
           pharmr::print_pharmpy_version()
         shell: Rscript {0}
 
-
-      - name: Update DESCRIPTION and documentation
+      - name: Update documentation
         working-directory: pharmr_repo/deploy
         run: |
           venv_path = file.path('..', '..', 'pharmpy_repo', 'pharmpy_venv')
