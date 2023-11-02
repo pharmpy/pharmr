@@ -2,7 +2,7 @@ on:
   workflow_dispatch:
   workflow_call:
 
-name: Check Pharmpy development version
+name: Deploy pharmr
 
 jobs:
   check-pharmr:
