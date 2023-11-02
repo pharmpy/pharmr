@@ -12,6 +12,7 @@ jobs:
 
   build-docs:
     runs-on: ubuntu-20.04
+    needs: check-pharmr
     steps:
       - name: Print path
         working-directory: pharmr_repo
