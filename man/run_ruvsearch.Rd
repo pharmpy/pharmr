@@ -12,6 +12,7 @@ run_ruvsearch(
   skip = NULL,
   max_iter = 3,
   dv = NULL,
+  strictness = "minimization_successful or (rounding_errors and sigdigs>=0)",
   ...
 )
 }
@@ -26,9 +27,11 @@ run_ruvsearch(
 
 \item{skip}{(array(str) (optional)) A vector of models to not attempt.}
 
-\item{max_iter}{(numeric (optional)) Number of iterations to run (1, 2, or 3). For models with BLQ only one iteration is supported.}
+\item{max_iter}{(numeric) Number of iterations to run (1, 2, or 3). For models with BLQ only one iteration is supported.}
 
-\item{dv}{(numeric (optional)) Which DV to assess the error model for}
+\item{dv}{(numeric (optional)) Which DV to assess the error model for.}
+
+\item{strictness}{(str (optional)) Strictness criteri}
 
 \item{...}{Arguments to pass to tool}
 }

@@ -12,6 +12,7 @@ run_iivsearch(
   results = NULL,
   model = NULL,
   keep = NULL,
+  strictness = "minimization_successful or (rounding_errors and sigdigs>=0)",
   ...
 )
 }
@@ -30,7 +31,9 @@ is NULL (all models will be ranked)}
 
 \item{model}{(Model (optional)) Pharmpy model}
 
-\item{keep}{(array(str) (optional)) List of IIVs to kee}
+\item{keep}{(array(str) (optional)) List of IIVs to keep}
+
+\item{strictness}{(str (optional)) Strictness criteri}
 
 \item{...}{Arguments to pass to tool}
 }

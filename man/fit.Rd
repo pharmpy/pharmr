@@ -4,12 +4,14 @@
 \alias{fit}
 \title{fit}
 \usage{
-fit(model_or_models, tool = NULL)
+fit(model_or_models, tool = NULL, path = NULL)
 }
 \arguments{
 \item{model_or_models}{(Model or array(Model)) List of models or one single model}
 
 \item{tool}{(str (optional)) Estimation tool to use. NULL to use default}
+
+\item{path}{(str (optional)) Path to fit directory}
 }
 \value{
 (ModelfitResults | vector of ModelfitResults) ModelfitResults for the model or models

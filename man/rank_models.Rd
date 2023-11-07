@@ -7,7 +7,7 @@
 rank_models(
   base_model,
   models,
-  errors_allowed = NULL,
+  strictness = "minimization_successful",
   rank_type = "ofv",
   cutoff = NULL,
   bic_type = "mixed",
@@ -19,8 +19,7 @@ rank_models(
 
 \item{models}{(array(Model)) List of models}
 
-\item{errors_allowed}{(array(str) (optional)) List of errors that are allowed for ranking. Currently available is: rounding_errors and
-maxevals_exceeded. Default is NULL}
+\item{strictness}{(str (optional)) Strictness criteria that are allowed for ranking. Default is "minimization_successful".}
 
 \item{rank_type}{(str) Name of ranking type. Available options are 'ofv', 'aic', 'bic', 'lrt' (OFV with LRT)}
 
@@ -43,7 +42,6 @@ Ranks a vector of models with a given ranking function
 model_1 <- load_example_model("pheno")
 model_2 <- load_example_model("pheno_linear")
 rank_models(model_1, c(model_2),
- errors_allowed=c('rounding_errors'),
  rank_type='lrt')
 }
 

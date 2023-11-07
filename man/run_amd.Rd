@@ -23,7 +23,8 @@ run_amd(
   allometric_variable = NULL,
   occasion = NULL,
   path = NULL,
-  resume = FALSE
+  resume = FALSE,
+  strictness = "minimization_successful or (rounding_errors and sigdigs>=0)"
 )
 }
 \arguments{
@@ -63,7 +64,9 @@ run_amd(
 
 \item{path}{(str (optional)) Path to run AMD in}
 
-\item{resume}{(logical (optional)) Whether to allow resuming previous run}
+\item{resume}{(logical) Whether to allow resuming previous run}
+
+\item{strictness}{(str (optional)) Strictness criteria}
 }
 \value{
 (Model) Reference to the same model object

@@ -12,6 +12,7 @@ run_covsearch(
   algorithm = "scm-forward-then-backward",
   results = NULL,
   model = NULL,
+  strictness = "minimization_successful or (rounding_errors and sigdigs>=0)",
   ...
 )
 }
@@ -29,7 +30,9 @@ run_covsearch(
 
 \item{results}{(ModelfitResults (optional)) Results of model}
 
-\item{model}{(Model (optional)) Pharmpy mode}
+\item{model}{(Model (optional)) Pharmpy model}
+
+\item{strictness}{(str (optional)) Strictness criteri}
 
 \item{...}{Arguments to pass to tool}
 }

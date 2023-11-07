@@ -15,13 +15,14 @@ run_structsearch(
   results = NULL,
   model = NULL,
   extra_model = NULL,
+  strictness = "minimization_successful or (rounding_errors and sigdigs >= 0)",
   ...
 )
 }
 \arguments{
 \item{type}{(str) Type of model. Currently only 'drug_metabolite' and 'pkpd'}
 
-\item{route}{(str (optional)) Type of administration. Currently 'oral', 'iv' and 'ivoral'}
+\item{route}{(str) Type of administration. Currently 'oral', 'iv' and 'ivoral'}
 
 \item{search_space}{(str (optional)) Search space to test}
 
@@ -37,7 +38,9 @@ run_structsearch(
 
 \item{model}{(Model (optional)) Pharmpy start model}
 
-\item{extra_model}{(Model (optional)) Optional extra Pharmpy model to use in TMDD structsearc}
+\item{extra_model}{(Model (optional)) Optional extra Pharmpy model to use in TMDD structsearch}
+
+\item{strictness}{(str (optional)) Strictness criteri}
 
 \item{...}{Arguments to pass to tool}
 }

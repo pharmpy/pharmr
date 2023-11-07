@@ -12,6 +12,7 @@ run_modelsearch(
   cutoff = NULL,
   results = NULL,
   model = NULL,
+  strictness = "minimization_successful or (rounding_errors and sigdigs >= 0)",
   ...
 )
 }
@@ -30,7 +31,9 @@ is NULL (all models will be ranked)}
 
 \item{results}{(ModelfitResults (optional)) Results for model}
 
-\item{model}{(Model (optional)) Pharmpy mode}
+\item{model}{(Model (optional)) Pharmpy model}
+
+\item{strictness}{(str (optional)) Strictness criteri}
 
 \item{...}{Arguments to pass to tool}
 }

@@ -231,9 +231,6 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' 
 #' Implemented PD models are:
 #' 
-#' * Baseline:
-#' 
-#' (equation could not be rendered, see API doc on website)
 #' 
 #' * Linear:
 #' 
@@ -258,7 +255,7 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' (equation could not be rendered, see API doc on website)
 #' 
 #' @param model (Model) Pharmpy model
-#' @param expr (str) Name of the PD effect function. Valid names are: baseline, linear, emax, sigmoid, step and loglin
+#' @param expr (str) Name of the PD effect function. Valid names are: linear, emax, sigmoid, step and loglin
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -2483,6 +2480,26 @@ get_covariate_baselines <- function(model) {
 }
 
 #' @title
+#' get_covariates
+#' 
+#' @description
+#' Return a list of all used covariates within a model
+#' 
+#' The list will have parameter name as key with a connected value as
+#' a vector of tuple(s) with (covariate, effect type, operator)
+#' 
+#' @param model (Model) Model to extract covariates from.
+#'  
+#' @return (Dictionary : Dictionary of parameters and connected covariate(s)) 
+#' 
+#' 
+#' @export
+get_covariates <- function(model) {
+	func_out <- pharmpy$modeling$get_covariates(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' get_doseid
 #' 
 #' @description
@@ -2943,6 +2960,8 @@ get_observation_expression <- function(model) {
 #' Get observations from dataset
 #' 
 #' @param model (Model) Pharmpy model
+#' @param keep_index (logical) Set to TRUE if the original index should be kept.
+#' Otherwise a new index using ID and idv will be created.
 #'  
 #' @return (data.frame) Observations indexed over ID and TIME
 #' 
@@ -2958,8 +2977,8 @@ get_observation_expression <- function(model) {
 #' 
 #' 
 #' @export
-get_observations <- function(model) {
-	func_out <- pharmpy$modeling$get_observations(model)
+get_observations <- function(model, keep_index=FALSE) {
+	func_out <- pharmpy$modeling$get_observations(model, keep_index=keep_index)
 	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
@@ -4540,6 +4559,28 @@ rename_symbols <- function(model, new_names) {
 }
 
 #' @title
+#' replace_non_random_rvs
+#' 
+#' @description
+#' Replace all random variables that are not actually random
+#' 
+#' Some random variables are constant. For example a normal
+#' distribution with the variance parameter fixed to 0 will always
+#' yield a single value when sampled. This function will find all such
+#' random variables and replace them with their constant value in the model.
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (Model) A new model
+#' 
+#' 
+#' @export
+replace_non_random_rvs <- function(model) {
+	func_out <- pharmpy$modeling$replace_non_random_rvs(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' resample_data
 #' 
 #' @description
@@ -4761,6 +4802,36 @@ set_additive_error_model <- function(model, dv=NULL, data_trans=NULL, series_ter
 }
 
 #' @title
+#' set_baseline_effect
+#' 
+#' @description
+#' Create baseline effect model.
+#' 
+#' Currently implemented baseline effects are:
+#' 
+#' Constant baseline effect (const):
+#' 
+#' (equation could not be rendered, see API doc on website)
+#' 
+#' @param model (Model) Pharmpy model
+#' @param expr (str) Name of baseline effect function.
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- set_baseline_effect(model, expr='const')
+#' model$statements$find_assignment("E")
+#' }
+#' 
+#' @export
+set_baseline_effect <- function(model, expr='const') {
+	func_out <- pharmpy$modeling$set_baseline_effect(model, expr=expr)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' set_combined_error_model
 #' 
 #' @description
@@ -4832,9 +4903,6 @@ set_covariates <- function(model, covariates) {
 #' 
 #' Implemented PD models are:
 #' 
-#' * Baseline:
-#' 
-#' (equation could not be rendered, see API doc on website)
 #' 
 #' * Linear:
 #' 
@@ -4859,7 +4927,7 @@ set_covariates <- function(model, covariates) {
 #' (equation could not be rendered, see API doc on website)
 #' 
 #' @param model (Model) Pharmpy model
-#' @param expr (str) Name of PD effect function. Valid names are: baseline, linear, emax, sigmoid, step and loglin
+#' @param expr (str) Name of PD effect function. Valid names are: linear, emax, sigmoid, step and loglin
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -5554,6 +5622,34 @@ set_reference_values <- function(model, refs) {
 #' @export
 set_seq_zo_fo_absorption <- function(model) {
 	func_out <- pharmpy$modeling$set_seq_zo_fo_absorption(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' set_simulation
+#' 
+#' @description
+#' Change model into simulation model
+#' 
+#' @param model (Model) Pharmpy model
+#' @param n (numeric) Number of replicates
+#' @param seed (numeric) Random seed for the simulation
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- set_simulation(model, n=10, seed=1234)
+#' steps <- model$estimation_steps
+#' steps[1]
+#' }
+#' 
+#' @export
+set_simulation <- function(model, n=1, seed=64206) {
+	n <- convert_input(n, "int")
+	seed <- convert_input(seed, "int")
+	func_out <- pharmpy$modeling$set_simulation(model, n=n, seed=seed)
 	return(py_to_r(func_out))
 }
 
@@ -6488,6 +6584,7 @@ create_results <- function(path, ...) {
 #' 
 #' @param model_or_models (Model or array(Model)) List of models or one single model
 #' @param tool (str (optional)) Estimation tool to use. NULL to use default
+#' @param path (str (optional)) Path to fit directory
 #'  
 #' @return (ModelfitResults | vector of ModelfitResults) ModelfitResults for the model or models
 #' 
@@ -6501,10 +6598,10 @@ create_results <- function(path, ...) {
 #' 
 #' 
 #' @export
-fit <- function(model_or_models, tool=NULL) {
+fit <- function(model_or_models, tool=NULL, path=NULL) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$fit(model_or_models, tool=tool)
+		func_out <- pharmpy$tools$fit(model_or_models, tool=tool, path=path)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -6548,6 +6645,53 @@ get_model_features <- function(model, supress_warnings=FALSE) {
 	tryCatch(
 	{
 		func_out <- pharmpy$tools$get_model_features(model, supress_warnings=supress_warnings)
+		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+			func_out <- reset_indices_results(func_out)
+		}
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
+#' is_strictness_fulfilled
+#' 
+#' @description
+#' Takes a ModelfitResults object and a statement as input and returns TRUE/FALSE
+#' if the evaluation of the statement is TRUE/FALSE.
+#' 
+#' @param res (ModelfitResults) ModelfitResults object
+#' @param statement (str) A statement containing the strictness criteria
+#'  
+#' @return (logical) A logical indicating whether the strictness criteria are fulfilled or not.
+#' 
+#' @examples
+#' \dontrun{
+#' res <- load_example_modelfit_results('pheno')
+#' is_strictness_fulfilled(res, "minimization_successful or rounding_errors")
+#' }
+#' 
+#' @export
+is_strictness_fulfilled <- function(res, statement) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$is_strictness_fulfilled(res, statement)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -6819,8 +6963,7 @@ print_fit_summary <- function(model) {
 #' 
 #' @param base_model (Model) Base model to compare to
 #' @param models (array(Model)) List of models
-#' @param errors_allowed (array(str) (optional)) List of errors that are allowed for ranking. Currently available is: rounding_errors and
-#' maxevals_exceeded. Default is NULL
+#' @param strictness (str (optional)) Strictness criteria that are allowed for ranking. Default is "minimization_successful".
 #' @param rank_type (str) Name of ranking type. Available options are 'ofv', 'aic', 'bic', 'lrt' (OFV with LRT)
 #' @param cutoff (numeric (optional)) Value to use as cutoff. If using LRT, cutoff denotes p-value. Default is NULL
 #' @param bic_type (str) Type of BIC to calculate. Default is the mixed effects.
@@ -6833,17 +6976,15 @@ print_fit_summary <- function(model) {
 #' model_1 <- load_example_model("pheno")
 #' model_2 <- load_example_model("pheno_linear")
 #' rank_models(model_1, c(model_2),
-#'  errors_allowed=c('rounding_errors'),
 #'  rank_type='lrt')
 #' }
 #' 
 #' @export
-rank_models <- function(base_model, models, errors_allowed=NULL, rank_type='ofv', cutoff=NULL, bic_type='mixed', ...) {
+rank_models <- function(base_model, models, strictness='minimization_successful', rank_type='ofv', cutoff=NULL, bic_type='mixed', ...) {
 	tryCatch(
 	{
 		models <- convert_input(models, "list")
-		errors_allowed <- convert_input(errors_allowed, "list")
-		func_out <- pharmpy$tools$rank_models(base_model, models, errors_allowed=errors_allowed, rank_type=rank_type, cutoff=cutoff, bic_type=bic_type, ...)
+		func_out <- pharmpy$tools$rank_models(base_model, models, strictness=strictness, rank_type=rank_type, cutoff=cutoff, bic_type=bic_type, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -7184,7 +7325,8 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' @param allometric_variable (str (optional)) Variable to use for allometry
 #' @param occasion (str (optional)) Name of occasion column
 #' @param path (str (optional)) Path to run AMD in
-#' @param resume (logical (optional)) Whether to allow resuming previous run
+#' @param resume (logical) Whether to allow resuming previous run
+#' @param strictness (str (optional)) Strictness criteria
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -7201,11 +7343,11 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' 
 #' 
 #' @export
-run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='oral', cl_init=0.01, vc_init=1.0, mat_init=0.1, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, search_space=NULL, lloq_method=NULL, lloq_limit=NULL, order=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE) {
+run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='oral', cl_init=0.01, vc_init=1.0, mat_init=0.1, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, search_space=NULL, lloq_method=NULL, lloq_limit=NULL, order=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs>=0)') {
 	tryCatch(
 	{
 		order <- convert_input(order, "list")
-		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, administration=administration, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, search_space=search_space, lloq_method=lloq_method, lloq_limit=lloq_limit, order=order, allometric_variable=allometric_variable, occasion=occasion, path=path, resume=resume)
+		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, administration=administration, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, search_space=search_space, lloq_method=lloq_method, lloq_limit=lloq_limit, order=order, allometric_variable=allometric_variable, occasion=occasion, path=path, resume=resume, strictness=strictness)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -7293,7 +7435,8 @@ run_bootstrap <- function(model, results=NULL, resamples=1, ...) {
 #' @param algorithm (str) The search algorithm to use. Currently, 'scm-forward' and
 #' 'scm-forward-then-backward' are supported.
 #' @param results (ModelfitResults (optional)) Results of model
-#' @param model (Model (optional)) Pharmpy mode
+#' @param model (Model (optional)) Pharmpy model
+#' @param strictness (str (optional)) Strictness criteri
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (COVSearchResults) COVsearch tool result object
@@ -7307,11 +7450,11 @@ run_bootstrap <- function(model, results=NULL, resamples=1, ...) {
 #' }
 #' 
 #' @export
-run_covsearch <- function(effects, p_forward=0.01, p_backward=0.001, max_steps=-1, algorithm='scm-forward-then-backward', results=NULL, model=NULL, ...) {
+run_covsearch <- function(effects, p_forward=0.01, p_backward=0.001, max_steps=-1, algorithm='scm-forward-then-backward', results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0)', ...) {
 	tryCatch(
 	{
 		max_steps <- convert_input(max_steps, "int")
-		func_out <- pharmpy$tools$run_covsearch(effects, p_forward=p_forward, p_backward=p_backward, max_steps=max_steps, algorithm=algorithm, results=results, model=model, ...)
+		func_out <- pharmpy$tools$run_covsearch(effects, p_forward=p_forward, p_backward=p_backward, max_steps=max_steps, algorithm=algorithm, results=results, model=model, strictness=strictness, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -7413,7 +7556,8 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 #' is NULL (all models will be ranked)
 #' @param results (ModelfitResults (optional)) Results for model
 #' @param model (Model (optional)) Pharmpy model
-#' @param keep (array(str) (optional)) List of IIVs to kee
+#' @param keep (array(str) (optional)) List of IIVs to keep
+#' @param strictness (str (optional)) Strictness criteri
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (IIVSearchResults) IIVsearch tool result object
@@ -7426,11 +7570,11 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 #' }
 #' 
 #' @export
-run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cutoff=NULL, results=NULL, model=NULL, keep=NULL, ...) {
+run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cutoff=NULL, results=NULL, model=NULL, keep=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0)', ...) {
 	tryCatch(
 	{
 		keep <- convert_input(keep, "list")
-		func_out <- pharmpy$tools$run_iivsearch(algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, cutoff=cutoff, results=results, model=model, keep=keep, ...)
+		func_out <- pharmpy$tools$run_iivsearch(algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, cutoff=cutoff, results=results, model=model, keep=keep, strictness=strictness, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -7468,7 +7612,8 @@ run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cut
 #' is NULL (all models will be ranked)
 #' @param distribution (str) Which distribution added IOVs should have (default is same-as-iiv)
 #' @param results (ModelfitResults (optional)) Results for model
-#' @param model (Model (optional)) Pharmpy mode
+#' @param model (Model (optional)) Pharmpy model
+#' @param strictness (str (optional)) Strictness criteri
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (IOVSearchResults) IOVSearch tool result object
@@ -7481,11 +7626,11 @@ run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cut
 #' }
 #' 
 #' @export
-run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='bic', cutoff=NULL, distribution='same-as-iiv', results=NULL, model=NULL, ...) {
+run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='bic', cutoff=NULL, distribution='same-as-iiv', results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0)', ...) {
 	tryCatch(
 	{
 		list_of_parameters <- convert_input(list_of_parameters, "list")
-		func_out <- pharmpy$tools$run_iovsearch(column=column, list_of_parameters=list_of_parameters, rank_type=rank_type, cutoff=cutoff, distribution=distribution, results=results, model=model, ...)
+		func_out <- pharmpy$tools$run_iovsearch(column=column, list_of_parameters=list_of_parameters, rank_type=rank_type, cutoff=cutoff, distribution=distribution, results=results, model=model, strictness=strictness, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -7573,7 +7718,8 @@ run_modelfit <- function(model_or_models=NULL, n=NULL, tool=NULL, ...) {
 #' @param cutoff (numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 #' is NULL (all models will be ranked)
 #' @param results (ModelfitResults (optional)) Results for model
-#' @param model (Model (optional)) Pharmpy mode
+#' @param model (Model (optional)) Pharmpy model
+#' @param strictness (str (optional)) Strictness criteri
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (ModelSearchResults) Modelsearch tool result object
@@ -7586,10 +7732,10 @@ run_modelfit <- function(model_or_models=NULL, n=NULL, tool=NULL, ...) {
 #' }
 #' 
 #' @export
-run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_delay', rank_type='bic', cutoff=NULL, results=NULL, model=NULL, ...) {
+run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_delay', rank_type='bic', cutoff=NULL, results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs >= 0)', ...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_modelsearch(search_space, algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, cutoff=cutoff, results=results, model=model, ...)
+		func_out <- pharmpy$tools$run_modelsearch(search_space, algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, cutoff=cutoff, results=results, model=model, strictness=strictness, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -7625,8 +7771,9 @@ run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_de
 #' @param groups (numeric) The number of bins to use for the time varying models
 #' @param p_value (numeric) The p-value to use for the likelihood ratio test
 #' @param skip (array(str) (optional)) A vector of models to not attempt.
-#' @param max_iter (numeric (optional)) Number of iterations to run (1, 2, or 3). For models with BLQ only one iteration is supported.
-#' @param dv (numeric (optional)) Which DV to assess the error model for
+#' @param max_iter (numeric) Number of iterations to run (1, 2, or 3). For models with BLQ only one iteration is supported.
+#' @param dv (numeric (optional)) Which DV to assess the error model for.
+#' @param strictness (str (optional)) Strictness criteri
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (RUVSearchResults) Ruvsearch tool result object
@@ -7639,14 +7786,14 @@ run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_de
 #' }
 #' 
 #' @export
-run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.001, skip=NULL, max_iter=3, dv=NULL, ...) {
+run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.001, skip=NULL, max_iter=3, dv=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0)', ...) {
 	tryCatch(
 	{
 		groups <- convert_input(groups, "int")
 		skip <- convert_input(skip, "list")
 		max_iter <- convert_input(max_iter, "int")
 		dv <- convert_input(dv, "int")
-		func_out <- pharmpy$tools$run_ruvsearch(model=model, results=results, groups=groups, p_value=p_value, skip=skip, max_iter=max_iter, dv=dv, ...)
+		func_out <- pharmpy$tools$run_ruvsearch(model=model, results=results, groups=groups, p_value=p_value, skip=skip, max_iter=max_iter, dv=dv, strictness=strictness, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -7678,7 +7825,7 @@ run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.001, ski
 #' Run the structsearch tool. For more details, see :ref:`structsearch`.
 #' 
 #' @param type (str) Type of model. Currently only 'drug_metabolite' and 'pkpd'
-#' @param route (str (optional)) Type of administration. Currently 'oral', 'iv' and 'ivoral'
+#' @param route (str) Type of administration. Currently 'oral', 'iv' and 'ivoral'
 #' @param search_space (str (optional)) Search space to test
 #' @param b_init (numeric (optional)) Initial estimate for the baseline for pkpd models. The default value is 0.1
 #' @param emax_init (numeric (optional)) Initial estimate for E_MAX (for pkpd models only). The default value is 0.1
@@ -7686,7 +7833,8 @@ run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.001, ski
 #' @param met_init (numeric (optional)) Initial estimate for MET (for pkpd models only). The default value is 0.1
 #' @param results (ModelfitResults (optional)) Results for the start model
 #' @param model (Model (optional)) Pharmpy start model
-#' @param extra_model (Model (optional)) Optional extra Pharmpy model to use in TMDD structsearc
+#' @param extra_model (Model (optional)) Optional extra Pharmpy model to use in TMDD structsearch
+#' @param strictness (str (optional)) Strictness criteri
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (StructSearchResult) structsearch tool result object
@@ -7699,10 +7847,10 @@ run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.001, ski
 #' }
 #' 
 #' @export
-run_structsearch <- function(type, route='oral', search_space=NULL, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, results=NULL, model=NULL, extra_model=NULL, ...) {
+run_structsearch <- function(type, route='oral', search_space=NULL, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, results=NULL, model=NULL, extra_model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs >= 0)', ...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_structsearch(type, route=route, search_space=search_space, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, results=results, model=model, extra_model=extra_model, ...)
+		func_out <- pharmpy$tools$run_structsearch(type, route=route, search_space=search_space, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, results=results, model=model, extra_model=extra_model, strictness=strictness, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}

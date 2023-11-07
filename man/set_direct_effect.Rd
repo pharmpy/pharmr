@@ -9,7 +9,7 @@ set_direct_effect(model, expr)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{expr}{(str) Name of PD effect function. Valid names are: baseline, linear, emax, sigmoid, step and loglin}
+\item{expr}{(str) Name of PD effect function. Valid names are: linear, emax, sigmoid, step and loglin}
 }
 \value{
 (Model) Pharmpy model object
@@ -18,11 +18,6 @@ set_direct_effect(model, expr)
 Add an effect to a model.
 
 Implemented PD models are:
-\itemize{
-\item Baseline:
-}
-
-(equation could not be rendered, see API doc on website)
 \itemize{
 \item Linear:
 }
