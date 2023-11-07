@@ -28,6 +28,12 @@ jobs:
           name: pharmr_repo
           path: pharmr_repo
 
+      - name: Set up git config
+        working-directory: pharmr_repo
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
       - name: Add changes to DESCRIPTION and documentation
         working-directory: pharmr_repo
         run: |
@@ -50,13 +56,14 @@ jobs:
         if: ${{ env.has_been_updated == 'true' }}
         working-directory: pharmr_repo
         run: |
-          git config user.name github-actions[bot]
-          git config user.email github-actions@github.com
           echo "Committing changes"
           git commit -m "Update DESCRIPTION/documentation"
           echo "Tag version"
           git tag "${{ needs.check-pharmr.outputs.pharmpy_version }}"
           echo "Push changes"
-          git push
+          git push https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
           echo "push tags"
-          git push --tags
+          git push --tags https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
+        env:
+          REPO_KEY: ${{secrets.GITHUB_TOKEN}}
+          USERNAME: github-actions[bot]
