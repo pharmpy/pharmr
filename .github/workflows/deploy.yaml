@@ -4,6 +4,9 @@ on:
 
 name: Deploy pharmr
 
+permissions:
+  contents: write
+
 jobs:
   check-pharmr:
     uses: pharmpy/pharmr/.github/workflows/main.yaml@main
@@ -58,9 +61,6 @@ jobs:
           echo "Tag version"
           git tag "${{ needs.check-pharmr.outputs.pharmpy_version }}"
           echo "Push changes"
-          git push https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
+          git push
           echo "push tags"
-          git push --tags https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
-        env:
-          REPO_KEY: ${{secrets.ACCESS_TOKEN}}
-          USERNAME: github-actions[bot]
+          git push --tags
