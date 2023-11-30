@@ -5,62 +5,72 @@ on:
 name: Deploy pharmr
 
 jobs:
-  check-pharmr:
-    uses: pharmpy/pharmr/.github/workflows/main.yaml@main
-    with:
-      as-release: true
-
   deploy:
     runs-on: ubuntu-20.04
-    needs: check-pharmr
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       RSPM: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - name: Download pharmr repo artifact
-        uses: actions/download-artifact@master
+      - name: Checkout pharmr
+        uses: actions/checkout@v3
         with:
-          name: pharmr_repo
           path: pharmr_repo
 
-      - name: Set up git config
+      - name: Switch branch (remove when in main)
         working-directory: pharmr_repo
         run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch use-composite-actions
+          pwd
 
-      - name: Add changes to DESCRIPTION and documentation
+      - uses: ./pharmr_repo/.github/actions/check-pharmr
+        with:
+          as-release: true
+
+      - name: Check git
         working-directory: pharmr_repo
-        run: |
-          git add DESCRIPTION
-          git add NAMESPACE
-          git add R/functions_wrapper.R
-          git add man/
+        run:
           git status
 
-      - name: Check if any files have been staged
-        working-directory: pharmr_repo
-        run: |
-          if [[ "$(git diff --name-only --cached | wc -c)" != "0" ]]; then
-            echo "has_been_updated=true" >> $GITHUB_ENV
-          else
-            echo "has_been_updated=false" >> $GITHUB_ENV
-          fi
 
-      - name: Commit and push changes, tag version
-        if: ${{ env.has_been_updated == 'true' }}
-        working-directory: pharmr_repo
-        run: |
-          echo "Committing changes"
-          git commit -m "Update DESCRIPTION/documentation"
-          echo "Tag version"
-          git tag "${{ needs.check-pharmr.outputs.pharmpy_version }}"
-          echo "Push changes"
-          git push https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
-          echo "push tags"
-          git push --tags https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
-        env:
-          REPO_KEY: ${{secrets.ACCESS_TOKEN}}
-          USERNAME: github-actions[bot]
+
+#      - name: Set up git config
+#        working-directory: pharmr_repo
+#        run: |
+#          git config --local user.name "github-actions[bot]"
+#          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+#
+#      - name: Add changes to DESCRIPTION and documentation
+#        working-directory: pharmr_repo
+#        run: |
+#          git add DESCRIPTION
+#          git add NAMESPACE
+#          git add R/functions_wrapper.R
+#          git add man/
+#          git status
+#
+#      - name: Check if any files have been staged
+#        working-directory: pharmr_repo
+#        run: |
+#          if [[ "$(git diff --name-only --cached | wc -c)" != "0" ]]; then
+#            echo "has_been_updated=true" >> $GITHUB_ENV
+#          else
+#            echo "has_been_updated=false" >> $GITHUB_ENV
+#          fi
+#
+#      - name: Commit and push changes, tag version
+#        if: ${{ env.has_been_updated == 'true' }}
+#        working-directory: pharmr_repo
+#        run: |
+#          echo "Committing changes"
+#          git commit -m "Update DESCRIPTION/documentation"
+#          echo "Tag version"
+#          git tag "${{ needs.check-pharmr.outputs.pharmpy_version }}"
+#          echo "Push changes"
+#          git push https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
+#          echo "push tags"
+#          git push --tags https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
+#        env:
+#          REPO_KEY: ${{secrets.ACCESS_TOKEN}}
+#          USERNAME: github-actions[bot]
