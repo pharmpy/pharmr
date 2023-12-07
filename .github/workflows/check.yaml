@@ -36,6 +36,10 @@ jobs:
         with:
           path: pharmr_repo
 
-      - uses: ./pharmr_repo/.github/actions/check-pharmr
+      - uses: ./pharmr_repo/.github/actions/setup-dependencies
+
+      - uses: ./pharmr_repo/.github/actions/setup-pharmr
         with:
           as-release: false
+
+      - uses: ./pharmr_repo/.github/actions/check-pharmr
