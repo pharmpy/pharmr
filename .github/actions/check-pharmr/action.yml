@@ -96,8 +96,8 @@ runs:
       working-directory: pharmpy_repo
       if: runner.os == 'Windows'
       run: |
-        python -m venv pharmpy_venv
-        pharmpy_venv\Scripts\activate
+        python3 -m venv pharmpy_venv
+        . pharmpy_venv/Scripts/activate
         pip install .
       shell: bash
 
