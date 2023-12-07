@@ -1,0 +1,63 @@
+name: "Check pharmr"
+description: "Updates pharmr and runs checks"
+runs:
+  using: "composite"
+  steps:
+    - name: Start Pharmpy venv
+      working-directory: pharmr_repo
+      run: |
+        reticulate::py_discover_config()
+        venv_path = file.path('..', 'pharmpy_repo', 'pharmpy_venv')
+        if(.Platform$OS.type == "unix") {
+            venv_path = file.path(venv_path, 'bin')
+        } else {
+            venv_path = file.path(venv_path, 'Scripts')          
+        }
+        reticulate::use_python(venv_path)
+        pharmr::print_pharmpy_version()
+      shell: Rscript {0}
+
+    - name: Update DESCRIPTION and documentation
+      working-directory: pharmr_repo/deploy
+      run: |
+        venv_path = file.path('..', '..', 'pharmpy_repo', 'pharmpy_venv')
+        if(.Platform$OS.type == "unix") {
+            venv_path = file.path(venv_path, 'bin')
+        } else {
+            venv_path = file.path(venv_path, 'Scripts')          
+        }
+        reticulate::use_python(venv_path)
+        
+        pharmpy <- reticulate::import("pharmpy")
+        pharmpy_version <- pharmpy$`__version__`
+        desc::desc_set('Version', pharmpy_version)
+        desc::desc_set('Date', Sys.Date())
+        
+        reticulate::py_run_file('build_functions.py')
+        devtools::document()
+      shell: Rscript {0}
+
+    - name: Check pharmr
+      working-directory: pharmr_repo
+      env:
+        _R_CHECK_CRAN_INCOMING_REMOTE_: false
+      run: |
+        venv_path = file.path('..', 'pharmpy_repo', 'pharmpy_venv')
+        if(.Platform$OS.type == "unix") {
+            venv_path = file.path(venv_path, 'bin')
+        } else {
+            venv_path = file.path(venv_path, 'Scripts')          
+        }
+        reticulate::use_python(venv_path)
+        pharmr::print_pharmpy_version()
+        options(crayon.enabled = TRUE)
+        rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
+        rcmdcheck::rcmdcheck(args = c("--no-manual"), error_on = "warning", check_dir = "check")
+      shell: Rscript {0}
+
+    - name: Upload check results
+      if: failure()
+      uses: actions/upload-artifact@main
+      with:
+        name: results-cran
+        path: check

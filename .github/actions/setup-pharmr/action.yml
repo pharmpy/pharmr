@@ -1,0 +1,48 @@
+name: "Set up pharmr"
+description: "Sets up Pharmpy and installs into virtual environment"
+inputs:
+  as-release:
+    description: "Whether to use latest dev branch or latest tag"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout Pharmpy
+      uses: actions/checkout@v3
+      with:
+        repository: pharmpy/pharmpy
+        path: pharmpy_repo
+        fetch-depth: 0
+
+    - name: Set up Pharmpy release version
+      working-directory: pharmpy_repo
+      if: ${{ inputs.as-release == true }}
+      run: |
+        git checkout -b release_latest "$(git rev-list --tags --max-count=1)"
+      shell: bash
+
+    - id: get_pharmpy_version
+      working-directory: pharmpy_repo
+      if: ${{ inputs.as-release == true && runner.os == 'Linux'}}
+      run: |
+          echo "pharmpy_version=`git describe --tags`" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Install Pharmpy in venv
+      working-directory: pharmpy_repo
+      if: runner.os != 'Windows'
+      run: |
+        python3 -m venv pharmpy_venv
+        source pharmpy_venv/bin/activate
+        pip install .
+      shell: bash
+
+    - name: Install Pharmpy in venv
+      working-directory: pharmpy_repo
+      if: runner.os == 'Windows'
+      run: |
+        python3 -m venv pharmpy_venv
+        . pharmpy_venv/Scripts/activate
+        pip install .
+      shell: bash
+
