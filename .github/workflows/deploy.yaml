@@ -57,7 +57,7 @@ jobs:
           echo "Committing changes"
           git commit -m "Update DESCRIPTION/documentation"
           echo "Tag version"
-          git tag "${{ needs.check-pharmr.outputs.pharmpy_version }}"
+          git tag "${{ env.pharmpy_version }}"
           echo "Push changes"
           git push https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
           echo "push tags"

@@ -25,7 +25,7 @@ runs:
       working-directory: pharmpy_repo
       if: ${{ inputs.as-release == true && runner.os == 'Linux'}}
       run: |
-        echo "pharmpy_version=`git describe --tags`" >> $GITHUB_OUTPUT
+          echo "pharmpy_version=`git describe --tags`" >> $GITHUB_ENV
       shell: bash
 
     - name: Install Pharmpy in venv
