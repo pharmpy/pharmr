@@ -22,7 +22,7 @@ jobs:
 
       - uses: ./pharmr_repo/.github/actions/setup-pharmr
         with:
-          as-release: false
+          as-release: true
 
       - uses: ./pharmr_repo/.github/actions/check-pharmr
 
