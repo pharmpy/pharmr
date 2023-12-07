@@ -18,59 +18,50 @@ jobs:
         with:
           path: pharmr_repo
 
-      - name: Switch branch (remove when in main)
-        working-directory: pharmr_repo
-        run: |
-          git switch use-composite-actions
-          pwd
+      - uses: ./pharmr_repo/.github/actions/setup-dependencies
+
+      - uses: ./pharmr_repo/.github/actions/setup-pharmr
+        with:
+          as-release: false
 
       - uses: ./pharmr_repo/.github/actions/check-pharmr
-        with:
-          as-release: true
 
-      - name: Check git
+      - name: Set up git config
         working-directory: pharmr_repo
-        run:
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Add changes to DESCRIPTION and documentation
+        working-directory: pharmr_repo
+        run: |
+          git add DESCRIPTION
+          git add NAMESPACE
+          git add R/functions_wrapper.R
+          git add man/
           git status
 
+      - name: Check if any files have been staged
+        working-directory: pharmr_repo
+        run: |
+          if [[ "$(git diff --name-only --cached | wc -c)" != "0" ]]; then
+            echo "has_been_updated=true" >> $GITHUB_ENV
+          else
+            echo "has_been_updated=false" >> $GITHUB_ENV
+          fi
 
-
-#      - name: Set up git config
-#        working-directory: pharmr_repo
-#        run: |
-#          git config --local user.name "github-actions[bot]"
-#          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-#
-#      - name: Add changes to DESCRIPTION and documentation
-#        working-directory: pharmr_repo
-#        run: |
-#          git add DESCRIPTION
-#          git add NAMESPACE
-#          git add R/functions_wrapper.R
-#          git add man/
-#          git status
-#
-#      - name: Check if any files have been staged
-#        working-directory: pharmr_repo
-#        run: |
-#          if [[ "$(git diff --name-only --cached | wc -c)" != "0" ]]; then
-#            echo "has_been_updated=true" >> $GITHUB_ENV
-#          else
-#            echo "has_been_updated=false" >> $GITHUB_ENV
-#          fi
-#
-#      - name: Commit and push changes, tag version
-#        if: ${{ env.has_been_updated == 'true' }}
-#        working-directory: pharmr_repo
-#        run: |
-#          echo "Committing changes"
-#          git commit -m "Update DESCRIPTION/documentation"
-#          echo "Tag version"
-#          git tag "${{ needs.check-pharmr.outputs.pharmpy_version }}"
-#          echo "Push changes"
-#          git push https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
-#          echo "push tags"
-#          git push --tags https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
-#        env:
-#          REPO_KEY: ${{secrets.ACCESS_TOKEN}}
-#          USERNAME: github-actions[bot]
+      - name: Commit and push changes, tag version
+        if: ${{ env.has_been_updated == 'true' }}
+        working-directory: pharmr_repo
+        run: |
+          echo "Committing changes"
+          git commit -m "Update DESCRIPTION/documentation"
+          echo "Tag version"
+          git tag "${{ needs.check-pharmr.outputs.pharmpy_version }}"
+          echo "Push changes"
+          git push https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
+          echo "push tags"
+          git push --tags https://$USERNAME:$REPO_KEY@github.com/pharmpy/pharmr.git
+        env:
+          REPO_KEY: ${{secrets.ACCESS_TOKEN}}
+          USERNAME: github-actions[bot]
