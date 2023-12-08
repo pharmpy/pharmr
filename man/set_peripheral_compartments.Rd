@@ -4,18 +4,23 @@
 \alias{set_peripheral_compartments}
 \title{set_peripheral_compartments}
 \usage{
-set_peripheral_compartments(model, n)
+set_peripheral_compartments(model, n, name = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{n}{(numeric) Number of transit compartments}
+
+\item{name}{(str) Name of compartment to add peripheral to.}
 }
 \value{
 (Model) Pharmpy model object
 }
 \description{
-Sets the number of peripheral compartments to a specified number.
+Sets the number of peripheral compartments for central compartment to a specified number.
+
+If name is set, the peripheral compartment will be added to the compartment
+with the specified name instead.
 }
 \examples{
 \dontrun{

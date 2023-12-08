@@ -12,7 +12,7 @@ run_modelsearch(
   cutoff = NULL,
   results = NULL,
   model = NULL,
-  strictness = "minimization_successful or (rounding_errors and sigdigs >= 0)",
+  strictness = "minimization_successful or (rounding_errors and sigdigs >= 0.1)",
   ...
 )
 }

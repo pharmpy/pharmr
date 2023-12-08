@@ -4,12 +4,14 @@
 \alias{set_tmdd}
 \title{set_tmdd}
 \usage{
-set_tmdd(model, type)
+set_tmdd(model, type, dv_types = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{type}{(str) Type of TMDD model}
+
+\item{dv_types}{(list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DVs (e.g. dv_types = {'drug' : 1, 'target': 2})}
 }
 \value{
 (Model) Pharmpy model object
@@ -17,9 +19,16 @@ set_tmdd(model, type)
 \description{
 Sets target mediated drug disposition
 
-Sets target mediated drug disposition to a PK model.
-
-Supported models are full, ib, cr, crib, qss, wagner and mmapp.
+Implemented target mediated drug disposition (TMDD) models are:
+\itemize{
+\item Full model
+\item Irreversible binding approximation (IB)
+\item Constant total receptor approximation (CR)
+\item Irreversible binding and constant total receptor approximation (CR+IB)
+\item Quasi steady-state approximation (QSS)
+\item Wagner
+\item Michaelis-Menten approximation (MMAPP)
+}
 }
 \examples{
 \dontrun{

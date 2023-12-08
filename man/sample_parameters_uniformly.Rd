@@ -10,7 +10,8 @@ sample_parameters_uniformly(
   fraction = 0.1,
   force_posdef_samples = NULL,
   n = 1,
-  rng = NULL
+  seed = NULL,
+  scale = "normal"
 )
 }
 \arguments{
@@ -25,7 +26,9 @@ positive definite covariance matrices.}
 
 \item{n}{(numeric) Number of samples}
 
-\item{rng}{(numeric (optional)) Random number generator or seed}
+\item{seed}{(numeric (optional)) Random number generator or seed}
+
+\item{scale}{(str) Scale to perform sampling on. Valid options are 'normal' and 'UCP'}
 }
 \value{
 (data.frame) samples
@@ -42,7 +45,7 @@ model <- load_example_model("pheno")
 results <- load_example_modelfit_results("pheno")
 rng <- create_rng(23)
 pe <- results$parameter_estimates
-sample_parameters_uniformly(model, pe, n=3, rng=rng)
+sample_parameters_uniformly(model, pe, n=3, seed=rng)
 }
 }
 \seealso{

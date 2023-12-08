@@ -6,7 +6,6 @@
 \usage{
 run_structsearch(
   type,
-  route = "oral",
   search_space = NULL,
   b_init = NULL,
   emax_init = NULL,
@@ -15,14 +14,14 @@ run_structsearch(
   results = NULL,
   model = NULL,
   extra_model = NULL,
-  strictness = "minimization_successful or (rounding_errors and sigdigs >= 0)",
+  strictness = "minimization_successful or (rounding_errors and sigdigs >= 0.1)",
+  extra_model_results = NULL,
+  dv_types = NULL,
   ...
 )
 }
 \arguments{
 \item{type}{(str) Type of model. Currently only 'drug_metabolite' and 'pkpd'}
-
-\item{route}{(str) Type of administration. Currently 'oral', 'iv' and 'ivoral'}
 
 \item{search_space}{(str (optional)) Search space to test}
 
@@ -40,7 +39,11 @@ run_structsearch(
 
 \item{extra_model}{(Model (optional)) Optional extra Pharmpy model to use in TMDD structsearch}
 
-\item{strictness}{(str (optional)) Strictness criteri}
+\item{strictness}{(str (optional)) Results for the extra model}
+
+\item{extra_model_results}{(ModelfitResults (optional)) Strictness criteria}
+
+\item{dv_types}{(list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DV}
 
 \item{...}{Arguments to pass to tool}
 }

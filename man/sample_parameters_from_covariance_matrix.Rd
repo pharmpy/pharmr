@@ -11,7 +11,7 @@ sample_parameters_from_covariance_matrix(
   force_posdef_samples = NULL,
   force_posdef_covmatrix = FALSE,
   n = 1,
-  rng = NULL
+  seed = NULL
 )
 }
 \arguments{
@@ -28,7 +28,7 @@ default and means never and 0 means always}
 
 \item{n}{(numeric) Number of samples}
 
-\item{rng}{(numeric (optional)) Random number generator}
+\item{seed}{(numeric (optional)) Random number generator}
 }
 \value{
 (data.frame) A dataframe with one sample per row
@@ -45,7 +45,7 @@ results <- load_example_modelfit_results("pheno")
 rng <- create_rng(23)
 cov <- results$covariance_matrix
 pe <- results$parameter_estimates
-sample_parameters_from_covariance_matrix(model, pe, cov, n=3, rng=rng)
+sample_parameters_from_covariance_matrix(model, pe, cov, n=3, seed=rng)
 }
 }
 \seealso{

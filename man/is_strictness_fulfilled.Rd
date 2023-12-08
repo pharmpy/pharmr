@@ -4,10 +4,12 @@
 \alias{is_strictness_fulfilled}
 \title{is_strictness_fulfilled}
 \usage{
-is_strictness_fulfilled(res, statement)
+is_strictness_fulfilled(res, model, statement)
 }
 \arguments{
 \item{res}{(ModelfitResults) ModelfitResults object}
+
+\item{model}{(Model) Model for parameter specific strictness.}
 
 \item{statement}{(str) A statement containing the strictness criteria}
 }
@@ -21,7 +23,8 @@ if the evaluation of the statement is TRUE/FALSE.
 \examples{
 \dontrun{
 res <- load_example_modelfit_results('pheno')
-is_strictness_fulfilled(res, "minimization_successful or rounding_errors")
+model <- load_example_model('pheno')
+is_strictness_fulfilled(res, model, "minimization_successful or rounding_errors")
 }
 
 }

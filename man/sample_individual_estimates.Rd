@@ -10,7 +10,7 @@ sample_individual_estimates(
   individual_estimates_covariance,
   parameters = NULL,
   samples_per_id = 100,
-  rng = NULL
+  seed = NULL
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ sample_individual_estimates(
 
 \item{samples_per_id}{(numeric) Number of samples per individual}
 
-\item{rng}{(numeric (optional)) Random number generator or seed}
+\item{seed}{(numeric (optional)) Random number generator or seed}
 }
 \value{
 (data.frame) Pool of samples in a DataFrame
@@ -39,7 +39,7 @@ results <- load_example_modelfit_results("pheno")
 rng <- create_rng(23)
 ie <- results$individual_estimates
 iec <- results$individual_estimates_covariance
-sample_individual_estimates(model, ie, iec, samples_per_id=2, rng=rng)
+sample_individual_estimates(model, ie, iec, samples_per_id=2, seed=rng)
 }
 }
 \seealso{

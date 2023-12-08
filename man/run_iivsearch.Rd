@@ -12,7 +12,7 @@ run_iivsearch(
   results = NULL,
   model = NULL,
   keep = NULL,
-  strictness = "minimization_successful or (rounding_errors and sigdigs>=0)",
+  strictness = "minimization_successful or (rounding_errors and sigdigs>=0.1)",
   ...
 )
 }

@@ -34,8 +34,14 @@ add_admid <- function(model) {
 #' P=P*(X/Z)**T where P is the parameter, X the allometric_variable, Z the reference_value
 #' and T is a theta. Default is to automatically use clearance and volume parameters.
 #' 
+#' If there already exists a covariate effect (or allometric scaling) on a parameter
+#' with the specified allometric variable, nothing will be added.
+#' 
+#' If no allometric variable is specified, it will be extracted from the dataset based on
+#' the descriptor "body weight".
+#' 
 #' @param model (Model) Pharmpy model
-#' @param allometric_variable (str) Value to use for allometry (X above)
+#' @param allometric_variable (str (optional)) Value to use for allometry (X above)
 #' @param reference_value (str or numeric) Reference value (Z above)
 #' @param parameters (array(str) (optional)) Parameters to use or NULL (default) for all available CL, Q and V parameters
 #' @param initials (array(numeric) (optional)) Initial estimates for the exponents. Default is to use 0.75 for CL and Qs and 1 for Vs
@@ -48,12 +54,14 @@ add_admid <- function(model) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
+#' model <- remove_covariate_effect(model, 'CL', 'WGT')
+#' model <- remove_covariate_effect(model, 'V', 'WGT')
 #' model <- add_allometry(model, allometric_variable='WGT')
 #' model$statements$before_odes
 #' }
 #' 
 #' @export
-add_allometry <- function(model, allometric_variable='WT', reference_value=70, parameters=NULL, initials=NULL, lower_bounds=NULL, upper_bounds=NULL, fixed=TRUE) {
+add_allometry <- function(model, allometric_variable=NULL, reference_value=70, parameters=NULL, initials=NULL, lower_bounds=NULL, upper_bounds=NULL, fixed=TRUE) {
 	parameters <- convert_input(parameters, "list")
 	initials <- convert_input(initials, "list")
 	lower_bounds <- convert_input(lower_bounds, "list")
@@ -816,6 +824,42 @@ append_estimation_step_options <- function(model, tool_options, idx) {
 }
 
 #' @title
+#' bin_observations
+#' 
+#' @description
+#' Bin all observations on the independent variable
+#' 
+#' Available binning methods:
+#' 
+#' +---------------+-------------------------------------------------+
+#' | Method        | Description                                     |
+#' +===============+=================================================+
+#' | equal_width   | Bins with equal width based on the idv          |
+#' +---------------+-------------------------------------------------+
+#' | equal_number  | Bins containing an equal number of observations |
+#' +---------------+-------------------------------------------------+
+#' 
+#' @param model (Model) Pharmpy model
+#' @param method (str) Name of the binning method to use
+#' @param nbins (numeric) The number of binns wanted
+#'  
+#' @return (data.frame) A series of bin ids indexed on the original record index of the dataset
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' bin_observations(model, method="equal_width", nbins=10)
+#' }
+#' 
+#' @export
+bin_observations <- function(model, method, nbins) {
+	nbins <- convert_input(nbins, "int")
+	func_out <- pharmpy$modeling$bin_observations(model, method, nbins)
+	func_out <- reset_index_df(func_out)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' bump_model_number
 #' 
 #' @description
@@ -1188,7 +1232,7 @@ calculate_eta_shrinkage <- function(model, parameter_estimates, individual_estim
 #' @param covariance_matrix (data.frame (optional)) sympy expression or iterable of str or sympy expressions
 #' Expressions or equations for parameters of interest. If equations are used
 #' the names of the left hand sides will be used as the names of the parameters.
-#' @param rng (numeric (optional)) Random number generator or integer seed
+#' @param seed (numeric (optional)) Random number generator or integer seed
 #'  
 #' @return (data.frame) A DataFrame of statistics indexed on parameter and covariate value.
 #' 
@@ -1199,14 +1243,14 @@ calculate_eta_shrinkage <- function(model, parameter_estimates, individual_estim
 #' rng <- create_rng(23)
 #' pe <- results$parameter_estimates
 #' cov <- results$covariance_matrix
-#' calculate_individual_parameter_statistics(model, "K=CL/V", pe, cov, rng=rng)
+#' calculate_individual_parameter_statistics(model, "K=CL/V", pe, cov, seed=rng)
 #' }
 #' 
 #' @export
-calculate_individual_parameter_statistics <- function(model, expr_or_exprs, parameter_estimates, covariance_matrix=NULL, rng=NULL) {
+calculate_individual_parameter_statistics <- function(model, expr_or_exprs, parameter_estimates, covariance_matrix=NULL, seed=NULL) {
 	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
-	rng <- convert_input(rng, "int")
-	func_out <- pharmpy$modeling$calculate_individual_parameter_statistics(model, expr_or_exprs, parameter_estimates, covariance_matrix=covariance_matrix, rng=rng)
+	seed <- convert_input(seed, "int")
+	func_out <- pharmpy$modeling$calculate_individual_parameter_statistics(model, expr_or_exprs, parameter_estimates, covariance_matrix=covariance_matrix, seed=seed)
 	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
@@ -1288,7 +1332,7 @@ calculate_parameters_from_ucp <- function(model, scale, ucps) {
 #' @param model (Model) A previously estimated model
 #' @param parameter_estimates (array) Parameter estimates
 #' @param covariance_matrix (data.frame (optional)) Parameter uncertainty covariance matrix
-#' @param rng (numeric (optional)) Random number generator or seed
+#' @param seed (numeric (optional)) Random number generator or seed
 #'  
 #' @return (data.frame) A DataFrame of statistics indexed on parameter and covariate value.
 #' 
@@ -1299,17 +1343,17 @@ calculate_parameters_from_ucp <- function(model, scale, ucps) {
 #' rng <- create_rng(23)
 #' pe <- results$parameter_estimates
 #' cov <- results$covariance_matrix
-#' calculate_pk_parameters_statistics(model, pe, cov, rng=rng)
+#' calculate_pk_parameters_statistics(model, pe, cov, seed=rng)
 #' }
 #' @seealso
 #' calculate_individual_parameter_statistics : Calculation of statistics for arbitrary parameters
 #' 
 #' 
 #' @export
-calculate_pk_parameters_statistics <- function(model, parameter_estimates, covariance_matrix=NULL, rng=NULL) {
+calculate_pk_parameters_statistics <- function(model, parameter_estimates, covariance_matrix=NULL, seed=NULL) {
 	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
-	rng <- convert_input(rng, "int")
-	func_out <- pharmpy$modeling$calculate_pk_parameters_statistics(model, parameter_estimates, covariance_matrix=covariance_matrix, rng=rng)
+	seed <- convert_input(seed, "int")
+	func_out <- pharmpy$modeling$calculate_pk_parameters_statistics(model, parameter_estimates, covariance_matrix=covariance_matrix, seed=seed)
 	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
@@ -2136,16 +2180,22 @@ expand_additional_doses <- function(model, flag=FALSE) {
 #' filter_dataset
 #' 
 #' @description
-#' Filter dataset according to expr.
+#' Filter dataset according to expr and return a model with the filtered dataset.
 #' 
-#' Example: expr = "DVID == 1" will filter the dataset so that
-#' only the rows with DVID = 1 remain.
+#' Example: "DVID == 1" will filter the dataset so that only the rows with DVID = 1 remain.
 #' 
 #' @param model (Model) Pharmpy model object
 #' @param expr (str) expression for dataset query
 #'  
 #' @return (Model) Pharmpy model object
 #' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model$dataset
+#' model <- filter_dataset(model, 'WGT < 1.4')
+#' model$dataset
+#' }
 #' 
 #' @export
 filter_dataset <- function(model, expr) {
@@ -3974,6 +4024,25 @@ omit_data <- function(dataset_or_model, group, name_pattern='omitted_{}') {
 }
 
 #' @title
+#' plot_abs_cwres_vs_ipred
+#' 
+#' @description
+#' Plot |CWRES| vs IPRED
+#' 
+#' @param model (Model) Pharmpy model
+#' @param predictions (data.frame) DataFrame containing the predictions
+#' @param residuals (data.frame) DataFrame containing the residuals
+#'  
+#' @return (alt.Chart) Plot
+#' 
+#' 
+#' @export
+plot_abs_cwres_vs_ipred <- function(model, predictions, residuals) {
+	func_out <- pharmpy$modeling$plot_abs_cwres_vs_ipred(model, predictions, residuals)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' plot_cwres_vs_idv
 #' 
 #' @description
@@ -4006,6 +4075,24 @@ plot_cwres_vs_idv <- function(model, residuals) {
 #' @export
 plot_dv_vs_ipred <- function(model, predictions) {
 	func_out <- pharmpy$modeling$plot_dv_vs_ipred(model, predictions)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' plot_dv_vs_pred
+#' 
+#' @description
+#' Plot DV vs PRED
+#' 
+#' @param model (Model) Pharmpy model
+#' @param predictions (data.frame) DataFrame containing the predictions
+#'  
+#' @return (alt.Chart) Plot
+#' 
+#' 
+#' @export
+plot_dv_vs_pred <- function(model, predictions) {
+	func_out <- pharmpy$modeling$plot_dv_vs_pred(model, predictions)
 	return(py_to_r(func_out))
 }
 
@@ -4629,7 +4716,7 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' @param individual_estimates_covariance (data.frame) Uncertainty covariance of the individual estimates
 #' @param parameters (array(str) (optional)) A vector of a subset of individual parameters to sample. Default is NULL, which means all.
 #' @param samples_per_id (numeric) Number of samples per individual
-#' @param rng (numeric (optional)) Random number generator or seed
+#' @param seed (numeric (optional)) Random number generator or seed
 #'  
 #' @return (data.frame) Pool of samples in a DataFrame
 #' 
@@ -4640,7 +4727,7 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' rng <- create_rng(23)
 #' ie <- results$individual_estimates
 #' iec <- results$individual_estimates_covariance
-#' sample_individual_estimates(model, ie, iec, samples_per_id=2, rng=rng)
+#' sample_individual_estimates(model, ie, iec, samples_per_id=2, seed=rng)
 #' }
 #' @seealso
 #' sample_parameters_from_covariance_matrix : Sample parameter vectors using the
@@ -4651,11 +4738,11 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' 
 #' 
 #' @export
-sample_individual_estimates <- function(model, individual_estimates, individual_estimates_covariance, parameters=NULL, samples_per_id=100, rng=NULL) {
+sample_individual_estimates <- function(model, individual_estimates, individual_estimates_covariance, parameters=NULL, samples_per_id=100, seed=NULL) {
 	parameters <- convert_input(parameters, "list")
 	samples_per_id <- convert_input(samples_per_id, "int")
-	rng <- convert_input(rng, "int")
-	func_out <- pharmpy$modeling$sample_individual_estimates(model, individual_estimates, individual_estimates_covariance, parameters=parameters, samples_per_id=samples_per_id, rng=rng)
+	seed <- convert_input(seed, "int")
+	func_out <- pharmpy$modeling$sample_individual_estimates(model, individual_estimates, individual_estimates_covariance, parameters=parameters, samples_per_id=samples_per_id, seed=seed)
 	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
@@ -4675,7 +4762,7 @@ sample_individual_estimates <- function(model, individual_estimates, individual_
 #' default and means never and 0 means always
 #' @param force_posdef_covmatrix (logical) Set to TRUE to force the input covariance matrix to be positive definite
 #' @param n (numeric) Number of samples
-#' @param rng (numeric (optional)) Random number generator
+#' @param seed (numeric (optional)) Random number generator
 #'  
 #' @return (data.frame) A dataframe with one sample per row
 #' 
@@ -4686,7 +4773,7 @@ sample_individual_estimates <- function(model, individual_estimates, individual_
 #' rng <- create_rng(23)
 #' cov <- results$covariance_matrix
 #' pe <- results$parameter_estimates
-#' sample_parameters_from_covariance_matrix(model, pe, cov, n=3, rng=rng)
+#' sample_parameters_from_covariance_matrix(model, pe, cov, n=3, seed=rng)
 #' }
 #' @seealso
 #' sample_parameters_uniformly : Sample parameter vectors using uniform distribution
@@ -4695,12 +4782,12 @@ sample_individual_estimates <- function(model, individual_estimates, individual_
 #' 
 #' 
 #' @export
-sample_parameters_from_covariance_matrix <- function(model, parameter_estimates, covariance_matrix, force_posdef_samples=NULL, force_posdef_covmatrix=FALSE, n=1, rng=NULL) {
+sample_parameters_from_covariance_matrix <- function(model, parameter_estimates, covariance_matrix, force_posdef_samples=NULL, force_posdef_covmatrix=FALSE, n=1, seed=NULL) {
 	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
 	force_posdef_samples <- convert_input(force_posdef_samples, "int")
 	n <- convert_input(n, "int")
-	rng <- convert_input(rng, "int")
-	func_out <- pharmpy$modeling$sample_parameters_from_covariance_matrix(model, parameter_estimates, covariance_matrix, force_posdef_samples=force_posdef_samples, force_posdef_covmatrix=force_posdef_covmatrix, n=n, rng=rng)
+	seed <- convert_input(seed, "int")
+	func_out <- pharmpy$modeling$sample_parameters_from_covariance_matrix(model, parameter_estimates, covariance_matrix, force_posdef_samples=force_posdef_samples, force_posdef_covmatrix=force_posdef_covmatrix, n=n, seed=seed)
 	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
@@ -4720,7 +4807,8 @@ sample_parameters_from_covariance_matrix <- function(model, parameter_estimates,
 #' @param force_posdef_samples (numeric (optional)) Number of samples to reject before forcing variability parameters to give
 #' positive definite covariance matrices.
 #' @param n (numeric) Number of samples
-#' @param rng (numeric (optional)) Random number generator or seed
+#' @param seed (numeric (optional)) Random number generator or seed
+#' @param scale (str) Scale to perform sampling on. Valid options are 'normal' and 'UCP'
 #'  
 #' @return (data.frame) samples
 #' 
@@ -4730,7 +4818,7 @@ sample_parameters_from_covariance_matrix <- function(model, parameter_estimates,
 #' results <- load_example_modelfit_results("pheno")
 #' rng <- create_rng(23)
 #' pe <- results$parameter_estimates
-#' sample_parameters_uniformly(model, pe, n=3, rng=rng)
+#' sample_parameters_uniformly(model, pe, n=3, seed=rng)
 #' }
 #' @seealso
 #' sample_parameters_from_covariance_matrix : Sample parameter vectors using the
@@ -4741,12 +4829,12 @@ sample_parameters_from_covariance_matrix <- function(model, parameter_estimates,
 #' 
 #' 
 #' @export
-sample_parameters_uniformly <- function(model, parameter_estimates, fraction=0.1, force_posdef_samples=NULL, n=1, rng=NULL) {
+sample_parameters_uniformly <- function(model, parameter_estimates, fraction=0.1, force_posdef_samples=NULL, n=1, seed=NULL, scale='normal') {
 	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
 	force_posdef_samples <- convert_input(force_posdef_samples, "int")
 	n <- convert_input(n, "int")
-	rng <- convert_input(rng, "int")
-	func_out <- pharmpy$modeling$sample_parameters_uniformly(model, parameter_estimates, fraction=fraction, force_posdef_samples=force_posdef_samples, n=n, rng=rng)
+	seed <- convert_input(seed, "int")
+	func_out <- pharmpy$modeling$sample_parameters_uniformly(model, parameter_estimates, fraction=fraction, force_posdef_samples=force_posdef_samples, n=n, seed=seed, scale=scale)
 	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
@@ -5447,10 +5535,14 @@ set_ode_solver <- function(model, solver) {
 #' set_peripheral_compartments
 #' 
 #' @description
-#' Sets the number of peripheral compartments to a specified number.
+#' Sets the number of peripheral compartments for central compartment to a specified number.
+#' 
+#' If name is set, the peripheral compartment will be added to the compartment
+#' with the specified name instead.
 #' 
 #' @param model (Model) Pharmpy model
 #' @param n (numeric) Number of transit compartments
+#' @param name (str) Name of compartment to add peripheral to.
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -5467,9 +5559,9 @@ set_ode_solver <- function(model, solver) {
 #' 
 #' 
 #' @export
-set_peripheral_compartments <- function(model, n) {
+set_peripheral_compartments <- function(model, n, name=NULL) {
 	n <- convert_input(n, "int")
-	func_out <- pharmpy$modeling$set_peripheral_compartments(model, n)
+	func_out <- pharmpy$modeling$set_peripheral_compartments(model, n, name=name)
 	return(py_to_r(func_out))
 }
 
@@ -5685,12 +5777,20 @@ set_time_varying_error_model <- function(model, cutoff, idv='TIME', dv=NULL) {
 #' @description
 #' Sets target mediated drug disposition
 #' 
-#' Sets target mediated drug disposition to a PK model.
+#' Implemented target mediated drug disposition (TMDD) models are:
 #' 
-#' Supported models are full, ib, cr, crib, qss, wagner and mmapp.
+#' * Full model
+#' * Irreversible binding approximation (IB)
+#' * Constant total receptor approximation (CR)
+#' * Irreversible binding and constant total receptor approximation (CR+IB)
+#' * Quasi steady-state approximation (QSS)
+#' * Wagner
+#' * Michaelis-Menten approximation (MMAPP)
+#' 
 #' 
 #' @param model (Model) Pharmpy model
 #' @param type (str) Type of TMDD model
+#' @param dv_types (list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DVs (e.g. dv_types = {'drug' : 1, 'target': 2})
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -5701,8 +5801,8 @@ set_time_varying_error_model <- function(model, cutoff, idv='TIME', dv=NULL) {
 #' }
 #' 
 #' @export
-set_tmdd <- function(model, type) {
-	func_out <- pharmpy$modeling$set_tmdd(model, type)
+set_tmdd <- function(model, type, dv_types=NULL) {
+	func_out <- pharmpy$modeling$set_tmdd(model, type, dv_types=dv_types)
 	return(py_to_r(func_out))
 }
 
@@ -6677,6 +6777,7 @@ get_model_features <- function(model, supress_warnings=FALSE) {
 #' if the evaluation of the statement is TRUE/FALSE.
 #' 
 #' @param res (ModelfitResults) ModelfitResults object
+#' @param model (Model) Model for parameter specific strictness.
 #' @param statement (str) A statement containing the strictness criteria
 #'  
 #' @return (logical) A logical indicating whether the strictness criteria are fulfilled or not.
@@ -6684,14 +6785,15 @@ get_model_features <- function(model, supress_warnings=FALSE) {
 #' @examples
 #' \dontrun{
 #' res <- load_example_modelfit_results('pheno')
-#' is_strictness_fulfilled(res, "minimization_successful or rounding_errors")
+#' model <- load_example_model('pheno')
+#' is_strictness_fulfilled(res, model, "minimization_successful or rounding_errors")
 #' }
 #' 
 #' @export
-is_strictness_fulfilled <- function(res, statement) {
+is_strictness_fulfilled <- function(res, model, statement) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$is_strictness_fulfilled(res, statement)
+		func_out <- pharmpy$tools$is_strictness_fulfilled(res, model, statement)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -7327,6 +7429,12 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' @param path (str (optional)) Path to run AMD in
 #' @param resume (logical) Whether to allow resuming previous run
 #' @param strictness (str (optional)) Strictness criteria
+#' @param dv_types (list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DVs.
+#' @param mechanistic_covariates (array(str) (optional)) List of covariates to run in a separate proioritized covsearch run. The effects are extracted
+#' from the search space for covsearch
+#' @param retries_strategy (str) Weither or not to run retries tool. Valid options are 'skip', 'all_final' or 'final'.
+#' Default is 'final'.
+#' @param seed (numeric (optional)) Random number generator or seed to be used.
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -7343,11 +7451,13 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' 
 #' 
 #' @export
-run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='oral', cl_init=0.01, vc_init=1.0, mat_init=0.1, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, search_space=NULL, lloq_method=NULL, lloq_limit=NULL, order=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs>=0)') {
+run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='oral', cl_init=0.01, vc_init=1.0, mat_init=0.1, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, search_space=NULL, lloq_method=NULL, lloq_limit=NULL, order=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', dv_types=NULL, mechanistic_covariates=NULL, retries_strategy='final', seed=NULL) {
 	tryCatch(
 	{
 		order <- convert_input(order, "list")
-		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, administration=administration, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, search_space=search_space, lloq_method=lloq_method, lloq_limit=lloq_limit, order=order, allometric_variable=allometric_variable, occasion=occasion, path=path, resume=resume, strictness=strictness)
+		mechanistic_covariates <- convert_input(mechanistic_covariates, "list")
+		seed <- convert_input(seed, "int")
+		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, administration=administration, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, search_space=search_space, lloq_method=lloq_method, lloq_limit=lloq_limit, order=order, allometric_variable=allometric_variable, occasion=occasion, path=path, resume=resume, strictness=strictness, dv_types=dv_types, mechanistic_covariates=mechanistic_covariates, retries_strategy=retries_strategy, seed=seed)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -7436,7 +7546,8 @@ run_bootstrap <- function(model, results=NULL, resamples=1, ...) {
 #' 'scm-forward-then-backward' are supported.
 #' @param results (ModelfitResults (optional)) Results of model
 #' @param model (Model (optional)) Pharmpy model
-#' @param strictness (str (optional)) Strictness criteri
+#' @param strictness (str (optional)) Strictness criteria
+#' @param naming_index_offset (numeric (optional)) index offset for naming of runs. Default is 0
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (COVSearchResults) COVsearch tool result object
@@ -7450,11 +7561,12 @@ run_bootstrap <- function(model, results=NULL, resamples=1, ...) {
 #' }
 #' 
 #' @export
-run_covsearch <- function(effects, p_forward=0.01, p_backward=0.001, max_steps=-1, algorithm='scm-forward-then-backward', results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0)', ...) {
+run_covsearch <- function(effects, p_forward=0.01, p_backward=0.001, max_steps=-1, algorithm='scm-forward-then-backward', results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', naming_index_offset=0, ...) {
 	tryCatch(
 	{
 		max_steps <- convert_input(max_steps, "int")
-		func_out <- pharmpy$tools$run_covsearch(effects, p_forward=p_forward, p_backward=p_backward, max_steps=max_steps, algorithm=algorithm, results=results, model=model, strictness=strictness, ...)
+		naming_index_offset <- convert_input(naming_index_offset, "int")
+		func_out <- pharmpy$tools$run_covsearch(effects, p_forward=p_forward, p_backward=p_backward, max_steps=max_steps, algorithm=algorithm, results=results, model=model, strictness=strictness, naming_index_offset=naming_index_offset, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -7570,7 +7682,7 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 #' }
 #' 
 #' @export
-run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cutoff=NULL, results=NULL, model=NULL, keep=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0)', ...) {
+run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cutoff=NULL, results=NULL, model=NULL, keep=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', ...) {
 	tryCatch(
 	{
 		keep <- convert_input(keep, "list")
@@ -7626,7 +7738,7 @@ run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cut
 #' }
 #' 
 #' @export
-run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='bic', cutoff=NULL, distribution='same-as-iiv', results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0)', ...) {
+run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='bic', cutoff=NULL, distribution='same-as-iiv', results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', ...) {
 	tryCatch(
 	{
 		list_of_parameters <- convert_input(list_of_parameters, "list")
@@ -7732,10 +7844,60 @@ run_modelfit <- function(model_or_models=NULL, n=NULL, tool=NULL, ...) {
 #' }
 #' 
 #' @export
-run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_delay', rank_type='bic', cutoff=NULL, results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs >= 0)', ...) {
+run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_delay', rank_type='bic', cutoff=NULL, results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs >= 0.1)', ...) {
 	tryCatch(
 	{
 		func_out <- pharmpy$tools$run_modelsearch(search_space, algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, cutoff=cutoff, results=results, model=model, strictness=strictness, ...)
+		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+			func_out <- reset_indices_results(func_out)
+		}
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
+#' run_retries
+#' 
+#' @description
+#' Run retries tool.
+#' 
+#' @param model (Model (optional)) Model object to run retries on. The default is NULL.
+#' @param results (ModelfitResults (optional)) Connected ModelfitResults object. The default is NULL.
+#' @param number_of_candidates (numeric) Number of retry candidates to run. The default is 5.
+#' @param fraction (numeric) Determines allowed increase/decrease from initial parameter estimate. Default is 0.1 (10%)
+#' @param strictness (str (optional)) Strictness criteria. The default is "minimization_successful or (rounding_errors and sigdigs >= 0.1)".
+#' @param scale (str (optional)) Which scale to update the initial values on. Either normal scale or UCP scale.
+#' @param prefix_name (str (optional)) Prefix the candidate model names with given string.
+#' @param seed (numeric (optional)) Random number generator or seed to be used
+#' @param ... Arguments to pass to tool
+#'  
+#' @return (RetriesResults) Retries tool results object.
+#' 
+#' 
+#' @export
+run_retries <- function(model=NULL, results=NULL, number_of_candidates=5, fraction=0.1, strictness='minimization_successful or (rounding_errors and sigdigs >= 0.1)', scale='UCP', prefix_name='', seed=NULL, ...) {
+	tryCatch(
+	{
+		number_of_candidates <- convert_input(number_of_candidates, "int")
+		seed <- convert_input(seed, "int")
+		func_out <- pharmpy$tools$run_retries(model=model, results=results, number_of_candidates=number_of_candidates, fraction=fraction, strictness=strictness, scale=scale, prefix_name=prefix_name, seed=seed, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -7786,7 +7948,7 @@ run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_de
 #' }
 #' 
 #' @export
-run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.001, skip=NULL, max_iter=3, dv=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0)', ...) {
+run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.001, skip=NULL, max_iter=3, dv=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', ...) {
 	tryCatch(
 	{
 		groups <- convert_input(groups, "int")
@@ -7825,7 +7987,6 @@ run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.001, ski
 #' Run the structsearch tool. For more details, see :ref:`structsearch`.
 #' 
 #' @param type (str) Type of model. Currently only 'drug_metabolite' and 'pkpd'
-#' @param route (str) Type of administration. Currently 'oral', 'iv' and 'ivoral'
 #' @param search_space (str (optional)) Search space to test
 #' @param b_init (numeric (optional)) Initial estimate for the baseline for pkpd models. The default value is 0.1
 #' @param emax_init (numeric (optional)) Initial estimate for E_MAX (for pkpd models only). The default value is 0.1
@@ -7834,7 +7995,9 @@ run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.001, ski
 #' @param results (ModelfitResults (optional)) Results for the start model
 #' @param model (Model (optional)) Pharmpy start model
 #' @param extra_model (Model (optional)) Optional extra Pharmpy model to use in TMDD structsearch
-#' @param strictness (str (optional)) Strictness criteri
+#' @param strictness (str (optional)) Results for the extra model
+#' @param extra_model_results (ModelfitResults (optional)) Strictness criteria
+#' @param dv_types (list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DV
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (StructSearchResult) structsearch tool result object
@@ -7847,10 +8010,10 @@ run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.001, ski
 #' }
 #' 
 #' @export
-run_structsearch <- function(type, route='oral', search_space=NULL, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, results=NULL, model=NULL, extra_model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs >= 0)', ...) {
+run_structsearch <- function(type, search_space=NULL, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, results=NULL, model=NULL, extra_model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs >= 0.1)', extra_model_results=NULL, dv_types=NULL, ...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_structsearch(type, route=route, search_space=search_space, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, results=results, model=model, extra_model=extra_model, strictness=strictness, ...)
+		func_out <- pharmpy$tools$run_structsearch(type, search_space=search_space, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, results=results, model=model, extra_model=extra_model, strictness=strictness, extra_model_results=extra_model_results, dv_types=dv_types, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}

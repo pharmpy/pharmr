@@ -6,7 +6,7 @@
 \usage{
 add_allometry(
   model,
-  allometric_variable = "WT",
+  allometric_variable = NULL,
   reference_value = 70,
   parameters = NULL,
   initials = NULL,
@@ -18,7 +18,7 @@ add_allometry(
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{allometric_variable}{(str) Value to use for allometry (X above)}
+\item{allometric_variable}{(str (optional)) Value to use for allometry (X above)}
 
 \item{reference_value}{(str or numeric) Reference value (Z above)}
 
@@ -41,10 +41,18 @@ Add allometric scaling of parameters
 Add an allometric function to each listed parameter. The function will be
 P=P*(X/Z)**T where P is the parameter, X the allometric_variable, Z the reference_value
 and T is a theta. Default is to automatically use clearance and volume parameters.
+
+If there already exists a covariate effect (or allometric scaling) on a parameter
+with the specified allometric variable, nothing will be added.
+
+If no allometric variable is specified, it will be extracted from the dataset based on
+the descriptor "body weight".
 }
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
+model <- remove_covariate_effect(model, 'CL', 'WGT')
+model <- remove_covariate_effect(model, 'V', 'WGT')
 model <- add_allometry(model, allometric_variable='WGT')
 model$statements$before_odes
 }

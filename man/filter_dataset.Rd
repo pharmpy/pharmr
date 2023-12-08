@@ -15,8 +15,16 @@ filter_dataset(model, expr)
 (Model) Pharmpy model object
 }
 \description{
-Filter dataset according to expr.
+Filter dataset according to expr and return a model with the filtered dataset.
 
-Example: expr = "DVID == 1" will filter the dataset so that
-only the rows with DVID = 1 remain.
+Example: "DVID == 1" will filter the dataset so that only the rows with DVID = 1 remain.
+}
+\examples{
+\dontrun{
+model <- load_example_model("pheno")
+model$dataset
+model <- filter_dataset(model, 'WGT < 1.4')
+model$dataset
+}
+
 }

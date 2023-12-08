@@ -24,7 +24,11 @@ run_amd(
   occasion = NULL,
   path = NULL,
   resume = FALSE,
-  strictness = "minimization_successful or (rounding_errors and sigdigs>=0)"
+  strictness = "minimization_successful or (rounding_errors and sigdigs>=0.1)",
+  dv_types = NULL,
+  mechanistic_covariates = NULL,
+  retries_strategy = "final",
+  seed = NULL
 )
 }
 \arguments{
@@ -67,6 +71,16 @@ run_amd(
 \item{resume}{(logical) Whether to allow resuming previous run}
 
 \item{strictness}{(str (optional)) Strictness criteria}
+
+\item{dv_types}{(list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DVs.}
+
+\item{mechanistic_covariates}{(array(str) (optional)) List of covariates to run in a separate proioritized covsearch run. The effects are extracted
+from the search space for covsearch}
+
+\item{retries_strategy}{(str) Weither or not to run retries tool. Valid options are 'skip', 'all_final' or 'final'.
+Default is 'final'.}
+
+\item{seed}{(numeric (optional)) Random number generator or seed to be used.}
 }
 \value{
 (Model) Reference to the same model object

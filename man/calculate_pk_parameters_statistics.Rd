@@ -8,7 +8,7 @@ calculate_pk_parameters_statistics(
   model,
   parameter_estimates,
   covariance_matrix = NULL,
-  rng = NULL
+  seed = NULL
 )
 }
 \arguments{
@@ -18,7 +18,7 @@ calculate_pk_parameters_statistics(
 
 \item{covariance_matrix}{(data.frame (optional)) Parameter uncertainty covariance matrix}
 
-\item{rng}{(numeric (optional)) Random number generator or seed}
+\item{seed}{(numeric (optional)) Random number generator or seed}
 }
 \value{
 (data.frame) A DataFrame of statistics indexed on parameter and covariate value.
@@ -37,7 +37,7 @@ results <- load_example_modelfit_results("pheno")
 rng <- create_rng(23)
 pe <- results$parameter_estimates
 cov <- results$covariance_matrix
-calculate_pk_parameters_statistics(model, pe, cov, rng=rng)
+calculate_pk_parameters_statistics(model, pe, cov, seed=rng)
 }
 }
 \seealso{

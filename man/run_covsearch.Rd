@@ -12,7 +12,8 @@ run_covsearch(
   algorithm = "scm-forward-then-backward",
   results = NULL,
   model = NULL,
-  strictness = "minimization_successful or (rounding_errors and sigdigs>=0)",
+  strictness = "minimization_successful or (rounding_errors and sigdigs>=0.1)",
+  naming_index_offset = 0,
   ...
 )
 }
@@ -32,7 +33,9 @@ run_covsearch(
 
 \item{model}{(Model (optional)) Pharmpy model}
 
-\item{strictness}{(str (optional)) Strictness criteri}
+\item{strictness}{(str (optional)) Strictness criteria}
+
+\item{naming_index_offset}{(numeric (optional)) index offset for naming of runs. Default is 0}
 
 \item{...}{Arguments to pass to tool}
 }
