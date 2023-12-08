@@ -21,11 +21,11 @@ runs:
         git checkout -b release_latest "$(git rev-list --tags --max-count=1)"
       shell: bash
 
-    - id: get_pharmpy_version
+    - name: Store Pharmpy version as env variable
       working-directory: pharmpy_repo
-      if: ${{ inputs.as-release == true && runner.os == 'Linux'}}
+      if: runner.os == 'Linux'
       run: |
-          echo "pharmpy_version=`git describe --tags`" >> $GITHUB_ENV
+          echo "pharmpy_version=`git describe --tags" >> $GITHUB_ENV
       shell: bash
 
     - name: Install Pharmpy in venv
