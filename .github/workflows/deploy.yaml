@@ -26,6 +26,12 @@ jobs:
 
       - uses: ./pharmr_repo/.github/actions/check-pharmr
 
+      - name: Get Pharmpy version
+        working-directory: pharmpy_repo
+        run: |
+          echo "pharmpy_version=`git describe --tags`" >> $GITHUB_ENV
+        shell: bash
+
       - name: Set up git config
         working-directory: pharmr_repo
         run: |
