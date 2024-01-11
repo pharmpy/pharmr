@@ -11,7 +11,7 @@ add_indirect_effect(model, expr, prod = TRUE)
 
 \item{expr}{(str) Production (TRUE) (default) or degradation (FALSE)}
 
-\item{prod}{(logical) Name of PD effect function. Valid names are: linear, emax, sigmoid and step}
+\item{prod}{(logical) Name of PD effect function.}
 }
 \value{
 (Model) Pharmpy model object

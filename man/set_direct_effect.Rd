@@ -9,7 +9,7 @@ set_direct_effect(model, expr)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{expr}{(str) Name of PD effect function. Valid names are: linear, emax, sigmoid, step and loglin}
+\item{expr}{(str) Name of PD effect function.}
 }
 \value{
 (Model) Pharmpy model object

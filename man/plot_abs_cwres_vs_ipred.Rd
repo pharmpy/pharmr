@@ -17,5 +17,10 @@ plot_abs_cwres_vs_ipred(model, predictions, residuals)
 (alt.Chart) Plot
 }
 \description{
-Plot |CWRES| vs IPRED
+Plot \|CWRES\| vs IPRED
+}
+\examples{
+\dontrun{
+}
+
 }

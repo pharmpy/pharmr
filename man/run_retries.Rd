@@ -9,6 +9,7 @@ run_retries(
   results = NULL,
   number_of_candidates = 5,
   fraction = 0.1,
+  use_initial_estimates = FALSE,
   strictness = "minimization_successful or (rounding_errors and sigdigs >= 0.1)",
   scale = "UCP",
   prefix_name = "",
@@ -24,6 +25,8 @@ run_retries(
 \item{number_of_candidates}{(numeric) Number of retry candidates to run. The default is 5.}
 
 \item{fraction}{(numeric) Determines allowed increase/decrease from initial parameter estimate. Default is 0.1 (10\%)}
+
+\item{use_initial_estimates}{(logical) Use initial parameter estimates instead of final estimates of input model when creating candidate models.}
 
 \item{strictness}{(str (optional)) Strictness criteria. The default is "minimization_successful or (rounding_errors and sigdigs >= 0.1)".}
 

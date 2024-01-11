@@ -9,6 +9,7 @@ run_amd(
   results = NULL,
   modeltype = "basic_pk",
   administration = "oral",
+  strategy = "all",
   cl_init = 0.01,
   vc_init = 1,
   mat_init = 0.1,
@@ -19,7 +20,6 @@ run_amd(
   search_space = NULL,
   lloq_method = NULL,
   lloq_limit = NULL,
-  order = NULL,
   allometric_variable = NULL,
   occasion = NULL,
   path = NULL,
@@ -27,8 +27,10 @@ run_amd(
   strictness = "minimization_successful or (rounding_errors and sigdigs>=0.1)",
   dv_types = NULL,
   mechanistic_covariates = NULL,
-  retries_strategy = "final",
-  seed = NULL
+  retries_strategy = "all_final",
+  seed = NULL,
+  parameter_uncertainty_method = NULL,
+  ignore_datainfo_fallback = FALSE
 )
 }
 \arguments{
@@ -39,6 +41,8 @@ run_amd(
 \item{modeltype}{(str) Type of model to build. Valid strings are 'basic_pk', 'pkpd', 'drug_metabolite' and 'tmdd'}
 
 \item{administration}{(str) Route of administration. Either 'iv', 'oral' or 'ivoral'}
+
+\item{strategy}{(str) Run algorithm for AMD procedure. Valid options are 'all', 'retries'. Default is all}
 
 \item{cl_init}{(numeric) Initial estimate for the population clearance}
 
@@ -60,8 +64,6 @@ run_amd(
 
 \item{lloq_limit}{(str (optional)) Lower limit of quantification. If NULL LLOQ column from dataset will be used}
 
-\item{order}{(array(str) (optional)) Runorder of components}
-
 \item{allometric_variable}{(str (optional)) Variable to use for allometry}
 
 \item{occasion}{(str (optional)) Name of occasion column}
@@ -81,6 +83,10 @@ from the search space for covsearch}
 Default is 'final'.}
 
 \item{seed}{(numeric (optional)) Random number generator or seed to be used.}
+
+\item{parameter_uncertainty_method}{(str (optional)) Parameter uncertainty method.}
+
+\item{ignore_datainfo_fallback}{(logical) Ignore using datainfo to get information not given by the user. Default is FALSE}
 }
 \value{
 (Model) Reference to the same model object

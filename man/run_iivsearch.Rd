@@ -7,7 +7,7 @@
 run_iivsearch(
   algorithm,
   iiv_strategy = "no_add",
-  rank_type = "bic",
+  rank_type = "mbic",
   cutoff = NULL,
   results = NULL,
   model = NULL,
@@ -17,12 +17,11 @@ run_iivsearch(
 )
 }
 \arguments{
-\item{algorithm}{(str) Which algorithm to run (brute_force, brute_force_no_of_etas, brute_force_block_structure)}
+\item{algorithm}{(str) Which algorithm to run.}
 
-\item{iiv_strategy}{(str) If/how IIV should be added to start model. Possible strategies are 'no_add', 'add_diagonal',
-or 'fullblock'. Default is 'no_add'}
+\item{iiv_strategy}{(str) If/how IIV should be added to start model. Default is 'no_add'.}
 
-\item{rank_type}{(str) Which ranking type should be used (OFV, AIC, BIC, mBIC). Default is BIC}
+\item{rank_type}{(str) Which ranking type should be used. Default is mBIC.}
 
 \item{cutoff}{(numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 is NULL (all models will be ranked)}

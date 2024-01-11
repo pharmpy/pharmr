@@ -21,3 +21,8 @@ plot_iofv_vs_iofv(iofv1, iofv2, name1, name2)
 \description{
 Plot individual OFV of two models against each other
 }
+\examples{
+\dontrun{
+}
+
+}

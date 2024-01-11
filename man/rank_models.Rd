@@ -6,7 +6,10 @@
 \usage{
 rank_models(
   base_model,
+  base_model_res,
   models,
+  models_res,
+  parent_dict = NULL,
   strictness = "minimization_successful",
   rank_type = "ofv",
   cutoff = NULL,
@@ -17,7 +20,13 @@ rank_models(
 \arguments{
 \item{base_model}{(Model) Base model to compare to}
 
+\item{base_model_res}{(ModelfitResults) Results of base model}
+
 \item{models}{(array(Model)) List of models}
+
+\item{models_res}{(array(ModelfitResults)) List of modelfit results}
+
+\item{parent_dict}{(list(str=str) or list(Model=Model) (optional)) Dict where key is child and value is parent. Only relevant for LRT, if NULL base will be set as parent}
 
 \item{strictness}{(str (optional)) Strictness criteria that are allowed for ranking. Default is "minimization_successful".}
 

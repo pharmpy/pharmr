@@ -42,7 +42,7 @@ Run estmethod tool.
 \dontrun{
 model <- load_example_model("pheno")
 results <- load_example_modelfit_results("pheno")
-methods <- c('imp', 'saem')
+methods <- c('IMP', 'SAEM')
 parameter_uncertainty_methods <- NULL
 run_estmethod(
  'reduced', methods=methods, solvers='all',

@@ -4,10 +4,12 @@
 \alias{summarize_individuals_count_table}
 \title{summarize_individuals_count_table}
 \usage{
-summarize_individuals_count_table(models = NULL, df = NULL)
+summarize_individuals_count_table(models = NULL, models_res = NULL, df = NULL)
 }
 \arguments{
 \item{models}{(array(Model) (optional)) List of models to summarize.}
+
+\item{models_res}{(array(ModelfitResults) (optional)) Input results}
 
 \item{df}{(data.frame) Output from a previous call to summarize_individuals.}
 }

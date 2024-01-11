@@ -7,7 +7,7 @@
 run_iovsearch(
   column = "OCC",
   list_of_parameters = NULL,
-  rank_type = "bic",
+  rank_type = "mbic",
   cutoff = NULL,
   distribution = "same-as-iiv",
   results = NULL,
@@ -21,7 +21,7 @@ run_iovsearch(
 
 \item{list_of_parameters}{(array(str) (optional)) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)}
 
-\item{rank_type}{(str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC}
+\item{rank_type}{(str) Which ranking type should be used. Default is mBIC.}
 
 \item{cutoff}{(numeric (optional)) Cutoff for which value of the ranking type that is considered significant. Default
 is NULL (all models will be ranked)}

@@ -17,3 +17,8 @@ plot_cwres_vs_idv(model, residuals)
 \description{
 Plot CWRES vs idv
 }
+\examples{
+\dontrun{
+}
+
+}

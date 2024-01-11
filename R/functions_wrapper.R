@@ -263,7 +263,7 @@ add_covariate_effect <- function(model, parameter, covariate, effect, operation=
 #' (equation could not be rendered, see API doc on website)
 #' 
 #' @param model (Model) Pharmpy model
-#' @param expr (str) Name of the PD effect function. Valid names are: linear, emax, sigmoid, step and loglin
+#' @param expr (str) Name of the PD effect function.
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -425,7 +425,7 @@ add_iiv <- function(model, list_of_parameters, expression, operation='*', initia
 #' 
 #' @param model (Model) Pharmpy model
 #' @param expr (str) Production (TRUE) (default) or degradation (FALSE)
-#' @param prod (logical) Name of PD effect function. Valid names are: linear, emax, sigmoid and step
+#' @param prod (logical) Name of PD effect function.
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -2432,6 +2432,29 @@ get_bioavailability <- function(model) {
 }
 
 #' @title
+#' get_central_volume_and_clearance
+#' 
+#' @description
+#' Get the volume and clearance parameters
+#' 
+#' @param model (Model) Pharmpy model
+#' 
+#'  
+#' @return (Sympy.Symbol) Volume symbol Sympy.Symbol Clearance symbol
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' get_central_volume_and_clearance(model)
+#' }
+#' 
+#' @export
+get_central_volume_and_clearance <- function(model) {
+	func_out <- pharmpy$modeling$get_central_volume_and_clearance(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' get_cmt
 #' 
 #' @description
@@ -4027,7 +4050,7 @@ omit_data <- function(dataset_or_model, group, name_pattern='omitted_{}') {
 #' plot_abs_cwres_vs_ipred
 #' 
 #' @description
-#' Plot |CWRES| vs IPRED
+#' Plot \|CWRES\| vs IPRED
 #' 
 #' @param model (Model) Pharmpy model
 #' @param predictions (data.frame) DataFrame containing the predictions
@@ -4035,6 +4058,9 @@ omit_data <- function(dataset_or_model, group, name_pattern='omitted_{}') {
 #'  
 #' @return (alt.Chart) Plot
 #' 
+#' @examples
+#' \dontrun{
+#' }
 #' 
 #' @export
 plot_abs_cwres_vs_ipred <- function(model, predictions, residuals) {
@@ -4053,6 +4079,9 @@ plot_abs_cwres_vs_ipred <- function(model, predictions, residuals) {
 #'  
 #' @return (alt.Chart) Plot
 #' 
+#' @examples
+#' \dontrun{
+#' }
 #' 
 #' @export
 plot_cwres_vs_idv <- function(model, residuals) {
@@ -4071,6 +4100,9 @@ plot_cwres_vs_idv <- function(model, residuals) {
 #'  
 #' @return (alt.Chart) Plot
 #' 
+#' @examples
+#' \dontrun{
+#' }
 #' 
 #' @export
 plot_dv_vs_ipred <- function(model, predictions) {
@@ -4089,6 +4121,9 @@ plot_dv_vs_ipred <- function(model, predictions) {
 #'  
 #' @return (alt.Chart) Plot
 #' 
+#' @examples
+#' \dontrun{
+#' }
 #' 
 #' @export
 plot_dv_vs_pred <- function(model, predictions) {
@@ -4108,6 +4143,9 @@ plot_dv_vs_pred <- function(model, predictions) {
 #'  
 #' @return (alt.Chart) Plot
 #' 
+#' @examples
+#' \dontrun{
+#' }
 #' 
 #' @export
 plot_individual_predictions <- function(model, predictions, individuals=NULL) {
@@ -4129,6 +4167,9 @@ plot_individual_predictions <- function(model, predictions, individuals=NULL) {
 #'  
 #' @return (alt.Chart) Scatterplot
 #' 
+#' @examples
+#' \dontrun{
+#' }
 #' 
 #' @export
 plot_iofv_vs_iofv <- function(iofv1, iofv2, name1, name2) {
@@ -5015,7 +5056,7 @@ set_covariates <- function(model, covariates) {
 #' (equation could not be rendered, see API doc on website)
 #' 
 #' @param model (Model) Pharmpy model
-#' @param expr (str) Name of PD effect function. Valid names are: linear, emax, sigmoid, step and loglin
+#' @param expr (str) Name of PD effect function.
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -5790,7 +5831,9 @@ set_time_varying_error_model <- function(model, cutoff, idv='TIME', dv=NULL) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param type (str) Type of TMDD model
-#' @param dv_types (list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DVs (e.g. dv_types = {'drug' : 1, 'target': 2})
+#' @param dv_types (list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DVs (e.g. dv_types = {'drug' : 1, 'target': 2}).
+#' For dv = 1 the only allowed keys are 'drug' and 'drug_tot'. If no DV for drug is specified then (free) drug
+#' will have dv = 1.
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -7064,7 +7107,10 @@ print_fit_summary <- function(model) {
 #' Ranks a vector of models with a given ranking function
 #' 
 #' @param base_model (Model) Base model to compare to
+#' @param base_model_res (ModelfitResults) Results of base model
 #' @param models (array(Model)) List of models
+#' @param models_res (array(ModelfitResults)) List of modelfit results
+#' @param parent_dict (list(str=str) or list(Model=Model) (optional)) Dict where key is child and value is parent. Only relevant for LRT, if NULL base will be set as parent
 #' @param strictness (str (optional)) Strictness criteria that are allowed for ranking. Default is "minimization_successful".
 #' @param rank_type (str) Name of ranking type. Available options are 'ofv', 'aic', 'bic', 'lrt' (OFV with LRT)
 #' @param cutoff (numeric (optional)) Value to use as cutoff. If using LRT, cutoff denotes p-value. Default is NULL
@@ -7082,11 +7128,12 @@ print_fit_summary <- function(model) {
 #' }
 #' 
 #' @export
-rank_models <- function(base_model, models, strictness='minimization_successful', rank_type='ofv', cutoff=NULL, bic_type='mixed', ...) {
+rank_models <- function(base_model, base_model_res, models, models_res, parent_dict=NULL, strictness='minimization_successful', rank_type='ofv', cutoff=NULL, bic_type='mixed', ...) {
 	tryCatch(
 	{
 		models <- convert_input(models, "list")
-		func_out <- pharmpy$tools$rank_models(base_model, models, strictness=strictness, rank_type=rank_type, cutoff=cutoff, bic_type=bic_type, ...)
+		models_res <- convert_input(models_res, "list")
+		func_out <- pharmpy$tools$rank_models(base_model, base_model_res, models, models_res, parent_dict=parent_dict, strictness=strictness, rank_type=rank_type, cutoff=cutoff, bic_type=bic_type, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -7413,6 +7460,7 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' @param results (ModelfitResults (optional)) Reults of input if input is a model
 #' @param modeltype (str) Type of model to build. Valid strings are 'basic_pk', 'pkpd', 'drug_metabolite' and 'tmdd'
 #' @param administration (str) Route of administration. Either 'iv', 'oral' or 'ivoral'
+#' @param strategy (str) Run algorithm for AMD procedure. Valid options are 'all', 'retries'. Default is all
 #' @param cl_init (numeric) Initial estimate for the population clearance
 #' @param vc_init (numeric) Initial estimate for the central compartment population volume
 #' @param mat_init (numeric) Initial estimate for the mean absorption time (not for iv models)
@@ -7423,7 +7471,6 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' @param search_space (str (optional)) MFL for search space for structural model
 #' @param lloq_method (str (optional)) Method for how to remove LOQ data. See `transform_blq` for vector of available methods
 #' @param lloq_limit (str (optional)) Lower limit of quantification. If NULL LLOQ column from dataset will be used
-#' @param order (array(str) (optional)) Runorder of components
 #' @param allometric_variable (str (optional)) Variable to use for allometry
 #' @param occasion (str (optional)) Name of occasion column
 #' @param path (str (optional)) Path to run AMD in
@@ -7435,6 +7482,8 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' @param retries_strategy (str) Weither or not to run retries tool. Valid options are 'skip', 'all_final' or 'final'.
 #' Default is 'final'.
 #' @param seed (numeric (optional)) Random number generator or seed to be used.
+#' @param parameter_uncertainty_method (str (optional)) Parameter uncertainty method.
+#' @param ignore_datainfo_fallback (logical) Ignore using datainfo to get information not given by the user. Default is FALSE
 #'  
 #' @return (Model) Reference to the same model object
 #' 
@@ -7451,13 +7500,12 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' 
 #' 
 #' @export
-run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='oral', cl_init=0.01, vc_init=1.0, mat_init=0.1, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, search_space=NULL, lloq_method=NULL, lloq_limit=NULL, order=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', dv_types=NULL, mechanistic_covariates=NULL, retries_strategy='final', seed=NULL) {
+run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='oral', strategy='all', cl_init=0.01, vc_init=1.0, mat_init=0.1, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, search_space=NULL, lloq_method=NULL, lloq_limit=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', dv_types=NULL, mechanistic_covariates=NULL, retries_strategy='all_final', seed=NULL, parameter_uncertainty_method=NULL, ignore_datainfo_fallback=FALSE) {
 	tryCatch(
 	{
-		order <- convert_input(order, "list")
 		mechanistic_covariates <- convert_input(mechanistic_covariates, "list")
 		seed <- convert_input(seed, "int")
-		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, administration=administration, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, search_space=search_space, lloq_method=lloq_method, lloq_limit=lloq_limit, order=order, allometric_variable=allometric_variable, occasion=occasion, path=path, resume=resume, strictness=strictness, dv_types=dv_types, mechanistic_covariates=mechanistic_covariates, retries_strategy=retries_strategy, seed=seed)
+		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, administration=administration, strategy=strategy, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, search_space=search_space, lloq_method=lloq_method, lloq_limit=lloq_limit, allometric_variable=allometric_variable, occasion=occasion, path=path, resume=resume, strictness=strictness, dv_types=dv_types, mechanistic_covariates=mechanistic_covariates, retries_strategy=retries_strategy, seed=seed, parameter_uncertainty_method=parameter_uncertainty_method, ignore_datainfo_fallback=ignore_datainfo_fallback)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -7614,7 +7662,7 @@ run_covsearch <- function(effects, p_forward=0.01, p_backward=0.001, max_steps=-
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' results <- load_example_modelfit_results("pheno")
-#' methods <- c('imp', 'saem')
+#' methods <- c('IMP', 'SAEM')
 #' parameter_uncertainty_methods <- NULL
 #' run_estmethod(
 #'  'reduced', methods=methods, solvers='all',
@@ -7626,9 +7674,6 @@ run_covsearch <- function(effects, p_forward=0.01, p_backward=0.001, max_steps=-
 run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncertainty_methods=NULL, results=NULL, model=NULL, ...) {
 	tryCatch(
 	{
-		methods <- convert_input(methods, "list")
-		solvers <- convert_input(solvers, "list")
-		parameter_uncertainty_methods <- convert_input(parameter_uncertainty_methods, "list")
 		func_out <- pharmpy$tools$run_estmethod(algorithm, methods=methods, solvers=solvers, parameter_uncertainty_methods=parameter_uncertainty_methods, results=results, model=model, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
@@ -7660,10 +7705,9 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 #' @description
 #' Run IIVsearch tool. For more details, see :ref:`iivsearch`.
 #' 
-#' @param algorithm (str) Which algorithm to run (brute_force, brute_force_no_of_etas, brute_force_block_structure)
-#' @param iiv_strategy (str) If/how IIV should be added to start model. Possible strategies are 'no_add', 'add_diagonal',
-#' or 'fullblock'. Default is 'no_add'
-#' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC, mBIC). Default is BIC
+#' @param algorithm (str) Which algorithm to run.
+#' @param iiv_strategy (str) If/how IIV should be added to start model. Default is 'no_add'.
+#' @param rank_type (str) Which ranking type should be used. Default is mBIC.
 #' @param cutoff (numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 #' is NULL (all models will be ranked)
 #' @param results (ModelfitResults (optional)) Results for model
@@ -7682,7 +7726,7 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 #' }
 #' 
 #' @export
-run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cutoff=NULL, results=NULL, model=NULL, keep=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', ...) {
+run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='mbic', cutoff=NULL, results=NULL, model=NULL, keep=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', ...) {
 	tryCatch(
 	{
 		keep <- convert_input(keep, "list")
@@ -7719,7 +7763,7 @@ run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cut
 #' 
 #' @param column (str) Name of column in dataset to use as occasion column (default is 'OCC')
 #' @param list_of_parameters (array(str) (optional)) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)
-#' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC). Default is BIC
+#' @param rank_type (str) Which ranking type should be used. Default is mBIC.
 #' @param cutoff (numeric (optional)) Cutoff for which value of the ranking type that is considered significant. Default
 #' is NULL (all models will be ranked)
 #' @param distribution (str) Which distribution added IOVs should have (default is same-as-iiv)
@@ -7738,7 +7782,7 @@ run_iivsearch <- function(algorithm, iiv_strategy='no_add', rank_type='bic', cut
 #' }
 #' 
 #' @export
-run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='bic', cutoff=NULL, distribution='same-as-iiv', results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', ...) {
+run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='mbic', cutoff=NULL, distribution='same-as-iiv', results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', ...) {
 	tryCatch(
 	{
 		list_of_parameters <- convert_input(list_of_parameters, "list")
@@ -7775,7 +7819,7 @@ run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='bic'
 #' 
 #' @param model_or_models (Model or array(Model) (optional)) A vector of models are one single model object
 #' @param n (numeric (optional)) Number of models to fit. This is only used if the tool is going to be combined with other tools.
-#' @param tool (str (optional)) Which tool to use for fitting. Currently, 'nonmem' or 'nlmixr' can be used
+#' @param tool (str (optional)) Which tool to use for fitting. Currently, 'nonmem', 'nlmixr', 'rxode' can be used
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (ModelfitResults) Modelfit tool result object
@@ -7823,10 +7867,9 @@ run_modelfit <- function(model_or_models=NULL, n=NULL, tool=NULL, ...) {
 #' Run Modelsearch tool. For more details, see :ref:`modelsearch`.
 #' 
 #' @param search_space (str or ModelFeatures) Search space to test. Either as a string or a ModelFeatures object.
-#' @param algorithm (str) Algorithm to use (e.g. exhaustive)
-#' @param iiv_strategy (str) If/how IIV should be added to candidate models. Possible strategies are 'no_add',
-#' 'add_diagonal', 'fullblock', or 'absorption_delay'. Default is 'absorption_delay'
-#' @param rank_type (str) Which ranking type should be used (OFV, AIC, BIC, mBIC). Default is BIC
+#' @param algorithm (str) Algorithm to use.
+#' @param iiv_strategy (str) If/how IIV should be added to candidate models. Default is 'absorption_delay'.
+#' @param rank_type (str) Which ranking type should be used. Default is mBIC.
 #' @param cutoff (numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 #' is NULL (all models will be ranked)
 #' @param results (ModelfitResults (optional)) Results for model
@@ -7844,7 +7887,7 @@ run_modelfit <- function(model_or_models=NULL, n=NULL, tool=NULL, ...) {
 #' }
 #' 
 #' @export
-run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_delay', rank_type='bic', cutoff=NULL, results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs >= 0.1)', ...) {
+run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_delay', rank_type='mbic', cutoff=NULL, results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs >= 0.1)', ...) {
 	tryCatch(
 	{
 		func_out <- pharmpy$tools$run_modelsearch(search_space, algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, cutoff=cutoff, results=results, model=model, strictness=strictness, ...)
@@ -7882,6 +7925,7 @@ run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_de
 #' @param results (ModelfitResults (optional)) Connected ModelfitResults object. The default is NULL.
 #' @param number_of_candidates (numeric) Number of retry candidates to run. The default is 5.
 #' @param fraction (numeric) Determines allowed increase/decrease from initial parameter estimate. Default is 0.1 (10%)
+#' @param use_initial_estimates (logical) Use initial parameter estimates instead of final estimates of input model when creating candidate models.
 #' @param strictness (str (optional)) Strictness criteria. The default is "minimization_successful or (rounding_errors and sigdigs >= 0.1)".
 #' @param scale (str (optional)) Which scale to update the initial values on. Either normal scale or UCP scale.
 #' @param prefix_name (str (optional)) Prefix the candidate model names with given string.
@@ -7892,12 +7936,12 @@ run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_de
 #' 
 #' 
 #' @export
-run_retries <- function(model=NULL, results=NULL, number_of_candidates=5, fraction=0.1, strictness='minimization_successful or (rounding_errors and sigdigs >= 0.1)', scale='UCP', prefix_name='', seed=NULL, ...) {
+run_retries <- function(model=NULL, results=NULL, number_of_candidates=5, fraction=0.1, use_initial_estimates=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs >= 0.1)', scale='UCP', prefix_name='', seed=NULL, ...) {
 	tryCatch(
 	{
 		number_of_candidates <- convert_input(number_of_candidates, "int")
 		seed <- convert_input(seed, "int")
-		func_out <- pharmpy$tools$run_retries(model=model, results=results, number_of_candidates=number_of_candidates, fraction=fraction, strictness=strictness, scale=scale, prefix_name=prefix_name, seed=seed, ...)
+		func_out <- pharmpy$tools$run_retries(model=model, results=results, number_of_candidates=number_of_candidates, fraction=fraction, use_initial_estimates=use_initial_estimates, strictness=strictness, scale=scale, prefix_name=prefix_name, seed=seed, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -8156,6 +8200,7 @@ summarize_errors <- function(results) {
 #' +-------------------------+----------------------------------------------------------------------+
 #' 
 #' @param models (array(Model)) Input models
+#' @param models_res (array(ModelfitResults)) Input results
 #'  
 #' @return (data.frame | NULL) The summary as a dataframe
 #' 
@@ -8171,11 +8216,12 @@ summarize_errors <- function(results) {
 #' }
 #' 
 #' @export
-summarize_individuals <- function(models) {
+summarize_individuals <- function(models, models_res) {
 	tryCatch(
 	{
 		models <- convert_input(models, "list")
-		func_out <- pharmpy$tools$summarize_individuals(models)
+		models_res <- convert_input(models_res, "list")
+		func_out <- pharmpy$tools$summarize_individuals(models, models_res)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -8226,6 +8272,7 @@ summarize_individuals <- function(models) {
 #' +-------------------------+------------------------------------------------------------------------------------------------+
 #' 
 #' @param models (array(Model) (optional)) List of models to summarize.
+#' @param models_res (array(ModelfitResults) (optional)) Input results
 #' @param df (data.frame) Output from a previous call to summarize_individuals.
 #'  
 #' @return (data.frame) Table with one row per model.
@@ -8235,11 +8282,12 @@ summarize_individuals <- function(models) {
 #' 
 #' 
 #' @export
-summarize_individuals_count_table <- function(models=NULL, df=NULL) {
+summarize_individuals_count_table <- function(models=NULL, models_res=NULL, df=NULL) {
 	tryCatch(
 	{
 		models <- convert_input(models, "list")
-		func_out <- pharmpy$tools$summarize_individuals_count_table(models=models, df=df)
+		models_res <- convert_input(models_res, "list")
+		func_out <- pharmpy$tools$summarize_individuals_count_table(models=models, models_res=models_res, df=df)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}

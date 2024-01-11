@@ -19,3 +19,8 @@ plot_individual_predictions(model, predictions, individuals = NULL)
 \description{
 Plot DV and predictions grouped on individuals
 }
+\examples{
+\dontrun{
+}
+
+}

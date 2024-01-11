@@ -11,7 +11,7 @@ run_modelfit(model_or_models = NULL, n = NULL, tool = NULL, ...)
 
 \item{n}{(numeric (optional)) Number of models to fit. This is only used if the tool is going to be combined with other tools.}
 
-\item{tool}{(str (optional)) Which tool to use for fitting. Currently, 'nonmem' or 'nlmixr' can be used}
+\item{tool}{(str (optional)) Which tool to use for fitting. Currently, 'nonmem', 'nlmixr', 'rxode' can be used}
 
 \item{...}{Arguments to pass to tool}
 }

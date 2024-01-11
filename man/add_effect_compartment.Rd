@@ -9,7 +9,7 @@ add_effect_compartment(model, expr)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{expr}{(str) Name of the PD effect function. Valid names are: linear, emax, sigmoid, step and loglin}
+\item{expr}{(str) Name of the PD effect function.}
 }
 \value{
 (Model) Pharmpy model object

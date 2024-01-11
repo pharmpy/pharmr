@@ -11,7 +11,9 @@ set_tmdd(model, type, dv_types = NULL)
 
 \item{type}{(str) Type of TMDD model}
 
-\item{dv_types}{(list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DVs (e.g. dv_types = {'drug' : 1, 'target': 2})}
+\item{dv_types}{(list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DVs (e.g. dv_types = {'drug' : 1, 'target': 2}).
+For dv = 1 the only allowed keys are 'drug' and 'drug_tot'. If no DV for drug is specified then (free) drug
+will have dv = 1.}
 }
 \value{
 (Model) Pharmpy model object

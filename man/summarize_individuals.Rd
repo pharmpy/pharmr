@@ -4,10 +4,12 @@
 \alias{summarize_individuals}
 \title{summarize_individuals}
 \usage{
-summarize_individuals(models)
+summarize_individuals(models, models_res)
 }
 \arguments{
 \item{models}{(array(Model)) Input models}
+
+\item{models_res}{(array(ModelfitResults)) Input results}
 }
 \value{
 (data.frame | NULL) The summary as a dataframe

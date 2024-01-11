@@ -17,3 +17,8 @@ plot_dv_vs_ipred(model, predictions)
 \description{
 Plot DV vs IPRED
 }
+\examples{
+\dontrun{
+}
+
+}
