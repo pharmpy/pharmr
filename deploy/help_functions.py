@@ -2,6 +2,7 @@ import pandas as pd
 import re
 from pathlib import Path
 from typing import Any
+import symengine
 
 from pharmpy.deps import sympy
 from pharmpy.deps import numpy as np
@@ -23,6 +24,7 @@ TYPE_DICT = {
 SKIP = [
     sympy.Expr,
     sympy.Symbol,
+    symengine.Basic,
     sympy.Eq,
     np.random.Generator,
     Path,
