@@ -64,7 +64,10 @@ def _create_r_params(doc_list, func):
         raise ValueError(f'Unexpected number of unbound parameters: {func.__name__}')
 
     if len(type_hints) == len(params) - len(params_unbound):
-        type_dict = _convert_types_from_typehints(type_hints)
+        try:
+            type_dict = _convert_types_from_typehints(type_hints)
+        except ValueError as e:
+            raise ValueError(f'{func.__name__}: {e}')
         if params_unbound:
             for param in params_unbound:
                 type_dict[param.name] = None
@@ -91,7 +94,7 @@ def _convert_types_from_typehints(type_hints):
     for var_name, var_type in type_hints.items():
         try:
             r_type = _translate_type_hints(var_type)
-        except NotImplementedError:
+        except ValueError:
             raise
         if r_type == '':
             warnings.warn('Could not translate')
@@ -132,7 +135,7 @@ def _translate_type_hints(var_type):
         elif origin is Literal:
             return 'str'
         else:
-            raise NotImplementedError(f'Could not translate origin: {origin}')
+            raise ValueError(f'Could not translate origin: {origin}')
 
 
 def _get_desc(var_names, docstring):
