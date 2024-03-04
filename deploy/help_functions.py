@@ -69,6 +69,7 @@ def py_to_r_str(arg, example=False):
 
     if not example:
         py_to_r_dict = {**py_to_r_dict, **{r'\[([0-9]+)\]_*': r'(\1)'}}
+        py_to_r_dict = {**py_to_r_dict, **{r'\[([\'\"\w(),\s]+)]': r'c(\1)'}}
 
     arg_sub = arg
     for key, value in py_to_r_dict.items():
