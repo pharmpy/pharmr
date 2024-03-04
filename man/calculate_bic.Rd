@@ -22,7 +22,7 @@ calculate_bic(
 
 \item{multiple_testing}{(logical) Whether to use penalty for multiple testing (default is FALSE)}
 
-\item{mult_test_p}{(numeric) Number of expected models if using type \code{mult_test}}
+\item{mult_test_p}{(numeric) Number of expected models if using type \code{multiple_testing}}
 
 \item{mult_test_e}{(numeric) E value if using type \code{mult_test}}
 }
@@ -40,9 +40,9 @@ Different variations of the BIC can be calculated:
 \item | fixed
 | BIC = -2LL + n_estimated_parameters * log(n_observations)
 \item | random
-| BIC = -2LL + n_estimated_parameters * log(n_individals)
+| BIC = -2LL + n_estimated_parameters * log(n_individuals)
 \item | iiv
-| BIC = -2LL + n_estimated_iiv_omega_parameters * log(n_individals)
+| BIC = -2LL + n_estimated_iiv_omega_parameters * log(n_individuals)
 }
 
 If multiple_testing option is set to true an additional penalty will be added:

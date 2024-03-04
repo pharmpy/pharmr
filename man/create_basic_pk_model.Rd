@@ -27,7 +27,9 @@ create_basic_pk_model(
 (Model) Pharmpy model object
 }
 \description{
-Creates a basic pk model of given type
+Creates a basic pk model of given type. The model will be a one compartment model, with first
+order elimination and in the case of oral administration first order absorption with no absorption
+delay. The elimination rate will be (equation could not be rendered, see API doc on website)
 }
 \examples{
 \dontrun{

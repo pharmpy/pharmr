@@ -18,11 +18,11 @@ add_allometry(
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{allometric_variable}{(str (optional)) Value to use for allometry (X above)}
+\item{allometric_variable}{(str or Expr (optional)) Value to use for allometry (X above)}
 
-\item{reference_value}{(str or numeric) Reference value (Z above)}
+\item{reference_value}{(numeric or str or Expr) Reference value (Z above)}
 
-\item{parameters}{(array(str) (optional)) Parameters to use or NULL (default) for all available CL, Q and V parameters}
+\item{parameters}{(array(numeric or str or Expr) (optional)) Parameters to use or NULL (default) for all available CL, Q and V parameters}
 
 \item{initials}{(array(numeric) (optional)) Initial estimates for the exponents. Default is to use 0.75 for CL and Qs and 1 for Vs}
 

@@ -21,7 +21,7 @@ This function currently only support models without ODE systems
 \dontrun{
 model <- load_example_model("pheno_linear")
 expr <- get_observation_expression(model)
-sympy$pprint(expr)
+print(expr$unicode())
 }
 
 }

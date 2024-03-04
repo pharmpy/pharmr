@@ -9,7 +9,7 @@ get_dv_symbol(model, dv = NULL)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{dv}{(str or numeric (optional)) Either a dv symbol, str or dvid. If NULL (default) return the
+\item{dv}{(Expr or str or numeric (optional)) Either a dv symbol, str or dvid. If NULL (default) return the
 only or first dv.}
 }
 \value{

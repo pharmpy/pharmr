@@ -19,12 +19,12 @@ set_power_on_ruv(
 \item{list_of_eps}{(str or array (optional)) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
 NULL is default.}
 
-\item{dv}{(str or numeric (optional)) Name or DVID of dependent variable. NULL will change the epsilon on all occurences
+\item{dv}{(str or Expr or numeric (optional)) Name or DVID of dependent variable. NULL will change the epsilon on all occurences
 regardless of affected dependent variable.}
 
 \item{lower_limit}{(numeric (optional)) Lower limit of power (theta). NULL for no limit.}
 
-\item{ipred}{(str (optional)) Symbol to use as IPRED. Default is to autodetect expression for IPRED.}
+\item{ipred}{(str or Expr (optional)) Symbol to use as IPRED. Default is to autodetect expression for IPRED.}
 
 \item{zero_protection}{(logical) Set to TRUE to add code protecting from IPRED=0}
 }

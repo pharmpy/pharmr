@@ -9,7 +9,7 @@ simplify_expression(model, expr)
 \arguments{
 \item{model}{(Model) Pharmpy model object}
 
-\item{expr}{(numeric or str) Expression to simplify}
+\item{expr}{(str or numeric or Expr) Expression to simplify}
 }
 \value{
 (Expression) Simplified expression

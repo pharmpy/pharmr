@@ -9,7 +9,7 @@ is_real(model, expr)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{expr}{(str) Expression to test}
+\item{expr}{(numeric or str or Expr) Expression to test}
 }
 \value{
 (logical or NULL) TRUE if expression is real, FALSE if not and NULL if unknown

@@ -10,7 +10,7 @@ get_pd_parameters(model)
 \item{model}{(Model) Pharmpy model to retrieve the PD parameters from}
 }
 \value{
-(vector\link{str}) A vector of the PD parameter names of the given model
+(vectorc(str)) A vector of the PD parameter names of the given model
 }
 \description{
 Retrieves PD parameters in :class:\code{pharmpy.model.Model}.

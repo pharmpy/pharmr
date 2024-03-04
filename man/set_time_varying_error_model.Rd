@@ -13,7 +13,7 @@ set_time_varying_error_model(model, cutoff, idv = "TIME", dv = NULL)
 
 \item{idv}{(str) Time or time after dose, default is Time}
 
-\item{dv}{(str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)}
+\item{dv}{(str or Expr or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)}
 }
 \value{
 (Model) Pharmpy model object

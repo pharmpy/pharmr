@@ -14,7 +14,7 @@ get_parameter_rv(model, parameter, var_type = "iiv")
 \item{var_type}{(str) Variability type: iiv (default) or iov}
 }
 \value{
-(vector\link{str}) A vector of random variable names for the given parameter
+(vectorc(str)) A vector of random variable names for the given parameter
 }
 \description{
 Retrieves name of random variable in :class:\code{pharmpy.model.Model} given a parameter.

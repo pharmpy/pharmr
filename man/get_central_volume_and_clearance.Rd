@@ -10,7 +10,7 @@ get_central_volume_and_clearance(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Sympy.Symbol) Volume symbol Sympy.Symbol Clearance symbol
+(sympy.Symbol) Volume symbol sympy.Symbol Clearance symbol
 }
 \description{
 Get the volume and clearance parameters

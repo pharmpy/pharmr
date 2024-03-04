@@ -5,7 +5,7 @@
 \title{run_covsearch}
 \usage{
 run_covsearch(
-  effects,
+  search_space,
   p_forward = 0.01,
   p_backward = 0.001,
   max_steps = -1,
@@ -18,7 +18,7 @@ run_covsearch(
 )
 }
 \arguments{
-\item{effects}{(str or array(array(str or array(str)))) MFL of covariate effects to try}
+\item{search_space}{(str or ModelFeatures) MFL of covariate effects to try}
 
 \item{p_forward}{(numeric) The p-value to use in the likelihood ratio test for forward steps}
 
@@ -49,8 +49,8 @@ Run COVsearch tool. For more details, see :ref:\code{covsearch}.
 \dontrun{
 model <- load_example_model("pheno")
 results <- load_example_modelfit_results("pheno")
-effects <- 'COVARIATE(c(CL, V), c(AGE, WT), EXP)'
-res <- run_covsearch(effects, model=model, results=results)
+search_space <- 'COVARIATE(c(CL, V), c(AGE, WT), EXP)'
+res <- run_covsearch(search_space, model=model, results=results)
 }
 
 }

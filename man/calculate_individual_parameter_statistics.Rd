@@ -15,11 +15,11 @@ calculate_individual_parameter_statistics(
 \arguments{
 \item{model}{(Model) A previously estimated model}
 
-\item{expr_or_exprs}{(array(str) or str) Parameter estimates}
+\item{expr_or_exprs}{(array(BooleanExpr) or array(Expr) or array(str) or BooleanExpr or Expr or str) Parameter estimates}
 
 \item{parameter_estimates}{(array) Parameter uncertainty covariance matrix}
 
-\item{covariance_matrix}{(data.frame (optional)) sympy expression or iterable of str or sympy expressions
+\item{covariance_matrix}{(data.frame (optional)) expression or iterable of str or expressions
 Expressions or equations for parameters of interest. If equations are used
 the names of the left hand sides will be used as the names of the parameters.}
 

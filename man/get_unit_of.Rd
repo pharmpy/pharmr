@@ -12,7 +12,7 @@ get_unit_of(model, variable)
 \item{variable}{(str) Find physical unit of this variable}
 }
 \value{
-(unit expression) A sympy physics.units expression
+(Unit) A unit expression
 }
 \description{
 Derive the physical unit of a variable in the model

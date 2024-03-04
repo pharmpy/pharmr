@@ -11,10 +11,10 @@ get_individual_parameters(model, level = "all", dv = NULL)
 
 \item{level}{(str) The variability level to look for: 'iiv', 'iov', 'random' or 'all' (default)}
 
-\item{dv}{(str or numeric (optional)) Name or DVID of dependent variable. NULL for all (default)}
+\item{dv}{(str or Expr or numeric (optional)) Name or DVID of dependent variable. NULL for all (default)}
 }
 \value{
-(vector\link{str}) A vector of the parameter names as strings
+(vectorc(str)) A vector of the parameter names as strings
 }
 \description{
 Retrieves all individual parameters in a :class:\code{pharmpy.model}.

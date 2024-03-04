@@ -12,7 +12,7 @@ get_rv_parameters(model, rv)
 \item{rv}{(str) Name of random variable to retrieve}
 }
 \value{
-(vector\link{str}) A vector of parameter names for the given random variable
+(vectorc(str)) A vector of parameter names for the given random variable
 }
 \description{
 Retrieves parameters in :class:\code{pharmpy.model.Model} given a random variable.

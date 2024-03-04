@@ -15,7 +15,7 @@ set_iiv_on_ruv(
 \arguments{
 \item{model}{(Model) Pharmpy model to apply IIV on epsilons.}
 
-\item{dv}{(str or numeric (optional)) Name/names of epsilons to multiply with exponential etas. If NULL, all epsilons will
+\item{dv}{(str or Expr or numeric (optional)) Name/names of epsilons to multiply with exponential etas. If NULL, all epsilons will
 be chosen. NULL is default.}
 
 \item{list_of_eps}{(array(str) or str (optional)) Boolean of whether all RUVs from input should use the same new ETA or if one ETA

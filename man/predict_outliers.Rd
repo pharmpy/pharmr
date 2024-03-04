@@ -24,7 +24,7 @@ See the :ref:\verb{simeval <Individual OFV summary>} documentation for a definit
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-results <- model$modelfit_results
+results <- load_example_modelfit_results("pheno")
 predict_outliers(model, results)
 }
 }

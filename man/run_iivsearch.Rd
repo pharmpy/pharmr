@@ -5,7 +5,7 @@
 \title{run_iivsearch}
 \usage{
 run_iivsearch(
-  algorithm,
+  algorithm = "top_down_exhaustive",
   iiv_strategy = "no_add",
   rank_type = "mbic",
   cutoff = NULL,
@@ -13,6 +13,7 @@ run_iivsearch(
   model = NULL,
   keep = NULL,
   strictness = "minimization_successful or (rounding_errors and sigdigs>=0.1)",
+  correlation_algorithm = NULL,
   ...
 )
 }
@@ -32,7 +33,10 @@ is NULL (all models will be ranked)}
 
 \item{keep}{(array(str) (optional)) List of IIVs to keep}
 
-\item{strictness}{(str (optional)) Strictness criteri}
+\item{strictness}{(str (optional)) Strictness criteria}
+
+\item{correlation_algorithm}{(str (optional)) Which algorithm to run for the determining block structure of added IIVs. If NULL, the
+algorithm is determined based on the 'algorithm' argumen}
 
 \item{...}{Arguments to pass to tool}
 }
@@ -46,7 +50,7 @@ Run IIVsearch tool. For more details, see :ref:\code{iivsearch}.
 \dontrun{
 model <- load_example_model("pheno")
 results <- load_example_modelfit_results("pheno")
-run_iivsearch('brute_force', results=results, model=model)
+run_iivsearch('td_brute_force', results=results, model=model)
 }
 
 }

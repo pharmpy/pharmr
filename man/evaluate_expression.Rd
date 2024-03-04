@@ -9,7 +9,7 @@ evaluate_expression(model, expression, parameter_estimates = NULL)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{expression}{(str) Expression to evaluate}
+\item{expression}{(str or numeric or Expr) Expression to evaluate}
 
 \item{parameter_estimates}{(list(str=numeric) (optional)) Parameter estimates to use instead of initial estimates}
 }

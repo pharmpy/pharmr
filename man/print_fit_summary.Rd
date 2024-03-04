@@ -4,10 +4,12 @@
 \alias{print_fit_summary}
 \title{print_fit_summary}
 \usage{
-print_fit_summary(model)
+print_fit_summary(model, modelfit_results)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model object}
+
+\item{modelfit_results}{(ModelfitResults) Pharmpy ModelfitResults object}
 }
 \description{
 Print a summary of the model fit

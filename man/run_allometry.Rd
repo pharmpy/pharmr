@@ -22,11 +22,11 @@ run_allometry(
 
 \item{results}{(ModelfitResults (optional)) Results for model}
 
-\item{allometric_variable}{(str) Name of the variable to use for allometric scaling (default is WT)}
+\item{allometric_variable}{(str or Expr) Name of the variable to use for allometric scaling (default is WT)}
 
-\item{reference_value}{(str or numeric) Reference value for the allometric variable (default is 70)}
+\item{reference_value}{(str or numeric or Expr) Reference value for the allometric variable (default is 70)}
 
-\item{parameters}{(array(str) (optional)) Parameters to apply scaling to (default is all CL, Q and V parameters)}
+\item{parameters}{(array(str or Expr) (optional)) Parameters to apply scaling to (default is all CL, Q and V parameters)}
 
 \item{initials}{(array(numeric) (optional)) Initial estimates for the exponents. (default is to use 0.75 for CL and Qs and 1 for Vs)}
 

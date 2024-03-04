@@ -9,7 +9,7 @@ set_lloq_data(model, value, lloq = NULL, blq = NULL)
 \arguments{
 \item{model}{(Model) Pharmpy model object}
 
-\item{value}{(str or numeric) The new dv value}
+\item{value}{(str or numeric or Expr) The new dv value}
 
 \item{lloq}{(numeric or str (optional)) Value or column name for lower limit of quantification.}
 

@@ -9,7 +9,7 @@ run_amd(
   results = NULL,
   modeltype = "basic_pk",
   administration = "oral",
-  strategy = "all",
+  strategy = "default",
   cl_init = 0.01,
   vc_init = 1,
   mat_init = 0.1,
@@ -42,7 +42,7 @@ run_amd(
 
 \item{administration}{(str) Route of administration. Either 'iv', 'oral' or 'ivoral'}
 
-\item{strategy}{(str) Run algorithm for AMD procedure. Valid options are 'all', 'retries'. Default is all}
+\item{strategy}{(str) Run algorithm for AMD procedure. Valid options are 'default', 'reevaluation'. Default is 'default'}
 
 \item{cl_init}{(numeric) Initial estimate for the population clearance}
 
@@ -64,7 +64,7 @@ run_amd(
 
 \item{lloq_limit}{(str (optional)) Lower limit of quantification. If NULL LLOQ column from dataset will be used}
 
-\item{allometric_variable}{(str (optional)) Variable to use for allometry}
+\item{allometric_variable}{(str or Expr (optional)) Variable to use for allometry}
 
 \item{occasion}{(str (optional)) Name of occasion column}
 
@@ -76,10 +76,11 @@ run_amd(
 
 \item{dv_types}{(list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DVs.}
 
-\item{mechanistic_covariates}{(array(str) (optional)) List of covariates to run in a separate proioritized covsearch run. The effects are extracted
-from the search space for covsearch}
+\item{mechanistic_covariates}{(array(str or list(str)) (optional)) List of covariates or tuple of covariate and parameter combination to run in a
+separate proioritized covsearch run. For instance c("WT", ("CRCL", "CL")).
+The effects are extracted from the search space for covsearch.}
 
-\item{retries_strategy}{(str) Weither or not to run retries tool. Valid options are 'skip', 'all_final' or 'final'.
+\item{retries_strategy}{(str) Whether or not to run retries tool. Valid options are 'skip', 'all_final' or 'final'.
 Default is 'final'.}
 
 \item{seed}{(numeric (optional)) Random number generator or seed to be used.}
@@ -93,8 +94,6 @@ Default is 'final'.}
 }
 \description{
 Run Automatic Model Development (AMD) tool
-
-Runs structural modelsearch, IIV building, and ruvsearch
 }
 \examples{
 \dontrun{

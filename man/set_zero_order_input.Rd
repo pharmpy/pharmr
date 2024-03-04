@@ -11,7 +11,7 @@ set_zero_order_input(model, compartment, expression)
 
 \item{compartment}{(str) Name of the compartment}
 
-\item{expression}{(str or numeric) The expression of the zero order input}
+\item{expression}{(numeric or str or Expr) The expression of the zero order input}
 }
 \value{
 (model) Pharmpy model object
