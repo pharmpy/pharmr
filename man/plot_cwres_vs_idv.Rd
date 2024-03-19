@@ -4,12 +4,16 @@
 \alias{plot_cwres_vs_idv}
 \title{plot_cwres_vs_idv}
 \usage{
-plot_cwres_vs_idv(model, residuals)
+plot_cwres_vs_idv(model, residuals, stratify_on = NULL, bins = 8)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{residuals}{(data.frame) DataFrame containing CWRES}
+
+\item{stratify_on}{(str) Name of parameter for stratification}
+
+\item{bins}{(numeric) Number of bins for stratification}
 }
 \value{
 (alt.Chart) Plot

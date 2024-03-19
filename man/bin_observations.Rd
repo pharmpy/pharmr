@@ -11,10 +11,10 @@ bin_observations(model, method, nbins)
 
 \item{method}{(str) Name of the binning method to use}
 
-\item{nbins}{(numeric) The number of binns wanted}
+\item{nbins}{(numeric) The number of bins wanted}
 }
 \value{
-(data.frame) A series of bin ids indexed on the original record index of the dataset
+(data.frame) A series of bin ids indexed on the original record index of the dataset vector A vector of bin edges
 }
 \description{
 Bin all observations on the independent variable
@@ -32,7 +32,9 @@ Available binning methods:
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-bin_observations(model, method="equal_width", nbins=10)
+bins, boundaries <- bin_observations(model, method="equal_width", nbins=10)
+bins
+boundaries
 }
 
 }

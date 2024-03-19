@@ -4,7 +4,13 @@
 \alias{plot_abs_cwres_vs_ipred}
 \title{plot_abs_cwres_vs_ipred}
 \usage{
-plot_abs_cwres_vs_ipred(model, predictions, residuals)
+plot_abs_cwres_vs_ipred(
+  model,
+  predictions,
+  residuals,
+  stratify_on = NULL,
+  bins = 8
+)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
@@ -12,6 +18,10 @@ plot_abs_cwres_vs_ipred(model, predictions, residuals)
 \item{predictions}{(data.frame) DataFrame containing the predictions}
 
 \item{residuals}{(data.frame) DataFrame containing the residuals}
+
+\item{stratify_on}{(str) Name of parameter for stratification}
+
+\item{bins}{(numeric) Number of bins for stratification}
 }
 \value{
 (alt.Chart) Plot

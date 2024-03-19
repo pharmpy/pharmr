@@ -25,13 +25,13 @@ run_structsearch(
 
 \item{search_space}{(str (optional)) Search space to test}
 
-\item{b_init}{(numeric (optional)) Initial estimate for the baseline for pkpd models. The default value is 0.1}
+\item{b_init}{(numeric (optional)) Initial estimate for the baseline for pkpd models.}
 
-\item{emax_init}{(numeric (optional)) Initial estimate for E_MAX (for pkpd models only). The default value is 0.1}
+\item{emax_init}{(numeric (optional)) Initial estimate for E_MAX (for pkpd models only).}
 
-\item{ec50_init}{(numeric (optional)) Initial estimate for EC_50 (for pkpd models only). The default value is 0.1}
+\item{ec50_init}{(numeric (optional)) Initial estimate for EC_50 (for pkpd models only).}
 
-\item{met_init}{(numeric (optional)) Initial estimate for MET (for pkpd models only). The default value is 0.1}
+\item{met_init}{(numeric (optional)) Initial estimate for MET (for pkpd models only).}
 
 \item{results}{(ModelfitResults (optional)) Results for the start model}
 

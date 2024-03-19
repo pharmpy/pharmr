@@ -20,7 +20,7 @@ Set initial estimates
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-model <- set_initial_estimates(model, list('PTVCL'=2))
+model <- set_initial_estimates(model, {'PTVCL': 2.0})
 model$parameters['PTVCL']
 }
 }

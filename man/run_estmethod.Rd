@@ -9,6 +9,7 @@ run_estmethod(
   methods = NULL,
   solvers = NULL,
   parameter_uncertainty_methods = NULL,
+  compare_ofv = TRUE,
   results = NULL,
   model = NULL,
   ...
@@ -25,6 +26,8 @@ not test any solver)}
 
 \item{parameter_uncertainty_methods}{(array(str) or str (optional)) List of parameter uncertainty methods to test.
 Can be specified as 'all', a vector of uncertainty methods, or NULL (to not evaluate any uncertainty)}
+
+\item{compare_ofv}{(logical) Whether to compare the OFV between candidates. Comparison is made by evaluating using IMP}
 
 \item{results}{(ModelfitResults (optional)) Results for model}
 

@@ -10,9 +10,9 @@ run_amd(
   modeltype = "basic_pk",
   administration = "oral",
   strategy = "default",
-  cl_init = 0.01,
-  vc_init = 1,
-  mat_init = 0.1,
+  cl_init = NULL,
+  vc_init = NULL,
+  mat_init = NULL,
   b_init = NULL,
   emax_init = NULL,
   ec50_init = NULL,
@@ -44,11 +44,11 @@ run_amd(
 
 \item{strategy}{(str) Run algorithm for AMD procedure. Valid options are 'default', 'reevaluation'. Default is 'default'}
 
-\item{cl_init}{(numeric) Initial estimate for the population clearance}
+\item{cl_init}{(numeric (optional)) Initial estimate for the population clearance}
 
-\item{vc_init}{(numeric) Initial estimate for the central compartment population volume}
+\item{vc_init}{(numeric (optional)) Initial estimate for the central compartment population volume}
 
-\item{mat_init}{(numeric) Initial estimate for the mean absorption time (not for iv models)}
+\item{mat_init}{(numeric (optional)) Initial estimate for the mean absorption time (not for iv models)}
 
 \item{b_init}{(numeric (optional)) Initial estimate for the baseline (PKPD model)}
 

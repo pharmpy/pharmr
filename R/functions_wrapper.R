@@ -759,6 +759,96 @@ add_population_parameter <- function(model, name, init, lower=NULL, upper=NULL, 
 }
 
 #' @title
+#' add_predictions
+#' 
+#' @description
+#' Add predictions and/or residuals
+#' 
+#' Add predictions to estimation step.
+#' 
+#' @param model (Model) Pharmpy model
+#' @param pred (array(str)) List of predictions (e.g. c('IPRED', 'PRED'))
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model$estimation_steps[-1].predictions
+#' model <- add_predictions(model, c('CIPREDI'))
+#' model$estimation_steps[-1].predictions
+#' }
+#' @seealso
+#' remove_predictions
+#' 
+#' remove_residuals
+#' 
+#' set_estimation_step
+#' 
+#' add_estimation_step
+#' 
+#' remove_estimation_step
+#' 
+#' append_estimation_step_options
+#' 
+#' add_parameter_uncertainty_step
+#' 
+#' remove_parameter_uncertainty_step
+#' 
+#' 
+#' @export
+add_predictions <- function(model, pred) {
+	pred <- convert_input(pred, "list")
+	func_out <- pharmpy$modeling$add_predictions(model, pred)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' add_residuals
+#' 
+#' @description
+#' Add predictions and/or residuals
+#' 
+#' Add residuals to estimation step.
+#' 
+#' @param model (Model) Pharmpy model
+#' @param res (array(str)) List of residuals (e.g. c('CWRES'))
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model$estimation_steps[-1].residuals
+#' model <- add_residuals(model, c('RES'))
+#' model$estimation_steps[-1].residuals
+#' }
+#' @seealso
+#' remove_predictions
+#' 
+#' remove_residuals
+#' 
+#' set_estimation_step
+#' 
+#' add_estimation_step
+#' 
+#' remove_estimation_step
+#' 
+#' append_estimation_step_options
+#' 
+#' add_parameter_uncertainty_step
+#' 
+#' remove_parameter_uncertainty_step
+#' 
+#' 
+#' @export
+add_residuals <- function(model, res) {
+	res <- convert_input(res, "list")
+	func_out <- pharmpy$modeling$add_residuals(model, res)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' add_time_after_dose
 #' 
 #' @description
@@ -841,14 +931,16 @@ append_estimation_step_options <- function(model, tool_options, idx) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param method (str) Name of the binning method to use
-#' @param nbins (numeric) The number of binns wanted
+#' @param nbins (numeric) The number of bins wanted
 #'  
-#' @return (data.frame) A series of bin ids indexed on the original record index of the dataset
+#' @return (data.frame) A series of bin ids indexed on the original record index of the dataset vector A vector of bin edges
 #' 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' bin_observations(model, method="equal_width", nbins=10)
+#' bins, boundaries <- bin_observations(model, method="equal_width", nbins=10)
+#' bins
+#' boundaries
 #' }
 #' 
 #' @export
@@ -4057,6 +4149,8 @@ omit_data <- function(dataset_or_model, group, name_pattern='omitted_{}') {
 #' @param model (Model) Pharmpy model
 #' @param predictions (data.frame) DataFrame containing the predictions
 #' @param residuals (data.frame) DataFrame containing the residuals
+#' @param stratify_on (str) Name of parameter for stratification
+#' @param bins (numeric) Number of bins for stratification
 #'  
 #' @return (alt.Chart) Plot
 #' 
@@ -4065,8 +4159,9 @@ omit_data <- function(dataset_or_model, group, name_pattern='omitted_{}') {
 #' }
 #' 
 #' @export
-plot_abs_cwres_vs_ipred <- function(model, predictions, residuals) {
-	func_out <- pharmpy$modeling$plot_abs_cwres_vs_ipred(model, predictions, residuals)
+plot_abs_cwres_vs_ipred <- function(model, predictions, residuals, stratify_on=NULL, bins=8) {
+	bins <- convert_input(bins, "int")
+	func_out <- pharmpy$modeling$plot_abs_cwres_vs_ipred(model, predictions, residuals, stratify_on=stratify_on, bins=bins)
 	return(py_to_r(func_out))
 }
 
@@ -4078,6 +4173,8 @@ plot_abs_cwres_vs_ipred <- function(model, predictions, residuals) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param residuals (data.frame) DataFrame containing CWRES
+#' @param stratify_on (str) Name of parameter for stratification
+#' @param bins (numeric) Number of bins for stratification
 #'  
 #' @return (alt.Chart) Plot
 #' 
@@ -4086,8 +4183,9 @@ plot_abs_cwres_vs_ipred <- function(model, predictions, residuals) {
 #' }
 #' 
 #' @export
-plot_cwres_vs_idv <- function(model, residuals) {
-	func_out <- pharmpy$modeling$plot_cwres_vs_idv(model, residuals)
+plot_cwres_vs_idv <- function(model, residuals, stratify_on=NULL, bins=8) {
+	bins <- convert_input(bins, "int")
+	func_out <- pharmpy$modeling$plot_cwres_vs_idv(model, residuals, stratify_on=stratify_on, bins=bins)
 	return(py_to_r(func_out))
 }
 
@@ -4099,7 +4197,7 @@ plot_cwres_vs_idv <- function(model, residuals) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param predictions (data.frame) DataFrame containing the predictions
-#' @param strat (str) Name of parameter for stratification
+#' @param stratify_on (str) Name of parameter for stratification
 #' @param bins (numeric) Number of bins for stratification
 #'  
 #' @return (alt.Chart) Plot
@@ -4109,9 +4207,9 @@ plot_cwres_vs_idv <- function(model, residuals) {
 #' }
 #' 
 #' @export
-plot_dv_vs_ipred <- function(model, predictions, strat=NULL, bins=8) {
+plot_dv_vs_ipred <- function(model, predictions, stratify_on=NULL, bins=8) {
 	bins <- convert_input(bins, "int")
-	func_out <- pharmpy$modeling$plot_dv_vs_ipred(model, predictions, strat=strat, bins=bins)
+	func_out <- pharmpy$modeling$plot_dv_vs_ipred(model, predictions, stratify_on=stratify_on, bins=bins)
 	return(py_to_r(func_out))
 }
 
@@ -4123,6 +4221,8 @@ plot_dv_vs_ipred <- function(model, predictions, strat=NULL, bins=8) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param predictions (data.frame) DataFrame containing the predictions
+#' @param stratify_on (str) Name of parameter for stratification
+#' @param bins (numeric) Number of bins for stratification
 #'  
 #' @return (alt.Chart) Plot
 #' 
@@ -4131,8 +4231,30 @@ plot_dv_vs_ipred <- function(model, predictions, strat=NULL, bins=8) {
 #' }
 #' 
 #' @export
-plot_dv_vs_pred <- function(model, predictions) {
-	func_out <- pharmpy$modeling$plot_dv_vs_pred(model, predictions)
+plot_dv_vs_pred <- function(model, predictions, stratify_on=NULL, bins=8) {
+	bins <- convert_input(bins, "int")
+	func_out <- pharmpy$modeling$plot_dv_vs_pred(model, predictions, stratify_on=stratify_on, bins=bins)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' plot_eta_distributions
+#' 
+#' @description
+#' Plot eta distributions for all etas
+#' 
+#' @param model (Model) Previously run Pharmpy model.
+#' @param individual_estimates (data.frame) Individual estimates for etas
+#'  
+#' @return (alt.Chart) Plot
+#' 
+#' @examples
+#' \dontrun{
+#' }
+#' 
+#' @export
+plot_eta_distributions <- function(model, individual_estimates) {
+	func_out <- pharmpy$modeling$plot_eta_distributions(model, individual_estimates)
 	return(py_to_r(func_out))
 }
 
@@ -4651,6 +4773,94 @@ remove_parameter_uncertainty_step <- function(model) {
 #' @export
 remove_peripheral_compartment <- function(model, name=NULL) {
 	func_out <- pharmpy$modeling$remove_peripheral_compartment(model, name=name)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' remove_predictions
+#' 
+#' @description
+#' Remove predictions and/or residuals
+#' 
+#' Remove predictions from estimation step.
+#' 
+#' @param model (Model) Pharmpy model
+#' @param to_remove (array(str)) List of predictions to remove
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- remove_predictions(model, 'all')
+#' model$estimation_steps[-1].predictions
+#' }
+#' @seealso
+#' add_predictions
+#' 
+#' add_residuals
+#' 
+#' set_estimation_step
+#' 
+#' add_estimation_step
+#' 
+#' remove_estimation_step
+#' 
+#' append_estimation_step_options
+#' 
+#' add_parameter_uncertainty_step
+#' 
+#' remove_parameter_uncertainty_step
+#' 
+#' 
+#' @export
+remove_predictions <- function(model, to_remove='all') {
+	to_remove <- convert_input(to_remove, "list")
+	func_out <- pharmpy$modeling$remove_predictions(model, to_remove=to_remove)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' remove_residuals
+#' 
+#' @description
+#' Remove predictions and/or residuals
+#' 
+#' Remove residuals from estimation step.
+#' 
+#' @param model (Model) Pharmpy model
+#' @param to_remove (array(str)) List of predictions to remove
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- remove_residuals(model, 'all')
+#' model$estimation_steps[-1].residuals
+#' }
+#' @seealso
+#' add_predictions
+#' 
+#' add_residuals
+#' 
+#' set_estimation_step
+#' 
+#' add_estimation_step
+#' 
+#' remove_estimation_step
+#' 
+#' append_estimation_step_options
+#' 
+#' add_parameter_uncertainty_step
+#' 
+#' remove_parameter_uncertainty_step
+#' 
+#' 
+#' @export
+remove_residuals <- function(model, to_remove=NULL) {
+	to_remove <- convert_input(to_remove, "list")
+	func_out <- pharmpy$modeling$remove_residuals(model, to_remove=to_remove)
 	return(py_to_r(func_out))
 }
 
@@ -5373,7 +5583,7 @@ set_initial_condition <- function(model, compartment, expression, time=0) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' model <- set_initial_estimates(model, list('PTVCL'=2))
+#' model <- set_initial_estimates(model, {'PTVCL': 2.0})
 #' model$parameters['PTVCL']
 #' }
 #' @seealso
@@ -6617,6 +6827,30 @@ use_thetas_for_error_stdev <- function(model) {
 }
 
 #' @title
+#' vpc_plot
+#' 
+#' @description
+#' VPC plot
+#' 
+#' @param model (Model) Pharmpy model
+#' @param simulations (data.frame) DataFrame containing the simulation data
+#' @param binning (str) Binning method. Can be "equal_number" or "equal_width". The default is "equal_number".
+#' @param nbins (numeric) Number of bins. Default is 8.
+#' @param qi (numeric) Upper quantile. Default is 0.95.
+#' @param ci (numeric) Confidence interval. Default is 0.95.
+#' @param stratify_on (str (optional)) Parameter to use for stratification. Optional.
+#'  
+#' @return (alt.Chart) Plot
+#' 
+#' 
+#' @export
+vpc_plot <- function(model, simulations, binning='equal_number', nbins=8, qi=0.95, ci=0.95, stratify_on=NULL) {
+	nbins <- convert_input(nbins, "int")
+	func_out <- pharmpy$modeling$vpc_plot(model, simulations, binning=binning, nbins=nbins, qi=qi, ci=ci, stratify_on=stratify_on)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' write_csv
 #' 
 #' @description
@@ -7493,9 +7727,9 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' @param modeltype (str) Type of model to build. Valid strings are 'basic_pk', 'pkpd', 'drug_metabolite' and 'tmdd'
 #' @param administration (str) Route of administration. Either 'iv', 'oral' or 'ivoral'
 #' @param strategy (str) Run algorithm for AMD procedure. Valid options are 'default', 'reevaluation'. Default is 'default'
-#' @param cl_init (numeric) Initial estimate for the population clearance
-#' @param vc_init (numeric) Initial estimate for the central compartment population volume
-#' @param mat_init (numeric) Initial estimate for the mean absorption time (not for iv models)
+#' @param cl_init (numeric (optional)) Initial estimate for the population clearance
+#' @param vc_init (numeric (optional)) Initial estimate for the central compartment population volume
+#' @param mat_init (numeric (optional)) Initial estimate for the mean absorption time (not for iv models)
 #' @param b_init (numeric (optional)) Initial estimate for the baseline (PKPD model)
 #' @param emax_init (numeric (optional)) Initial estimate for E_max (PKPD model)
 #' @param ec50_init (numeric (optional)) Initial estimate for EC_50 (PKPD model)
@@ -7533,7 +7767,7 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' 
 #' 
 #' @export
-run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='oral', strategy='default', cl_init=0.01, vc_init=1.0, mat_init=0.1, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, search_space=NULL, lloq_method=NULL, lloq_limit=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', dv_types=NULL, mechanistic_covariates=NULL, retries_strategy='all_final', seed=NULL, parameter_uncertainty_method=NULL, ignore_datainfo_fallback=FALSE) {
+run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='oral', strategy='default', cl_init=NULL, vc_init=NULL, mat_init=NULL, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, search_space=NULL, lloq_method=NULL, lloq_limit=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', dv_types=NULL, mechanistic_covariates=NULL, retries_strategy='all_final', seed=NULL, parameter_uncertainty_method=NULL, ignore_datainfo_fallback=FALSE) {
 	tryCatch(
 	{
 		mechanistic_covariates <- convert_input(mechanistic_covariates, "list")
@@ -7685,6 +7919,7 @@ run_covsearch <- function(search_space, p_forward=0.01, p_backward=0.001, max_st
 #' not test any solver)
 #' @param parameter_uncertainty_methods (array(str) or str (optional)) List of parameter uncertainty methods to test.
 #' Can be specified as 'all', a vector of uncertainty methods, or NULL (to not evaluate any uncertainty)
+#' @param compare_ofv (logical) Whether to compare the OFV between candidates. Comparison is made by evaluating using IMP
 #' @param results (ModelfitResults (optional)) Results for model
 #' @param model (Model (optional)) Pharmpy mode
 #' @param ... Arguments to pass to tool
@@ -7704,10 +7939,10 @@ run_covsearch <- function(search_space, p_forward=0.01, p_backward=0.001, max_st
 #' }
 #' 
 #' @export
-run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncertainty_methods=NULL, results=NULL, model=NULL, ...) {
+run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncertainty_methods=NULL, compare_ofv=TRUE, results=NULL, model=NULL, ...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_estmethod(algorithm, methods=methods, solvers=solvers, parameter_uncertainty_methods=parameter_uncertainty_methods, results=results, model=model, ...)
+		func_out <- pharmpy$tools$run_estmethod(algorithm, methods=methods, solvers=solvers, parameter_uncertainty_methods=parameter_uncertainty_methods, compare_ofv=compare_ofv, results=results, model=model, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -8060,6 +8295,53 @@ run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.001, ski
 }
 
 #' @title
+#' run_simulation
+#' 
+#' @description
+#' Run the simulation tool.
+#' 
+#' @param model (Model (optional)) Pharmpy mode
+#' @param ... Arguments to pass to tool
+#'  
+#' @return (SimulationResult) SimulationResults object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- set_simulation(model, n=10)
+#' run_simulations(model)
+#' }
+#' 
+#' @export
+run_simulation <- function(model=NULL, ...) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$run_simulation(model=model, ...)
+		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+			func_out <- reset_indices_results(func_out)
+		}
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	},
+	warning=function(cond) {
+		message(cond)
+		message('Full stack:')
+		message(reticulate::py_last_error())
+		message("pharmr version: ", packageVersion("pharmr"))
+		message("Pharmpy version: ", print_pharmpy_version())
+		return(NA)
+	}
+	)
+}
+
+#' @title
 #' run_structsearch
 #' 
 #' @description
@@ -8067,10 +8349,10 @@ run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.001, ski
 #' 
 #' @param type (str) Type of model. Currently only 'drug_metabolite' and 'pkpd'
 #' @param search_space (str (optional)) Search space to test
-#' @param b_init (numeric (optional)) Initial estimate for the baseline for pkpd models. The default value is 0.1
-#' @param emax_init (numeric (optional)) Initial estimate for E_MAX (for pkpd models only). The default value is 0.1
-#' @param ec50_init (numeric (optional)) Initial estimate for EC_50 (for pkpd models only). The default value is 0.1
-#' @param met_init (numeric (optional)) Initial estimate for MET (for pkpd models only). The default value is 0.1
+#' @param b_init (numeric (optional)) Initial estimate for the baseline for pkpd models.
+#' @param emax_init (numeric (optional)) Initial estimate for E_MAX (for pkpd models only).
+#' @param ec50_init (numeric (optional)) Initial estimate for EC_50 (for pkpd models only).
+#' @param met_init (numeric (optional)) Initial estimate for MET (for pkpd models only).
 #' @param results (ModelfitResults (optional)) Results for the start model
 #' @param model (Model (optional)) Pharmpy start model
 #' @param extra_model (Model (optional)) Optional extra Pharmpy model to use in TMDD structsearch

@@ -4,12 +4,16 @@
 \alias{plot_dv_vs_pred}
 \title{plot_dv_vs_pred}
 \usage{
-plot_dv_vs_pred(model, predictions)
+plot_dv_vs_pred(model, predictions, stratify_on = NULL, bins = 8)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{predictions}{(data.frame) DataFrame containing the predictions}
+
+\item{stratify_on}{(str) Name of parameter for stratification}
+
+\item{bins}{(numeric) Number of bins for stratification}
 }
 \value{
 (alt.Chart) Plot
