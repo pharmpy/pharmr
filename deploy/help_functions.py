@@ -45,6 +45,13 @@ def py_to_r_arg(arg):
     except KeyError:
         if isinstance(arg, str):
             return f'\'{arg}\''
+        elif isinstance(arg, tuple):
+            def _convert(elem):
+                if isinstance(elem, str):
+                    return f'\'{elem}\''
+                return elem
+
+            return f"c({','.join(_convert(elem) for elem in arg)})"
         else:
             return arg
 
