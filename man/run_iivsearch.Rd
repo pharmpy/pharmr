@@ -11,7 +11,7 @@ run_iivsearch(
   cutoff = NULL,
   results = NULL,
   model = NULL,
-  keep = NULL,
+  keep = c("CL"),
   strictness = "minimization_successful or (rounding_errors and sigdigs>=0.1)",
   correlation_algorithm = NULL,
   ...
@@ -31,7 +31,7 @@ is NULL (all models will be ranked)}
 
 \item{model}{(Model (optional)) Pharmpy model}
 
-\item{keep}{(array(str) (optional)) List of IIVs to keep}
+\item{keep}{(array(str) (optional)) List of IIVs to keep. Default is "CL"}
 
 \item{strictness}{(str (optional)) Strictness criteria}
 

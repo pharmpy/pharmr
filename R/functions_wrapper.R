@@ -6075,6 +6075,7 @@ set_time_varying_error_model <- function(model, cutoff, idv='TIME', dv=NULL) {
 #' @param model (Model) Pharmpy model
 #' @param type (str) Type of TMDD model
 #' @param dv_types (list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DVs (e.g. dv_types = {'drug' : 1, 'target': 2}).
+#' Default is NULL which means that all observations are treated as drug observations.
 #' For dv = 1 the only allowed keys are 'drug' and 'drug_tot'. If no DV for drug is specified then (free) drug
 #' will have dv = 1.
 #'  
@@ -6830,18 +6831,28 @@ use_thetas_for_error_stdev <- function(model) {
 #' vpc_plot
 #' 
 #' @description
-#' VPC plot
+#' Creates a VPC plot for a model
 #' 
 #' @param model (Model) Pharmpy model
-#' @param simulations (data.frame) DataFrame containing the simulation data
+#' @param simulations (data.frame or str) DataFrame containing the simulation data or path to dataset.
+#' The dataset has to have one (index) column named "SIM" containing
+#' the simulation number, one (index) column named "index" containing the data indices and one dv column.
+#' See below for more information.
 #' @param binning (str) Binning method. Can be "equal_number" or "equal_width". The default is "equal_number".
 #' @param nbins (numeric) Number of bins. Default is 8.
 #' @param qi (numeric) Upper quantile. Default is 0.95.
 #' @param ci (numeric) Confidence interval. Default is 0.95.
 #' @param stratify_on (str (optional)) Parameter to use for stratification. Optional.
 #'  
-#' @return (alt.Chart) Plot
+#' @return (alt.Chart) Plot The simulation data should have the following format: +-----+-------+--------+ | SIM | index | DV     | +=====+=======+========+ | 1   | 0     | 0.000  | +-----+-------+--------+ | 1   | 1     | 34.080 | +-----+-------+--------+ | 1   | 2     | 28.858 | +-----+-------+--------+ | 1   | 3     | 0.000  | +-----+-------+--------+ | 1   | 4     | 12.157 | +-----+-------+--------+ | 2   | 0     | 23.834 | +-----+-------+--------+ | 2   | 1     | 0.000  | +-----+-------+--------+ | ... | ...   | ...    | +-----+-------+--------+ | 20  | 2     | 0.000  | +-----+-------+--------+ | 20  | 3     | 31.342 | +-----+-------+--------+ | 20  | 4     | 29.983 | +-----+-------+--------+
 #' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' sim_model <- set_simulation(model, n=100)
+#' sim_data <- run_simulation(sim_model)
+#' vpc_plot(model, sim_data)
+#' }
 #' 
 #' @export
 vpc_plot <- function(model, simulations, binning='equal_number', nbins=8, qi=0.95, ci=0.95, stratify_on=NULL) {
@@ -7980,7 +7991,7 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 #' is NULL (all models will be ranked)
 #' @param results (ModelfitResults (optional)) Results for model
 #' @param model (Model (optional)) Pharmpy model
-#' @param keep (array(str) (optional)) List of IIVs to keep
+#' @param keep (array(str) (optional)) List of IIVs to keep. Default is "CL"
 #' @param strictness (str (optional)) Strictness criteria
 #' @param correlation_algorithm (str (optional)) Which algorithm to run for the determining block structure of added IIVs. If NULL, the
 #' algorithm is determined based on the 'algorithm' argumen
@@ -7996,10 +8007,9 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 #' }
 #' 
 #' @export
-run_iivsearch <- function(algorithm='top_down_exhaustive', iiv_strategy='no_add', rank_type='mbic', cutoff=NULL, results=NULL, model=NULL, keep=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', correlation_algorithm=NULL, ...) {
+run_iivsearch <- function(algorithm='top_down_exhaustive', iiv_strategy='no_add', rank_type='mbic', cutoff=NULL, results=NULL, model=NULL, keep=c('CL'), strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', correlation_algorithm=NULL, ...) {
 	tryCatch(
 	{
-		keep <- convert_input(keep, "list")
 		func_out <- pharmpy$tools$run_iivsearch(algorithm=algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, cutoff=cutoff, results=results, model=model, keep=keep, strictness=strictness, correlation_algorithm=correlation_algorithm, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
@@ -8032,7 +8042,7 @@ run_iivsearch <- function(algorithm='top_down_exhaustive', iiv_strategy='no_add'
 #' Run IOVsearch tool. For more details, see :ref:`iovsearch`.
 #' 
 #' @param column (str) Name of column in dataset to use as occasion column (default is 'OCC')
-#' @param list_of_parameters (array(str) (optional)) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)
+#' @param list_of_parameters (array(str or array(str)) (optional)) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)
 #' @param rank_type (str) Which ranking type should be used. Default is mBIC.
 #' @param cutoff (numeric (optional)) Cutoff for which value of the ranking type that is considered significant. Default
 #' is NULL (all models will be ranked)
@@ -8348,7 +8358,7 @@ run_simulation <- function(model=NULL, ...) {
 #' Run the structsearch tool. For more details, see :ref:`structsearch`.
 #' 
 #' @param type (str) Type of model. Currently only 'drug_metabolite' and 'pkpd'
-#' @param search_space (str (optional)) Search space to test
+#' @param search_space (str or ModelFeatures (optional)) Search space to test
 #' @param b_init (numeric (optional)) Initial estimate for the baseline for pkpd models.
 #' @param emax_init (numeric (optional)) Initial estimate for E_MAX (for pkpd models only).
 #' @param ec50_init (numeric (optional)) Initial estimate for EC_50 (for pkpd models only).

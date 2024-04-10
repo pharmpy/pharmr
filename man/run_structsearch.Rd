@@ -23,7 +23,7 @@ run_structsearch(
 \arguments{
 \item{type}{(str) Type of model. Currently only 'drug_metabolite' and 'pkpd'}
 
-\item{search_space}{(str (optional)) Search space to test}
+\item{search_space}{(str or ModelFeatures (optional)) Search space to test}
 
 \item{b_init}{(numeric (optional)) Initial estimate for the baseline for pkpd models.}
 

@@ -19,7 +19,7 @@ run_iovsearch(
 \arguments{
 \item{column}{(str) Name of column in dataset to use as occasion column (default is 'OCC')}
 
-\item{list_of_parameters}{(array(str) (optional)) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)}
+\item{list_of_parameters}{(array(str or array(str)) (optional)) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)}
 
 \item{rank_type}{(str) Which ranking type should be used. Default is mBIC.}
 
