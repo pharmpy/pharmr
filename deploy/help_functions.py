@@ -6,7 +6,7 @@ import symengine
 
 from pharmpy.deps import sympy
 from pharmpy.deps import numpy as np
-from pharmpy.workflows import ModelDatabase, ToolDatabase
+from pharmpy.workflows import ModelDatabase
 
 TYPE_DICT = {
     str: 'str',
@@ -30,7 +30,6 @@ SKIP = [
     Path,
     type(None),
     ModelDatabase,
-    ToolDatabase
 ]
 
 
