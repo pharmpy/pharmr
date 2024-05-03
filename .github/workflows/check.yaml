@@ -1,5 +1,11 @@
 on:
   workflow_dispatch:
+    inputs:
+      debug_enabled:
+        type: boolean
+        description: 'Run the build with tmate debugging enabled'
+        required: false
+        default: false
   push:
     branches:
       - main
@@ -43,3 +49,7 @@ jobs:
           as-release: false
 
       - uses: ./pharmr_repo/.github/actions/check-pharmr
+
+      - name: Debug session
+        uses: mxschmitt/action-tmate@v3
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
