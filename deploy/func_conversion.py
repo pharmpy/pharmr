@@ -3,7 +3,7 @@ import pandas as pd
 
 import re
 import textwrap
-from typing import List, Union, get_args, get_origin, get_type_hints
+from typing import List, Mapping, Union, get_args, get_origin, get_type_hints
 
 import pharmpy.model
 
@@ -145,6 +145,8 @@ def _get_conversion_str(key, args, origin):
         return f'{key} <- convert_input({key}, "list")'
     elif args is pd.Series:
         return f'{key} <- convert_input({key}, "pd.Series")'
+    elif args is Mapping:
+        return f'{key} <- convert_input({key}, "Mapping")'
     return None
 
 

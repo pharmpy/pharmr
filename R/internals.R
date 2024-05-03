@@ -80,6 +80,9 @@ convert_input <- function(arg, to_py_type) {
     if (is.null(arg)) {
         return(arg)
     }
+    else if (to_py_type == 'Mapping') {
+        return(to_list(arg))
+    }
     else if (to_py_type == 'pd.Series') {
         pd <- reticulate::import("pandas", convert=FALSE)
         return(pd$Series(to_list(arg)))
