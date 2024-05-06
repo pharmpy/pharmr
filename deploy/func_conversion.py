@@ -146,7 +146,7 @@ def _get_conversion_str(key, args, origin):
         return f'{key} <- convert_input({key}, "list")'
     elif args is pd.Series:
         return f'{key} <- convert_input({key}, "pd.Series")'
-    elif args is Mapping:
+    elif origin is Mapping:
         return f'{key} <- convert_input({key}, "Mapping")'
     return None
 
