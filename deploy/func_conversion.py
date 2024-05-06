@@ -3,7 +3,8 @@ import pandas as pd
 
 import re
 import textwrap
-from typing import List, Mapping, Union, get_args, get_origin, get_type_hints
+from collections.abc import Mapping
+from typing import List, Union, get_args, get_origin, get_type_hints
 
 import pharmpy.model
 
