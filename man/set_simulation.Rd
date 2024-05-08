@@ -23,7 +23,7 @@ Change model into simulation model
 \dontrun{
 model <- load_example_model("pheno")
 model <- set_simulation(model, n=10, seed=1234)
-steps <- model$estimation_steps
+steps <- model$execution_steps
 steps[1]
 }
 

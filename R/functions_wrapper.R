@@ -160,6 +160,19 @@ add_cmt <- function(model) {
 #' * Init: 0.001
 #' * Upper: 5
 #' * Lower: -1
+#' * (alternative) Linear function for categorical covariates (*cat2*)
+#' * Function:
+#' * If covariate is the most common category:
+#' 
+#' (equation could not be rendered, see API doc on website)
+#' 
+#' * For each additional category:
+#' 
+#' (equation could not be rendered, see API doc on website)
+#' 
+#' * Init: 0.001
+#' * Upper: 6
+#' * Lower: 0
 #' * Piecewise linear function/"hockey-stick", continuous covariates only (*piece_lin*)
 #' * Function:
 #' * If cov <= median:
@@ -228,6 +241,35 @@ add_cmt <- function(model) {
 #' @export
 add_covariate_effect <- function(model, parameter, covariate, effect, operation='*', allow_nested=FALSE) {
 	func_out <- pharmpy$modeling$add_covariate_effect(model, parameter, covariate, effect, operation=operation, allow_nested=allow_nested)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' add_derivative
+#' 
+#' @description
+#' Add a derivative to be calculcated when running the model. Currently, only
+#' derivatives with respect to the prediction is supported. Default is to add all possible
+#' ETA and EPS derivatives.
+#' First order derivates are specied either by single string or single-element tuple.
+#' For instance with_respect_to = "ETA_1" or with_respect_to = ("ETA_1",)
+#' 
+#' Second order derivatives are specified by giving the two independent varibles in a tuple
+#' of tuples. For instance with_respect_to ((ETA_1, EPS_1),)
+#' 
+#' Multiple derivatives can be specified within a tuple. For instance ((ETA_1, EPS_1), "ETA_1")
+#' 
+#' Currently, only ETAs and EPSILONs are supported
+#' 
+#' @param model (Model) Pharmpy modeas.
+#' @param with_respect_to (array(array(str) or str) or str (optional)) Parameter name(s) to use as independent variables. Default is NULL.
+#'  
+#' @return (Pharmpy model.) 
+#' 
+#' 
+#' @export
+add_derivative <- function(model, with_respect_to=NULL) {
+	func_out <- pharmpy$modeling$add_derivative(model, with_respect_to=with_respect_to)
 	return(py_to_r(func_out))
 }
 
@@ -301,7 +343,7 @@ add_effect_compartment <- function(model, expr) {
 #' model <- load_example_model("pheno")
 #' opts <- list('NITER'=1000, 'ISAMPLE'=100)
 #' model <- add_estimation_step(model, 'IMP', tool_options=opts)
-#' ests <- model$estimation_steps
+#' ests <- model$execution_steps
 #' length(ests)
 #' ests[2]
 #' }
@@ -588,7 +630,7 @@ add_metabolite <- function(model, drug_dvid=1, presystemic=FALSE) {
 #' model <- load_example_model("pheno")
 #' model <- set_estimation_step(model, 'FOCE', parameter_uncertainty_method=NULL)
 #' model <- add_parameter_uncertainty_step(model, 'SANDWICH')
-#' ests <- model$estimation_steps
+#' ests <- model$execution_steps
 #' ests[1]
 #' }
 #' @seealso
@@ -774,9 +816,9 @@ add_population_parameter <- function(model, name, init, lower=NULL, upper=NULL, 
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' model$estimation_steps[-1].predictions
+#' model$execution_steps[-1].predictions
 #' model <- add_predictions(model, c('CIPREDI'))
-#' model$estimation_steps[-1].predictions
+#' model$execution_steps[-1].predictions
 #' }
 #' @seealso
 #' remove_predictions
@@ -811,6 +853,9 @@ add_predictions <- function(model, pred) {
 #' 
 #' Add residuals to estimation step.
 #' 
+#' Added redidual variable(s) need to be one of the following :
+#' c('RES', 'IRES', 'WRES', 'IWRES', 'CWRES')
+#' 
 #' @param model (Model) Pharmpy model
 #' @param res (array(str)) List of residuals (e.g. c('CWRES'))
 #'  
@@ -819,9 +864,9 @@ add_predictions <- function(model, pred) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' model$estimation_steps[-1].residuals
+#' model$execution_steps[-1].residuals
 #' model <- add_residuals(model, c('RES'))
-#' model$estimation_steps[-1].residuals
+#' model$execution_steps[-1].residuals
 #' }
 #' @seealso
 #' remove_predictions
@@ -852,7 +897,7 @@ add_residuals <- function(model, res) {
 #' add_time_after_dose
 #' 
 #' @description
-#' Calculate and add a TAD column to the dataset"
+#' Calculate and add a TAD column to the dataset
 #' 
 #' @param model (Model) Pharmpy model
 #'  
@@ -889,7 +934,7 @@ add_time_after_dose <- function(model) {
 #' model <- load_example_model("pheno")
 #' opts <- list('NITER'=1000, 'ISAMPLE'=100)
 #' model <- append_estimation_step_options(model, tool_options=opts, idx=0)
-#' est <- model$estimation_steps[1]
+#' est <- model$execution_steps[1]
 #' length(est$tool_options)
 #' }
 #' @seealso
@@ -1020,7 +1065,7 @@ calculate_aic <- function(model, likelihood) {
 #' 
 #' If multiple_testing option is set to true an additional penalty will be added:
 #' 
-#' * | mBIC = BIC + 2*(n_estimated_parameters)*log(n_predictors/n_expected_models)
+#' * | mBIC = BIC + 2*(n_estimated_parameters)*log(n_predictors/n_expected_predictors)
 #' 
 #' @param model (Model) Pharmpy model object
 #' @param likelihood (numeric) -2LL to use
@@ -2062,6 +2107,7 @@ drop_dropped_columns <- function(model) {
 #' 
 #' @export
 evaluate_epsilon_gradient <- function(model, etas=NULL, parameters=NULL, dataset=NULL) {
+	parameters <- convert_input(parameters, "Mapping")
 	func_out <- pharmpy$modeling$evaluate_epsilon_gradient(model, etas=etas, parameters=parameters, dataset=dataset)
 	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
@@ -2102,6 +2148,7 @@ evaluate_epsilon_gradient <- function(model, etas=NULL, parameters=NULL, dataset
 #' 
 #' @export
 evaluate_eta_gradient <- function(model, etas=NULL, parameters=NULL, dataset=NULL) {
+	parameters <- convert_input(parameters, "Mapping")
 	func_out <- pharmpy$modeling$evaluate_eta_gradient(model, etas=etas, parameters=parameters, dataset=dataset)
 	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
@@ -2134,6 +2181,7 @@ evaluate_eta_gradient <- function(model, etas=NULL, parameters=NULL, dataset=NUL
 #' 
 #' @export
 evaluate_expression <- function(model, expression, parameter_estimates=NULL) {
+	parameter_estimates <- convert_input(parameter_estimates, "Mapping")
 	func_out <- pharmpy$modeling$evaluate_expression(model, expression, parameter_estimates=parameter_estimates)
 	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
@@ -2174,6 +2222,7 @@ evaluate_expression <- function(model, expression, parameter_estimates=NULL) {
 #' 
 #' @export
 evaluate_individual_prediction <- function(model, etas=NULL, parameters=NULL, dataset=NULL) {
+	parameters <- convert_input(parameters, "Mapping")
 	func_out <- pharmpy$modeling$evaluate_individual_prediction(model, etas=etas, parameters=parameters, dataset=dataset)
 	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
@@ -2211,6 +2260,7 @@ evaluate_individual_prediction <- function(model, etas=NULL, parameters=NULL, da
 #' 
 #' @export
 evaluate_population_prediction <- function(model, parameters=NULL, dataset=NULL) {
+	parameters <- convert_input(parameters, "Mapping")
 	func_out <- pharmpy$modeling$evaluate_population_prediction(model, parameters=parameters, dataset=dataset)
 	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
@@ -2245,6 +2295,7 @@ evaluate_population_prediction <- function(model, parameters=NULL, dataset=NULL)
 #' 
 #' @export
 evaluate_weighted_residuals <- function(model, parameters=NULL, dataset=NULL) {
+	parameters <- convert_input(parameters, "Mapping")
 	func_out <- pharmpy$modeling$evaluate_weighted_residuals(model, parameters=parameters, dataset=dataset)
 	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
@@ -2415,7 +2466,6 @@ fix_or_unfix_parameters <- function(model, parameters) {
 #' 
 #' @export
 fix_parameters <- function(model, parameter_names) {
-	parameter_names <- convert_input(parameter_names, "list")
 	func_out <- pharmpy$modeling$fix_parameters(model, parameter_names)
 	return(py_to_r(func_out))
 }
@@ -4342,7 +4392,6 @@ plot_transformed_eta_distributions <- function(model, parameter_estimates, indiv
 #' @export
 print_model_code <- function(model) {
 	func_out <- pharmpy$modeling$print_model_code(model)
-	return(py_to_r(func_out))
 }
 
 #' @title
@@ -4365,7 +4414,6 @@ print_model_code <- function(model) {
 #' @export
 print_model_symbols <- function(model) {
 	func_out <- pharmpy$modeling$print_model_symbols(model)
-	return(py_to_r(func_out))
 }
 
 #' @title
@@ -4500,6 +4548,35 @@ remove_covariate_effect <- function(model, parameter, covariate) {
 }
 
 #' @title
+#' remove_derivative
+#' 
+#' @description
+#' Remove a derivative currently being calculcate when running model. Currently, only
+#' derivatives with respect to the prediction is supported. Default is to remove all
+#' that are present,
+#' First order derivates are specied either by single string or single-element tuple.
+#' For instance with_respect_to = "ETA_1" or with_respect_to = ("ETA_1",)
+#' 
+#' Second order derivatives are specified by giving the two independent varibles in a tuple
+#' of tuples. For instance with_respect_to ((ETA_1, EPS_1),)
+#' 
+#' Multiple derivatives can be specified within a tuple. For instance ((ETA_1, EPS_1), "ETA_1")
+#' 
+#' Currently, only ETAs and EPSILONs are supported
+#' 
+#' @param model (Model) Pharmpy modeas.
+#' @param with_respect_to (array(array(str) or str) or str (optional)) Parameter name(s) to use as independent variables. Default is NULL.
+#'  
+#' @return (Pharmpy model.) 
+#' 
+#' 
+#' @export
+remove_derivative <- function(model, with_respect_to=NULL) {
+	func_out <- pharmpy$modeling$remove_derivative(model, with_respect_to=with_respect_to)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' remove_error_model
 #' 
 #' @description
@@ -4538,7 +4615,7 @@ remove_error_model <- function(model) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model <- remove_estimation_step(model, 0)
-#' ests <- model$estimation_steps
+#' ests <- model$execution_steps
 #' length(ests)
 #' }
 #' @seealso
@@ -4711,7 +4788,7 @@ remove_loq_data <- function(model, lloq=NULL, uloq=NULL, blq=NULL, alq=NULL, kee
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model <- remove_parameter_uncertainty_step(model)
-#' ests <- model$estimation_steps
+#' ests <- model$execution_steps
 #' ests[1]
 #' }
 #' @seealso
@@ -4793,7 +4870,7 @@ remove_peripheral_compartment <- function(model, name=NULL) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model <- remove_predictions(model, 'all')
-#' model$estimation_steps[-1].predictions
+#' model$execution_steps[-1].predictions
 #' }
 #' @seealso
 #' add_predictions
@@ -4837,7 +4914,7 @@ remove_predictions <- function(model, to_remove='all') {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model <- remove_residuals(model, 'all')
-#' model$estimation_steps[-1].residuals
+#' model$execution_steps[-1].residuals
 #' }
 #' @seealso
 #' add_predictions
@@ -5378,7 +5455,7 @@ set_dvid <- function(model, name) {
 #' model <- load_example_model("pheno")
 #' opts <- list('NITER'=1000, 'ISAMPLE'=100)
 #' model <- set_estimation_step(model, 'IMP', evaluation=TRUE, tool_options=opts)
-#' model$estimation_steps[1]
+#' model$execution_steps[1]
 #' }
 #' @seealso
 #' add_estimation_step
@@ -5419,7 +5496,7 @@ set_estimation_step <- function(model, method, idx=0, ...) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model <- set_evaluation_step(model)
-#' model$estimation_steps[1]
+#' model$execution_steps[1]
 #' }
 #' @seealso
 #' set_estimation_step
@@ -5573,15 +5650,25 @@ set_initial_condition <- function(model, compartment, expression, time=0) {
 #' set_initial_estimates
 #' 
 #' @description
-#' Set initial estimates
+#' Update initial parameter estimate for a model
 #' 
-#' @param model (Model) Pharmpy model
-#' @param inits (list(str=numeric)) A list of parameter init for parameters to change
+#' Updates initial estimates of population parameters for a model.
+#' If the new initial estimates are out of bounds or NaN this function will raise.
+#' 
+#' @param model (Model) Pharmpy model to update initial estimates
+#' @param inits (list(str=numeric)) Initial parameter estimates to update
+#' @param move_est_close_to_bounds (logical) Move estimates that are close to bounds. If correlation >0.99 the correlation will
+#' be set to 0.9, if variance is <0.001 the variance will be set to 0.01.
 #'  
 #' @return (Model) Pharmpy model object
 #' 
 #' @examples
 #' \dontrun{
+#' model <- load_example_model("pheno")
+#' results <- load_example_modelfit_results("pheno")
+#' model$parameters$inits
+#' model <- set_initial_estimates(model, results$parameter_estimates)
+#' model$parameters$inits
 #' model <- load_example_model("pheno")
 #' model <- set_initial_estimates(model, {'PTVCL': 2.0})
 #' model$parameters['PTVCL']
@@ -5593,8 +5680,9 @@ set_initial_condition <- function(model, compartment, expression, time=0) {
 #' 
 #' 
 #' @export
-set_initial_estimates <- function(model, inits) {
-	func_out <- pharmpy$modeling$set_initial_estimates(model, inits)
+set_initial_estimates <- function(model, inits, move_est_close_to_bounds=FALSE) {
+	inits <- convert_input(inits, "Mapping")
+	func_out <- pharmpy$modeling$set_initial_estimates(model, inits, move_est_close_to_bounds=move_est_close_to_bounds)
 	return(py_to_r(func_out))
 }
 
@@ -6017,7 +6105,7 @@ set_seq_zo_fo_absorption <- function(model) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model <- set_simulation(model, n=10, seed=1234)
-#' steps <- model$estimation_steps
+#' steps <- model$execution_steps
 #' steps[1]
 #' }
 #' 
@@ -6036,7 +6124,7 @@ set_simulation <- function(model, n=1, seed=64206) {
 #' Set a time varying error model per time cutoff
 #' 
 #' @param model (Model) Pharmpy model
-#' @param cutoff (numeric) A value at the given quantile over idv column
+#' @param cutoff (numeric) A cutoff value for idv column
 #' @param idv (str) Time or time after dose, default is Time
 #' @param dv (str or Expr or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
 #'  
@@ -6671,7 +6759,6 @@ undrop_columns <- function(model, column_names) {
 #' 
 #' @export
 unfix_parameters <- function(model, parameter_names) {
-	parameter_names <- convert_input(parameter_names, "list")
 	func_out <- pharmpy$modeling$unfix_parameters(model, parameter_names)
 	return(py_to_r(func_out))
 }
@@ -6765,38 +6852,6 @@ unload_dataset <- function(model) {
 update_initial_individual_estimates <- function(model, individual_estimates, force=TRUE) {
 	individual_estimates <- convert_input(individual_estimates, "pd.Series")
 	func_out <- pharmpy$modeling$update_initial_individual_estimates(model, individual_estimates, force=force)
-	return(py_to_r(func_out))
-}
-
-#' @title
-#' update_inits
-#' 
-#' @description
-#' Update initial parameter estimate for a model
-#' 
-#' Updates initial estimates of population parameters for a model.
-#' If the new initial estimates are out of bounds or NaN this function will raise.
-#' 
-#' @param model (Model) Pharmpy model to update initial estimates
-#' @param parameter_estimates (array) Parameter estimates to update
-#' @param move_est_close_to_bounds (logical) Move estimates that are close to bounds. If correlation >0.99 the correlation will
-#' be set to 0.9, if variance is <0.001 the variance will be set to 0.01.
-#'  
-#' @return (Model) Pharmpy model object
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' results <- load_example_modelfit_results("pheno")
-#' model$parameters$inits
-#' model <- update_inits(model, results$parameter_estimates)
-#' model$parameters$inits
-#' }
-#' 
-#' @export
-update_inits <- function(model, parameter_estimates, move_est_close_to_bounds=FALSE) {
-	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
-	func_out <- pharmpy$modeling$update_inits(model, parameter_estimates, move_est_close_to_bounds=move_est_close_to_bounds)
 	return(py_to_r(func_out))
 }
 
@@ -7006,6 +7061,7 @@ create_results <- function(path, ...) {
 #' @param model_or_models (Model or array(Model)) List of models or one single model
 #' @param tool (str (optional)) Estimation tool to use. NULL to use default
 #' @param path (str (optional)) Path to fit directory
+#' @param context (Context (optional)) Run in this context
 #'  
 #' @return (ModelfitResults | vector of ModelfitResults) ModelfitResults for the model or models
 #' 
@@ -7019,10 +7075,10 @@ create_results <- function(path, ...) {
 #' 
 #' 
 #' @export
-fit <- function(model_or_models, tool=NULL, path=NULL) {
+fit <- function(model_or_models, tool=NULL, path=NULL, context=NULL) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$fit(model_or_models, tool=tool, path=path)
+		func_out <- pharmpy$tools$fit(model_or_models, tool=tool, path=path, context=context)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -7623,8 +7679,8 @@ retrieve_final_model <- function(res) {
 #' Any models created and run by the tool can be
 #' retrieved.
 #' 
-#' @param source (str or Results) Source where to find models. Can be a path (as str or Path), a results object, or a
-#' ToolDatabase/ModelDatabase
+#' @param source (str or Context) Source where to find models. Can be a path (as str or Path), or a
+#' Context
 #' @param names (array(str) (optional)) List of names of the models to retrieve or NULL for all
 #'  
 #' @return (vector) List of retrieved model objects
@@ -7872,6 +7928,12 @@ run_bootstrap <- function(model, results=NULL, resamples=1, ...) {
 #' 'scm-forward-then-backward' are supported.
 #' @param results (ModelfitResults (optional)) Results of model
 #' @param model (Model (optional)) Pharmpy model
+#' @param max_eval (logical) Limit the number of function evaluations to 3.1 times that of the
+#' base model. Default is FALSE.
+#' @param adaptive_scope_reduction (logical) Stash all non-significant parameter-covariate effects to be tested
+#' after all significant effects have been tested. Once all these have been
+#' tested, try adding the stashed effects once more with a regular forward approach.
+#' Default is FALSE
 #' @param strictness (str (optional)) Strictness criteria
 #' @param naming_index_offset (numeric (optional)) index offset for naming of runs. Default is 0
 #' @param ... Arguments to pass to tool
@@ -7887,12 +7949,12 @@ run_bootstrap <- function(model, results=NULL, resamples=1, ...) {
 #' }
 #' 
 #' @export
-run_covsearch <- function(search_space, p_forward=0.01, p_backward=0.001, max_steps=-1, algorithm='scm-forward-then-backward', results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', naming_index_offset=0, ...) {
+run_covsearch <- function(search_space, p_forward=0.01, p_backward=0.001, max_steps=-1, algorithm='scm-forward-then-backward', results=NULL, model=NULL, max_eval=FALSE, adaptive_scope_reduction=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', naming_index_offset=0, ...) {
 	tryCatch(
 	{
 		max_steps <- convert_input(max_steps, "int")
 		naming_index_offset <- convert_input(naming_index_offset, "int")
-		func_out <- pharmpy$tools$run_covsearch(search_space, p_forward=p_forward, p_backward=p_backward, max_steps=max_steps, algorithm=algorithm, results=results, model=model, strictness=strictness, naming_index_offset=naming_index_offset, ...)
+		func_out <- pharmpy$tools$run_covsearch(search_space, p_forward=p_forward, p_backward=p_backward, max_steps=max_steps, algorithm=algorithm, results=results, model=model, max_eval=max_eval, adaptive_scope_reduction=adaptive_scope_reduction, strictness=strictness, naming_index_offset=naming_index_offset, ...)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -8459,25 +8521,20 @@ run_tool <- function(name, ...) {
 #' summarize_errors
 #' 
 #' @description
-#' Summarize errors and warnings from one or multiple model runs.
+#' Summarize errors and warnings from all runs in a context.
 #' 
 #' Summarize the errors and warnings found after running the model/models.
 #' 
-#' @param results (ModelfitResults or array(ModelfitResults)) List of ModelfitResults or single ModelfitResults
+#' @param context (Context) Context in which models were run
 #'  
 #' @return (data.frame) A DataFrame of errors with model name, category (error or warning), and an integer as index, an empty DataFrame if there were no errors or warnings found.
 #' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' summarize_errors(model)
-#' }
 #' 
 #' @export
-summarize_errors <- function(results) {
+summarize_errors <- function(context) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$summarize_errors(results)
+		func_out <- pharmpy$tools$summarize_errors(context)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -8647,29 +8704,23 @@ summarize_individuals_count_table <- function(models=NULL, models_res=NULL, df=N
 #' Summarize results of model runs
 #' 
 #' Summarize different results after fitting a model, includes runtime, ofv,
-#' and parameter estimates (with errors). If include_all_estimation_steps is FALSE,
+#' and parameter estimates (with errors). If include_all_execution_steps is FALSE,
 #' only the last estimation step will be included (note that in that case, the
 #' minimization_successful value will be referring to the last estimation step, if
 #' last step is evaluation it will go backwards until it finds an estimation step
 #' that wasn't an evaluation).
 #' 
-#' @param results (ModelfitResults or array(ModelfitResults)) List of ModelfitResults or single ModelfitResults
-#' @param include_all_estimation_steps (logical) Whether to include all estimation steps, default is FALSE
+#' @param context (Context) Context in which models were run
+#' @param include_all_execution_steps (logical) Whether to include all estimation steps, default is FALSE
 #'  
 #' @return (data.frame) A DataFrame of modelfit results with model name and estmation step as index.
 #' 
-#' @examples
-#' \dontrun{
-#' results <- load_example_modelfit_results("pheno")
-#' df <- summarize_modelfit_results(results)
-#' df
-#' }
 #' 
 #' @export
-summarize_modelfit_results <- function(results, include_all_estimation_steps=FALSE) {
+summarize_modelfit_results <- function(context, include_all_execution_steps=FALSE) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$summarize_modelfit_results(results, include_all_estimation_steps=include_all_estimation_steps)
+		func_out <- pharmpy$tools$summarize_modelfit_results(context, include_all_execution_steps=include_all_execution_steps)
 		if ('pharmpy.model.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}

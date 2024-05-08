@@ -7,8 +7,8 @@
 retrieve_models(source, names = NULL)
 }
 \arguments{
-\item{source}{(str or Results) Source where to find models. Can be a path (as str or Path), a results object, or a
-ToolDatabase/ModelDatabase}
+\item{source}{(str or Context) Source where to find models. Can be a path (as str or Path), or a
+Context}
 
 \item{names}{(array(str) (optional)) List of names of the models to retrieve or NULL for all}
 }

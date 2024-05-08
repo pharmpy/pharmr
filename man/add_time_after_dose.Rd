@@ -13,7 +13,7 @@ add_time_after_dose(model)
 (Model) Pharmpy model object
 }
 \description{
-Calculate and add a TAD column to the dataset"
+Calculate and add a TAD column to the dataset
 }
 \examples{
 \dontrun{

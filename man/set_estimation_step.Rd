@@ -29,7 +29,7 @@ FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM, BAYES
 model <- load_example_model("pheno")
 opts <- list('NITER'=1000, 'ISAMPLE'=100)
 model <- set_estimation_step(model, 'IMP', evaluation=TRUE, tool_options=opts)
-model$estimation_steps[1]
+model$execution_steps[1]
 }
 }
 \seealso{

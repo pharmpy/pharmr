@@ -23,7 +23,7 @@ Remove predictions from estimation step.
 \dontrun{
 model <- load_example_model("pheno")
 model <- remove_predictions(model, 'all')
-model$estimation_steps[-1].predictions
+model$execution_steps[-1].predictions
 }
 }
 \seealso{

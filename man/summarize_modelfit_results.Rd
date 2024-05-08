@@ -4,12 +4,12 @@
 \alias{summarize_modelfit_results}
 \title{summarize_modelfit_results}
 \usage{
-summarize_modelfit_results(results, include_all_estimation_steps = FALSE)
+summarize_modelfit_results(context, include_all_execution_steps = FALSE)
 }
 \arguments{
-\item{results}{(ModelfitResults or array(ModelfitResults)) List of ModelfitResults or single ModelfitResults}
+\item{context}{(Context) Context in which models were run}
 
-\item{include_all_estimation_steps}{(logical) Whether to include all estimation steps, default is FALSE}
+\item{include_all_execution_steps}{(logical) Whether to include all estimation steps, default is FALSE}
 }
 \value{
 (data.frame) A DataFrame of modelfit results with model name and estmation step as index.
@@ -18,17 +18,9 @@ summarize_modelfit_results(results, include_all_estimation_steps = FALSE)
 Summarize results of model runs
 
 Summarize different results after fitting a model, includes runtime, ofv,
-and parameter estimates (with errors). If include_all_estimation_steps is FALSE,
+and parameter estimates (with errors). If include_all_execution_steps is FALSE,
 only the last estimation step will be included (note that in that case, the
 minimization_successful value will be referring to the last estimation step, if
 last step is evaluation it will go backwards until it finds an estimation step
 that wasn't an evaluation).
-}
-\examples{
-\dontrun{
-results <- load_example_modelfit_results("pheno")
-df <- summarize_modelfit_results(results)
-df
-}
-
 }

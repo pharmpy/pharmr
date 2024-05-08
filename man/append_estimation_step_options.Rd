@@ -26,7 +26,7 @@ Appends options to an existing estimation step.
 model <- load_example_model("pheno")
 opts <- list('NITER'=1000, 'ISAMPLE'=100)
 model <- append_estimation_step_options(model, tool_options=opts, idx=0)
-est <- model$estimation_steps[1]
+est <- model$execution_steps[1]
 length(est$tool_options)
 }
 }

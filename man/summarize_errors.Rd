@@ -4,23 +4,16 @@
 \alias{summarize_errors}
 \title{summarize_errors}
 \usage{
-summarize_errors(results)
+summarize_errors(context)
 }
 \arguments{
-\item{results}{(ModelfitResults or array(ModelfitResults)) List of ModelfitResults or single ModelfitResults}
+\item{context}{(Context) Context in which models were run}
 }
 \value{
 (data.frame) A DataFrame of errors with model name, category (error or warning), and an integer as index, an empty DataFrame if there were no errors or warnings found.
 }
 \description{
-Summarize errors and warnings from one or multiple model runs.
+Summarize errors and warnings from all runs in a context.
 
 Summarize the errors and warnings found after running the model/models.
-}
-\examples{
-\dontrun{
-model <- load_example_model("pheno")
-summarize_errors(model)
-}
-
 }

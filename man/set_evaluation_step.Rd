@@ -24,7 +24,7 @@ FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM, BAYES
 \dontrun{
 model <- load_example_model("pheno")
 model <- set_evaluation_step(model)
-model$estimation_steps[1]
+model$execution_steps[1]
 }
 }
 \seealso{

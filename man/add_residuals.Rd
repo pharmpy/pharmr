@@ -18,13 +18,16 @@ add_residuals(model, res)
 Add predictions and/or residuals
 
 Add residuals to estimation step.
+
+Added redidual variable(s) need to be one of the following :
+c('RES', 'IRES', 'WRES', 'IWRES', 'CWRES')
 }
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-model$estimation_steps[-1].residuals
+model$execution_steps[-1].residuals
 model <- add_residuals(model, c('RES'))
-model$estimation_steps[-1].residuals
+model$execution_steps[-1].residuals
 }
 }
 \seealso{

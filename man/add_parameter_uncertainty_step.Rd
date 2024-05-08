@@ -22,7 +22,7 @@ Adds parameter uncertainty step to the final estimation step
 model <- load_example_model("pheno")
 model <- set_estimation_step(model, 'FOCE', parameter_uncertainty_method=NULL)
 model <- add_parameter_uncertainty_step(model, 'SANDWICH')
-ests <- model$estimation_steps
+ests <- model$execution_steps
 ests[1]
 }
 }

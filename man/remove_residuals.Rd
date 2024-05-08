@@ -23,7 +23,7 @@ Remove residuals from estimation step.
 \dontrun{
 model <- load_example_model("pheno")
 model <- remove_residuals(model, 'all')
-model$estimation_steps[-1].residuals
+model$execution_steps[-1].residuals
 }
 }
 \seealso{

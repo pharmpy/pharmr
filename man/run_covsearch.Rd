@@ -12,6 +12,8 @@ run_covsearch(
   algorithm = "scm-forward-then-backward",
   results = NULL,
   model = NULL,
+  max_eval = FALSE,
+  adaptive_scope_reduction = FALSE,
   strictness = "minimization_successful or (rounding_errors and sigdigs>=0.1)",
   naming_index_offset = 0,
   ...
@@ -32,6 +34,14 @@ run_covsearch(
 \item{results}{(ModelfitResults (optional)) Results of model}
 
 \item{model}{(Model (optional)) Pharmpy model}
+
+\item{max_eval}{(logical) Limit the number of function evaluations to 3.1 times that of the
+base model. Default is FALSE.}
+
+\item{adaptive_scope_reduction}{(logical) Stash all non-significant parameter-covariate effects to be tested
+after all significant effects have been tested. Once all these have been
+tested, try adding the stashed effects once more with a regular forward approach.
+Default is FALSE}
 
 \item{strictness}{(str (optional)) Strictness criteria}
 

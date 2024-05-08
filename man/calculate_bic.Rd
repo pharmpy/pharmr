@@ -47,7 +47,7 @@ Different variations of the BIC can be calculated:
 
 If multiple_testing option is set to true an additional penalty will be added:
 \itemize{
-\item | mBIC = BIC + 2*(n_estimated_parameters)*log(n_predictors/n_expected_models)
+\item | mBIC = BIC + 2*(n_estimated_parameters)*log(n_predictors/n_expected_predictors)
 }
 }
 \examples{

@@ -63,6 +63,21 @@ The following effects have templates:
 \item Init: 0.001
 \item Upper: 5
 \item Lower: -1
+\item (alternative) Linear function for categorical covariates (\emph{cat2})
+\item Function:
+\item If covariate is the most common category:
+}
+
+(equation could not be rendered, see API doc on website)
+\itemize{
+\item For each additional category:
+}
+
+(equation could not be rendered, see API doc on website)
+\itemize{
+\item Init: 0.001
+\item Upper: 6
+\item Lower: 0
 \item Piecewise linear function/"hockey-stick", continuous covariates only (\emph{piece_lin})
 \item Function:
 \item If cov <= median:

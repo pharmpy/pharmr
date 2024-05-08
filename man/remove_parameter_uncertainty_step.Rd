@@ -19,7 +19,7 @@ Removes parameter uncertainty step from the final estimation step
 \dontrun{
 model <- load_example_model("pheno")
 model <- remove_parameter_uncertainty_step(model)
-ests <- model$estimation_steps
+ests <- model$execution_steps
 ests[1]
 }
 }

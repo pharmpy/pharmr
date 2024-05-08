@@ -21,7 +21,7 @@ Remove estimation step
 \dontrun{
 model <- load_example_model("pheno")
 model <- remove_estimation_step(model, 0)
-ests <- model$estimation_steps
+ests <- model$execution_steps
 length(ests)
 }
 }

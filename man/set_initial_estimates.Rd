@@ -4,21 +4,32 @@
 \alias{set_initial_estimates}
 \title{set_initial_estimates}
 \usage{
-set_initial_estimates(model, inits)
+set_initial_estimates(model, inits, move_est_close_to_bounds = FALSE)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model}
+\item{model}{(Model) Pharmpy model to update initial estimates}
 
-\item{inits}{(list(str=numeric)) A list of parameter init for parameters to change}
+\item{inits}{(list(str=numeric)) Initial parameter estimates to update}
+
+\item{move_est_close_to_bounds}{(logical) Move estimates that are close to bounds. If correlation >0.99 the correlation will
+be set to 0.9, if variance is <0.001 the variance will be set to 0.01.}
 }
 \value{
 (Model) Pharmpy model object
 }
 \description{
-Set initial estimates
+Update initial parameter estimate for a model
+
+Updates initial estimates of population parameters for a model.
+If the new initial estimates are out of bounds or NaN this function will raise.
 }
 \examples{
 \dontrun{
+model <- load_example_model("pheno")
+results <- load_example_modelfit_results("pheno")
+model$parameters$inits
+model <- set_initial_estimates(model, results$parameter_estimates)
+model$parameters$inits
 model <- load_example_model("pheno")
 model <- set_initial_estimates(model, {'PTVCL': 2.0})
 model$parameters['PTVCL']
