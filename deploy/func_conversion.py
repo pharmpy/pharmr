@@ -29,7 +29,7 @@ def create_r_func(func, module):
     func_def = f'{func_name} <- function({wrapper_arg_str})'
     func_execute = f'func_out <- pharmpy${module_name}${func_name}({pyfunc_arg_str})'
 
-    if module_name == 'tools':
+    if module_name == 'tools' and func_name.startswith("run_"):
         r_func_body = _create_func_body_tool(func, func_execute)
     else:
         r_func_body = _create_func_body_modeling(func, func_execute)
