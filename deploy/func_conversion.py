@@ -67,7 +67,9 @@ def _create_func_body_modeling(func, func_execute):
 def _create_func_body_tool(func, func_execute):
     error_msg = [
         'err <- reticulate::py_last_error()',
-        'if (err$type == "InputValidationError") {',
+        'if (is.null(err)) {',
+        '    message(cond)',
+        '} else if (err$type == "InputValidationError") {',
         '    message(err$value)',
         '} else {',
         '    message(\'Full stack:\')',
