@@ -76,6 +76,10 @@ def py_to_r_str(arg, example=False):
     if not example:
         py_to_r_dict = {**py_to_r_dict, **{r'\[([0-9]+)\]_*': r'(\1)'}}
         py_to_r_dict = {**py_to_r_dict, **{r'\[([\'\"\w(),\s]+)]': r'c(\1)'}}
+        py_to_r_dict = {**py_to_r_dict, **{r'\{(.+:.+,*)+\}': r'list(\1)'}}
+        py_to_r_dict = {**py_to_r_dict, **{
+            r'list\(((.+):(.+),*)+\)': lambda x: x.group().replace(':', "=".format(x.group(1)))}
+                        }
 
     arg_sub = arg
     for key, value in py_to_r_dict.items():
