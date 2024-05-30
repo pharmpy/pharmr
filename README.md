@@ -18,7 +18,7 @@ For comprehensive information and documentation, see: https://pharmpy.github.io
 
 ### Install from CRAN
 
-pharmr is available via CRAN, and can be installed via:
+The latest stable version of pharmr is available via CRAN, and can be installed via:
 
 ```R
 install.packages("pharmr")
@@ -31,6 +31,20 @@ pharmr::install_pharmpy()
 ```
 
 For a more comprehensive description of the process of setting up, see the [following guide](https://pharmpy.github.io/latest/using_r.html).
+
+### Install from GitHub
+
+It is also possible to install the development version of pharmr from GitHub, with the following command:
+
+```R
+remotes::install_github("pharmpy/pharmr", ref="main")
+```
+
+Pharmpy can then be installed:
+
+```R
+pharmr::install_pharmpy()
+```
 
 ## Using pharmr
 
