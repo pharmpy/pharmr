@@ -13,7 +13,7 @@ Authors@R: c(
   person("Simon", "Buatois", role=c("rev")),
   person("João A.", "Abrantes", role=c("rev")),
   person("Emilie", "Schindler", role=c("rev")),
-  person("F. Hoffmann-La Roche Ltd.", role=c("fnd"))
+  person("F. Hoffmann-La Roche Ltd.", role=c("fnd")),
   person("Bayer AG", role=c("fnd"))
   )
 Maintainer: Rikard Nordgren <rikard.nordgren@farmaci.uu.se>
