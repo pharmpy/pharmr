@@ -39,6 +39,6 @@ Config/reticulate:
   )
 URL: https://github.com/pharmpy/pharmr
 BugReports: https://github.com/pharmpy/pharmr/issues
-License: LGPL (>= 3)
+License: LGPL (>= 3) + file LICENSE
 RoxygenNote: 7.3.1
 Roxygen: list(markdown = TRUE)
