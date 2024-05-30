@@ -168,7 +168,10 @@ def _create_r_example(doc_list):
     pattern_ws = re.compile(r'\s{2,}')
     pattern_doctest = re.compile(r'\s+# doctest:.*')
 
-    doc_code = [row for row in doc_list if row.startswith('>>>') or re.match(r'^\.\.\.\s+[$\w\d]', row)]
+    if any('pharmpy-execute::' in row for row in doc_list):
+        doc_code = [row for row in doc_list if row and 'pharmpy-execute::' not in row]
+    else:
+        doc_code = [row for row in doc_list if row.startswith('>>>') or re.match(r'^\.\.\.\s+[$\w\d]', row)]
     doc_code = [row for row in doc_code if ' import ' not in row]
 
     doc_code_r = ''
