@@ -6,7 +6,7 @@ status](https://www.r-pkg.org/badges/version/pharmr)](https://cran.r-project.org
 [![check](https://github.com/pharmpy/pharmr/workflows/check.yaml/badge.svg)](https://github.com/pharmpy/pharmr/actions)
 <!-- badges: end -->
 
-# ![](https://github.com/pharmpy/pharmpy/blob/master/docs/pharmr_logo.svg)
+# ![](https://github.com/pharmpy/pharmpy/blob/main/docs/pharmr_logo.svg)
 
 pharmr is an R wrapper to [**Pharmpy**](https://github.com/pharmpy/pharmpy): an open-source software package for 
 pharmacometric modeling. It provides an R interface to all functions found in the `modeling` and `tools` modules
