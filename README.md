@@ -1,9 +1,8 @@
 <!-- badges: start -->
 
-[![CRAN
-status](https://www.r-pkg.org/badges/version/pharmr)](https://cran.r-project.org/package=pharmr)
+[![CRAN status](https://www.r-pkg.org/badges/version/pharmr)](https://cran.r-project.org/package=pharmr)
 [![](https://img.shields.io/github/r-package/v/pharmpy/pharmr?label=github%20version&logo=github)](https://github.com/pharmpy/pharmr)
-[![check](https://github.com/pharmpy/pharmr/workflows/check.yaml/badge.svg)](https://github.com/pharmpy/pharmr/actions)
+[![check](https://github.com/pharmpy/pharmr/actions/workflows/check.yaml/badge.svg)](https://github.com/pharmpy/pharmr/actions)
 <!-- badges: end -->
 
 # ![](https://github.com/pharmpy/pharmpy/blob/main/docs/pharmr_logo.svg)
