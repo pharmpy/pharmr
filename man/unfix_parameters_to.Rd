@@ -22,11 +22,11 @@ Unfix all listed parameters to specified value/values
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-model <- fix_parameters(model, c('PTVCL', 'PTVV', 'THETA_3'))
+model <- fix_parameters(model, c('POP_CL', 'POP_VC'))
 model$parameters$fix
-model <- unfix_parameters_to(model, {'PTVCL': 0.5})
+model <- unfix_parameters_to(model, {'POP_CL': 0.5})
 model$parameters$fix
-model$parameters['PTVCL']
+model$parameters['POP_CL']
 }
 }
 \seealso{

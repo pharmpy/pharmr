@@ -22,7 +22,7 @@ Initial estimate for degrees of freedom is 80 with bounds (3, 100).
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-model <- transform_etas_tdist(model, c("ETA_1"))
+model <- transform_etas_tdist(model, c("ETA_CL"))
 model$statements$before_odes$full_expression("CL")
 }
 }

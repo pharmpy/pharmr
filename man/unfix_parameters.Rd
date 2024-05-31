@@ -22,9 +22,9 @@ Unfix all listed parameters
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-model <- fix_parameters(model, c('PTVCL', 'PTVV', 'THETA_3'))
+model <- fix_parameters(model, c('POP_CL', 'POP_VC'))
 model$parameters$fix
-model <- unfix_parameters(model, 'PTVCL')
+model <- unfix_parameters(model, 'POP_CL')
 model$parameters$fix
 }
 }

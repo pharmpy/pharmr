@@ -15,14 +15,6 @@ use_thetas_for_error_stdev(model)
 \description{
 Use thetas to estimate standard deviation of error
 }
-\examples{
-\dontrun{
-model <- load_example_model("pheno")
-model <- use_thetas_for_error_stdev(model)
-model$statements$find_assignment("W")
-model$statements$find_assignment("Y")
-}
-}
 \seealso{
 set_weighted_error_model : Encode error model with one epsilon and weight
 }

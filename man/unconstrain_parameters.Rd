@@ -20,9 +20,9 @@ Remove all constraints from parameters
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-model$parameters['PTVCL']
-model <- unconstrain_parameters(model, c('PTVCL'))
-model$parameters['PTVCL']
+model$parameters['POP_CL']
+model <- unconstrain_parameters(model, c('POP_CL'))
+model$parameters['POP_CL']
 }
 }
 \seealso{

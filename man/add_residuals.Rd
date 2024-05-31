@@ -26,7 +26,7 @@ c('RES', 'IRES', 'WRES', 'IWRES', 'CWRES')
 \dontrun{
 model <- load_example_model("pheno")
 model$execution_steps[-1].residuals
-model <- add_residuals(model, c('RES'))
+model <- add_residuals(model, c('WRES'))
 model$execution_steps[-1].residuals
 }
 }

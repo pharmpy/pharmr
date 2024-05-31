@@ -4,14 +4,12 @@
 \alias{run_modelfit}
 \title{run_modelfit}
 \usage{
-run_modelfit(model_or_models = NULL, n = NULL, tool = NULL, ...)
+run_modelfit(model_or_models = NULL, n = NULL, ...)
 }
 \arguments{
 \item{model_or_models}{(Model or array(Model) (optional)) A vector of models are one single model object}
 
-\item{n}{(numeric (optional)) Number of models to fit. This is only used if the tool is going to be combined with other tools.}
-
-\item{tool}{(str (optional)) Which tool to use for fitting. Currently, 'nonmem', 'nlmixr', 'rxode' can be used}
+\item{n}{(numeric (optional)) Number of models to fit. This is only used if the tool is going to be combined with other tools}
 
 \item{...}{Arguments to pass to tool}
 }
@@ -20,6 +18,9 @@ run_modelfit(model_or_models = NULL, n = NULL, tool = NULL, ...)
 }
 \description{
 Run modelfit tool.
+
+note::
+For most use cases the :func:\code{pharmpy.tools.fit} function is a more user friendly option for fitting a model.
 }
 \examples{
 \dontrun{

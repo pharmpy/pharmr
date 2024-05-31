@@ -20,7 +20,7 @@ Simplify expression given constraints in model
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-simplify_expression(model, "Abs(PTVCL)")
+simplify_expression(model, "Abs(POP_CL)")
 }
 
 }

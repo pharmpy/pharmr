@@ -26,7 +26,5 @@ retrieved.
 tooldir_path <- 'path/to/tool/directory'
 models <- retrieve_models(tooldir_path, names=c('run1'))
 }
-}
-\seealso{
-retrieve_final_model
+
 }

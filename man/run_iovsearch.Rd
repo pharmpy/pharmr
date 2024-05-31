@@ -7,12 +7,13 @@
 run_iovsearch(
   column = "OCC",
   list_of_parameters = NULL,
-  rank_type = "mbic",
+  rank_type = "bic",
   cutoff = NULL,
   distribution = "same-as-iiv",
   results = NULL,
   model = NULL,
   strictness = "minimization_successful or (rounding_errors and sigdigs>=0.1)",
+  E = NULL,
   ...
 )
 }
@@ -21,7 +22,7 @@ run_iovsearch(
 
 \item{list_of_parameters}{(array(str or array(str)) (optional)) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)}
 
-\item{rank_type}{(str) Which ranking type should be used. Default is mBIC.}
+\item{rank_type}{(str) Which ranking type should be used. Default is BIC.}
 
 \item{cutoff}{(numeric (optional)) Cutoff for which value of the ranking type that is considered significant. Default
 is NULL (all models will be ranked)}
@@ -32,7 +33,9 @@ is NULL (all models will be ranked)}
 
 \item{model}{(Model (optional)) Pharmpy model}
 
-\item{strictness}{(str (optional)) Strictness criteri}
+\item{strictness}{(str (optional)) Strictness criteria}
+
+\item{E}{(numeric (optional)) Expected number of predictors (used for mBIC). Must be set when using mBI}
 
 \item{...}{Arguments to pass to tool}
 }

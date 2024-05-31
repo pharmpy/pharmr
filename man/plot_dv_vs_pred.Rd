@@ -23,6 +23,12 @@ Plot DV vs PRED
 }
 \examples{
 \dontrun{
+model <- load_example_model("pheno")
+res <- load_example_modelfit_results("pheno")
+plot_dv_vs_pred(model, res$predictions)
+model <- load_example_model("pheno")
+res <- load_example_modelfit_results("pheno")
+plot_dv_vs_pred(model, res$predictions, 'WGT', bins=4)
 }
 
 }

@@ -21,7 +21,7 @@ run_estmethod(
 \item{methods}{(array(str) or str (optional)) List of estimation methods to test.
 Can be specified as 'all', a vector of estimation methods, or NULL (to not test any estimation method)}
 
-\item{solvers}{(array(str) or str (optional)) List of solver to test. Can be specified as 'all', a vector of solvers, or NULL (to
+\item{solvers}{(array(str) or str (optional)) List of solvers to test. Can be specified as 'all', a vector of solvers, or NULL (to
 not test any solver)}
 
 \item{parameter_uncertainty_methods}{(array(str) or str (optional)) List of parameter uncertainty methods to test.

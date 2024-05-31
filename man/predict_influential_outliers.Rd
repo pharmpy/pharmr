@@ -16,15 +16,18 @@ predict_influential_outliers(
 
 \item{results}{(ModelfitResults) Results for model}
 
-\item{outlier_cutoff}{(numeric) Cutoff threshold for a residual signalling an outlier}
+\item{outlier_cutoff}{(numeric) Cutoff threshold for a residual signaling an outlier}
 
-\item{influential_cutoff}{(numeric) Cutoff threshold for a dofv signalling an influential individual}
+\item{influential_cutoff}{(numeric) Cutoff threshold for a dofv signaling an influential individual}
 }
 \value{
 (data.frame) Dataframe over the individuals with a \code{outliers} and \code{dofv} columns containing the raw predictions and \code{influential}, \code{outlier} and \code{influential_outlier} boolean columns.
 }
 \description{
 Predict influential outliers for a model using a machine learning model.
+
+Please refer to www.page-meeting.org/?abstract=10029 for more information on training and estimated
+precision and accuracy.
 }
 \seealso{
 predict_influential_individuals

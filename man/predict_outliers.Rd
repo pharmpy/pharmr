@@ -11,7 +11,7 @@ predict_outliers(model, results, cutoff = 3)
 
 \item{results}{(ModelfitResults) ModelfitResults for the model}
 
-\item{cutoff}{(numeric) Cutoff threshold for a residual singalling an outlier}
+\item{cutoff}{(numeric) Cutoff threshold for a residual signaling an outlier}
 }
 \value{
 (data.frame) Dataframe over the individuals with a \code{residual} column containing the raw predicted residuals and a \code{outlier} column with a boolean to tell whether the individual is an outlier or not.
@@ -20,6 +20,9 @@ predict_outliers(model, results, cutoff = 3)
 Predict outliers for a model using a machine learning model.
 
 See the :ref:\verb{simeval <Individual OFV summary>} documentation for a definition of the \code{residual}
+
+Please refer to www.page-meeting.org/?abstract=10029 for more information on training and estimated
+precision and accuracy.
 }
 \examples{
 \dontrun{

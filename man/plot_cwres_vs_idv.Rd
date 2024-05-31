@@ -23,6 +23,12 @@ Plot CWRES vs idv
 }
 \examples{
 \dontrun{
+model <- load_example_model("pheno")
+res <- load_example_modelfit_results("pheno")
+plot_cwres_vs_idv(model, res$residuals)
+model <- load_example_model("pheno")
+res <- load_example_modelfit_results("pheno")
+plot_cwres_vs_idv(model, res$residuals, 'WGT', bins=4)
 }
 
 }

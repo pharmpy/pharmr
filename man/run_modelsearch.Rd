@@ -8,11 +8,12 @@ run_modelsearch(
   search_space,
   algorithm,
   iiv_strategy = "absorption_delay",
-  rank_type = "mbic",
+  rank_type = "bic",
   cutoff = NULL,
   results = NULL,
   model = NULL,
   strictness = "minimization_successful or (rounding_errors and sigdigs >= 0.1)",
+  E = NULL,
   ...
 )
 }
@@ -23,7 +24,7 @@ run_modelsearch(
 
 \item{iiv_strategy}{(str) If/how IIV should be added to candidate models. Default is 'absorption_delay'.}
 
-\item{rank_type}{(str) Which ranking type should be used. Default is mBIC.}
+\item{rank_type}{(str) Which ranking type should be used. Default is BIC.}
 
 \item{cutoff}{(numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 is NULL (all models will be ranked)}
@@ -32,7 +33,9 @@ is NULL (all models will be ranked)}
 
 \item{model}{(Model (optional)) Pharmpy model}
 
-\item{strictness}{(str (optional)) Strictness criteri}
+\item{strictness}{(str (optional)) Strictness criteria}
+
+\item{E}{(numeric (optional)) Expected number of predictors (used for mBIC). Must be set when using mBI}
 
 \item{...}{Arguments to pass to tool}
 }

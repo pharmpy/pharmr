@@ -21,9 +21,9 @@ Splits etas following a joint distribution into separate distributions.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-model <- create_joint_distribution(model, c('ETA_1', 'ETA_2'))
+model <- create_joint_distribution(model, c('ETA_CL', 'ETA_VC'))
 model$random_variables$etas
-model <- split_joint_distribution(model, c('ETA_1', 'ETA_2'))
+model <- split_joint_distribution(model, c('ETA_CL', 'ETA_VC'))
 model$random_variables$etas
 }
 }

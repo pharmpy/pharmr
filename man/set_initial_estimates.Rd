@@ -31,8 +31,8 @@ model$parameters$inits
 model <- set_initial_estimates(model, results$parameter_estimates)
 model$parameters$inits
 model <- load_example_model("pheno")
-model <- set_initial_estimates(model, {'PTVCL': 2.0})
-model$parameters['PTVCL']
+model <- set_initial_estimates(model, {'POP_CL': 2.0})
+model$parameters['POP_CL']
 }
 }
 \seealso{

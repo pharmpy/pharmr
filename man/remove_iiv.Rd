@@ -24,8 +24,8 @@ model <- load_example_model("pheno")
 model <- remove_iiv(model)
 model$statements$find_assignment("CL")
 model <- load_example_model("pheno")
-model <- remove_iiv(model, "V")
-model$statements$find_assignment("V")
+model <- remove_iiv(model, "VC")
+model$statements$find_assignment("VC")
 }
 }
 \seealso{

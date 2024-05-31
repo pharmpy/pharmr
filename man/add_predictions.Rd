@@ -23,7 +23,7 @@ Add predictions to estimation step.
 \dontrun{
 model <- load_example_model("pheno")
 model$execution_steps[-1].predictions
-model <- add_predictions(model, c('CIPREDI'))
+model <- add_predictions(model, c('IPRED'))
 model$execution_steps[-1].predictions
 }
 }

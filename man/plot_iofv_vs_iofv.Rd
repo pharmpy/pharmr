@@ -23,6 +23,9 @@ Plot individual OFV of two models against each other
 }
 \examples{
 \dontrun{
+res1 <- load_example_modelfit_results("pheno")
+res2 <- load_example_modelfit_results("pheno_linear")
+plot_iofv_vs_iofv(res1$individual_ofv, res2$individual_ofv, "nonlin", "linear")
 }
 
 }

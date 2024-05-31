@@ -817,7 +817,7 @@ add_population_parameter <- function(model, name, init, lower=NULL, upper=NULL, 
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$execution_steps[-1].predictions
-#' model <- add_predictions(model, c('CIPREDI'))
+#' model <- add_predictions(model, c('IPRED'))
 #' model$execution_steps[-1].predictions
 #' }
 #' @seealso
@@ -865,7 +865,7 @@ add_predictions <- function(model, pred) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$execution_steps[-1].residuals
-#' model <- add_residuals(model, c('RES'))
+#' model <- add_residuals(model, c('WRES'))
 #' model$execution_steps[-1].residuals
 #' }
 #' @seealso
@@ -1063,16 +1063,9 @@ calculate_aic <- function(model, likelihood) {
 #' * | iiv
 #' | BIC = -2LL + n_estimated_iiv_omega_parameters * log(n_individuals)
 #' 
-#' If multiple_testing option is set to true an additional penalty will be added:
-#' 
-#' * | mBIC = BIC + 2*(n_estimated_parameters)*log(n_predictors/n_expected_predictors)
-#' 
 #' @param model (Model) Pharmpy model object
 #' @param likelihood (numeric) -2LL to use
 #' @param type (str) Type of BIC to calculate. Default is the mixed effects.
-#' @param multiple_testing (logical) Whether to use penalty for multiple testing (default is FALSE)
-#' @param mult_test_p (numeric) Number of expected models if using type `multiple_testing`
-#' @param mult_test_e (numeric) E value if using type `mult_test`
 #'  
 #' @return (numeric) BIC of model fit
 #' 
@@ -1088,10 +1081,8 @@ calculate_aic <- function(model, likelihood) {
 #' }
 #' 
 #' @export
-calculate_bic <- function(model, likelihood, type='mixed', multiple_testing=FALSE, mult_test_p=1, mult_test_e=1) {
-	mult_test_p <- convert_input(mult_test_p, "int")
-	mult_test_e <- convert_input(mult_test_e, "int")
-	func_out <- pharmpy$modeling$calculate_bic(model, likelihood, type=type, multiple_testing=multiple_testing, mult_test_p=mult_test_p, mult_test_e=mult_test_e)
+calculate_bic <- function(model, likelihood, type='mixed') {
+	func_out <- pharmpy$modeling$calculate_bic(model, likelihood, type=type)
 	return(py_to_r(func_out))
 }
 
@@ -1442,7 +1433,7 @@ calculate_individual_shrinkage <- function(model, parameter_estimates, individua
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' scale <- calculate_ucp_scale(model)
-#' values <- {'PTVCL': 0.1, 'PTVV': 0.1, 'THETA_3': 0.1, 'IVCL': 0.1, 'IVV': 0.1, 'SIGMA_1_1': 0.1}
+#' values <- {'POP_CL': 0.1, 'POP_VC': 0.1, 'COVAPGR': 0.1, 'IIV_CL': 0.1, 'IIV_VC': 0.1, 'SIGMA': 0.1}
 #' calculate_parameters_from_ucp(model, scale, values)
 #' }
 #' @seealso
@@ -1889,7 +1880,7 @@ create_config_template <- function() {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' model$random_variables$etas
-#' model <- create_joint_distribution(model, c('ETA_1', 'ETA_2'))
+#' model <- create_joint_distribution(model, c('ETA_CL', 'ETA_VC'))
 #' model$random_variables$etas
 #' }
 #' @seealso
@@ -2408,9 +2399,9 @@ find_volume_parameters <- function(model) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' model$parameters['PTVCL']
-#' model <- fix_or_unfix_parameters(model, list('PTVCL'=TRUE))
-#' model$parameters['PTVCL']
+#' model$parameters['POP_CL']
+#' model <- fix_or_unfix_parameters(model, list('POP_CL'=TRUE))
+#' model$parameters['POP_CL']
 #' }
 #' @seealso
 #' fix_parameters : Fix parameters
@@ -2448,9 +2439,9 @@ fix_or_unfix_parameters <- function(model, parameters) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' model$parameters['PTVCL']
-#' model <- fix_parameters(model, 'PTVCL')
-#' model$parameters['PTVCL']
+#' model$parameters['POP_CL']
+#' model <- fix_parameters(model, 'POP_CL')
+#' model$parameters['POP_CL']
 #' }
 #' @seealso
 #' fix_or_unfix_parameters : Fix or unfix parameters (given boolean)
@@ -2486,9 +2477,9 @@ fix_parameters <- function(model, parameter_names) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' model$parameters['PTVCL']
-#' model <- fix_parameters_to(model, {'PTVCL': 0.5})
-#' model$parameters['PTVCL']
+#' model$parameters['POP_CL']
+#' model <- fix_parameters_to(model, {'POP_CL': 0.5})
+#' model$parameters['POP_CL']
 #' }
 #' @seealso
 #' fix_parameters : Fix parameters
@@ -3359,7 +3350,7 @@ get_population_prediction_expression <- function(model) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' get_rv_parameters(model, 'ETA_1')
+#' get_rv_parameters(model, 'ETA_CL')
 #' }
 #' @seealso
 #' has_random_effect
@@ -3448,7 +3439,7 @@ get_thetas <- function(model) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' get_unit_of(model, "Y")
-#' get_unit_of(model, "V")
+#' get_unit_of(model, "VC")
 #' get_unit_of(model, "WGT")
 #' }
 #' 
@@ -4206,6 +4197,12 @@ omit_data <- function(dataset_or_model, group, name_pattern='omitted_{}') {
 #' 
 #' @examples
 #' \dontrun{
+#' model <- load_example_model("pheno")
+#' res <- load_example_modelfit_results("pheno")
+#' plot_abs_cwres_vs_ipred(model, res$predictions, res$residuals)
+#' model <- load_example_model("pheno")
+#' res <- load_example_modelfit_results("pheno")
+#' plot_abs_cwres_vs_ipred(model, res$predictions, res$residuals, 'WGT', bins=4)
 #' }
 #' 
 #' @export
@@ -4230,6 +4227,12 @@ plot_abs_cwres_vs_ipred <- function(model, predictions, residuals, stratify_on=N
 #' 
 #' @examples
 #' \dontrun{
+#' model <- load_example_model("pheno")
+#' res <- load_example_modelfit_results("pheno")
+#' plot_cwres_vs_idv(model, res$residuals)
+#' model <- load_example_model("pheno")
+#' res <- load_example_modelfit_results("pheno")
+#' plot_cwres_vs_idv(model, res$residuals, 'WGT', bins=4)
 #' }
 #' 
 #' @export
@@ -4254,6 +4257,12 @@ plot_cwres_vs_idv <- function(model, residuals, stratify_on=NULL, bins=8) {
 #' 
 #' @examples
 #' \dontrun{
+#' model <- load_example_model("pheno")
+#' res <- load_example_modelfit_results("pheno")
+#' plot_dv_vs_ipred(model, res$predictions)
+#' model <- load_example_model("pheno")
+#' res <- load_example_modelfit_results("pheno")
+#' plot_dv_vs_ipred(model, res$predictions, 'WGT', bins=4)
 #' }
 #' 
 #' @export
@@ -4278,6 +4287,12 @@ plot_dv_vs_ipred <- function(model, predictions, stratify_on=NULL, bins=8) {
 #' 
 #' @examples
 #' \dontrun{
+#' model <- load_example_model("pheno")
+#' res <- load_example_modelfit_results("pheno")
+#' plot_dv_vs_pred(model, res$predictions)
+#' model <- load_example_model("pheno")
+#' res <- load_example_modelfit_results("pheno")
+#' plot_dv_vs_pred(model, res$predictions, 'WGT', bins=4)
 #' }
 #' 
 #' @export
@@ -4300,6 +4315,9 @@ plot_dv_vs_pred <- function(model, predictions, stratify_on=NULL, bins=8) {
 #' 
 #' @examples
 #' \dontrun{
+#' model <- load_example_model("pheno")
+#' res <- load_example_modelfit_results("pheno")
+#' plot_eta_distributions(model, res$individual_estimates)
 #' }
 #' 
 #' @export
@@ -4322,6 +4340,9 @@ plot_eta_distributions <- function(model, individual_estimates) {
 #' 
 #' @examples
 #' \dontrun{
+#' model <- load_example_model("pheno")
+#' res <- load_example_modelfit_results("pheno")
+#' plot_individual_predictions(model, res$predictions, individuals=c(1, 2, 3, 4, 5))
 #' }
 #' 
 #' @export
@@ -4346,6 +4367,9 @@ plot_individual_predictions <- function(model, predictions, individuals=NULL) {
 #' 
 #' @examples
 #' \dontrun{
+#' res1 <- load_example_modelfit_results("pheno")
+#' res2 <- load_example_modelfit_results("pheno_linear")
+#' plot_iofv_vs_iofv(res1$individual_ofv, res2$individual_ofv, "nonlin", "linear")
 #' }
 #' 
 #' @export
@@ -4372,6 +4396,40 @@ plot_iofv_vs_iofv <- function(iofv1, iofv2, name1, name2) {
 #' @export
 plot_transformed_eta_distributions <- function(model, parameter_estimates, individual_estimates) {
 	func_out <- pharmpy$modeling$plot_transformed_eta_distributions(model, parameter_estimates, individual_estimates)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' plot_vpc
+#' 
+#' @description
+#' Creates a VPC plot for a model
+#' 
+#' @param model (Model) Pharmpy model
+#' @param simulations (data.frame or str) DataFrame containing the simulation data or path to dataset.
+#' The dataset has to have one (index) column named "SIM" containing
+#' the simulation number, one (index) column named "index" containing the data indices and one dv column.
+#' See below for more information.
+#' @param binning (str) Binning method. Can be "equal_number" or "equal_width". The default is "equal_number".
+#' @param nbins (numeric) Number of bins. Default is 8.
+#' @param qi (numeric) Upper quantile. Default is 0.95.
+#' @param ci (numeric) Confidence interval. Default is 0.95.
+#' @param stratify_on (str (optional)) Parameter to use for stratification. Optional.
+#'  
+#' @return (alt.Chart) Plot The simulation data should have the following format: +-----+-------+--------+ | SIM | index | DV     | +=====+=======+========+ | 1   | 0     | 0.000  | +-----+-------+--------+ | 1   | 1     | 34.080 | +-----+-------+--------+ | 1   | 2     | 28.858 | +-----+-------+--------+ | 1   | 3     | 0.000  | +-----+-------+--------+ | 1   | 4     | 12.157 | +-----+-------+--------+ | 2   | 0     | 23.834 | +-----+-------+--------+ | 2   | 1     | 0.000  | +-----+-------+--------+ | ... | ...   | ...    | +-----+-------+--------+ | 20  | 2     | 0.000  | +-----+-------+--------+ | 20  | 3     | 31.342 | +-----+-------+--------+ | 20  | 4     | 29.983 | +-----+-------+--------+
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' sim_model <- set_simulation(model, n=100)
+#' sim_data <- run_simulation(sim_model)
+#' plot_vpc(model, sim_data)
+#' }
+#' 
+#' @export
+plot_vpc <- function(model, simulations, binning='equal_number', nbins=8, qi=0.95, ci=0.95, stratify_on=NULL) {
+	nbins <- convert_input(nbins, "int")
+	func_out <- pharmpy$modeling$plot_vpc(model, simulations, binning=binning, nbins=nbins, qi=qi, ci=ci, stratify_on=stratify_on)
 	return(py_to_r(func_out))
 }
 
@@ -4657,8 +4715,8 @@ remove_estimation_step <- function(model, idx) {
 #' model <- remove_iiv(model)
 #' model$statements$find_assignment("CL")
 #' model <- load_example_model("pheno")
-#' model <- remove_iiv(model, "V")
-#' model$statements$find_assignment("V")
+#' model <- remove_iiv(model, "VC")
+#' model$statements$find_assignment("VC")
 #' }
 #' @seealso
 #' remove_iov
@@ -5670,8 +5728,8 @@ set_initial_condition <- function(model, compartment, expression, time=0) {
 #' model <- set_initial_estimates(model, results$parameter_estimates)
 #' model$parameters$inits
 #' model <- load_example_model("pheno")
-#' model <- set_initial_estimates(model, {'PTVCL': 2.0})
-#' model$parameters['PTVCL']
+#' model <- set_initial_estimates(model, {'POP_CL': 2.0})
+#' model$parameters['POP_CL']
 #' }
 #' @seealso
 #' fix_parameters_to : Fixing and setting parameter initial estimates in the same function
@@ -5760,8 +5818,8 @@ set_lloq_data <- function(model, value, lloq=NULL, blq=NULL) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' model <- set_lower_bounds(model, {'PTVCL': -10})
-#' model$parameters['PTVCL']
+#' model <- set_lower_bounds(model, {'POP_CL': -10})
+#' model$parameters['POP_CL']
 #' }
 #' @seealso
 #' set_upper_bounds : Set parameter upper bounds
@@ -6162,7 +6220,7 @@ set_time_varying_error_model <- function(model, cutoff, idv='TIME', dv=NULL) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param type (str) Type of TMDD model
-#' @param dv_types (list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DVs (e.g. dv_types = {'drug' : 1, 'target': 2}).
+#' @param dv_types (list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DVs (e.g. dv_types = list('drug' = 1, 'target'= 2)).
 #' Default is NULL which means that all observations are treated as drug observations.
 #' For dv = 1 the only allowed keys are 'drug' and 'drug_tot'. If no DV for drug is specified then (free) drug
 #' will have dv = 1.
@@ -6227,8 +6285,8 @@ set_transit_compartments <- function(model, n, keep_depot=TRUE) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' model <- set_upper_bounds(model, list('PTVCL'=10))
-#' model$parameters['PTVCL']
+#' model <- set_upper_bounds(model, list('POP_CL'=10))
+#' model$parameters['POP_CL']
 #' }
 #' @seealso
 #' set_lower_bounds : Set parameter lower bounds
@@ -6369,7 +6427,7 @@ set_zero_order_input <- function(model, compartment, expression) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' simplify_expression(model, "Abs(PTVCL)")
+#' simplify_expression(model, "Abs(POP_CL)")
 #' }
 #' 
 #' @export
@@ -6419,9 +6477,9 @@ solve_ode_system <- function(model) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' model <- create_joint_distribution(model, c('ETA_1', 'ETA_2'))
+#' model <- create_joint_distribution(model, c('ETA_CL', 'ETA_VC'))
 #' model$random_variables$etas
-#' model <- split_joint_distribution(model, c('ETA_1', 'ETA_2'))
+#' model <- split_joint_distribution(model, c('ETA_CL', 'ETA_VC'))
 #' model$random_variables$etas
 #' }
 #' @seealso
@@ -6552,7 +6610,7 @@ transform_blq <- function(model, method='m4', lloq=NULL) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' model <- transform_etas_boxcox(model, c("ETA_1"))
+#' model <- transform_etas_boxcox(model, c("ETA_CL"))
 #' model$statements$before_odes$full_expression("CL")
 #' }
 #' @seealso
@@ -6588,7 +6646,7 @@ transform_etas_boxcox <- function(model, list_of_etas=NULL) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' model <- transform_etas_john_draper(model, c("ETA_1"))
+#' model <- transform_etas_john_draper(model, c("ETA_CL"))
 #' model$statements$before_odes$full_expression("CL")
 #' }
 #' @seealso
@@ -6620,7 +6678,7 @@ transform_etas_john_draper <- function(model, list_of_etas=NULL) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' model <- transform_etas_tdist(model, c("ETA_1"))
+#' model <- transform_etas_tdist(model, c("ETA_CL"))
 #' model$statements$before_odes$full_expression("CL")
 #' }
 #' @seealso
@@ -6673,9 +6731,9 @@ translate_nmtran_time <- function(model) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' model$parameters['PTVCL']
-#' model <- unconstrain_parameters(model, c('PTVCL'))
-#' model$parameters['PTVCL']
+#' model$parameters['POP_CL']
+#' model <- unconstrain_parameters(model, c('POP_CL'))
+#' model$parameters['POP_CL']
 #' }
 #' @seealso
 #' set_lower_bounds : Set parameter lower bounds
@@ -6738,9 +6796,9 @@ undrop_columns <- function(model, column_names) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' model <- fix_parameters(model, c('PTVCL', 'PTVV', 'THETA_3'))
+#' model <- fix_parameters(model, c('POP_CL', 'POP_VC'))
 #' model$parameters$fix
-#' model <- unfix_parameters(model, 'PTVCL')
+#' model <- unfix_parameters(model, 'POP_CL')
 #' model$parameters$fix
 #' }
 #' @seealso
@@ -6779,11 +6837,11 @@ unfix_parameters <- function(model, parameter_names) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' model <- fix_parameters(model, c('PTVCL', 'PTVV', 'THETA_3'))
+#' model <- fix_parameters(model, c('POP_CL', 'POP_VC'))
 #' model$parameters$fix
-#' model <- unfix_parameters_to(model, {'PTVCL': 0.5})
+#' model <- unfix_parameters_to(model, {'POP_CL': 0.5})
 #' model$parameters$fix
-#' model$parameters['PTVCL']
+#' model$parameters['POP_CL']
 #' }
 #' @seealso
 #' fix_parameters : Fix parameters
@@ -6865,13 +6923,6 @@ update_initial_individual_estimates <- function(model, individual_estimates, for
 #'  
 #' @return (Model) Pharmpy model object
 #' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' model <- use_thetas_for_error_stdev(model)
-#' model$statements$find_assignment("W")
-#' model$statements$find_assignment("Y")
-#' }
 #' @seealso
 #' set_weighted_error_model : Encode error model with one epsilon and weight
 #' 
@@ -6879,40 +6930,6 @@ update_initial_individual_estimates <- function(model, individual_estimates, for
 #' @export
 use_thetas_for_error_stdev <- function(model) {
 	func_out <- pharmpy$modeling$use_thetas_for_error_stdev(model)
-	return(py_to_r(func_out))
-}
-
-#' @title
-#' vpc_plot
-#' 
-#' @description
-#' Creates a VPC plot for a model
-#' 
-#' @param model (Model) Pharmpy model
-#' @param simulations (data.frame or str) DataFrame containing the simulation data or path to dataset.
-#' The dataset has to have one (index) column named "SIM" containing
-#' the simulation number, one (index) column named "index" containing the data indices and one dv column.
-#' See below for more information.
-#' @param binning (str) Binning method. Can be "equal_number" or "equal_width". The default is "equal_number".
-#' @param nbins (numeric) Number of bins. Default is 8.
-#' @param qi (numeric) Upper quantile. Default is 0.95.
-#' @param ci (numeric) Confidence interval. Default is 0.95.
-#' @param stratify_on (str (optional)) Parameter to use for stratification. Optional.
-#'  
-#' @return (alt.Chart) Plot The simulation data should have the following format: +-----+-------+--------+ | SIM | index | DV     | +=====+=======+========+ | 1   | 0     | 0.000  | +-----+-------+--------+ | 1   | 1     | 34.080 | +-----+-------+--------+ | 1   | 2     | 28.858 | +-----+-------+--------+ | 1   | 3     | 0.000  | +-----+-------+--------+ | 1   | 4     | 12.157 | +-----+-------+--------+ | 2   | 0     | 23.834 | +-----+-------+--------+ | 2   | 1     | 0.000  | +-----+-------+--------+ | ... | ...   | ...    | +-----+-------+--------+ | 20  | 2     | 0.000  | +-----+-------+--------+ | 20  | 3     | 31.342 | +-----+-------+--------+ | 20  | 4     | 29.983 | +-----+-------+--------+
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' sim_model <- set_simulation(model, n=100)
-#' sim_data <- run_simulation(sim_model)
-#' vpc_plot(model, sim_data)
-#' }
-#' 
-#' @export
-vpc_plot <- function(model, simulations, binning='equal_number', nbins=8, qi=0.95, ci=0.95, stratify_on=NULL) {
-	nbins <- convert_input(nbins, "int")
-	func_out <- pharmpy$modeling$vpc_plot(model, simulations, binning=binning, nbins=nbins, qi=qi, ci=ci, stratify_on=stratify_on)
 	return(py_to_r(func_out))
 }
 
@@ -6977,79 +6994,8 @@ write_model <- function(model, path='', force=TRUE) {
 #' 
 #' @export
 create_report <- function(results, path) {
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$create_report(results, path)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
-}
-
-#' @title
-#' create_results
-#' 
-#' @description
-#' Create/recalculate results object given path to run directory
-#' 
-#' @param path (str) Path to run directory
-#' @param ... Arguments to pass to tool specific create results function
-#'  
-#' @return (Results) Results object for tool
-#' 
-#' @examples
-#' \dontrun{
-#' res <- create_results("frem_dir1")
-#' }
-#' @seealso
-#' read_results
-#' 
-#' 
-#' @export
-create_results <- function(path, ...) {
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$create_results(path, ...)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
+	func_out <- pharmpy$tools$create_report(results, path)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -7059,7 +7005,7 @@ create_results <- function(path, ...) {
 #' Fit models.
 #' 
 #' @param model_or_models (Model or array(Model)) List of models or one single model
-#' @param tool (str (optional)) Estimation tool to use. NULL to use default
+#' @param esttool (str (optional)) Estimation tool to use. NULL to use default
 #' @param path (str (optional)) Path to fit directory
 #' @param context (Context (optional)) Run in this context
 #'  
@@ -7075,75 +7021,9 @@ create_results <- function(path, ...) {
 #' 
 #' 
 #' @export
-fit <- function(model_or_models, tool=NULL, path=NULL, context=NULL) {
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$fit(model_or_models, tool=tool, path=path, context=context)
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
-}
-
-#' @title
-#' get_model_features
-#' 
-#' @description
-#' Create an MFL representation of an input model
-#' 
-#' Given an input model. Create a model feature language (MFL) string
-#' representation. Can currently extract absorption, elimination, transits,
-#' peripherals and lagtime.
-#' 
-#' @param model (Model) Model to extract features from.
-#' @param supress_warnings (logical) Choose to supress warnings if absorption/elimination type cannot be
-#' determined. The default is FALSE.
-#'  
-#' @return (str) A MFL string representation of the input model.
-#' 
-#' 
-#' @export
-get_model_features <- function(model, supress_warnings=FALSE) {
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$get_model_features(model, supress_warnings=supress_warnings)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
+fit <- function(model_or_models, esttool=NULL, path=NULL, context=NULL) {
+	func_out <- pharmpy$tools$fit(model_or_models, esttool=esttool, path=path, context=context)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -7153,9 +7033,9 @@ get_model_features <- function(model, supress_warnings=FALSE) {
 #' Takes a ModelfitResults object and a statement as input and returns TRUE/FALSE
 #' if the evaluation of the statement is TRUE/FALSE.
 #' 
-#' @param res (ModelfitResults) ModelfitResults object
 #' @param model (Model) Model for parameter specific strictness.
-#' @param statement (str) A statement containing the strictness criteria
+#' @param results (ModelfitResults) ModelfitResults object
+#' @param strictness (str) A strictness expression
 #'  
 #' @return (logical) A logical indicating whether the strictness criteria are fulfilled or not.
 #' 
@@ -7163,36 +7043,13 @@ get_model_features <- function(model, supress_warnings=FALSE) {
 #' \dontrun{
 #' res <- load_example_modelfit_results('pheno')
 #' model <- load_example_model('pheno')
-#' is_strictness_fulfilled(res, model, "minimization_successful or rounding_errors")
+#' is_strictness_fulfilled(model, res, "minimization_successful or rounding_errors")
 #' }
 #' 
 #' @export
-is_strictness_fulfilled <- function(res, model, statement) {
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$is_strictness_fulfilled(res, model, statement)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
+is_strictness_fulfilled <- function(model, results, strictness) {
+	func_out <- pharmpy$tools$is_strictness_fulfilled(model, results, strictness)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -7215,31 +7072,8 @@ is_strictness_fulfilled <- function(res, model, statement) {
 #' 
 #' @export
 load_example_modelfit_results <- function(name) {
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$load_example_modelfit_results(name)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
+	func_out <- pharmpy$tools$load_example_modelfit_results(name)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -7247,6 +7081,9 @@ load_example_modelfit_results <- function(name) {
 #' 
 #' @description
 #' Predict influential individuals for a model using a machine learning model.
+#' 
+#' Please refer to www.page-meeting.org/?abstract=10029 for more information on training and estimated
+#' precision and accuracy.
 #' 
 #' @param model (Model) Pharmpy model
 #' @param results (ModelfitResults) Results for model
@@ -7262,32 +7099,9 @@ load_example_modelfit_results <- function(name) {
 #' 
 #' @export
 predict_influential_individuals <- function(model, results, cutoff=3.84) {
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$predict_influential_individuals(model, results, cutoff=cutoff)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		func_out <- reset_index_df(func_out)
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
+	func_out <- pharmpy$tools$predict_influential_individuals(model, results, cutoff=cutoff)
+	func_out <- reset_index_df(func_out)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -7296,10 +7110,13 @@ predict_influential_individuals <- function(model, results, cutoff=3.84) {
 #' @description
 #' Predict influential outliers for a model using a machine learning model.
 #' 
+#' Please refer to www.page-meeting.org/?abstract=10029 for more information on training and estimated
+#' precision and accuracy.
+#' 
 #' @param model (Model) Pharmpy model
 #' @param results (ModelfitResults) Results for model
-#' @param outlier_cutoff (numeric) Cutoff threshold for a residual signalling an outlier
-#' @param influential_cutoff (numeric) Cutoff threshold for a dofv signalling an influential individual
+#' @param outlier_cutoff (numeric) Cutoff threshold for a residual signaling an outlier
+#' @param influential_cutoff (numeric) Cutoff threshold for a dofv signaling an influential individual
 #'  
 #' @return (data.frame) Dataframe over the individuals with a `outliers` and `dofv` columns containing the raw predictions and `influential`, `outlier` and `influential_outlier` boolean columns.
 #' 
@@ -7311,32 +7128,9 @@ predict_influential_individuals <- function(model, results, cutoff=3.84) {
 #' 
 #' @export
 predict_influential_outliers <- function(model, results, outlier_cutoff=3.0, influential_cutoff=3.84) {
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$predict_influential_outliers(model, results, outlier_cutoff=outlier_cutoff, influential_cutoff=influential_cutoff)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		func_out <- reset_index_df(func_out)
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
+	func_out <- pharmpy$tools$predict_influential_outliers(model, results, outlier_cutoff=outlier_cutoff, influential_cutoff=influential_cutoff)
+	func_out <- reset_index_df(func_out)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -7347,9 +7141,12 @@ predict_influential_outliers <- function(model, results, outlier_cutoff=3.0, inf
 #' 
 #' See the :ref:`simeval <Individual OFV summary>` documentation for a definition of the `residual`
 #' 
+#' Please refer to www.page-meeting.org/?abstract=10029 for more information on training and estimated
+#' precision and accuracy.
+#' 
 #' @param model (Model) Pharmpy model
 #' @param results (ModelfitResults) ModelfitResults for the model
-#' @param cutoff (numeric) Cutoff threshold for a residual singalling an outlier
+#' @param cutoff (numeric) Cutoff threshold for a residual signaling an outlier
 #'  
 #' @return (data.frame) Dataframe over the individuals with a `residual` column containing the raw predicted residuals and a `outlier` column with a boolean to tell whether the individual is an outlier or not.
 #' 
@@ -7367,32 +7164,9 @@ predict_influential_outliers <- function(model, results, outlier_cutoff=3.0, inf
 #' 
 #' @export
 predict_outliers <- function(model, results, cutoff=3.0) {
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$predict_outliers(model, results, cutoff=cutoff)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		func_out <- reset_index_df(func_out)
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
+	func_out <- pharmpy$tools$predict_outliers(model, results, cutoff=cutoff)
+	func_out <- reset_index_df(func_out)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -7406,92 +7180,8 @@ predict_outliers <- function(model, results, cutoff=3.0) {
 #' 
 #' @export
 print_fit_summary <- function(model, modelfit_results) {
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$print_fit_summary(model, modelfit_results)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
-}
-
-#' @title
-#' rank_models
-#' 
-#' @description
-#' Ranks a vector of models
-#' 
-#' Ranks a vector of models with a given ranking function
-#' 
-#' @param base_model (Model) Base model to compare to
-#' @param base_model_res (ModelfitResults) Results of base model
-#' @param models (array(Model)) List of models
-#' @param models_res (array(ModelfitResults)) List of modelfit results
-#' @param parent_dict (list(str=str) or list(Model=Model) (optional)) Dict where key is child and value is parent. Only relevant for LRT, if NULL base will be set as parent
-#' @param strictness (str (optional)) Strictness criteria that are allowed for ranking. Default is "minimization_successful".
-#' @param rank_type (str) Name of ranking type. Available options are 'ofv', 'aic', 'bic', 'lrt' (OFV with LRT)
-#' @param cutoff (numeric (optional)) Value to use as cutoff. If using LRT, cutoff denotes p-value. Default is NULL
-#' @param bic_type (str) Type of BIC to calculate. Default is the mixed effects.
-#' @param ... Arguments to pass to calculate BIC (such as `mult_test_p` and `mult_test_p`)
-#'  
-#' @return (data.frame) DataFrame of the ranked models
-#' 
-#' @examples
-#' \dontrun{
-#' model_1 <- load_example_model("pheno")
-#' model_2 <- load_example_model("pheno_linear")
-#' rank_models(model_1, c(model_2),
-#'  rank_type='lrt')
-#' }
-#' 
-#' @export
-rank_models <- function(base_model, base_model_res, models, models_res, parent_dict=NULL, strictness='minimization_successful', rank_type='ofv', cutoff=NULL, bic_type='mixed', ...) {
-	tryCatch(
-	{
-		models <- convert_input(models, "list")
-		models_res <- convert_input(models_res, "list")
-		func_out <- pharmpy$tools$rank_models(base_model, base_model_res, models, models_res, parent_dict=parent_dict, strictness=strictness, rank_type=rank_type, cutoff=cutoff, bic_type=bic_type, ...)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		func_out <- reset_index_df(func_out)
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
+	func_out <- pharmpy$tools$print_fit_summary(model, modelfit_results)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -7501,34 +7191,15 @@ rank_models <- function(base_model, base_model_res, models, models_res, parent_d
 #' Read results from external tool for a model
 #' 
 #' @param path (str) Path to model file
+#' @param esttool (str) Set if other than the default estimation tool is to be used
 #'  
 #' @return (ModelfitResults) Results object
 #' 
 #' 
 #' @export
-read_modelfit_results <- function(path) {
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$read_modelfit_results(path)
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
+read_modelfit_results <- function(path, esttool=NULL) {
+	func_out <- pharmpy$tools$read_modelfit_results(path, esttool=esttool)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -7551,123 +7222,8 @@ read_modelfit_results <- function(path) {
 #' 
 #' @export
 read_results <- function(path) {
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$read_results(path)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
-}
-
-#' @title
-#' resume_tool
-#' 
-#' @description
-#' Resume tool workflow from tool database path
-#' 
-#' @param path (str) The path to the tool database
-#'  
-#' @return (Results) Results object for tool
-#' 
-#' @examples
-#' \dontrun{
-#' res <- resume_tool("resmod_dir1")
-#' }
-#' 
-#' @export
-resume_tool <- function(path) {
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$resume_tool(path)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
-}
-
-#' @title
-#' retrieve_final_model
-#' 
-#' @description
-#' Retrieve final model from a result object
-#' 
-#' @param res (Results) A results object
-#'  
-#' @return (Model) Reference to final model
-#' 
-#' @examples
-#' \dontrun{
-#' res <- read_results("results$json")
-#' model <- retrieve_final_model(res)
-#' }
-#' @seealso
-#' retrieve_models
-#' 
-#' 
-#' @export
-retrieve_final_model <- function(res) {
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$retrieve_final_model(res)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
+	func_out <- pharmpy$tools$read_results(path)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -7690,38 +7246,12 @@ retrieve_final_model <- function(res) {
 #' tooldir_path <- 'path/to/tool/directory'
 #' models <- retrieve_models(tooldir_path, names=c('run1'))
 #' }
-#' @seealso
-#' retrieve_final_model
-#' 
 #' 
 #' @export
 retrieve_models <- function(source, names=NULL) {
-	tryCatch(
-	{
-		names <- convert_input(names, "list")
-		func_out <- pharmpy$tools$retrieve_models(source, names=names)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
+	names <- convert_input(names, "list")
+	func_out <- pharmpy$tools$retrieve_models(source, names=names)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -7759,25 +7289,41 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 		lower_bounds <- convert_input(lower_bounds, "list")
 		upper_bounds <- convert_input(upper_bounds, "list")
 		func_out <- pharmpy$tools$run_allometry(model=model, results=results, allometric_variable=allometric_variable, reference_value=reference_value, parameters=parameters, initials=initials, lower_bounds=lower_bounds, upper_bounds=upper_bounds, fixed=fixed, ...)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	},
 	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	}
 	)
@@ -7801,9 +7347,9 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' @param emax_init (numeric (optional)) Initial estimate for E_max (PKPD model)
 #' @param ec50_init (numeric (optional)) Initial estimate for EC_50 (PKPD model)
 #' @param met_init (numeric (optional)) Initial estimate for mean equilibration time (PKPD model)
-#' @param search_space (str (optional)) MFL for search space for structural model
+#' @param search_space (str (optional)) MFL for search space for structural and covariate model
 #' @param lloq_method (str (optional)) Method for how to remove LOQ data. See `transform_blq` for vector of available methods
-#' @param lloq_limit (str (optional)) Lower limit of quantification. If NULL LLOQ column from dataset will be used
+#' @param lloq_limit (numeric (optional)) Lower limit of quantification. If NULL LLOQ column from dataset will be used
 #' @param allometric_variable (str or Expr (optional)) Variable to use for allometry
 #' @param occasion (str (optional)) Name of occasion column
 #' @param path (str (optional)) Path to run AMD in
@@ -7840,25 +7386,41 @@ run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='o
 		mechanistic_covariates <- convert_input(mechanistic_covariates, "list")
 		seed <- convert_input(seed, "int")
 		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, administration=administration, strategy=strategy, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, search_space=search_space, lloq_method=lloq_method, lloq_limit=lloq_limit, allometric_variable=allometric_variable, occasion=occasion, path=path, resume=resume, strictness=strictness, dv_types=dv_types, mechanistic_covariates=mechanistic_covariates, retries_strategy=retries_strategy, seed=seed, parameter_uncertainty_method=parameter_uncertainty_method, ignore_datainfo_fallback=ignore_datainfo_fallback)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	},
 	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	}
 	)
@@ -7890,25 +7452,41 @@ run_bootstrap <- function(model, results=NULL, resamples=1, ...) {
 	{
 		resamples <- convert_input(resamples, "int")
 		func_out <- pharmpy$tools$run_bootstrap(model, results=results, resamples=resamples, ...)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	},
 	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	}
 	)
@@ -7955,25 +7533,41 @@ run_covsearch <- function(search_space, p_forward=0.01, p_backward=0.001, max_st
 		max_steps <- convert_input(max_steps, "int")
 		naming_index_offset <- convert_input(naming_index_offset, "int")
 		func_out <- pharmpy$tools$run_covsearch(search_space, p_forward=p_forward, p_backward=p_backward, max_steps=max_steps, algorithm=algorithm, results=results, model=model, max_eval=max_eval, adaptive_scope_reduction=adaptive_scope_reduction, strictness=strictness, naming_index_offset=naming_index_offset, ...)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	},
 	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	}
 	)
@@ -7988,7 +7582,7 @@ run_covsearch <- function(search_space, p_forward=0.01, p_backward=0.001, max_st
 #' @param algorithm (str) The algorithm to use (can be 'exhaustive', 'exhaustive_with_update' or 'exhaustive_only_eval')
 #' @param methods (array(str) or str (optional)) List of estimation methods to test.
 #' Can be specified as 'all', a vector of estimation methods, or NULL (to not test any estimation method)
-#' @param solvers (array(str) or str (optional)) List of solver to test. Can be specified as 'all', a vector of solvers, or NULL (to
+#' @param solvers (array(str) or str (optional)) List of solvers to test. Can be specified as 'all', a vector of solvers, or NULL (to
 #' not test any solver)
 #' @param parameter_uncertainty_methods (array(str) or str (optional)) List of parameter uncertainty methods to test.
 #' Can be specified as 'all', a vector of uncertainty methods, or NULL (to not evaluate any uncertainty)
@@ -8016,25 +7610,41 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 	tryCatch(
 	{
 		func_out <- pharmpy$tools$run_estmethod(algorithm, methods=methods, solvers=solvers, parameter_uncertainty_methods=parameter_uncertainty_methods, compare_ofv=compare_ofv, results=results, model=model, ...)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	},
 	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	}
 	)
@@ -8046,9 +7656,10 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 #' @description
 #' Run IIVsearch tool. For more details, see :ref:`iivsearch`.
 #' 
-#' @param algorithm (str) Which algorithm to run.
+#' @param algorithm (str) Which algorithm to run when determining number of IIVs.
 #' @param iiv_strategy (str) If/how IIV should be added to start model. Default is 'no_add'.
-#' @param rank_type (str) Which ranking type should be used. Default is mBIC.
+#' @param rank_type (str) Which ranking type should be used. Default is BIC.
+#' @param linearize (logical) Wheter or not use linearization when running the tool.
 #' @param cutoff (numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 #' is NULL (all models will be ranked)
 #' @param results (ModelfitResults (optional)) Results for model
@@ -8056,7 +7667,11 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 #' @param keep (array(str) (optional)) List of IIVs to keep. Default is "CL"
 #' @param strictness (str (optional)) Strictness criteria
 #' @param correlation_algorithm (str (optional)) Which algorithm to run for the determining block structure of added IIVs. If NULL, the
-#' algorithm is determined based on the 'algorithm' argumen
+#' algorithm is determined based on the 'algorithm' argument
+#' @param E_p (numeric (optional)) Expected number of predictors for diagonal elements (used for mBIC). Must be set when using mBIC and
+#' when the argument 'algorithm' is not 'skip'
+#' @param E_q (numeric (optional)) Expected number of predictors for off-diagonal elements (used for mBIC). Must be set when using mBIC
+#' and when the argument `correlation_algorithm` is not `skip` or Non
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (IIVSearchResults) IIVsearch tool result object
@@ -8069,29 +7684,45 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 #' }
 #' 
 #' @export
-run_iivsearch <- function(algorithm='top_down_exhaustive', iiv_strategy='no_add', rank_type='mbic', cutoff=NULL, results=NULL, model=NULL, keep=c('CL'), strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', correlation_algorithm=NULL, ...) {
+run_iivsearch <- function(algorithm='top_down_exhaustive', iiv_strategy='no_add', rank_type='bic', linearize=FALSE, cutoff=NULL, results=NULL, model=NULL, keep=c('CL'), strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', correlation_algorithm=NULL, E_p=NULL, E_q=NULL, ...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_iivsearch(algorithm=algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, cutoff=cutoff, results=results, model=model, keep=keep, strictness=strictness, correlation_algorithm=correlation_algorithm, ...)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+		func_out <- pharmpy$tools$run_iivsearch(algorithm=algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, linearize=linearize, cutoff=cutoff, results=results, model=model, keep=keep, strictness=strictness, correlation_algorithm=correlation_algorithm, E_p=E_p, E_q=E_q, ...)
+		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	},
 	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	}
 	)
@@ -8105,13 +7736,14 @@ run_iivsearch <- function(algorithm='top_down_exhaustive', iiv_strategy='no_add'
 #' 
 #' @param column (str) Name of column in dataset to use as occasion column (default is 'OCC')
 #' @param list_of_parameters (array(str or array(str)) (optional)) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)
-#' @param rank_type (str) Which ranking type should be used. Default is mBIC.
+#' @param rank_type (str) Which ranking type should be used. Default is BIC.
 #' @param cutoff (numeric (optional)) Cutoff for which value of the ranking type that is considered significant. Default
 #' is NULL (all models will be ranked)
 #' @param distribution (str) Which distribution added IOVs should have (default is same-as-iiv)
 #' @param results (ModelfitResults (optional)) Results for model
 #' @param model (Model (optional)) Pharmpy model
-#' @param strictness (str (optional)) Strictness criteri
+#' @param strictness (str (optional)) Strictness criteria
+#' @param E (numeric (optional)) Expected number of predictors (used for mBIC). Must be set when using mBI
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (IOVSearchResults) IOVSearch tool result object
@@ -8124,30 +7756,105 @@ run_iivsearch <- function(algorithm='top_down_exhaustive', iiv_strategy='no_add'
 #' }
 #' 
 #' @export
-run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='mbic', cutoff=NULL, distribution='same-as-iiv', results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', ...) {
+run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='bic', cutoff=NULL, distribution='same-as-iiv', results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', E=NULL, ...) {
 	tryCatch(
 	{
 		list_of_parameters <- convert_input(list_of_parameters, "list")
-		func_out <- pharmpy$tools$run_iovsearch(column=column, list_of_parameters=list_of_parameters, rank_type=rank_type, cutoff=cutoff, distribution=distribution, results=results, model=model, strictness=strictness, ...)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+		func_out <- pharmpy$tools$run_iovsearch(column=column, list_of_parameters=list_of_parameters, rank_type=rank_type, cutoff=cutoff, distribution=distribution, results=results, model=model, strictness=strictness, E=E, ...)
+		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	},
 	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
+		return(NA)
+	}
+	)
+}
+
+#' @title
+#' run_linearize
+#' 
+#' @description
+#' Run linaerization procedure
+#' 
+#' @param model (Model (optional)) Pharmpy model.
+#' @param model_name (str) New name of linearized model. The default is "linbase".
+#' @param description (str) Description of linaerized model. The default is ""
+#' @param ... Arguments to pass to tool
+#'  
+#' @return (LinearizeResults) Linaerize tool results object.
+#' 
+#' 
+#' @export
+run_linearize <- function(model=NULL, model_name='linbase', description='', ...) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$run_linearize(model=model, model_name=model_name, description=description, ...)
+		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
+			func_out <- reset_indices_results(func_out)
+		}
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
+		return(NA)
+	},
+	warning=function(cond) {
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	}
 	)
@@ -8159,9 +7866,11 @@ run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='mbic
 #' @description
 #' Run modelfit tool.
 #' 
+#' note::
+#' For most use cases the :func:`pharmpy.tools.fit` function is a more user friendly option for fitting a model.
+#' 
 #' @param model_or_models (Model or array(Model) (optional)) A vector of models are one single model object
-#' @param n (numeric (optional)) Number of models to fit. This is only used if the tool is going to be combined with other tools.
-#' @param tool (str (optional)) Which tool to use for fitting. Currently, 'nonmem', 'nlmixr', 'rxode' can be used
+#' @param n (numeric (optional)) Number of models to fit. This is only used if the tool is going to be combined with other tools
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (ModelfitResults) Modelfit tool result object
@@ -8173,30 +7882,46 @@ run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='mbic
 #' }
 #' 
 #' @export
-run_modelfit <- function(model_or_models=NULL, n=NULL, tool=NULL, ...) {
+run_modelfit <- function(model_or_models=NULL, n=NULL, ...) {
 	tryCatch(
 	{
 		n <- convert_input(n, "int")
-		func_out <- pharmpy$tools$run_modelfit(model_or_models=model_or_models, n=n, tool=tool, ...)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+		func_out <- pharmpy$tools$run_modelfit(model_or_models=model_or_models, n=n, ...)
+		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	},
 	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	}
 	)
@@ -8211,12 +7936,13 @@ run_modelfit <- function(model_or_models=NULL, n=NULL, tool=NULL, ...) {
 #' @param search_space (str or ModelFeatures) Search space to test. Either as a string or a ModelFeatures object.
 #' @param algorithm (str) Algorithm to use.
 #' @param iiv_strategy (str) If/how IIV should be added to candidate models. Default is 'absorption_delay'.
-#' @param rank_type (str) Which ranking type should be used. Default is mBIC.
+#' @param rank_type (str) Which ranking type should be used. Default is BIC.
 #' @param cutoff (numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 #' is NULL (all models will be ranked)
 #' @param results (ModelfitResults (optional)) Results for model
 #' @param model (Model (optional)) Pharmpy model
-#' @param strictness (str (optional)) Strictness criteri
+#' @param strictness (str (optional)) Strictness criteria
+#' @param E (numeric (optional)) Expected number of predictors (used for mBIC). Must be set when using mBI
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (ModelSearchResults) Modelsearch tool result object
@@ -8229,29 +7955,45 @@ run_modelfit <- function(model_or_models=NULL, n=NULL, tool=NULL, ...) {
 #' }
 #' 
 #' @export
-run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_delay', rank_type='mbic', cutoff=NULL, results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs >= 0.1)', ...) {
+run_modelsearch <- function(search_space, algorithm, iiv_strategy='absorption_delay', rank_type='bic', cutoff=NULL, results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs >= 0.1)', E=NULL, ...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_modelsearch(search_space, algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, cutoff=cutoff, results=results, model=model, strictness=strictness, ...)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+		func_out <- pharmpy$tools$run_modelsearch(search_space, algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, cutoff=cutoff, results=results, model=model, strictness=strictness, E=E, ...)
+		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	},
 	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	}
 	)
@@ -8284,25 +8026,41 @@ run_retries <- function(model=NULL, results=NULL, number_of_candidates=5, fracti
 		number_of_candidates <- convert_input(number_of_candidates, "int")
 		seed <- convert_input(seed, "int")
 		func_out <- pharmpy$tools$run_retries(model=model, results=results, number_of_candidates=number_of_candidates, fraction=fraction, use_initial_estimates=use_initial_estimates, strictness=strictness, scale=scale, prefix_name=prefix_name, seed=seed, ...)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	},
 	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	}
 	)
@@ -8342,25 +8100,41 @@ run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.001, ski
 		max_iter <- convert_input(max_iter, "int")
 		dv <- convert_input(dv, "int")
 		func_out <- pharmpy$tools$run_ruvsearch(model=model, results=results, groups=groups, p_value=p_value, skip=skip, max_iter=max_iter, dv=dv, strictness=strictness, ...)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	},
 	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	}
 	)
@@ -8389,25 +8163,41 @@ run_simulation <- function(model=NULL, ...) {
 	tryCatch(
 	{
 		func_out <- pharmpy$tools$run_simulation(model=model, ...)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	},
 	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	}
 	)
@@ -8447,25 +8237,41 @@ run_structsearch <- function(type, search_space=NULL, b_init=NULL, emax_init=NUL
 	tryCatch(
 	{
 		func_out <- pharmpy$tools$run_structsearch(type, search_space=search_space, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, results=results, model=model, extra_model=extra_model, strictness=strictness, extra_model_results=extra_model_results, dv_types=dv_types, ...)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	},
 	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
 		return(NA)
 	}
 	)
@@ -8476,6 +8282,10 @@ run_structsearch <- function(type, search_space=NULL, b_init=NULL, emax_init=NUL
 #' 
 #' @description
 #' Run tool workflow
+#' 
+#' note::
+#' This is a general function that can run any tool. There is also one function for each
+#' specific tool. Please refer to the documentation of these for more specific information.
 #' 
 #' @param name (str) Name of tool to run
 #' @param ... Arguments to pass to tool
@@ -8493,205 +8303,41 @@ run_tool <- function(name, ...) {
 	tryCatch(
 	{
 		func_out <- pharmpy$tools$run_tool(name, ...)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
+		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
-}
-
-#' @title
-#' summarize_errors
-#' 
-#' @description
-#' Summarize errors and warnings from all runs in a context.
-#' 
-#' Summarize the errors and warnings found after running the model/models.
-#' 
-#' @param context (Context) Context in which models were run
-#'  
-#' @return (data.frame) A DataFrame of errors with model name, category (error or warning), and an integer as index, an empty DataFrame if there were no errors or warnings found.
-#' 
-#' 
-#' @export
-summarize_errors <- function(context) {
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$summarize_errors(context)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
-		func_out <- reset_index_df(func_out)
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	},
 	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
-}
-
-#' @title
-#' summarize_individuals
-#' 
-#' @description
-#' Creates a summary dataframe keyed by model-individual pairs for an input
-#' vector of models.
-#' 
-#' Content of the various columns:
-#' 
-#' +-------------------------+----------------------------------------------------------------------+
-#' | Column                  | Description                                                          |
-#' +=========================+======================================================================+
-#' | ``outlier_count``       | Number of observations with CWRES > 5                                |
-#' +-------------------------+----------------------------------------------------------------------+
-#' | ``ofv``                 | Individual OFV                                                       |
-#' +-------------------------+----------------------------------------------------------------------+
-#' | ``dofv_vs_parent``      | Difference in individual OFV between this model and its parent model |
-#' +-------------------------+----------------------------------------------------------------------+
-#' | ``predicted_dofv``      | Predicted dOFV if this individual was excluded                       |
-#' +-------------------------+----------------------------------------------------------------------+
-#' | ``predicted_residual``  | Predicted residual                                                   |
-#' +-------------------------+----------------------------------------------------------------------+
-#' 
-#' @param models (array(Model)) Input models
-#' @param models_res (array(ModelfitResults)) Input results
-#'  
-#' @return (data.frame | NULL) The summary as a dataframe
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' fit_results <- fit(model)
-#' results <- run_tool(
-#'  model=model,
-#'  mfl='ABSORPTION(ZO);PERIPHERALS(c(1, 2))',
-#'  algorithm='reduced_stepwise'
-#' summarize_individuals([results$start_model, *results$models])
-#' }
-#' 
-#' @export
-summarize_individuals <- function(models, models_res) {
-	tryCatch(
-	{
-		models <- convert_input(models, "list")
-		models_res <- convert_input(models_res, "list")
-		func_out <- pharmpy$tools$summarize_individuals(models, models_res)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Full stack:')
+			    message(cond)
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
-		func_out <- reset_index_df(func_out)
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
-}
-
-#' @title
-#' summarize_individuals_count_table
-#' 
-#' @description
-#' Create a count table for individual data
-#' 
-#' Content of the various columns:
-#' 
-#' +-------------------------+------------------------------------------------------------------------------------------------+
-#' | Column                  | Description                                                                                    |
-#' +=========================+================================================================================================+
-#' | ``inf_selection``       | Number of subjects influential on model selection.                                             |
-#' |                         | (equation could not be rendered, see API doc on website)
-#' |                         | (equation could not be rendered, see API doc on website)
-#' +-------------------------+------------------------------------------------------------------------------------------------+
-#' | ``inf_params``          | Number of subjects influential on parameters. predicted_dofv > 3.84                            |
-#' +-------------------------+------------------------------------------------------------------------------------------------+
-#' | ``out_obs``             | Number of subjects having at least one outlying observation (CWRES > 5)                        |
-#' +-------------------------+------------------------------------------------------------------------------------------------+
-#' | ``out_ind``             | Number of outlying subjects. predicted_residual > 3.0                                          |
-#' +-------------------------+------------------------------------------------------------------------------------------------+
-#' | ``inf_outlier``         | Number of subjects both influential by any criteria and outlier by any criteria                |
-#' +-------------------------+------------------------------------------------------------------------------------------------+
-#' 
-#' @param models (array(Model) (optional)) List of models to summarize.
-#' @param models_res (array(ModelfitResults) (optional)) Input results
-#' @param df (data.frame) Output from a previous call to summarize_individuals.
-#'  
-#' @return (data.frame) Table with one row per model.
-#' 
-#' @seealso
-#' summarize_individuals : Get raw individual data
-#' 
-#' 
-#' @export
-summarize_individuals_count_table <- function(models=NULL, models_res=NULL, df=NULL) {
-	tryCatch(
-	{
-		models <- convert_input(models, "list")
-		models_res <- convert_input(models_res, "list")
-		func_out <- pharmpy$tools$summarize_individuals_count_table(models=models, models_res=models_res, df=df)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		func_out <- reset_index_df(func_out)
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
 		return(NA)
 	}
 	)
@@ -8718,32 +8364,9 @@ summarize_individuals_count_table <- function(models=NULL, models_res=NULL, df=N
 #' 
 #' @export
 summarize_modelfit_results <- function(context, include_all_execution_steps=FALSE) {
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$summarize_modelfit_results(context, include_all_execution_steps=include_all_execution_steps)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		func_out <- reset_index_df(func_out)
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
+	func_out <- pharmpy$tools$summarize_modelfit_results(context, include_all_execution_steps=include_all_execution_steps)
+	func_out <- reset_index_df(func_out)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -8756,35 +8379,12 @@ summarize_modelfit_results <- function(context, include_all_execution_steps=FALS
 #' 
 #' @param results (Results) Pharmpy results object
 #' @param path (str) Path to results file
-#' @param lzma (logical) TRUE for lzma compression. Not applicable to csv file
+#' @param compression (logical) TRUE to compress the file. Not applicable to csv file
 #' @param csv (logical) Save as csv file 
 #' 
 #' @export
-write_results <- function(results, path, lzma=FALSE, csv=FALSE) {
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$write_results(results, path, lzma=lzma, csv=csv)
-		if ('pharmpy.model.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	},
-	warning=function(cond) {
-		message(cond)
-		message('Full stack:')
-		message(reticulate::py_last_error())
-		message("pharmr version: ", packageVersion("pharmr"))
-		message("Pharmpy version: ", print_pharmpy_version())
-		return(NA)
-	}
-	)
+write_results <- function(results, path, compression=FALSE, csv=FALSE) {
+	func_out <- pharmpy$tools$write_results(results, path, compression=compression, csv=csv)
+	return(py_to_r(func_out))
 }
 

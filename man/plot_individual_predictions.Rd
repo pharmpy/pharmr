@@ -21,6 +21,9 @@ Plot DV and predictions grouped on individuals
 }
 \examples{
 \dontrun{
+model <- load_example_model("pheno")
+res <- load_example_modelfit_results("pheno")
+plot_individual_predictions(model, res$predictions, individuals=c(1, 2, 3, 4, 5))
 }
 
 }

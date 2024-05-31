@@ -25,7 +25,7 @@ or a random variable.
 \dontrun{
 model <- load_example_model("pheno")
 get_unit_of(model, "Y")
-get_unit_of(model, "V")
+get_unit_of(model, "VC")
 get_unit_of(model, "WGT")
 }
 

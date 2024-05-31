@@ -20,8 +20,8 @@ Set parameter lower bounds
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-model <- set_lower_bounds(model, {'PTVCL': -10})
-model$parameters['PTVCL']
+model <- set_lower_bounds(model, {'POP_CL': -10})
+model$parameters['POP_CL']
 }
 }
 \seealso{

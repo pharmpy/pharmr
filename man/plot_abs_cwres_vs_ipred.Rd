@@ -31,6 +31,12 @@ Plot \|CWRES\| vs IPRED
 }
 \examples{
 \dontrun{
+model <- load_example_model("pheno")
+res <- load_example_modelfit_results("pheno")
+plot_abs_cwres_vs_ipred(model, res$predictions, res$residuals)
+model <- load_example_model("pheno")
+res <- load_example_modelfit_results("pheno")
+plot_abs_cwres_vs_ipred(model, res$predictions, res$residuals, 'WGT', bins=4)
 }
 
 }

@@ -22,9 +22,9 @@ Fix all listed parameters to specified value/values
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-model$parameters['PTVCL']
-model <- fix_parameters_to(model, {'PTVCL': 0.5})
-model$parameters['PTVCL']
+model$parameters['POP_CL']
+model <- fix_parameters_to(model, {'POP_CL': 0.5})
+model$parameters['POP_CL']
 }
 }
 \seealso{

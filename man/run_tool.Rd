@@ -16,6 +16,10 @@ run_tool(name, ...)
 }
 \description{
 Run tool workflow
+
+note::
+This is a general function that can run any tool. There is also one function for each
+specific tool. Please refer to the documentation of these for more specific information.
 }
 \examples{
 \dontrun{

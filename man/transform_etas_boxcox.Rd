@@ -22,7 +22,7 @@ Initial estimate for lambda is 0.1 with bounds (-3, 3).
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-model <- transform_etas_boxcox(model, c("ETA_1"))
+model <- transform_etas_boxcox(model, c("ETA_CL"))
 model$statements$before_odes$full_expression("CL")
 }
 }

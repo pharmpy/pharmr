@@ -19,6 +19,9 @@ Plot eta distributions for all etas
 }
 \examples{
 \dontrun{
+model <- load_example_model("pheno")
+res <- load_example_modelfit_results("pheno")
+plot_eta_distributions(model, res$individual_estimates)
 }
 
 }

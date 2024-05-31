@@ -18,6 +18,9 @@ predict_influential_individuals(model, results, cutoff = 3.84)
 }
 \description{
 Predict influential individuals for a model using a machine learning model.
+
+Please refer to www.page-meeting.org/?abstract=10029 for more information on training and estimated
+precision and accuracy.
 }
 \seealso{
 predict_influential_outliers

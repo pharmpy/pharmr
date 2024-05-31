@@ -4,10 +4,12 @@
 \alias{read_modelfit_results}
 \title{read_modelfit_results}
 \usage{
-read_modelfit_results(path)
+read_modelfit_results(path, esttool = NULL)
 }
 \arguments{
 \item{path}{(str) Path to model file}
+
+\item{esttool}{(str) Set if other than the default estimation tool is to be used}
 }
 \value{
 (ModelfitResults) Results object

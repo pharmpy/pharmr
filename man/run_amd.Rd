@@ -58,11 +58,11 @@ run_amd(
 
 \item{met_init}{(numeric (optional)) Initial estimate for mean equilibration time (PKPD model)}
 
-\item{search_space}{(str (optional)) MFL for search space for structural model}
+\item{search_space}{(str (optional)) MFL for search space for structural and covariate model}
 
 \item{lloq_method}{(str (optional)) Method for how to remove LOQ data. See \code{transform_blq} for vector of available methods}
 
-\item{lloq_limit}{(str (optional)) Lower limit of quantification. If NULL LLOQ column from dataset will be used}
+\item{lloq_limit}{(numeric (optional)) Lower limit of quantification. If NULL LLOQ column from dataset will be used}
 
 \item{allometric_variable}{(str or Expr (optional)) Variable to use for allometry}
 

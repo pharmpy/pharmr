@@ -20,8 +20,8 @@ Set parameter upper bounds
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-model <- set_upper_bounds(model, list('PTVCL'=10))
-model$parameters['PTVCL']
+model <- set_upper_bounds(model, list('POP_CL'=10))
+model$parameters['POP_CL']
 }
 }
 \seealso{

@@ -4,14 +4,14 @@
 \alias{write_results}
 \title{write_results}
 \usage{
-write_results(results, path, lzma = FALSE, csv = FALSE)
+write_results(results, path, compression = FALSE, csv = FALSE)
 }
 \arguments{
 \item{results}{(Results) Pharmpy results object}
 
 \item{path}{(str) Path to results file}
 
-\item{lzma}{(logical) TRUE for lzma compression. Not applicable to csv file}
+\item{compression}{(logical) TRUE to compress the file. Not applicable to csv file}
 
 \item{csv}{(logical) Save as csv file}
 }

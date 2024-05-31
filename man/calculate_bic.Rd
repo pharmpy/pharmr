@@ -4,14 +4,7 @@
 \alias{calculate_bic}
 \title{calculate_bic}
 \usage{
-calculate_bic(
-  model,
-  likelihood,
-  type = "mixed",
-  multiple_testing = FALSE,
-  mult_test_p = 1,
-  mult_test_e = 1
-)
+calculate_bic(model, likelihood, type = "mixed")
 }
 \arguments{
 \item{model}{(Model) Pharmpy model object}
@@ -19,12 +12,6 @@ calculate_bic(
 \item{likelihood}{(numeric) -2LL to use}
 
 \item{type}{(str) Type of BIC to calculate. Default is the mixed effects.}
-
-\item{multiple_testing}{(logical) Whether to use penalty for multiple testing (default is FALSE)}
-
-\item{mult_test_p}{(numeric) Number of expected models if using type \code{multiple_testing}}
-
-\item{mult_test_e}{(numeric) E value if using type \code{mult_test}}
 }
 \value{
 (numeric) BIC of model fit
@@ -43,11 +30,6 @@ Different variations of the BIC can be calculated:
 | BIC = -2LL + n_estimated_parameters * log(n_individuals)
 \item | iiv
 | BIC = -2LL + n_estimated_iiv_omega_parameters * log(n_individuals)
-}
-
-If multiple_testing option is set to true an additional penalty will be added:
-\itemize{
-\item | mBIC = BIC + 2*(n_estimated_parameters)*log(n_predictors/n_expected_predictors)
 }
 }
 \examples{

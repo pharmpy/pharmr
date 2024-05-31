@@ -22,9 +22,9 @@ Set fixedness of parameters to specified values
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-model$parameters['PTVCL']
-model <- fix_or_unfix_parameters(model, list('PTVCL'=TRUE))
-model$parameters['PTVCL']
+model$parameters['POP_CL']
+model <- fix_or_unfix_parameters(model, list('POP_CL'=TRUE))
+model$parameters['POP_CL']
 }
 }
 \seealso{
