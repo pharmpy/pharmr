@@ -15,6 +15,8 @@ set_michaelis_menten_elimination(model)
 \description{
 Sets elimination to Michaelis-Menten.
 
+Note that the parametrization is not the usual, but is instead using a CLMM parameter.
+
 Initial estimate for CLMM is set to CL and KM is set to (equation could not be rendered, see API doc on website)
 }
 \examples{
