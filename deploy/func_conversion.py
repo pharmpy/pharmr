@@ -3,7 +3,7 @@ import pandas as pd
 
 import re
 import textwrap
-from collections.abc import Mapping
+from collections.abc import Iterable, Mapping, Sequence
 from typing import List, Union, get_args, get_origin, get_type_hints
 
 import pharmpy.model
@@ -150,7 +150,7 @@ def _get_conversion_str(key, args, origin):
             origin = get_origin(args)
     if args is int:
         return f'{key} <- convert_input({key}, "int")'
-    elif origin is list or args == (List[str], str):
+    elif origin in (list, Iterable, Sequence) or args == (List[str], str):
         return f'{key} <- convert_input({key}, "list")'
     elif args is pd.Series:
         return f'{key} <- convert_input({key}, "pd.Series")'
