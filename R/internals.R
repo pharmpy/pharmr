@@ -91,6 +91,9 @@ convert_input <- function(arg, to_py_type) {
         return(as.list(arg))
     }
     else if (to_py_type == 'int') {
-        return(as.integer(arg))
+        if (is.numeric(arg)) {
+            return(as.integer(arg))
+        }
+        return(arg)
     }
 }
