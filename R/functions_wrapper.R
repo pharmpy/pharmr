@@ -2779,6 +2779,7 @@ get_doses <- function(model) {
 #' 
 #' @export
 get_dv_symbol <- function(model, dv=NULL) {
+	dv <- convert_input(dv, "int")
 	func_out <- pharmpy$modeling$get_dv_symbol(model, dv=dv)
 	return(py_to_r(func_out))
 }
@@ -2862,6 +2863,7 @@ get_ids <- function(model) {
 #' 
 #' @export
 get_individual_parameters <- function(model, level='all', dv=NULL) {
+	dv <- convert_input(dv, "int")
 	func_out <- pharmpy$modeling$get_individual_parameters(model, level=level, dv=dv)
 	return(py_to_r(func_out))
 }
@@ -3525,6 +3527,7 @@ greekify_model <- function(model, named_subscripts=FALSE) {
 #' 
 #' @export
 has_additive_error_model <- function(model, dv=NULL) {
+	dv <- convert_input(dv, "int")
 	func_out <- pharmpy$modeling$has_additive_error_model(model, dv=dv)
 	return(py_to_r(func_out))
 }
@@ -3558,6 +3561,7 @@ has_additive_error_model <- function(model, dv=NULL) {
 #' 
 #' @export
 has_combined_error_model <- function(model, dv=NULL) {
+	dv <- convert_input(dv, "int")
 	func_out <- pharmpy$modeling$has_combined_error_model(model, dv=dv)
 	return(py_to_r(func_out))
 }
@@ -3847,6 +3851,7 @@ has_presystemic_metabolite <- function(model) {
 #' 
 #' @export
 has_proportional_error_model <- function(model, dv=NULL) {
+	dv <- convert_input(dv, "int")
 	func_out <- pharmpy$modeling$has_proportional_error_model(model, dv=dv)
 	return(py_to_r(func_out))
 }
@@ -5275,6 +5280,7 @@ sample_parameters_uniformly <- function(model, parameter_estimates, fraction=0.1
 #' 
 #' @export
 set_additive_error_model <- function(model, dv=NULL, data_trans=NULL, series_terms=2) {
+	dv <- convert_input(dv, "int")
 	series_terms <- convert_input(series_terms, "int")
 	func_out <- pharmpy$modeling$set_additive_error_model(model, dv=dv, data_trans=data_trans, series_terms=series_terms)
 	return(py_to_r(func_out))
@@ -5351,6 +5357,7 @@ set_baseline_effect <- function(model, expr='const') {
 #' 
 #' @export
 set_combined_error_model <- function(model, dv=NULL, data_trans=NULL) {
+	dv <- convert_input(dv, "int")
 	func_out <- pharmpy$modeling$set_combined_error_model(model, dv=dv, data_trans=data_trans)
 	return(py_to_r(func_out))
 }
@@ -5399,6 +5406,31 @@ set_covariates <- function(model, covariates) {
 #' @export
 set_dataset <- function(model, path_or_df, datatype=NULL) {
 	func_out <- pharmpy$modeling$set_dataset(model, path_or_df, datatype=datatype)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' set_description
+#' 
+#' @description
+#' Set description of model object
+#' 
+#' @param model (Model) Pharmpy model
+#' @param new_description (str) New description of model
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model$description
+#' model <- set_description(model, "PHENOBARB run 2")
+#' model$description
+#' }
+#' 
+#' @export
+set_description <- function(model, new_description) {
+	func_out <- pharmpy$modeling$set_description(model, new_description)
 	return(py_to_r(func_out))
 }
 
@@ -5669,6 +5701,7 @@ set_first_order_elimination <- function(model) {
 #' 
 #' @export
 set_iiv_on_ruv <- function(model, dv=NULL, list_of_eps=NULL, same_eta=TRUE, eta_names=NULL) {
+	dv <- convert_input(dv, "int")
 	list_of_eps <- convert_input(list_of_eps, "list")
 	eta_names <- convert_input(eta_names, "list")
 	func_out <- pharmpy$modeling$set_iiv_on_ruv(model, dv=dv, list_of_eps=list_of_eps, same_eta=same_eta, eta_names=eta_names)
@@ -6034,6 +6067,7 @@ set_peripheral_compartments <- function(model, n, name=NULL) {
 #' 
 #' @export
 set_power_on_ruv <- function(model, list_of_eps=NULL, dv=NULL, lower_limit=0.01, ipred=NULL, zero_protection=FALSE) {
+	dv <- convert_input(dv, "int")
 	func_out <- pharmpy$modeling$set_power_on_ruv(model, list_of_eps=list_of_eps, dv=dv, lower_limit=lower_limit, ipred=ipred, zero_protection=zero_protection)
 	return(py_to_r(func_out))
 }
@@ -6081,6 +6115,7 @@ set_power_on_ruv <- function(model, list_of_eps=NULL, dv=NULL, lower_limit=0.01,
 #' 
 #' @export
 set_proportional_error_model <- function(model, dv=NULL, data_trans=NULL, zero_protection=TRUE) {
+	dv <- convert_input(dv, "int")
 	func_out <- pharmpy$modeling$set_proportional_error_model(model, dv=dv, data_trans=data_trans, zero_protection=zero_protection)
 	return(py_to_r(func_out))
 }
@@ -6199,6 +6234,7 @@ set_simulation <- function(model, n=1, seed=64206) {
 #' 
 #' @export
 set_time_varying_error_model <- function(model, cutoff, idv='TIME', dv=NULL) {
+	dv <- convert_input(dv, "int")
 	func_out <- pharmpy$modeling$set_time_varying_error_model(model, cutoff, idv=idv, dv=dv)
 	return(py_to_r(func_out))
 }
@@ -7689,6 +7725,7 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 run_iivsearch <- function(algorithm='top_down_exhaustive', iiv_strategy='no_add', rank_type='bic', linearize=FALSE, cutoff=NULL, results=NULL, model=NULL, keep=c('CL'), strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', correlation_algorithm=NULL, E_p=NULL, E_q=NULL, ...) {
 	tryCatch(
 	{
+		keep <- convert_input(keep, "list")
 		func_out <- pharmpy$tools$run_iivsearch(algorithm=algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, linearize=linearize, cutoff=cutoff, results=results, model=model, keep=keep, strictness=strictness, correlation_algorithm=correlation_algorithm, E_p=E_p, E_q=E_q, ...)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)

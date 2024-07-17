@@ -1,7 +1,7 @@
 Package: pharmr
 Encoding: UTF-8
-Version: 1.0.1
-Date: 2024-06-12
+Version: 1.1.0
+Date: 2024-07-17
 Title: Interface to the 'Pharmpy' 'Pharmacometrics' Library
 Authors@R: c(
   person("Rikard", "Nordgren", role=c("aut", "cre", "cph"), email="rikard.nordgren@farmaci.uu.se"),
@@ -42,5 +42,5 @@ Config/reticulate:
 URL: https://github.com/pharmpy/pharmr
 BugReports: https://github.com/pharmpy/pharmr/issues
 License: LGPL (>= 3)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
