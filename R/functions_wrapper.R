@@ -4505,6 +4505,8 @@ read_dataset_from_datainfo <- function(datainfo, datatype=NULL) {
 #' Read model from file
 #' 
 #' @param path (str) Path to model
+#' @param missing_data_token (str (optional)) Use this token for missing data. This option will override the token from the config.
+#' (This option was added in Pharmpy version 1.2.0)
 #'  
 #' @return (Model) Read model object
 #' 
@@ -4519,8 +4521,8 @@ read_dataset_from_datainfo <- function(datainfo, datatype=NULL) {
 #' 
 #' 
 #' @export
-read_model <- function(path) {
-	func_out <- pharmpy$modeling$read_model(path)
+read_model <- function(path, missing_data_token=NULL) {
+	func_out <- pharmpy$modeling$read_model(path, missing_data_token=missing_data_token)
 	return(py_to_r(func_out))
 }
 
