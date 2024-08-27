@@ -38,7 +38,7 @@ jobs:
 
     steps:
       - name: Checkout pharmr
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: pharmr_repo
 
