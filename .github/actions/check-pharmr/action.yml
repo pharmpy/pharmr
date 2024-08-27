@@ -55,6 +55,12 @@ runs:
         rcmdcheck::rcmdcheck(args = c("--no-manual"), error_on = "warning", check_dir = "check")
       shell: Rscript {0}
 
+    - name: Upload source package artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: pharmr
+        path: pharmr_*.tar.gz
+
     - name: Upload check results
       if: failure()
       uses: actions/upload-artifact@main
