@@ -39,6 +39,7 @@ runs:
 
     - name: Build source package
       run: R CMD build pharmr_repo 
+      shell: bash
 
     - name: Check pharmr
       working-directory: pharmr_repo
