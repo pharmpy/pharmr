@@ -37,6 +37,19 @@ runs:
         devtools::document()
       shell: Rscript {0}
 
+    - name: Update commit hash for development install
+      working-directory: pharmr_repo
+      run: |
+        import subprocess
+        commit = subprocess.getoutput("git -C ../pharmpy_repo rev-parse HEAD")
+        with open("R/install.R", "r") as fp:
+            lines = fp.readlines()
+        lines[0] = f'"{commit}"'
+        with open("R/install.R", "w") as fp:
+            for line in lines:
+                fp.write(line)
+      shell: python
+
     - name: Build source package
       run: R CMD build pharmr_repo 
       shell: bash
