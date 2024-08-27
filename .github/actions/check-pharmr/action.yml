@@ -37,6 +37,9 @@ runs:
         devtools::document()
       shell: Rscript {0}
 
+    - name: Build source package
+      run: R CMD build pharmr_repo 
+
     - name: Check pharmr
       working-directory: pharmr_repo
       env:
