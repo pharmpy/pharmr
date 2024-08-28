@@ -47,7 +47,7 @@ runs:
         with open("R/install.R", "w") as fp:
             for line in lines:
                 if line.lstrip().startswith("PHARMPY_COMMIT"):
-                    fp.write(f'    PHARMPY_COMMIT <- "{commit}"\n)'
+                    fp.write(f'    PHARMPY_COMMIT <- "{commit}"\n')
                 else:
                     fp.write(line)
       shell: python
