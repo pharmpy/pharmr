@@ -44,10 +44,12 @@ runs:
         commit = subprocess.getoutput("git -C ../pharmpy_repo rev-parse HEAD")
         with open("R/install.R", "r") as fp:
             lines = fp.readlines()
-        lines[0] = f'"{commit}"\n'
         with open("R/install.R", "w") as fp:
             for line in lines:
-                fp.write(line)
+                if line.lstrip().startswith("PHARMPY_COMMIT"):
+                    fp.write(f'    PHARMPY_COMMIT <- "{commit}"\n)'
+                else:
+                    fp.write(line)
       shell: python
 
     - name: Build source package
