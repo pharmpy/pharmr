@@ -38,7 +38,7 @@ runs:
         do
           eval sudo $cmd
         done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "22.04"))')
-        sudo apt install libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev libicu66
+        sudo apt install libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev
       shell: bash
 
     - name: Install png (temporary)
