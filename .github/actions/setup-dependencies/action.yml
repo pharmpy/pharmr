@@ -20,7 +20,7 @@ runs:
 
     - uses: actions/setup-python@v5
       with:
-          python-version: "3.11"
+          python-version: "3.12"
 
     - name: Restore R package cache
       if: runner.os != 'Windows'
@@ -37,7 +37,7 @@ runs:
         while read -r cmd
         do
           eval sudo $cmd
-        done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
+        done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "24.04"))')
         sudo apt install libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev
       shell: bash
 
