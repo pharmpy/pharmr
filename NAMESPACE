@@ -12,6 +12,7 @@ S3method(repr::repr_latex,pharmpy.model.distributions.symbolic.NormalDistributio
 S3method(repr::repr_latex,pharmpy.model.random_variables.RandomVariables)
 S3method(repr::repr_latex,pharmpy.model.statements.Assignment)
 S3method(repr::repr_latex,pharmpy.modeling.odes.ODEDisplayer)
+S3method(length,pharmpy.model.parameters.Parameters)
 export(add_admid)
 export(add_allometry)
 export(add_bioavailability)
