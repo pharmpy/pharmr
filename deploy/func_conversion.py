@@ -29,7 +29,7 @@ def create_r_func(func, module):
     func_def = f'{func_name} <- function({wrapper_arg_str})'
     func_execute = f'func_out <- pharmpy${module_name}${func_name}({pyfunc_arg_str})'
 
-    if module_name == 'tools' and func_name.startswith("run_"):
+    if module_name == 'tools':
         r_func_body = _create_func_body_tool(func, func_execute)
     else:
         r_func_body = _create_func_body_modeling(func, func_execute)
@@ -45,14 +45,15 @@ def create_r_func(func, module):
 def _get_args(params):
     wrapper_args, pyfunc_args = [], []
     for param in params.values():
+        param_name = re.sub(r'^_', '.', param.name)
         if param.kind == param.VAR_KEYWORD or param.kind == param.VAR_POSITIONAL:
             if '...' not in wrapper_args:
                 wrapper_args.append('...'), pyfunc_args.append('...')
         elif param.default is param.empty:
-            wrapper_args.append(f'{param.name}'), pyfunc_args.append(f'{param.name}')
+            wrapper_args.append(f'{param_name}'), pyfunc_args.append(f'{param_name}')
         else:
-            wrapper_args.append(f'{param.name}={py_to_r_arg(param.default)}')
-            pyfunc_args.append(f'{param.name}={param.name}')
+            wrapper_args.append(f'{param_name}={py_to_r_arg(param.default)}')
+            pyfunc_args.append(f'{param_name}={param_name}')
 
     return ', '.join(wrapper_args), ', '.join(pyfunc_args)
 

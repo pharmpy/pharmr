@@ -84,7 +84,8 @@ def _create_r_params(doc_list, func):
             r_params += f'@param ... {desc_dict[key]}'
             unbound_added = True
         else:
-            r_params += f'@param {key} ({value}) {desc_dict[key]}'
+            param_name = re.sub(r'^_', '.', key)
+            r_params += f'@param {param_name} ({value}) {desc_dict[key]}'
 
     return r_params + ' \n'
 
