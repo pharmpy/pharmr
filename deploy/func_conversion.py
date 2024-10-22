@@ -45,15 +45,20 @@ def create_r_func(func, module):
 def _get_args(params):
     wrapper_args, pyfunc_args = [], []
     for param in params.values():
-        param_name = re.sub(r'^_', '.', param.name)
+        if param.name.startswith('_'):
+            param_name_r = re.sub(r'^_', '.', param.name)
+            param_name_py = f'`{param.name}`'
+        else:
+            param_name_r, param_name_py = param.name, param.name
+
         if param.kind == param.VAR_KEYWORD or param.kind == param.VAR_POSITIONAL:
             if '...' not in wrapper_args:
                 wrapper_args.append('...'), pyfunc_args.append('...')
         elif param.default is param.empty:
-            wrapper_args.append(f'{param_name}'), pyfunc_args.append(f'{param_name}')
+            wrapper_args.append(f'{param_name_r}'), pyfunc_args.append(f'{param_name_r}')
         else:
-            wrapper_args.append(f'{param_name}={py_to_r_arg(param.default)}')
-            pyfunc_args.append(f'{param_name}={param_name}')
+            wrapper_args.append(f'{param_name_r}={py_to_r_arg(param.default)}')
+            pyfunc_args.append(f'{param_name_py}={param_name_r}')
 
     return ', '.join(wrapper_args), ', '.join(pyfunc_args)
 
