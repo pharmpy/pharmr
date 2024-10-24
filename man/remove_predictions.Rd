@@ -4,12 +4,12 @@
 \alias{remove_predictions}
 \title{remove_predictions}
 \usage{
-remove_predictions(model, to_remove = "all")
+remove_predictions(model, to_remove = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{to_remove}{(array(str)) List of predictions to remove}
+\item{to_remove}{(array(str) (optional)) Predictions to remove}
 }
 \value{
 (Model) Pharmpy model object
@@ -22,7 +22,7 @@ Remove predictions from estimation step.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-model <- remove_predictions(model, 'all')
+model <- remove_predictions(model)
 model$execution_steps[-1].predictions
 }
 }

@@ -16,6 +16,10 @@ run_covsearch(
   adaptive_scope_reduction = FALSE,
   strictness = "minimization_successful or (rounding_errors and sigdigs>=0.1)",
   naming_index_offset = 0,
+  nsamples = 10,
+  .statsmodels = FALSE,
+  .weighted_linreg = FALSE,
+  .lin_filter = 0,
   ...
 )
 }
@@ -45,7 +49,20 @@ Default is FALSE}
 
 \item{strictness}{(str (optional)) Strictness criteria}
 
-\item{naming_index_offset}{(numeric (optional)) index offset for naming of runs. Default is 0}
+\item{naming_index_offset}{(numeric (optional)) index offset for naming of runs. Default is 0.}
+
+\item{nsamples}{(numeric) Number of samples from individual parameter conditional distribution for linear covariate model selection.
+\code{nsamples=0} uses ETAs to for linear model selection, whereas \code{nsample}>=1 generates MCMC samples with an
+additional SAEM estimation step. When multiple samples are generated, linear mixed effects model will be
+used to fit the linear models.
+Default is 10, i.e. generating 10 samples per subject}
+
+\item{.statsmodels}{(logical) Estimation tool for SAMBA linear covariate model fitting. 'TRUE' calls statsmodel's
+functionalities, whereas 'FALSE' calls nonmem.}
+
+\item{.weighted_linreg}{(logical) When using nonmem to run linear covariate models, 'TRUE' uses ETC as weight to run WLS.}
+
+\item{.lin_filter}{(numeric) Option to control the number of covariates passed to nonlinear selection}
 
 \item{...}{Arguments to pass to tool}
 }

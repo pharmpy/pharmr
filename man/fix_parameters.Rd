@@ -4,12 +4,14 @@
 \alias{fix_parameters}
 \title{fix_parameters}
 \usage{
-fix_parameters(model, parameter_names)
+fix_parameters(model, parameter_names, strict = TRUE)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{parameter_names}{(array(str) or str) one parameter name or a vector of parameter names}
+
+\item{strict}{(logical) Whether all parameters in input need to exist in the model. Default is TRUE}
 }
 \value{
 (Model) Pharmpy model object

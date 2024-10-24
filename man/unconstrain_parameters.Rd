@@ -4,12 +4,14 @@
 \alias{unconstrain_parameters}
 \title{unconstrain_parameters}
 \usage{
-unconstrain_parameters(model, parameter_names)
+unconstrain_parameters(model, parameter_names, strict = TRUE)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{parameter_names}{(array(str)) Remove all constraints for the listed parameters}
+
+\item{strict}{(logical) Whether all parameters in input need to exist in the model. Default is TRUE}
 }
 \value{
 (Model) Pharmpy model object

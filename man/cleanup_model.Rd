@@ -10,7 +10,7 @@ cleanup_model(model)
 \item{model}{(Model) Pharmpy model object}
 }
 \value{
-(Model) Reference to the same model
+(Model) Updated model
 }
 \description{
 Perform various cleanups of a model
@@ -19,6 +19,8 @@ This is what is currently done
 \itemize{
 \item Make model statements declarative, i.e. only one assignment per symbol
 \item Inline all assignments of one symbol, e.g. X = Y
+\item Remove all random variables with no variability (i.e. with omegas fixed to zero)
+\item Put fixed thetas directly in the model statements
 }
 }
 \note{

@@ -9,20 +9,20 @@ remove_residuals(model, to_remove = NULL)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{to_remove}{(array(str)) List of predictions to remove}
+\item{to_remove}{(array(str) (optional)) Residuals to remove}
 }
 \value{
 (Model) Pharmpy model object
 }
 \description{
-Remove predictions and/or residuals
+Remove residuals
 
 Remove residuals from estimation step.
 }
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-model <- remove_residuals(model, 'all')
+model <- remove_residuals(model)
 model$execution_steps[-1].residuals
 }
 }

@@ -4,12 +4,14 @@
 \alias{fix_or_unfix_parameters}
 \title{fix_or_unfix_parameters}
 \usage{
-fix_or_unfix_parameters(model, parameters)
+fix_or_unfix_parameters(model, parameters, strict = TRUE)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{parameters}{(list(str=logical)) Set fix/unfix for these parameters}
+
+\item{strict}{(logical) Whether all parameters in input need to exist in the model. Default is TRUE}
 }
 \value{
 (Model) Pharmpy model object

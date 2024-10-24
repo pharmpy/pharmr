@@ -4,12 +4,14 @@
 \alias{set_upper_bounds}
 \title{set_upper_bounds}
 \usage{
-set_upper_bounds(model, bounds)
+set_upper_bounds(model, bounds, strict = TRUE)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{bounds}{(list(str=numeric)) A list of parameter bounds for parameters to change}
+
+\item{strict}{(logical) Whether all parameters in input need to exist in the model. Default is TRUE}
 }
 \value{
 (Model) Pharmpy model object

@@ -7,7 +7,7 @@
 install_pharmpy_devel(
   envname = "r-reticulate",
   method = "auto",
-  version = "same"
+  version = "devel"
 )
 }
 \arguments{

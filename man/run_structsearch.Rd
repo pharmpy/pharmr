@@ -6,13 +6,13 @@
 \usage{
 run_structsearch(
   type,
+  model,
+  results,
   search_space = NULL,
   b_init = NULL,
   emax_init = NULL,
   ec50_init = NULL,
   met_init = NULL,
-  results = NULL,
-  model = NULL,
   extra_model = NULL,
   strictness = "minimization_successful or (rounding_errors and sigdigs >= 0.1)",
   extra_model_results = NULL,
@@ -23,19 +23,19 @@ run_structsearch(
 \arguments{
 \item{type}{(str) Type of model. Currently only 'drug_metabolite' and 'pkpd'}
 
-\item{search_space}{(str or ModelFeatures (optional)) Search space to test}
+\item{model}{(Model) Search space to test}
 
-\item{b_init}{(numeric (optional)) Initial estimate for the baseline for pkpd models.}
+\item{results}{(ModelfitResults) Initial estimate for the baseline for pkpd models.}
 
-\item{emax_init}{(numeric (optional)) Initial estimate for E_MAX (for pkpd models only).}
+\item{search_space}{(str or ModelFeatures (optional)) Initial estimate for E_MAX (for pkpd models only).}
 
-\item{ec50_init}{(numeric (optional)) Initial estimate for EC_50 (for pkpd models only).}
+\item{b_init}{(numeric (optional)) Initial estimate for EC_50 (for pkpd models only).}
 
-\item{met_init}{(numeric (optional)) Initial estimate for MET (for pkpd models only).}
+\item{emax_init}{(numeric (optional)) Initial estimate for MET (for pkpd models only).}
 
-\item{results}{(ModelfitResults (optional)) Results for the start model}
+\item{ec50_init}{(numeric (optional)) Results for the start model}
 
-\item{model}{(Model (optional)) Pharmpy start model}
+\item{met_init}{(numeric (optional)) Pharmpy start model}
 
 \item{extra_model}{(Model (optional)) Optional extra Pharmpy model to use in TMDD structsearch}
 

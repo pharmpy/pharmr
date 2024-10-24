@@ -10,7 +10,7 @@ has_zero_order_absorption(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Reference to same model
+(logical) Whether the model has zero order absorption or not
 }
 \description{
 Check if ode system describes a zero order absorption

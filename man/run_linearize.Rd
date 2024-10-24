@@ -4,20 +4,28 @@
 \alias{run_linearize}
 \title{run_linearize}
 \usage{
-run_linearize(model = NULL, model_name = "linbase", description = "", ...)
+run_linearize(
+  model = NULL,
+  results = NULL,
+  model_name = "linbase",
+  description = "",
+  ...
+)
 }
 \arguments{
 \item{model}{(Model (optional)) Pharmpy model.}
 
+\item{results}{(ModelfitResults (optional)) Results of estimation of model}
+
 \item{model_name}{(str) New name of linearized model. The default is "linbase".}
 
-\item{description}{(str) Description of linaerized model. The default is ""}
+\item{description}{(str) Description of linearized model. The default is ""}
 
 \item{...}{Arguments to pass to tool}
 }
 \value{
-(LinearizeResults) Linaerize tool results object.
+(LinearizeResults) Linearize tool results object.
 }
 \description{
-Run linaerization procedure
+Linearize a model
 }

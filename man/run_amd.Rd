@@ -30,11 +30,12 @@ run_amd(
   retries_strategy = "all_final",
   seed = NULL,
   parameter_uncertainty_method = NULL,
-  ignore_datainfo_fallback = FALSE
+  ignore_datainfo_fallback = FALSE,
+  .E = NULL
 )
 }
 \arguments{
-\item{input}{(Model or str) Read model object/Path to a dataset}
+\item{input}{(Model or str or data.frame) Starting model or dataset}
 
 \item{results}{(ModelfitResults (optional)) Reults of input if input is a model}
 
@@ -42,7 +43,7 @@ run_amd(
 
 \item{administration}{(str) Route of administration. Either 'iv', 'oral' or 'ivoral'}
 
-\item{strategy}{(str) Run algorithm for AMD procedure. Valid options are 'default', 'reevaluation'. Default is 'default'}
+\item{strategy}{(str) Run algorithm for AMD procedure. Valid options are 'default', 'reevaluation', 'SIR', 'SRI', and 'RSI'.}
 
 \item{cl_init}{(numeric (optional)) Initial estimate for the population clearance}
 
@@ -64,7 +65,8 @@ run_amd(
 
 \item{lloq_limit}{(numeric (optional)) Lower limit of quantification. If NULL LLOQ column from dataset will be used}
 
-\item{allometric_variable}{(str or Expr (optional)) Variable to use for allometry}
+\item{allometric_variable}{(str or Expr (optional)) Variable to use for allometry. This option is deprecated.
+Please use ALLOMETRY in the mfl instead.}
 
 \item{occasion}{(str (optional)) Name of occasion column}
 
@@ -88,9 +90,11 @@ Default is 'final'.}
 \item{parameter_uncertainty_method}{(str (optional)) Parameter uncertainty method.}
 
 \item{ignore_datainfo_fallback}{(logical) Ignore using datainfo to get information not given by the user. Default is FALSE}
+
+\item{.E}{(list(str=numeric or str) (optional)) EXPERIMENTAL FEATURE. Dictionary of different E-values used in mBIC.}
 }
 \value{
-(Model) Reference to the same model object
+(AMDResults) Results for the run
 }
 \description{
 Run Automatic Model Development (AMD) tool
@@ -99,7 +103,7 @@ Run Automatic Model Development (AMD) tool
 \dontrun{
 model <- load_example_model("pheno")
 results <- load_example_modelfit_results("pheno")
-run_amd(model, results=results)
+res <- run_amd(model, results=results)
 }
 }
 \seealso{

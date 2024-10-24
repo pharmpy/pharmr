@@ -11,7 +11,7 @@ plot_dv_vs_ipred(model, predictions, stratify_on = NULL, bins = 8)
 
 \item{predictions}{(data.frame) DataFrame containing the predictions}
 
-\item{stratify_on}{(str) Name of parameter for stratification}
+\item{stratify_on}{(str (optional)) Name of parameter for stratification}
 
 \item{bins}{(numeric) Number of bins for stratification}
 }

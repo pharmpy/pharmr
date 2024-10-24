@@ -43,10 +43,10 @@ is NULL (all models will be ranked)}
 \item{correlation_algorithm}{(str (optional)) Which algorithm to run for the determining block structure of added IIVs. If NULL, the
 algorithm is determined based on the 'algorithm' argument}
 
-\item{E_p}{(numeric (optional)) Expected number of predictors for diagonal elements (used for mBIC). Must be set when using mBIC and
+\item{E_p}{(numeric or str (optional)) Expected number of predictors for diagonal elements (used for mBIC). Must be set when using mBIC and
 when the argument 'algorithm' is not 'skip'}
 
-\item{E_q}{(numeric (optional)) Expected number of predictors for off-diagonal elements (used for mBIC). Must be set when using mBIC
+\item{E_q}{(numeric or str (optional)) Expected number of predictors for off-diagonal elements (used for mBIC). Must be set when using mBIC
 and when the argument \code{correlation_algorithm} is not \code{skip} or Non}
 
 \item{...}{Arguments to pass to tool}

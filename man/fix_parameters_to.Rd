@@ -4,12 +4,14 @@
 \alias{fix_parameters_to}
 \title{fix_parameters_to}
 \usage{
-fix_parameters_to(model, inits)
+fix_parameters_to(model, inits, strict = TRUE)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{inits}{(list(str=numeric)) Inits for all parameters to fix and set init}
+
+\item{strict}{(logical) Whether all parameters in input need to exist in the model. Default is TRUE}
 }
 \value{
 (Model) Pharmpy model object

@@ -4,7 +4,12 @@
 \alias{set_initial_estimates}
 \title{set_initial_estimates}
 \usage{
-set_initial_estimates(model, inits, move_est_close_to_bounds = FALSE)
+set_initial_estimates(
+  model,
+  inits,
+  move_est_close_to_bounds = FALSE,
+  strict = TRUE
+)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model to update initial estimates}
@@ -13,6 +18,8 @@ set_initial_estimates(model, inits, move_est_close_to_bounds = FALSE)
 
 \item{move_est_close_to_bounds}{(logical) Move estimates that are close to bounds. If correlation >0.99 the correlation will
 be set to 0.9, if variance is <0.001 the variance will be set to 0.01.}
+
+\item{strict}{(logical) Whether all parameters in input need to exist in the model. Default is TRUE}
 }
 \value{
 (Model) Pharmpy model object

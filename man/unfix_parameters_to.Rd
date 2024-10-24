@@ -4,12 +4,14 @@
 \alias{unfix_parameters_to}
 \title{unfix_parameters_to}
 \usage{
-unfix_parameters_to(model, inits)
+unfix_parameters_to(model, inits, strict = TRUE)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{inits}{(list(str=numeric)) Inits for all parameters to unfix and change init}
+
+\item{strict}{(logical) Whether all parameters in input need to exist in the model. Default is TRUE}
 }
 \value{
 (Model) Pharmpy model object

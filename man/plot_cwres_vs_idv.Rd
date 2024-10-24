@@ -11,7 +11,7 @@ plot_cwres_vs_idv(model, residuals, stratify_on = NULL, bins = 8)
 
 \item{residuals}{(data.frame) DataFrame containing CWRES}
 
-\item{stratify_on}{(str) Name of parameter for stratification}
+\item{stratify_on}{(str (optional)) Name of parameter for stratification}
 
 \item{bins}{(numeric) Number of bins for stratification}
 }

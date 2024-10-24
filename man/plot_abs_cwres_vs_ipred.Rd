@@ -19,7 +19,7 @@ plot_abs_cwres_vs_ipred(
 
 \item{residuals}{(data.frame) DataFrame containing the residuals}
 
-\item{stratify_on}{(str) Name of parameter for stratification}
+\item{stratify_on}{(str (optional)) Name of parameter for stratification}
 
 \item{bins}{(numeric) Number of bins for stratification}
 }
