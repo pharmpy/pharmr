@@ -124,10 +124,14 @@ def _preprocess_input(func):
         if key == 'return':
             continue
         args, origin = get_args(value), get_origin(value)
-        if value is Union or origin is Union:
-            r_conversion = _get_conversion_str(key, args, origin)
+        if key.startswith('_'):
+            mangled_key = '.' + key[1:]
         else:
-            r_conversion = _get_conversion_str(key, value, origin)
+            mangled_key = key
+        if value is Union or origin is Union:
+            r_conversion = _get_conversion_str(mangled_key, args, origin)
+        else:
+            r_conversion = _get_conversion_str(mangled_key, value, origin)
 
         if r_conversion is None:
             continue
