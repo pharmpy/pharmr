@@ -165,7 +165,7 @@ def _create_r_example(doc_list):
     pattern_methods = re.compile(r'([A-Za-z]\d*)\.([A-Za-z]\d*)')
     pattern_list_idx = re.compile(r'\w\[(\d+)]')
     pattern_list = re.compile(r'\[([\'\"\w(),\s]+)]')
-    pattern_dict = re.compile(r'{(([\'\"]*[\w\d()]+[\'\"]*: [\'\"]*[\w\d]+\'*,*\s*)+)}')
+    pattern_dict = re.compile(r'\{(([\'\"]*[\w().]+[\'\"]*: [\'\"]*[\w.]+\'*,*\s*)+)}')
     pattern_ws = re.compile(r'\s{2,}')
     pattern_doctest = re.compile(r'\s+# doctest:.*')
 
