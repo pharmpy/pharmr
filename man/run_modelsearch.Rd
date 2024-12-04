@@ -6,7 +6,7 @@
 \usage{
 run_modelsearch(
   search_space,
-  algorithm,
+  algorithm = "reduced_stepwise",
   iiv_strategy = "absorption_delay",
   rank_type = "bic",
   cutoff = NULL,

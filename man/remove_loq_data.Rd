@@ -24,7 +24,7 @@ remove_loq_data(
 
 \item{alq}{(str (optional)) Column name for above limit of quantification indicator.}
 
-\item{keep}{(numeric (optional)) Number of loq records to keep for each run of consecutive loq records.}
+\item{keep}{(numeric) Number of loq records to keep for each run of consecutive loq records.}
 }
 \value{
 (Model) Pharmpy model object

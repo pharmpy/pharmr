@@ -25,7 +25,7 @@ Fix all listed parameters to specified value/values
 \dontrun{
 model <- load_example_model("pheno")
 model$parameters['POP_CL']
-model <- fix_parameters_to(model, {'POP_CL': 0.5})
+model <- fix_parameters_to(model, list('POP_CL'=0.5))
 model$parameters['POP_CL']
 }
 }

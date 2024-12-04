@@ -23,7 +23,7 @@ only the values for dosing events will be replaced.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-model <- set_reference_values(model, {'WGT': 0.5, 'AMT': 4.0})
+model <- set_reference_values(model, list('WGT'=0.5, 'AMT'=4.0))
 model$dataset
 }
 

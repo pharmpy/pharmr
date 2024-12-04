@@ -13,12 +13,12 @@ get_model_code(model)
 (str) Model code
 }
 \description{
-Get the model code of the underlying model language
+Get the model code of the underlying model language as a string
 }
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-get_model_code(model)
+code <- get_model_code(model)
 }
 
 }
