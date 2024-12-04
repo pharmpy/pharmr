@@ -4,8 +4,8 @@ Version: 1.4.0
 Date: 2024-12-04
 Title: Interface to the 'Pharmpy' 'Pharmacometrics' Library
 Authors@R: c(
-  person("Rikard", "Nordgren", role=c("aut", "cre", "cph"), email="rikard.nordgren@farmaci.uu.se"),
-  person("Stella", "Belin", role=c("aut", "cph"), email="stella.belin@farmaci.uu.se"),
+  person("Rikard", "Nordgren", role=c("aut", "cre", "cph"), email="rikard.nordgren@uu.se"),
+  person("Stella", "Belin", role=c("aut", "cph"), email="stella.belin@uu.se"),
   person("Mats O.", "Karlsson", role=c("sad")),
   person("Andrew C.", "Hooker", role=c("sad")),
   person("Xiaomei", "Chen", role=c("sad")),
@@ -16,7 +16,7 @@ Authors@R: c(
   person("F. Hoffmann-La Roche Ltd.", role=c("fnd")),
   person("Bayer AG", role=c("fnd"))
   )
-Maintainer: Rikard Nordgren <rikard.nordgren@farmaci.uu.se>
+Maintainer: Rikard Nordgren <rikard.nordgren@uu.se>
 Depends:
     R (>= 3.6.0),
     altair (>= 4.0.0)
