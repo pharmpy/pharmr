@@ -10,10 +10,10 @@
 #' @export
 check_setup <- function() {
   cli::cli_h3("Checking Python setup")
-  py_okay <- check_python()
+  py_okay <- check_setup_python()
   if (py_okay) {
     cli::cli_h3("Checking Pharmpy and pharmr")
-    pharmpy_okay <- check_pharmpy()
+    pharmpy_okay <- check_setup_pharmpy()
   }
 }
 
