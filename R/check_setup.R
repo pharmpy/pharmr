@@ -17,7 +17,7 @@ check_setup <- function() {
   }
 }
 
-check_python <- function() {
+check_setup_python <- function() {
   py <- reticulate::py_discover_config()
   if (is.null(py)) {
     print_status('fail', 'No Python found')
@@ -33,7 +33,7 @@ check_python <- function() {
   return(TRUE)
 }
 
-check_pharmpy <- function() {
+check_setup_pharmpy <- function() {
   pharmpy_avail <- reticulate::py_module_available('pharmpy')
   if (isFALSE(pharmpy_avail)) {
     print_status('fail', 'Could not find Pharmpy installation')
