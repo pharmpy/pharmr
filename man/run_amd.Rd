@@ -28,14 +28,14 @@ run_amd(
   dv_types = NULL,
   mechanistic_covariates = NULL,
   retries_strategy = "all_final",
-  seed = NULL,
+  seed = 1234,
   parameter_uncertainty_method = NULL,
   ignore_datainfo_fallback = FALSE,
   .E = NULL
 )
 }
 \arguments{
-\item{input}{(Model or str or data.frame) Starting model or dataset}
+\item{input}{(Model or str) Starting model or dataset}
 
 \item{results}{(ModelfitResults (optional)) Reults of input if input is a model}
 
@@ -74,7 +74,7 @@ Please use ALLOMETRY in the mfl instead.}
 
 \item{resume}{(logical) Whether to allow resuming previous run}
 
-\item{strictness}{(str (optional)) Strictness criteria}
+\item{strictness}{(str) Strictness criteria}
 
 \item{dv_types}{(list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DVs.}
 
@@ -85,7 +85,7 @@ The effects are extracted from the search space for covsearch.}
 \item{retries_strategy}{(str) Whether or not to run retries tool. Valid options are 'skip', 'all_final' or 'final'.
 Default is 'final'.}
 
-\item{seed}{(numeric (optional)) Random number generator or seed to be used.}
+\item{seed}{(numeric) Random seed to be used.}
 
 \item{parameter_uncertainty_method}{(str (optional)) Parameter uncertainty method.}
 

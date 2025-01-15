@@ -10,7 +10,7 @@ sample_parameters_uniformly(
   fraction = 0.1,
   force_posdef_samples = NULL,
   n = 1,
-  seed = NULL,
+  seed = 1234,
   scale = "normal"
 )
 }
@@ -26,7 +26,7 @@ positive definite covariance matrices.}
 
 \item{n}{(numeric) Number of samples}
 
-\item{seed}{(numeric (optional)) Random number generator or seed}
+\item{seed}{(numeric) Random number generator or seed}
 
 \item{scale}{(str) Scale to perform sampling on. Valid options are 'normal' and 'UCP'}
 }

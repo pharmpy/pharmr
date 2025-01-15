@@ -9,7 +9,7 @@ remove_peripheral_compartment(model, name = NULL)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{name}{(str) Name of compartment to remove peripheral compartment from.}
+\item{name}{(str (optional)) Name of compartment to remove peripheral compartment from.}
 }
 \value{
 (Model) Pharmpy model object

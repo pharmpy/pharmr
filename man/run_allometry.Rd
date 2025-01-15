@@ -5,8 +5,8 @@
 \title{run_allometry}
 \usage{
 run_allometry(
-  model = NULL,
-  results = NULL,
+  model,
+  results,
   allometric_variable = "WT",
   reference_value = 70,
   parameters = NULL,
@@ -18,9 +18,9 @@ run_allometry(
 )
 }
 \arguments{
-\item{model}{(Model (optional)) Pharmpy model}
+\item{model}{(Model) Pharmpy model}
 
-\item{results}{(ModelfitResults (optional)) Results for model}
+\item{results}{(ModelfitResults) Results for model}
 
 \item{allometric_variable}{(str or Expr) Name of the variable to use for allometric scaling (default is WT)}
 

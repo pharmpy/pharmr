@@ -5,19 +5,23 @@
 \title{run_modelsearch}
 \usage{
 run_modelsearch(
+  model,
+  results,
   search_space,
   algorithm = "reduced_stepwise",
   iiv_strategy = "absorption_delay",
   rank_type = "bic",
   cutoff = NULL,
-  results = NULL,
-  model = NULL,
   strictness = "minimization_successful or (rounding_errors and sigdigs >= 0.1)",
   E = NULL,
   ...
 )
 }
 \arguments{
+\item{model}{(Model) Pharmpy model}
+
+\item{results}{(ModelfitResults) Results for model}
+
 \item{search_space}{(str or ModelFeatures) Search space to test. Either as a string or a ModelFeatures object.}
 
 \item{algorithm}{(str) Algorithm to use.}
@@ -29,11 +33,7 @@ run_modelsearch(
 \item{cutoff}{(numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 is NULL (all models will be ranked)}
 
-\item{results}{(ModelfitResults (optional)) Results for model}
-
-\item{model}{(Model (optional)) Pharmpy model}
-
-\item{strictness}{(str (optional)) Strictness criteria}
+\item{strictness}{(str) Strictness criteria}
 
 \item{E}{(numeric or str (optional)) Expected number of predictors (used for mBIC). Must be set when using mBI}
 
@@ -48,8 +48,9 @@ Run Modelsearch tool. For more details, see :ref:\code{modelsearch}.
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
-results <- load_example_modelfit_results("pheno")
-run_modelsearch('ABSORPTION(ZO);PERIPHERALS(1)', 'exhaustive', results=results, model=model)
+res <- load_example_modelfit_results("pheno")
+search_space <- 'ABSORPTION(ZO);PERIPHERALS(1)'
+run_modelsearch(model=model, results=res, search_space=search_space, algorithm='exhaustive')
 }
 
 }

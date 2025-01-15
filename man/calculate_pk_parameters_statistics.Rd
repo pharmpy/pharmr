@@ -8,7 +8,7 @@ calculate_pk_parameters_statistics(
   model,
   parameter_estimates,
   covariance_matrix = NULL,
-  seed = NULL
+  seed = 1234
 )
 }
 \arguments{
@@ -18,7 +18,7 @@ calculate_pk_parameters_statistics(
 
 \item{covariance_matrix}{(data.frame (optional)) Parameter uncertainty covariance matrix}
 
-\item{seed}{(numeric (optional)) Random number generator or seed}
+\item{seed}{(numeric) Random number generator or seed}
 }
 \value{
 (data.frame) A DataFrame of statistics indexed on parameter and covariate value.

@@ -4,7 +4,7 @@
 \alias{set_simulation}
 \title{set_simulation}
 \usage{
-set_simulation(model, n = 1, seed = 64206)
+set_simulation(model, n = 1, seed = 1234)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}

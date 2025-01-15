@@ -9,7 +9,7 @@ calculate_individual_parameter_statistics(
   expr_or_exprs,
   parameter_estimates,
   covariance_matrix = NULL,
-  seed = NULL
+  seed = 1234
 )
 }
 \arguments{
@@ -17,13 +17,13 @@ calculate_individual_parameter_statistics(
 
 \item{expr_or_exprs}{(array(BooleanExpr) or array(Expr) or array(str) or BooleanExpr or Expr or str) Parameter estimates}
 
-\item{parameter_estimates}{(array) Parameter uncertainty covariance matrix}
+\item{parameter_estimates}{() Parameter uncertainty covariance matrix}
 
 \item{covariance_matrix}{(data.frame (optional)) expression or iterable of str or expressions
 Expressions or equations for parameters of interest. If equations are used
 the names of the left hand sides will be used as the names of the parameters.}
 
-\item{seed}{(numeric (optional)) Random number generator or integer seed}
+\item{seed}{(numeric) Random number generator or integer seed}
 }
 \value{
 (data.frame) A DataFrame of statistics indexed on parameter and covariate value.

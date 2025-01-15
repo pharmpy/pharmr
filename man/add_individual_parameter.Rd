@@ -4,12 +4,16 @@
 \alias{add_individual_parameter}
 \title{add_individual_parameter}
 \usage{
-add_individual_parameter(model, name)
+add_individual_parameter(model, name, init = 0.1, lower = 0)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{name}{(str) Name of individual/pk parameter}
+
+\item{init}{(numeric) Initial estimate of the population parameter}
+
+\item{lower}{(numeric) Lower bound for the population parameter}
 }
 \value{
 (Model) Pharmpy model object

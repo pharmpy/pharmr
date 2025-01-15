@@ -11,7 +11,7 @@ set_peripheral_compartments(model, n, name = NULL)
 
 \item{n}{(numeric) Number of transit compartments}
 
-\item{name}{(str) Name of compartment to add peripheral to.}
+\item{name}{(str (optional)) Name of compartment to add peripheral to.}
 }
 \value{
 (Model) Pharmpy model object

@@ -13,7 +13,6 @@ run_retries(
   strictness = "minimization_successful or (rounding_errors and sigdigs >= 0.1)",
   scale = "UCP",
   prefix_name = "",
-  seed = NULL,
   ...
 )
 }
@@ -28,13 +27,11 @@ run_retries(
 
 \item{use_initial_estimates}{(logical) Use initial parameter estimates instead of final estimates of input model when creating candidate models.}
 
-\item{strictness}{(str (optional)) Strictness criteria. The default is "minimization_successful or (rounding_errors and sigdigs >= 0.1)".}
+\item{strictness}{(str) Strictness criteria. The default is "minimization_successful or (rounding_errors and sigdigs >= 0.1)".}
 
 \item{scale}{(str (optional)) Which scale to update the initial values on. Either normal scale or UCP scale.}
 
-\item{prefix_name}{(str (optional)) Prefix the candidate model names with given string.}
-
-\item{seed}{(numeric (optional)) Random number generator or seed to be used}
+\item{prefix_name}{(str (optional)) Prefix the candidate model names with given string}
 
 \item{...}{Arguments to pass to tool}
 }

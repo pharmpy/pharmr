@@ -489,6 +489,8 @@ add_indirect_effect <- function(model, expr, prod=TRUE) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param name (str) Name of individual/pk parameter
+#' @param init (numeric) Initial estimate of the population parameter
+#' @param lower (numeric) Lower bound for the population parameter
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -500,8 +502,8 @@ add_indirect_effect <- function(model, expr, prod=TRUE) {
 #' }
 #' 
 #' @export
-add_individual_parameter <- function(model, name) {
-	func_out <- pharmpy$modeling$add_individual_parameter(model, name)
+add_individual_parameter <- function(model, name, init=0.1, lower=0.0) {
+	func_out <- pharmpy$modeling$add_individual_parameter(model, name, init=init, lower=lower)
 	return(py_to_r(func_out))
 }
 
@@ -709,7 +711,7 @@ add_pd_iiv <- function(model, initial_estimate=0.09) {
 #' ==  ===================================================
 #' 
 #' @param model (Model) Pharmpy model
-#' @param name (str) Name of compartment to add peripheral to.
+#' @param name (str (optional)) Name of compartment to add peripheral to.
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -1353,11 +1355,11 @@ calculate_eta_shrinkage <- function(model, parameter_estimates, individual_estim
 #' 
 #' @param model (Model) A previously estimated model
 #' @param expr_or_exprs (array(BooleanExpr) or array(Expr) or array(str) or BooleanExpr or Expr or str) Parameter estimates
-#' @param parameter_estimates (array) Parameter uncertainty covariance matrix
+#' @param parameter_estimates () Parameter uncertainty covariance matrix
 #' @param covariance_matrix (data.frame (optional)) expression or iterable of str or expressions
 #' Expressions or equations for parameters of interest. If equations are used
 #' the names of the left hand sides will be used as the names of the parameters.
-#' @param seed (numeric (optional)) Random number generator or integer seed
+#' @param seed (numeric) Random number generator or integer seed
 #'  
 #' @return (data.frame) A DataFrame of statistics indexed on parameter and covariate value.
 #' 
@@ -1372,8 +1374,8 @@ calculate_eta_shrinkage <- function(model, parameter_estimates, individual_estim
 #' }
 #' 
 #' @export
-calculate_individual_parameter_statistics <- function(model, expr_or_exprs, parameter_estimates, covariance_matrix=NULL, seed=NULL) {
-	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
+calculate_individual_parameter_statistics <- function(model, expr_or_exprs, parameter_estimates, covariance_matrix=NULL, seed=1234) {
+	parameter_estimates <- convert_input(parameter_estimates, "Mapping")
 	seed <- convert_input(seed, "int")
 	func_out <- pharmpy$modeling$calculate_individual_parameter_statistics(model, expr_or_exprs, parameter_estimates, covariance_matrix=covariance_matrix, seed=seed)
 	func_out <- reset_index_df(func_out)
@@ -1457,7 +1459,7 @@ calculate_parameters_from_ucp <- function(model, scale, ucps) {
 #' @param model (Model) A previously estimated model
 #' @param parameter_estimates (array) Parameter estimates
 #' @param covariance_matrix (data.frame (optional)) Parameter uncertainty covariance matrix
-#' @param seed (numeric (optional)) Random number generator or seed
+#' @param seed (numeric) Random number generator or seed
 #'  
 #' @return (data.frame) A DataFrame of statistics indexed on parameter and covariate value.
 #' 
@@ -1475,7 +1477,7 @@ calculate_parameters_from_ucp <- function(model, scale, ucps) {
 #' 
 #' 
 #' @export
-calculate_pk_parameters_statistics <- function(model, parameter_estimates, covariance_matrix=NULL, seed=NULL) {
+calculate_pk_parameters_statistics <- function(model, parameter_estimates, covariance_matrix=NULL, seed=1234) {
 	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
 	seed <- convert_input(seed, "int")
 	func_out <- pharmpy$modeling$calculate_pk_parameters_statistics(model, parameter_estimates, covariance_matrix=covariance_matrix, seed=seed)
@@ -1902,7 +1904,7 @@ create_joint_distribution <- function(model, rvs=NULL, individual_estimates=NULL
 #' Pharmpy functions that use random sampling take a random number generator or seed as input.
 #' This function can be used to create a default new random number generator.
 #' 
-#' @param seed (numeric (optional)) Seed for the random number generator or NULL (default) for a randomized seed. If seed
+#' @param seed (numeric) Seed for the random number generator or NULL (default) for a randomized seed. If seed
 #' is generator it will be passed through.
 #'  
 #' @return (Generator) Initialized numpy random number generator object
@@ -1914,7 +1916,7 @@ create_joint_distribution <- function(model, rvs=NULL, individual_estimates=NULL
 #' }
 #' 
 #' @export
-create_rng <- function(seed=NULL) {
+create_rng <- function(seed=1234) {
 	seed <- convert_input(seed, "int")
 	func_out <- pharmpy$modeling$create_rng(seed=seed)
 	return(py_to_r(func_out))
@@ -3482,7 +3484,7 @@ get_unit_of <- function(model, variable) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (sympy.Matrix) Vector of inputs
+#' @return (Matrix) Vector of inputs
 #' 
 #' @examples
 #' \dontrun{
@@ -3531,7 +3533,7 @@ greekify_model <- function(model, named_subscripts=FALSE) {
 #' first (in case of many) dependent variable is going to be checked.
 #' 
 #' @param model (Model) The model to check
-#' @param dv (str or Expr or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
+#' @param dv (Expr or str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
 #'  
 #' @return (logical) TRUE if the model has an additive error model and FALSE otherwise
 #' 
@@ -3565,7 +3567,7 @@ has_additive_error_model <- function(model, dv=NULL) {
 #' first (in case of many) dependent variable is going to be checked.
 #' 
 #' @param model (Model) The model to check
-#' @param dv (str or Expr or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
+#' @param dv (Expr or str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
 #'  
 #' @return (logical) TRUE if the model has a combined error model and FALSE otherwise
 #' 
@@ -3874,7 +3876,7 @@ has_presystemic_metabolite <- function(model) {
 #' first (in case of many) dependent variable is going to be checked.
 #' 
 #' @param model (Model) The model to check
-#' @param dv (str or Expr or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
+#' @param dv (Expr or str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
 #'  
 #' @return (logical) TRUE if the model has a proportional error model and FALSE otherwise
 #' 
@@ -4937,7 +4939,7 @@ remove_parameter_uncertainty_step <- function(model) {
 #' ==  ===================================================
 #' 
 #' @param model (Model) Pharmpy model
-#' @param name (str) Name of compartment to remove peripheral compartment from.
+#' @param name (str (optional)) Name of compartment to remove peripheral compartment from.
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -5174,7 +5176,7 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' @param individual_estimates_covariance (data.frame) Uncertainty covariance of the individual estimates
 #' @param parameters (array(str) (optional)) A vector of a subset of individual parameters to sample. Default is NULL, which means all.
 #' @param samples_per_id (numeric) Number of samples per individual
-#' @param seed (numeric (optional)) Random number generator or seed
+#' @param seed (numeric) Random number generator or seed
 #'  
 #' @return (data.frame) Pool of samples in a DataFrame
 #' 
@@ -5196,7 +5198,7 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 #' 
 #' 
 #' @export
-sample_individual_estimates <- function(model, individual_estimates, individual_estimates_covariance, parameters=NULL, samples_per_id=100, seed=NULL) {
+sample_individual_estimates <- function(model, individual_estimates, individual_estimates_covariance, parameters=NULL, samples_per_id=100, seed=1234) {
 	parameters <- convert_input(parameters, "list")
 	samples_per_id <- convert_input(samples_per_id, "int")
 	seed <- convert_input(seed, "int")
@@ -5220,7 +5222,7 @@ sample_individual_estimates <- function(model, individual_estimates, individual_
 #' default and means never and 0 means always
 #' @param force_posdef_covmatrix (logical) Set to TRUE to force the input covariance matrix to be positive definite
 #' @param n (numeric) Number of samples
-#' @param seed (numeric (optional)) Random number generator
+#' @param seed (numeric) Random number generator
 #'  
 #' @return (data.frame) A dataframe with one sample per row
 #' 
@@ -5240,7 +5242,7 @@ sample_individual_estimates <- function(model, individual_estimates, individual_
 #' 
 #' 
 #' @export
-sample_parameters_from_covariance_matrix <- function(model, parameter_estimates, covariance_matrix, force_posdef_samples=NULL, force_posdef_covmatrix=FALSE, n=1, seed=NULL) {
+sample_parameters_from_covariance_matrix <- function(model, parameter_estimates, covariance_matrix, force_posdef_samples=NULL, force_posdef_covmatrix=FALSE, n=1, seed=1234) {
 	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
 	force_posdef_samples <- convert_input(force_posdef_samples, "int")
 	n <- convert_input(n, "int")
@@ -5265,7 +5267,7 @@ sample_parameters_from_covariance_matrix <- function(model, parameter_estimates,
 #' @param force_posdef_samples (numeric (optional)) Number of samples to reject before forcing variability parameters to give
 #' positive definite covariance matrices.
 #' @param n (numeric) Number of samples
-#' @param seed (numeric (optional)) Random number generator or seed
+#' @param seed (numeric) Random number generator or seed
 #' @param scale (str) Scale to perform sampling on. Valid options are 'normal' and 'UCP'
 #'  
 #' @return (data.frame) samples
@@ -5287,7 +5289,7 @@ sample_parameters_from_covariance_matrix <- function(model, parameter_estimates,
 #' 
 #' 
 #' @export
-sample_parameters_uniformly <- function(model, parameter_estimates, fraction=0.1, force_posdef_samples=NULL, n=1, seed=NULL, scale='normal') {
+sample_parameters_uniformly <- function(model, parameter_estimates, fraction=0.1, force_posdef_samples=NULL, n=1, seed=1234, scale='normal') {
 	parameter_estimates <- convert_input(parameter_estimates, "pd.Series")
 	force_posdef_samples <- convert_input(force_posdef_samples, "int")
 	n <- convert_input(n, "int")
@@ -5315,7 +5317,7 @@ sample_parameters_uniformly <- function(model, parameter_estimates, fraction=0.1
 #' +------------------------+----------------------------------------+
 #' 
 #' @param model (Model) Set error model for this model
-#' @param dv (str or Expr or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
+#' @param dv (Expr or str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
 #' @param data_trans (numeric or str or Expr (optional)) A data transformation expression or NULL (default) to use the transformation
 #' specified by the model. Series expansion will be used for approximation.
 #' @param series_terms (numeric) Number of terms to use for the series expansion approximation for data
@@ -5396,7 +5398,7 @@ set_baseline_effect <- function(model, expr='const') {
 #' +------------------------+-----------------------------------------------------+
 #' 
 #' @param model (Model) Set error model for this model
-#' @param dv (str or Expr or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
+#' @param dv (Expr or str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
 #' @param data_trans (numeric or str or Expr (optional)) A data transformation expression or NULL (default) to use the transformation
 #' specified by the model.
 #'  
@@ -6069,7 +6071,7 @@ set_ode_solver <- function(model, solver) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param n (numeric) Number of transit compartments
-#' @param name (str) Name of compartment to add peripheral to.
+#' @param name (str (optional)) Name of compartment to add peripheral to.
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -6151,7 +6153,7 @@ set_power_on_ruv <- function(model, list_of_eps=NULL, dv=NULL, lower_limit=0.01,
 #' +------------------------+----------------------------------------+
 #' 
 #' @param model (Model) Set error model for this model
-#' @param dv (str or Expr or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
+#' @param dv (Expr or str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
 #' @param data_trans (numeric or str or Expr (optional)) A data transformation expression or NULL (default) to use the transformation
 #' specified by the model.
 #' @param zero_protection (logical) Set to TRUE to add code protecting from IPRED=0
@@ -6267,7 +6269,7 @@ set_seq_zo_fo_absorption <- function(model) {
 #' }
 #' 
 #' @export
-set_simulation <- function(model, n=1, seed=64206) {
+set_simulation <- function(model, n=1, seed=1234) {
 	n <- convert_input(n, "int")
 	seed <- convert_input(seed, "int")
 	func_out <- pharmpy$modeling$set_simulation(model, n=n, seed=seed)
@@ -6283,7 +6285,7 @@ set_simulation <- function(model, n=1, seed=64206) {
 #' @param model (Model) Pharmpy model
 #' @param cutoff (numeric) A cutoff value for idv column
 #' @param idv (str) Time or time after dose, default is Time
-#' @param dv (str or Expr or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
+#' @param dv (Expr or str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -8028,8 +8030,8 @@ retrieve_models <- function(source, names=NULL) {
 #' @description
 #' Run allometry tool. For more details, see :ref:`allometry`.
 #' 
-#' @param model (Model (optional)) Pharmpy model
-#' @param results (ModelfitResults (optional)) Results for model
+#' @param model (Model) Pharmpy model
+#' @param results (ModelfitResults) Results for model
 #' @param allometric_variable (str or Expr) Name of the variable to use for allometric scaling (default is WT)
 #' @param reference_value (str or numeric or Expr) Reference value for the allometric variable (default is 70)
 #' @param parameters (array(str or Expr) (optional)) Parameters to apply scaling to (default is all CL, Q and V parameters)
@@ -8049,14 +8051,14 @@ retrieve_models <- function(source, names=NULL) {
 #' }
 #' 
 #' @export
-run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', reference_value=70, parameters=NULL, initials=NULL, lower_bounds=NULL, upper_bounds=NULL, fixed=TRUE, ...) {
+run_allometry <- function(model, results, allometric_variable='WT', reference_value=70, parameters=NULL, initials=NULL, lower_bounds=NULL, upper_bounds=NULL, fixed=TRUE, ...) {
 	tryCatch(
 	{
 		parameters <- convert_input(parameters, "list")
 		initials <- convert_input(initials, "list")
 		lower_bounds <- convert_input(lower_bounds, "list")
 		upper_bounds <- convert_input(upper_bounds, "list")
-		func_out <- pharmpy$tools$run_allometry(model=model, results=results, allometric_variable=allometric_variable, reference_value=reference_value, parameters=parameters, initials=initials, lower_bounds=lower_bounds, upper_bounds=upper_bounds, fixed=fixed, ...)
+		func_out <- pharmpy$tools$run_allometry(model, results, allometric_variable=allometric_variable, reference_value=reference_value, parameters=parameters, initials=initials, lower_bounds=lower_bounds, upper_bounds=upper_bounds, fixed=fixed, ...)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -8103,7 +8105,7 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' @description
 #' Run Automatic Model Development (AMD) tool
 #' 
-#' @param input (Model or str or data.frame) Starting model or dataset
+#' @param input (Model or str) Starting model or dataset
 #' @param results (ModelfitResults (optional)) Reults of input if input is a model
 #' @param modeltype (str) Type of model to build. Valid strings are 'basic_pk', 'pkpd', 'drug_metabolite' and 'tmdd'
 #' @param administration (str) Route of administration. Either 'iv', 'oral' or 'ivoral'
@@ -8123,14 +8125,14 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' @param occasion (str (optional)) Name of occasion column
 #' @param path (str (optional)) Path to run AMD in
 #' @param resume (logical) Whether to allow resuming previous run
-#' @param strictness (str (optional)) Strictness criteria
+#' @param strictness (str) Strictness criteria
 #' @param dv_types (list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DVs.
 #' @param mechanistic_covariates (array(str or list(str)) (optional)) List of covariates or tuple of covariate and parameter combination to run in a
 #' separate proioritized covsearch run. For instance c("WT", ("CRCL", "CL")).
 #' The effects are extracted from the search space for covsearch.
 #' @param retries_strategy (str) Whether or not to run retries tool. Valid options are 'skip', 'all_final' or 'final'.
 #' Default is 'final'.
-#' @param seed (numeric (optional)) Random number generator or seed to be used.
+#' @param seed (numeric) Random seed to be used.
 #' @param parameter_uncertainty_method (str (optional)) Parameter uncertainty method.
 #' @param ignore_datainfo_fallback (logical) Ignore using datainfo to get information not given by the user. Default is FALSE
 #' @param .E (list(str=numeric or str) (optional)) EXPERIMENTAL FEATURE. Dictionary of different E-values used in mBIC.
@@ -8150,7 +8152,7 @@ run_allometry <- function(model=NULL, results=NULL, allometric_variable='WT', re
 #' 
 #' 
 #' @export
-run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='oral', strategy='default', cl_init=NULL, vc_init=NULL, mat_init=NULL, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, search_space=NULL, lloq_method=NULL, lloq_limit=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', dv_types=NULL, mechanistic_covariates=NULL, retries_strategy='all_final', seed=NULL, parameter_uncertainty_method=NULL, ignore_datainfo_fallback=FALSE, .E=NULL) {
+run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='oral', strategy='default', cl_init=NULL, vc_init=NULL, mat_init=NULL, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, search_space=NULL, lloq_method=NULL, lloq_limit=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', dv_types=NULL, mechanistic_covariates=NULL, retries_strategy='all_final', seed=1234, parameter_uncertainty_method=NULL, ignore_datainfo_fallback=FALSE, .E=NULL) {
 	tryCatch(
 	{
 		mechanistic_covariates <- convert_input(mechanistic_covariates, "list")
@@ -8268,31 +8270,31 @@ run_bootstrap <- function(model, results=NULL, resamples=1, ...) {
 #' @description
 #' Run COVsearch tool. For more details, see :ref:`covsearch`.
 #' 
+#' @param model (Model) Pharmpy model
+#' @param results (ModelfitResults) Results of model
 #' @param search_space (str or ModelFeatures) MFL of covariate effects to try
 #' @param p_forward (numeric) The p-value to use in the likelihood ratio test for forward steps
 #' @param p_backward (numeric) The p-value to use in the likelihood ratio test for backward steps
 #' @param max_steps (numeric) The maximum number of search steps to make
 #' @param algorithm (str) The search algorithm to use. Currently, 'scm-forward' and
 #' 'scm-forward-then-backward' are supported.
-#' @param results (ModelfitResults (optional)) Results of model
-#' @param model (Model (optional)) Pharmpy model
 #' @param max_eval (logical) Limit the number of function evaluations to 3.1 times that of the
 #' base model. Default is FALSE.
 #' @param adaptive_scope_reduction (logical) Stash all non-significant parameter-covariate effects to be tested
 #' after all significant effects have been tested. Once all these have been
 #' tested, try adding the stashed effects once more with a regular forward approach.
 #' Default is FALSE
-#' @param strictness (str (optional)) Strictness criteria
+#' @param strictness (str) Strictness criteria
 #' @param naming_index_offset (numeric (optional)) index offset for naming of runs. Default is 0.
 #' @param nsamples (numeric) Number of samples from individual parameter conditional distribution for linear covariate model selection.
-#' `nsamples=0` uses ETAs to for linear model selection, whereas `nsample`>=1 generates MCMC samples with an
-#' additional SAEM estimation step. When multiple samples are generated, linear mixed effects model will be
-#' used to fit the linear models.
 #' Default is 10, i.e. generating 10 samples per subject
-#' @param .statsmodels (logical) Estimation tool for SAMBA linear covariate model fitting. 'TRUE' calls statsmodel's
-#' functionalities, whereas 'FALSE' calls nonmem.
-#' @param .weighted_linreg (logical) When using nonmem to run linear covariate models, 'TRUE' uses ETC as weight to run WLS.
-#' @param .lin_filter (numeric) Option to control the number of covariates passed to nonlinear selection
+#' @param .samba_max_covariates (numeric (optional)) Maximum number of covariate inclusion allowed in linear covariate screening for each parameter.
+#' @param .samba_selection_criterion (str) Method used to fit linear covariate models. Currently, Ordinary Least Squares (ols),
+#' Weighted Least Squares (wls), and Linear Mixed-Effects (lme) are supported.
+#' @param .samba_linreg_method (str) Method used for linear and nonlinear model selection in SAMBA methods. Currently, BIC and LRT are
+#' supported.
+#' @param .samba_stepwise_lcs (logical (optional)) Use stepwise linear covariate screening or not. By default, SAMBA methods use stepwise LCS whereas SCM-LCS uses
+#' non-stepwise LCS
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (COVSearchResults) COVsearch tool result object
@@ -8302,18 +8304,18 @@ run_bootstrap <- function(model, results=NULL, resamples=1, ...) {
 #' model <- load_example_model("pheno")
 #' results <- load_example_modelfit_results("pheno")
 #' search_space <- 'COVARIATE(c(CL, V), c(AGE, WT), EXP)'
-#' res <- run_covsearch(search_space, model=model, results=results)
+#' res <- run_covsearch(model=model, results=results, search_space=search_space)
 #' }
 #' 
 #' @export
-run_covsearch <- function(search_space, p_forward=0.01, p_backward=0.001, max_steps=-1, algorithm='scm-forward-then-backward', results=NULL, model=NULL, max_eval=FALSE, adaptive_scope_reduction=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', naming_index_offset=0, nsamples=10, .statsmodels=FALSE, .weighted_linreg=FALSE, .lin_filter=0, ...) {
+run_covsearch <- function(model, results, search_space, p_forward=0.01, p_backward=0.001, max_steps=-1, algorithm='scm-forward-then-backward', max_eval=FALSE, adaptive_scope_reduction=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', naming_index_offset=0, nsamples=10, .samba_max_covariates=3, .samba_selection_criterion='bic', .samba_linreg_method='ols', .samba_stepwise_lcs=NULL, ...) {
 	tryCatch(
 	{
 		max_steps <- convert_input(max_steps, "int")
 		naming_index_offset <- convert_input(naming_index_offset, "int")
 		nsamples <- convert_input(nsamples, "int")
-		.lin_filter <- convert_input(.lin_filter, "int")
-		func_out <- pharmpy$tools$run_covsearch(search_space, p_forward=p_forward, p_backward=p_backward, max_steps=max_steps, algorithm=algorithm, results=results, model=model, max_eval=max_eval, adaptive_scope_reduction=adaptive_scope_reduction, strictness=strictness, naming_index_offset=naming_index_offset, nsamples=nsamples, `_statsmodels`=.statsmodels, `_weighted_linreg`=.weighted_linreg, `_lin_filter`=.lin_filter, ...)
+		.samba_max_covariates <- convert_input(.samba_max_covariates, "int")
+		func_out <- pharmpy$tools$run_covsearch(model, results, search_space, p_forward=p_forward, p_backward=p_backward, max_steps=max_steps, algorithm=algorithm, max_eval=max_eval, adaptive_scope_reduction=adaptive_scope_reduction, strictness=strictness, naming_index_offset=naming_index_offset, nsamples=nsamples, `_samba_max_covariates`=.samba_max_covariates, `_samba_selection_criterion`=.samba_selection_criterion, `_samba_linreg_method`=.samba_linreg_method, `_samba_stepwise_lcs`=.samba_stepwise_lcs, ...)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -8437,16 +8439,16 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 #' @description
 #' Run IIVsearch tool. For more details, see :ref:`iivsearch`.
 #' 
+#' @param model (Model) Pharmpy model
+#' @param results (ModelfitResults) Results for model
 #' @param algorithm (str) Which algorithm to run when determining number of IIVs.
 #' @param iiv_strategy (str) If/how IIV should be added to start model. Default is 'no_add'.
 #' @param rank_type (str) Which ranking type should be used. Default is BIC.
 #' @param linearize (logical) Wheter or not use linearization when running the tool.
 #' @param cutoff (numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 #' is NULL (all models will be ranked)
-#' @param results (ModelfitResults (optional)) Results for model
-#' @param model (Model (optional)) Pharmpy model
 #' @param keep (array(str) (optional)) List of IIVs to keep. Default is "CL"
-#' @param strictness (str (optional)) Strictness criteria
+#' @param strictness (str) Strictness criteria
 #' @param correlation_algorithm (str (optional)) Which algorithm to run for the determining block structure of added IIVs. If NULL, the
 #' algorithm is determined based on the 'algorithm' argument
 #' @param E_p (numeric or str (optional)) Expected number of predictors for diagonal elements (used for mBIC). Must be set when using mBIC and
@@ -8461,15 +8463,15 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' results <- load_example_modelfit_results("pheno")
-#' run_iivsearch('td_brute_force', results=results, model=model)
+#' run_iivsearch(model=model, results=results, algorithm='td_brute_force')
 #' }
 #' 
 #' @export
-run_iivsearch <- function(algorithm='top_down_exhaustive', iiv_strategy='no_add', rank_type='bic', linearize=FALSE, cutoff=NULL, results=NULL, model=NULL, keep=c('CL'), strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', correlation_algorithm=NULL, E_p=NULL, E_q=NULL, ...) {
+run_iivsearch <- function(model, results, algorithm='top_down_exhaustive', iiv_strategy='no_add', rank_type='bic', linearize=FALSE, cutoff=NULL, keep=c('CL'), strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', correlation_algorithm=NULL, E_p=NULL, E_q=NULL, ...) {
 	tryCatch(
 	{
 		keep <- convert_input(keep, "list")
-		func_out <- pharmpy$tools$run_iivsearch(algorithm=algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, linearize=linearize, cutoff=cutoff, results=results, model=model, keep=keep, strictness=strictness, correlation_algorithm=correlation_algorithm, E_p=E_p, E_q=E_q, ...)
+		func_out <- pharmpy$tools$run_iivsearch(model, results, algorithm=algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, linearize=linearize, cutoff=cutoff, keep=keep, strictness=strictness, correlation_algorithm=correlation_algorithm, E_p=E_p, E_q=E_q, ...)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -8516,14 +8518,14 @@ run_iivsearch <- function(algorithm='top_down_exhaustive', iiv_strategy='no_add'
 #' @description
 #' Run IOVsearch tool. For more details, see :ref:`iovsearch`.
 #' 
+#' @param model (Model) Pharmpy model
+#' @param results (ModelfitResults) Results for model
 #' @param column (str) Name of column in dataset to use as occasion column (default is 'OCC')
 #' @param list_of_parameters (array(str or array(str)) (optional)) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)
 #' @param rank_type (str) Which ranking type should be used. Default is BIC.
 #' @param cutoff (numeric (optional)) Cutoff for which value of the ranking type that is considered significant. Default
 #' is NULL (all models will be ranked)
 #' @param distribution (str) Which distribution added IOVs should have (default is same-as-iiv)
-#' @param results (ModelfitResults (optional)) Results for model
-#' @param model (Model (optional)) Pharmpy model
 #' @param strictness (str (optional)) Strictness criteria
 #' @param E (numeric or str (optional)) Expected number of predictors (used for mBIC). Must be set when using mBI
 #' @param ... Arguments to pass to tool
@@ -8534,15 +8536,15 @@ run_iivsearch <- function(algorithm='top_down_exhaustive', iiv_strategy='no_add'
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' results <- load_example_modelfit_results("pheno")
-#' run_iovsearch('OCC', results=results, model=model)
+#' run_iovsearch(model=model, results=results, column='OCC')
 #' }
 #' 
 #' @export
-run_iovsearch <- function(column='OCC', list_of_parameters=NULL, rank_type='bic', cutoff=NULL, distribution='same-as-iiv', results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', E=NULL, ...) {
+run_iovsearch <- function(model, results, column='OCC', list_of_parameters=NULL, rank_type='bic', cutoff=NULL, distribution='same-as-iiv', strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', E=NULL, ...) {
 	tryCatch(
 	{
 		list_of_parameters <- convert_input(list_of_parameters, "list")
-		func_out <- pharmpy$tools$run_iovsearch(column=column, list_of_parameters=list_of_parameters, rank_type=rank_type, cutoff=cutoff, distribution=distribution, results=results, model=model, strictness=strictness, E=E, ...)
+		func_out <- pharmpy$tools$run_iovsearch(model, results, column=column, list_of_parameters=list_of_parameters, rank_type=rank_type, cutoff=cutoff, distribution=distribution, strictness=strictness, E=E, ...)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -8716,15 +8718,15 @@ run_modelfit <- function(model_or_models=NULL, n=NULL, ...) {
 #' @description
 #' Run Modelsearch tool. For more details, see :ref:`modelsearch`.
 #' 
+#' @param model (Model) Pharmpy model
+#' @param results (ModelfitResults) Results for model
 #' @param search_space (str or ModelFeatures) Search space to test. Either as a string or a ModelFeatures object.
 #' @param algorithm (str) Algorithm to use.
 #' @param iiv_strategy (str) If/how IIV should be added to candidate models. Default is 'absorption_delay'.
 #' @param rank_type (str) Which ranking type should be used. Default is BIC.
 #' @param cutoff (numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 #' is NULL (all models will be ranked)
-#' @param results (ModelfitResults (optional)) Results for model
-#' @param model (Model (optional)) Pharmpy model
-#' @param strictness (str (optional)) Strictness criteria
+#' @param strictness (str) Strictness criteria
 #' @param E (numeric or str (optional)) Expected number of predictors (used for mBIC). Must be set when using mBI
 #' @param ... Arguments to pass to tool
 #'  
@@ -8733,15 +8735,16 @@ run_modelfit <- function(model_or_models=NULL, n=NULL, ...) {
 #' @examples
 #' \dontrun{
 #' model <- load_example_model("pheno")
-#' results <- load_example_modelfit_results("pheno")
-#' run_modelsearch('ABSORPTION(ZO);PERIPHERALS(1)', 'exhaustive', results=results, model=model)
+#' res <- load_example_modelfit_results("pheno")
+#' search_space <- 'ABSORPTION(ZO);PERIPHERALS(1)'
+#' run_modelsearch(model=model, results=res, search_space=search_space, algorithm='exhaustive')
 #' }
 #' 
 #' @export
-run_modelsearch <- function(search_space, algorithm='reduced_stepwise', iiv_strategy='absorption_delay', rank_type='bic', cutoff=NULL, results=NULL, model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs >= 0.1)', E=NULL, ...) {
+run_modelsearch <- function(model, results, search_space, algorithm='reduced_stepwise', iiv_strategy='absorption_delay', rank_type='bic', cutoff=NULL, strictness='minimization_successful or (rounding_errors and sigdigs >= 0.1)', E=NULL, ...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_modelsearch(search_space, algorithm=algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, cutoff=cutoff, results=results, model=model, strictness=strictness, E=E, ...)
+		func_out <- pharmpy$tools$run_modelsearch(model, results, search_space, algorithm=algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, cutoff=cutoff, strictness=strictness, E=E, ...)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -8793,22 +8796,20 @@ run_modelsearch <- function(search_space, algorithm='reduced_stepwise', iiv_stra
 #' @param number_of_candidates (numeric) Number of retry candidates to run. The default is 5.
 #' @param fraction (numeric) Determines allowed increase/decrease from initial parameter estimate. Default is 0.1 (10%)
 #' @param use_initial_estimates (logical) Use initial parameter estimates instead of final estimates of input model when creating candidate models.
-#' @param strictness (str (optional)) Strictness criteria. The default is "minimization_successful or (rounding_errors and sigdigs >= 0.1)".
+#' @param strictness (str) Strictness criteria. The default is "minimization_successful or (rounding_errors and sigdigs >= 0.1)".
 #' @param scale (str (optional)) Which scale to update the initial values on. Either normal scale or UCP scale.
-#' @param prefix_name (str (optional)) Prefix the candidate model names with given string.
-#' @param seed (numeric (optional)) Random number generator or seed to be used
+#' @param prefix_name (str (optional)) Prefix the candidate model names with given string
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (RetriesResults) Retries tool results object.
 #' 
 #' 
 #' @export
-run_retries <- function(model=NULL, results=NULL, number_of_candidates=5, fraction=0.1, use_initial_estimates=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs >= 0.1)', scale='UCP', prefix_name='', seed=NULL, ...) {
+run_retries <- function(model=NULL, results=NULL, number_of_candidates=5, fraction=0.1, use_initial_estimates=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs >= 0.1)', scale='UCP', prefix_name='', ...) {
 	tryCatch(
 	{
 		number_of_candidates <- convert_input(number_of_candidates, "int")
-		seed <- convert_input(seed, "int")
-		func_out <- pharmpy$tools$run_retries(model=model, results=results, number_of_candidates=number_of_candidates, fraction=fraction, use_initial_estimates=use_initial_estimates, strictness=strictness, scale=scale, prefix_name=prefix_name, seed=seed, ...)
+		func_out <- pharmpy$tools$run_retries(model=model, results=results, number_of_candidates=number_of_candidates, fraction=fraction, use_initial_estimates=use_initial_estimates, strictness=strictness, scale=scale, prefix_name=prefix_name, ...)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -8855,14 +8856,14 @@ run_retries <- function(model=NULL, results=NULL, number_of_candidates=5, fracti
 #' @description
 #' Run the ruvsearch tool. For more details, see :ref:`ruvsearch`.
 #' 
-#' @param model (Model (optional)) Pharmpy model
-#' @param results (ModelfitResults (optional)) Results of model
+#' @param model (Model) Pharmpy model
+#' @param results (ModelfitResults) Results of model
 #' @param groups (numeric) The number of bins to use for the time varying models
 #' @param p_value (numeric) The p-value to use for the likelihood ratio test
 #' @param skip (array(str) (optional)) A vector of models to not attempt.
 #' @param max_iter (numeric) Number of iterations to run (1, 2, or 3). For models with BLQ only one iteration is supported.
 #' @param dv (numeric (optional)) Which DV to assess the error model for.
-#' @param strictness (str (optional)) Strictness criteri
+#' @param strictness (str) Strictness criteri
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (RUVSearchResults) Ruvsearch tool result object
@@ -8875,14 +8876,14 @@ run_retries <- function(model=NULL, results=NULL, number_of_candidates=5, fracti
 #' }
 #' 
 #' @export
-run_ruvsearch <- function(model=NULL, results=NULL, groups=4, p_value=0.001, skip=NULL, max_iter=3, dv=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', ...) {
+run_ruvsearch <- function(model, results, groups=4, p_value=0.001, skip=NULL, max_iter=3, dv=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', ...) {
 	tryCatch(
 	{
 		groups <- convert_input(groups, "int")
 		skip <- convert_input(skip, "list")
 		max_iter <- convert_input(max_iter, "int")
 		dv <- convert_input(dv, "int")
-		func_out <- pharmpy$tools$run_ruvsearch(model=model, results=results, groups=groups, p_value=p_value, skip=skip, max_iter=max_iter, dv=dv, strictness=strictness, ...)
+		func_out <- pharmpy$tools$run_ruvsearch(model, results, groups=groups, p_value=p_value, skip=skip, max_iter=max_iter, dv=dv, strictness=strictness, ...)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -8992,14 +8993,14 @@ run_simulation <- function(model=NULL, ...) {
 #' @description
 #' Run the structsearch tool. For more details, see :ref:`structsearch`.
 #' 
+#' @param model (Model) Pharmpy start model
+#' @param results (ModelfitResults) Results for the start model
 #' @param type (str) Type of model. Currently only 'drug_metabolite' and 'pkpd'
-#' @param model (Model) Search space to test
-#' @param results (ModelfitResults) Initial estimate for the baseline for pkpd models.
-#' @param search_space (str or ModelFeatures (optional)) Initial estimate for E_MAX (for pkpd models only).
-#' @param b_init (numeric (optional)) Initial estimate for EC_50 (for pkpd models only).
-#' @param emax_init (numeric (optional)) Initial estimate for MET (for pkpd models only).
-#' @param ec50_init (numeric (optional)) Results for the start model
-#' @param met_init (numeric (optional)) Pharmpy start model
+#' @param search_space (str or ModelFeatures (optional)) Search space to test
+#' @param b_init (numeric (optional)) Initial estimate for the baseline for pkpd models.
+#' @param emax_init (numeric (optional)) Initial estimate for E_MAX (for pkpd models only).
+#' @param ec50_init (numeric (optional)) Initial estimate for EC_50 (for pkpd models only).
+#' @param met_init (numeric (optional)) Initial estimate for MET (for pkpd models only).
 #' @param extra_model (Model (optional)) Optional extra Pharmpy model to use in TMDD structsearch
 #' @param strictness (str (optional)) Results for the extra model
 #' @param extra_model_results (ModelfitResults (optional)) Strictness criteria
@@ -9012,14 +9013,14 @@ run_simulation <- function(model=NULL, ...) {
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' results <- load_example_modelfit_results("pheno")
-#' run_structsearch(model_type='pkpd', results=results, model=model)
+#' run_structsearch(model=model, results=results, model_type='pkpd')
 #' }
 #' 
 #' @export
-run_structsearch <- function(type, model, results, search_space=NULL, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, extra_model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs >= 0.1)', extra_model_results=NULL, dv_types=NULL, ...) {
+run_structsearch <- function(model, results, type, search_space=NULL, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, extra_model=NULL, strictness='minimization_successful or (rounding_errors and sigdigs >= 0.1)', extra_model_results=NULL, dv_types=NULL, ...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_structsearch(type, model, results, search_space=search_space, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, extra_model=extra_model, strictness=strictness, extra_model_results=extra_model_results, dv_types=dv_types, ...)
+		func_out <- pharmpy$tools$run_structsearch(model, results, type, search_space=search_space, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, extra_model=extra_model, strictness=strictness, extra_model_results=extra_model_results, dv_types=dv_types, ...)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}

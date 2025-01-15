@@ -5,9 +5,9 @@
 \title{run_structsearch}
 \usage{
 run_structsearch(
-  type,
   model,
   results,
+  type,
   search_space = NULL,
   b_init = NULL,
   emax_init = NULL,
@@ -21,21 +21,21 @@ run_structsearch(
 )
 }
 \arguments{
+\item{model}{(Model) Pharmpy start model}
+
+\item{results}{(ModelfitResults) Results for the start model}
+
 \item{type}{(str) Type of model. Currently only 'drug_metabolite' and 'pkpd'}
 
-\item{model}{(Model) Search space to test}
+\item{search_space}{(str or ModelFeatures (optional)) Search space to test}
 
-\item{results}{(ModelfitResults) Initial estimate for the baseline for pkpd models.}
+\item{b_init}{(numeric (optional)) Initial estimate for the baseline for pkpd models.}
 
-\item{search_space}{(str or ModelFeatures (optional)) Initial estimate for E_MAX (for pkpd models only).}
+\item{emax_init}{(numeric (optional)) Initial estimate for E_MAX (for pkpd models only).}
 
-\item{b_init}{(numeric (optional)) Initial estimate for EC_50 (for pkpd models only).}
+\item{ec50_init}{(numeric (optional)) Initial estimate for EC_50 (for pkpd models only).}
 
-\item{emax_init}{(numeric (optional)) Initial estimate for MET (for pkpd models only).}
-
-\item{ec50_init}{(numeric (optional)) Results for the start model}
-
-\item{met_init}{(numeric (optional)) Pharmpy start model}
+\item{met_init}{(numeric (optional)) Initial estimate for MET (for pkpd models only).}
 
 \item{extra_model}{(Model (optional)) Optional extra Pharmpy model to use in TMDD structsearch}
 
@@ -57,7 +57,7 @@ Run the structsearch tool. For more details, see :ref:\code{structsearch}.
 \dontrun{
 model <- load_example_model("pheno")
 results <- load_example_modelfit_results("pheno")
-run_structsearch(model_type='pkpd', results=results, model=model)
+run_structsearch(model=model, results=results, model_type='pkpd')
 }
 
 }

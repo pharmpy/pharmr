@@ -5,8 +5,8 @@
 \title{run_ruvsearch}
 \usage{
 run_ruvsearch(
-  model = NULL,
-  results = NULL,
+  model,
+  results,
   groups = 4,
   p_value = 0.001,
   skip = NULL,
@@ -17,9 +17,9 @@ run_ruvsearch(
 )
 }
 \arguments{
-\item{model}{(Model (optional)) Pharmpy model}
+\item{model}{(Model) Pharmpy model}
 
-\item{results}{(ModelfitResults (optional)) Results of model}
+\item{results}{(ModelfitResults) Results of model}
 
 \item{groups}{(numeric) The number of bins to use for the time varying models}
 
@@ -31,7 +31,7 @@ run_ruvsearch(
 
 \item{dv}{(numeric (optional)) Which DV to assess the error model for.}
 
-\item{strictness}{(str (optional)) Strictness criteri}
+\item{strictness}{(str) Strictness criteri}
 
 \item{...}{Arguments to pass to tool}
 }

@@ -10,7 +10,7 @@ sample_individual_estimates(
   individual_estimates_covariance,
   parameters = NULL,
   samples_per_id = 100,
-  seed = NULL
+  seed = 1234
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ sample_individual_estimates(
 
 \item{samples_per_id}{(numeric) Number of samples per individual}
 
-\item{seed}{(numeric (optional)) Random number generator or seed}
+\item{seed}{(numeric) Random number generator or seed}
 }
 \value{
 (data.frame) Pool of samples in a DataFrame

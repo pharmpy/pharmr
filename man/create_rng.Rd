@@ -4,10 +4,10 @@
 \alias{create_rng}
 \title{create_rng}
 \usage{
-create_rng(seed = NULL)
+create_rng(seed = 1234)
 }
 \arguments{
-\item{seed}{(numeric (optional)) Seed for the random number generator or NULL (default) for a randomized seed. If seed
+\item{seed}{(numeric) Seed for the random number generator or NULL (default) for a randomized seed. If seed
 is generator it will be passed through.}
 }
 \value{

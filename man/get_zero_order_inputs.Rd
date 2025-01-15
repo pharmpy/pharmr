@@ -10,7 +10,7 @@ get_zero_order_inputs(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(sympy.Matrix) Vector of inputs
+(Matrix) Vector of inputs
 }
 \description{
 Get zero order inputs for all compartments

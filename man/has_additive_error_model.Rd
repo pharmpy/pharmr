@@ -9,7 +9,7 @@ has_additive_error_model(model, dv = NULL)
 \arguments{
 \item{model}{(Model) The model to check}
 
-\item{dv}{(str or Expr or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)}
+\item{dv}{(Expr or str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)}
 }
 \value{
 (logical) TRUE if the model has an additive error model and FALSE otherwise

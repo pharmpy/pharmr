@@ -5,19 +5,23 @@
 \title{run_iovsearch}
 \usage{
 run_iovsearch(
+  model,
+  results,
   column = "OCC",
   list_of_parameters = NULL,
   rank_type = "bic",
   cutoff = NULL,
   distribution = "same-as-iiv",
-  results = NULL,
-  model = NULL,
   strictness = "minimization_successful or (rounding_errors and sigdigs>=0.1)",
   E = NULL,
   ...
 )
 }
 \arguments{
+\item{model}{(Model) Pharmpy model}
+
+\item{results}{(ModelfitResults) Results for model}
+
 \item{column}{(str) Name of column in dataset to use as occasion column (default is 'OCC')}
 
 \item{list_of_parameters}{(array(str or array(str)) (optional)) List of parameters to test IOV on, if none all parameters with IIV will be tested (default)}
@@ -28,10 +32,6 @@ run_iovsearch(
 is NULL (all models will be ranked)}
 
 \item{distribution}{(str) Which distribution added IOVs should have (default is same-as-iiv)}
-
-\item{results}{(ModelfitResults (optional)) Results for model}
-
-\item{model}{(Model (optional)) Pharmpy model}
 
 \item{strictness}{(str (optional)) Strictness criteria}
 
@@ -49,7 +49,7 @@ Run IOVsearch tool. For more details, see :ref:\code{iovsearch}.
 \dontrun{
 model <- load_example_model("pheno")
 results <- load_example_modelfit_results("pheno")
-run_iovsearch('OCC', results=results, model=model)
+run_iovsearch(model=model, results=results, column='OCC')
 }
 
 }
