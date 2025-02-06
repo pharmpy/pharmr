@@ -23,7 +23,7 @@ Depends:
 SystemRequirements:
     Python (>= 3.11.0)
 Imports:
-    reticulate (>= 1.19),
+    reticulate (>= 1.38),
     cli,
     utils
 Suggests:
