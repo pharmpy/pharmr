@@ -5504,7 +5504,8 @@ set_description <- function(model, new_description) {
 #' @description
 #' Add an effect to a model.
 #' 
-#' Implemented PD models are:
+#' Effects are by default using concentratrion, but any user specified
+#' variable in the model can be used. Implemented PD models are:
 #' 
 #' 
 #' * Linear:
@@ -5531,6 +5532,7 @@ set_description <- function(model, new_description) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param expr (str) Name of PD effect function.
+#' @param variable (str (optional)) Name of variable to use (if NULL concentration will be used)
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -5542,8 +5544,8 @@ set_description <- function(model, new_description) {
 #' }
 #' 
 #' @export
-set_direct_effect <- function(model, expr) {
-	func_out <- pharmpy$modeling$set_direct_effect(model, expr)
+set_direct_effect <- function(model, expr, variable=NULL) {
+	func_out <- pharmpy$modeling$set_direct_effect(model, expr, variable=variable)
 	return(py_to_r(func_out))
 }
 

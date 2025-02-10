@@ -4,12 +4,14 @@
 \alias{set_direct_effect}
 \title{set_direct_effect}
 \usage{
-set_direct_effect(model, expr)
+set_direct_effect(model, expr, variable = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{expr}{(str) Name of PD effect function.}
+
+\item{variable}{(str (optional)) Name of variable to use (if NULL concentration will be used)}
 }
 \value{
 (Model) Pharmpy model object
@@ -17,7 +19,8 @@ set_direct_effect(model, expr)
 \description{
 Add an effect to a model.
 
-Implemented PD models are:
+Effects are by default using concentratrion, but any user specified
+variable in the model can be used. Implemented PD models are:
 \itemize{
 \item Linear:
 }
