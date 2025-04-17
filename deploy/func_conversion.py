@@ -176,7 +176,7 @@ def _create_func_return(func):
             'func_out <- reset_index_df(func_out)'
         ]
         func_return.extend(r_reset_index)
-    if inspect.signature(func).return_annotation is not None:
+    if inspect.signature(func).return_annotation != 'None':
         func_return += [
             f'return(py_to_r(func_out))',
         ]
