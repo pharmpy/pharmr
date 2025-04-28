@@ -71,6 +71,7 @@ on how to set up the config file.
 
 ```R
 model <- load_example_model('pheno') %>%
-  add_peripheral_compartment() %>%
-  fit()
+  add_peripheral_compartment()
+ 
+res <- fit(model)
 ```
