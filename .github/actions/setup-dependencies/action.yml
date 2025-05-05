@@ -56,6 +56,7 @@ runs:
         install.packages('reticulate')
         install.packages('devtools')
         install.packages('promises')
+        install.packages('stringi')
         remotes::install_local(force=TRUE)
       shell: Rscript {0}
 
