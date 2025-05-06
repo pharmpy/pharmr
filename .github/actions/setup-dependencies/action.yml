@@ -18,16 +18,6 @@ runs:
     - name: Install dependencies
       uses: r-lib/actions/setup-r-dependencies@v2
       with:
-        extra-packages: any::roxygen2
-        needs: roxygen2
+        extra-packages: any::roxygen2,any::rcmdcheck,any::devtools,any::promises
         working-directory: pharmr_repo
-
-    - name: Install R packages
-      working-directory: pharmr_repo
-      run: |
-        install.packages('rcmdcheck') 
-        install.packages('devtools')
-        install.packages('promises')
-        remotes::install_local(force=TRUE, build=TRUE, dependencies=TRUE)
-      shell: Rscript {0}
 
