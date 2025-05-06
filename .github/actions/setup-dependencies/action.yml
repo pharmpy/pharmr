@@ -24,11 +24,11 @@ runs:
           python-version: "3.12"
 
     - name: Install dependencies
-      working-directory: pharmr_repo
       uses: r-lib/actions/setup-r-dependencies@v2
       with:
         extra-packages: any::roxygen2
         needs: roxygen2
+        working-directory: pharmr_repo
 
     - name: Install system dependencies
       working-directory: pharmr_repo
