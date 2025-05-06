@@ -43,9 +43,9 @@ runs:
     - name: Install R packages
       working-directory: pharmr_repo
       run: |
-        install.packages('rcmdcheck') 
-        install.packages('devtools')
-        install.packages('promises')
+        install.packages('rcmdcheck', type='source') 
+        install.packages('devtools', type='source')
+        install.packages('promises', type='source')
         remotes::install_local(force=TRUE, build=TRUE, dependencies=TRUE)
       shell: Rscript {0}
 
