@@ -22,14 +22,6 @@ runs:
       with:
           python-version: "3.12"
 
-    - name: Restore R package cache
-      if: runner.os != 'Windows'
-      uses: actions/cache@v4
-      with:
-        path: ${{ env.R_LIBS_USER }}
-        key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-        restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
-
     - name: Install system dependencies
       working-directory: pharmr_repo
       if: runner.os == 'Linux'
