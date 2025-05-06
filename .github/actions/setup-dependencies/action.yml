@@ -11,14 +11,6 @@ runs:
 
     - uses: r-lib/actions/setup-pandoc@v2
 
-    - name: Query dependencies
-      working-directory: pharmr_repo
-      run: |
-        install.packages('remotes')
-        saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-        writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
-      shell: Rscript {0}
-
     - uses: actions/setup-python@v5
       with:
           python-version: "3.12"
@@ -29,24 +21,6 @@ runs:
         extra-packages: any::roxygen2
         needs: roxygen2
         working-directory: pharmr_repo
-
-    - name: Install system dependencies
-      working-directory: pharmr_repo
-      if: runner.os == 'Linux'
-      run: |
-        while read -r cmd
-        do
-          eval sudo $cmd
-        done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "22.04"))')
-        sudo apt install libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev
-      shell: bash
-
-    - name: Install png (temporary)
-      working-directory: pharmr_repo
-      if: runner.os == 'Windows'
-      run: |
-        install.packages('png', repos='https://mran.microsoft.com/snapshot/2022-11-27')
-      shell: Rscript {0}
 
     - name: Install R packages
       working-directory: pharmr_repo
