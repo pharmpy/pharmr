@@ -22,14 +22,6 @@ runs:
       with:
           python-version: "3.12"
 
-#    - name: Restore R package cache
-#      if: runner.os != 'Windows'
-#      uses: actions/cache@v4
-#      with:
-#        path: ${{ env.R_LIBS_USER }}
-#        key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-#        restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
-
     - name: Install system dependencies
       working-directory: pharmr_repo
       if: runner.os == 'Linux'
@@ -51,12 +43,9 @@ runs:
     - name: Install R packages
       working-directory: pharmr_repo
       run: |
-#        remotes::install_deps(dependencies = TRUE)
-#        install.packages('reticulate')
         install.packages('rcmdcheck') 
         install.packages('devtools')
         install.packages('promises')
-#        install.packages('stringi')
         remotes::install_local(force=TRUE, build=TRUE, dependencies=TRUE)
       shell: Rscript {0}
 
