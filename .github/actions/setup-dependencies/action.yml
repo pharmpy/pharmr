@@ -9,12 +9,6 @@ runs:
         r-version: "release"
         use-public-rspm: true
 
-    - name: Install dependencies
-      uses: r-lib/actions/setup-r-dependencies@v2
-      with:
-        extra-packages: any::roxygen2
-        needs: roxygen2
-
     - uses: r-lib/actions/setup-pandoc@v2
 
     - name: Query dependencies
@@ -28,6 +22,13 @@ runs:
     - uses: actions/setup-python@v5
       with:
           python-version: "3.12"
+
+    - name: Install dependencies
+      uses: r-lib/actions/setup-r-dependencies@v2
+      working-directory: pharmr_repo
+      with:
+        extra-packages: any::roxygen2
+        needs: roxygen2
 
     - name: Install system dependencies
       working-directory: pharmr_repo
