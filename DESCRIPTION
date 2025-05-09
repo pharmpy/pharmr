@@ -33,13 +33,6 @@ Suggests:
     knitr
 NeedsCompilation: no
 Description: Interface to the 'Pharmpy' 'pharmacometrics' library. The 'Reticulate' package is used to interface Python from R.
-Config/reticulate:
-  list(
-    packages = list(
-      list(package = "altair"), 
-      list(package = "pharmpy-core")
-    )
-  )
 URL: https://github.com/pharmpy/pharmr
 BugReports: https://github.com/pharmpy/pharmr/issues
 License: LGPL (>= 3)
