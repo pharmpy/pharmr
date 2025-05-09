@@ -141,7 +141,8 @@ def _translate_type_hints(var_type):
 
 def _get_desc(var_names, docstring):
     # FIXME currently assumes order is same as in typing
-    m = re.compile(r'^\S+\s*:\s*.+\s*\n|kwargs\n|args\n', flags=re.MULTILINE)
+    # FIXME see issue https://github.com/pharmpy/pharmr/issues/189
+    m = re.compile(r'^\S+\s*:(?!class)\s*.+\s*\n|kwargs\n|args\n', flags=re.MULTILINE)
     descs = m.split(docstring)
     descs = list(filter(None, descs))
     assert len(descs) == len(var_names)
