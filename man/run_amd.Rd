@@ -22,16 +22,14 @@ run_amd(
   lloq_limit = NULL,
   allometric_variable = NULL,
   occasion = NULL,
-  path = NULL,
-  resume = FALSE,
   strictness = "minimization_successful or (rounding_errors and sigdigs>=0.1)",
   dv_types = NULL,
   mechanistic_covariates = NULL,
   retries_strategy = "all_final",
-  seed = 1234,
   parameter_uncertainty_method = NULL,
   ignore_datainfo_fallback = FALSE,
-  .E = NULL
+  .E = NULL,
+  ...
 )
 }
 \arguments{
@@ -70,10 +68,6 @@ Please use ALLOMETRY in the mfl instead.}
 
 \item{occasion}{(str (optional)) Name of occasion column}
 
-\item{path}{(str (optional)) Path to run AMD in}
-
-\item{resume}{(logical) Whether to allow resuming previous run}
-
 \item{strictness}{(str) Strictness criteria}
 
 \item{dv_types}{(list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DVs.}
@@ -85,13 +79,13 @@ The effects are extracted from the search space for covsearch.}
 \item{retries_strategy}{(str) Whether or not to run retries tool. Valid options are 'skip', 'all_final' or 'final'.
 Default is 'final'.}
 
-\item{seed}{(numeric) Random seed to be used.}
-
 \item{parameter_uncertainty_method}{(str (optional)) Parameter uncertainty method.}
 
 \item{ignore_datainfo_fallback}{(logical) Ignore using datainfo to get information not given by the user. Default is FALSE}
 
-\item{.E}{(list(str=numeric or str) (optional)) EXPERIMENTAL FEATURE. Dictionary of different E-values used in mBIC.}
+\item{.E}{(list(str=numeric or str) (optional)) EXPERIMENTAL FEATURE. Dictionary of different E-values used in mBIC}
+
+\item{...}{Arguments to pass to tool}
 }
 \value{
 (AMDResults) Results for the run

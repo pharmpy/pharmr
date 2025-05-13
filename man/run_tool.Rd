@@ -4,10 +4,10 @@
 \alias{run_tool}
 \title{run_tool}
 \usage{
-run_tool(name, ...)
+run_tool(tool_name, ...)
 }
 \arguments{
-\item{name}{(str) Name of tool to run}
+\item{tool_name}{(str) Name of tool to run}
 
 \item{...}{Arguments to pass to tool}
 }

@@ -13,7 +13,7 @@ get_dv_symbol(model, dv = NULL)
 only or first dv.}
 }
 \value{
-(sympy.Symbol) DV symbol
+(Expr) DV symbol
 }
 \description{
 Get the symbol for a certain dvid or dv and check that it is valid

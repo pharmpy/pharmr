@@ -4,14 +4,16 @@
 \alias{run_bootstrap}
 \title{run_bootstrap}
 \usage{
-run_bootstrap(model, results = NULL, resamples = 1, ...)
+run_bootstrap(model, results = NULL, resamples = 1, dofv = FALSE, ...)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{results}{(ModelfitResults (optional)) Results for model}
 
-\item{resamples}{(numeric) Number of bootstrap resample}
+\item{resamples}{(numeric) Number of bootstrap resamples}
+
+\item{dofv}{(logical) Will evaluate bootstrap models with original dataset if se}
 
 \item{...}{Arguments to pass to tool}
 }

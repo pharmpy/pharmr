@@ -334,7 +334,23 @@ add_effect_compartment <- function(model, expr) {
 #' @param model (Model) Pharmpy model
 #' @param method (str) estimation method to change to
 #' @param idx (numeric (optional)) index of estimation step (starting from 0), default is NULL (adds step at the end)
-#' @param ... Arguments to pass to EstimationStep (such as interaction, evaluation)
+#' @param interaction (logical) See :class:`~pharmpy.model.EstimationStep` for more information on options
+#' @param parameter_uncertainty_method (str (optional)) See above
+#' @param evaluation (logical) See above
+#' @param maximum_evaluations (numeric (optional)) See above
+#' @param laplace (logical) See above
+#' @param isample (numeric (optional)) See above
+#' @param niter (numeric (optional)) See above
+#' @param auto (logical (optional)) See above
+#' @param keep_every_nth_iter (numeric (optional)) See above
+#' @param residuals (array(str)) See above
+#' @param predictions (array(str)) See above
+#' @param solver (str (optional)) See above
+#' @param solver_rtol (numeric (optional)) See above
+#' @param solver_atol (numeric (optional)) See above
+#' @param tool_options (list(str=any)) See above
+#' @param derivatives (array(array(Expr))) See above
+#' @param individual_eta_samples (logical) See above
 #'  
 #' @return (Model) Pharmpy model object
 #' 
@@ -362,9 +378,19 @@ add_effect_compartment <- function(model, expr) {
 #' 
 #' 
 #' @export
-add_estimation_step <- function(model, method, idx=NULL, ...) {
+add_estimation_step <- function(model, method, idx=NULL, interaction=FALSE, parameter_uncertainty_method=NULL, evaluation=FALSE, maximum_evaluations=NULL, laplace=FALSE, isample=NULL, niter=NULL, auto=NULL, keep_every_nth_iter=NULL, residuals=c(), predictions=c(), solver=NULL, solver_rtol=NULL, solver_atol=NULL, tool_options={}, derivatives=c(), individual_eta_samples=FALSE) {
 	idx <- convert_input(idx, "int")
-	func_out <- pharmpy$modeling$add_estimation_step(model, method, idx=idx, ...)
+	maximum_evaluations <- convert_input(maximum_evaluations, "int")
+	isample <- convert_input(isample, "int")
+	niter <- convert_input(niter, "int")
+	keep_every_nth_iter <- convert_input(keep_every_nth_iter, "int")
+	residuals <- convert_input(residuals, "list")
+	predictions <- convert_input(predictions, "list")
+	solver_rtol <- convert_input(solver_rtol, "int")
+	solver_atol <- convert_input(solver_atol, "int")
+	tool_options <- convert_input(tool_options, "Mapping")
+	derivatives <- convert_input(derivatives, "list")
+	func_out <- pharmpy$modeling$add_estimation_step(model, method, idx=idx, interaction=interaction, parameter_uncertainty_method=parameter_uncertainty_method, evaluation=evaluation, maximum_evaluations=maximum_evaluations, laplace=laplace, isample=isample, niter=niter, auto=auto, keep_every_nth_iter=keep_every_nth_iter, residuals=residuals, predictions=predictions, solver=solver, solver_rtol=solver_rtol, solver_atol=solver_atol, tool_options=tool_options, derivatives=derivatives, individual_eta_samples=individual_eta_samples)
 	return(py_to_r(func_out))
 }
 
@@ -1354,11 +1380,11 @@ calculate_eta_shrinkage <- function(model, parameter_estimates, individual_estim
 #' for the model the standard error will not be calculated.
 #' 
 #' @param model (Model) A previously estimated model
-#' @param expr_or_exprs (array(BooleanExpr) or array(Expr) or array(str) or BooleanExpr or Expr or str) Parameter estimates
-#' @param parameter_estimates () Parameter uncertainty covariance matrix
-#' @param covariance_matrix (data.frame (optional)) expression or iterable of str or expressions
+#' @param expr_or_exprs (array(BooleanExpr) or array(Expr) or array(str) or BooleanExpr or Expr or str) expression or iterable of str or expressions
 #' Expressions or equations for parameters of interest. If equations are used
 #' the names of the left hand sides will be used as the names of the parameters.
+#' @param parameter_estimates (list(str=numeric)) Parameter estimates
+#' @param covariance_matrix (data.frame (optional)) Parameter uncertainty covariance matrix
 #' @param seed (numeric) Random number generator or integer seed
 #'  
 #' @return (data.frame) A DataFrame of statistics indexed on parameter and covariate value.
@@ -1856,7 +1882,6 @@ create_basic_pk_model <- function(administration='iv', dataset_path=NULL, cl_ini
 #' @export
 create_config_template <- function() {
 	func_out <- pharmpy$modeling$create_config_template()
-	return(py_to_r(func_out))
 }
 
 #' @title
@@ -2773,7 +2798,7 @@ get_doses <- function(model) {
 #' @param dv (Expr or str or numeric (optional)) Either a dv symbol, str or dvid. If NULL (default) return the
 #' only or first dv.
 #'  
-#' @return (sympy.Symbol) DV symbol
+#' @return (Expr) DV symbol
 #' 
 #' @examples
 #' \dontrun{
@@ -3032,6 +3057,46 @@ get_mu_connected_to_parameter <- function(model, parameter) {
 }
 
 #' @title
+#' get_nested_model
+#' 
+#' @description
+#' Return nested model from a pair of models
+#' 
+#' Function to get a nested model from a pair of models, NULL
+#' if neither model is nested. A model is not considered nested if:
+#' 
+#' 1. They are the same model
+#' 2. They have the same number of parameters
+#' 3. The parameters of the reduced model is not a subset of
+#' the extended model
+#' 4. The dosing or DV is changed
+#' 
+#' Assumptions made:
+#' 
+#' 1. Parametrization is the same
+#' 2. Parameter names are the same
+#' 
+#' @param model_1 (Model) Pharmpy model object
+#' @param model_2 (Model) Pharmpy model object
+#'  
+#' @return (Model | NULL) Pharmpy model object or NULL
+#' 
+#' @examples
+#' \dontrun{
+#' model_1 <- load_example_model("pheno")
+#' model_2 <- add_peripheral_compartment(model_1)
+#' model_2 <- set_name(model_2, 'pheno_2')
+#' nested <- get_nested_model(model_1, model_2)
+#' nested$name
+#' }
+#' 
+#' @export
+get_nested_model <- function(model_1, model_2) {
+	func_out <- pharmpy$modeling$get_nested_model(model_1, model_2)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' get_number_of_individuals
 #' 
 #' @description
@@ -3197,6 +3262,7 @@ get_observation_expression <- function(model) {
 #' @param model (Model) Pharmpy model
 #' @param keep_index (logical) Set to TRUE if the original index should be kept.
 #' Otherwise a new index using ID and idv will be created.
+#' @param dv (Expr or str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
 #'  
 #' @return (data.frame) Observations indexed over ID and TIME
 #' 
@@ -3212,8 +3278,9 @@ get_observation_expression <- function(model) {
 #' 
 #' 
 #' @export
-get_observations <- function(model, keep_index=FALSE) {
-	func_out <- pharmpy$modeling$get_observations(model, keep_index=keep_index)
+get_observations <- function(model, keep_index=FALSE, dv=NULL) {
+	dv <- convert_input(dv, "int")
+	func_out <- pharmpy$modeling$get_observations(model, keep_index=keep_index, dv=dv)
 	func_out <- reset_index_df(func_out)
 	return(py_to_r(func_out))
 }
@@ -3955,6 +4022,26 @@ has_seq_zo_fo_absorption <- function(model) {
 }
 
 #' @title
+#' has_weibull_absorption
+#' 
+#' @description
+#' Check if ode system describes a weibull type absorption
+#' 
+#' warning::
+#' This function is still under development.
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (Bool : TRUE if model has weibull type absorption) 
+#' 
+#' 
+#' @export
+has_weibull_absorption <- function(model) {
+	func_out <- pharmpy$modeling$has_weibull_absorption(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' has_weighted_error_model
 #' 
 #' @description
@@ -4078,6 +4165,28 @@ is_linearized <- function(model) {
 #' @export
 is_real <- function(model, expr) {
 	func_out <- pharmpy$modeling$is_real(model, expr)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' is_simulation_model
+#' 
+#' @description
+#' Check if a model is a pure simulation model
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (logical) TRUE if it is a simulation model
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' is_simulation_model(model)
+#' }
+#' 
+#' @export
+is_simulation_model <- function(model) {
+	func_out <- pharmpy$modeling$is_simulation_model(model)
 	return(py_to_r(func_out))
 }
 
@@ -4499,7 +4608,6 @@ plot_vpc <- function(model, simulations, binning='equal_number', nbins=8, qi=0.9
 #' @export
 print_model_code <- function(model) {
 	func_out <- pharmpy$modeling$print_model_code(model)
-	return(py_to_r(func_out))
 }
 
 #' @title
@@ -4522,7 +4630,6 @@ print_model_code <- function(model) {
 #' @export
 print_model_symbols <- function(model) {
 	func_out <- pharmpy$modeling$print_model_symbols(model)
-	return(py_to_r(func_out))
 }
 
 #' @title
@@ -6407,6 +6514,46 @@ set_upper_bounds <- function(model, bounds, strict=TRUE) {
 }
 
 #' @title
+#' set_weibull_absorption
+#' 
+#' @description
+#' Set or change to Weibull type absorption
+#' 
+#' Initial estimate for absorption rate is set to??
+#' 
+#' If multiple doses is set to the affected compartment, currently only iv+oral
+#' doses (one of each) is supported
+#' 
+#' Weibull absorption cannot be used together with lag time and transit compartments.
+#' 
+#' Assumes that absorption of one does is done when next dose is given.
+#' 
+#' warning::
+#' This function is still under development.
+#' 
+#' @param model (Model) Model to set or change to use Weibull absorption rate
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- set_weibull_absorption(model)
+#' model$statements$ode_system
+#' }
+#' @seealso
+#' set_zero_order_absorption
+#' 
+#' set_first_order_absorption
+#' 
+#' 
+#' @export
+set_weibull_absorption <- function(model) {
+	func_out <- pharmpy$modeling$set_weibull_absorption(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' set_weighted_error_model
 #' 
 #' @description
@@ -7087,26 +7234,22 @@ write_model <- function(model, path='', force=TRUE) {
 }
 
 #' @title
-#' create_context
+#' broadcast_log
 #' 
 #' @description
-#' Create a new context
+#' Broadcast the log of a context
 #' 
-#' Currently a local filesystem context (i.e. a directory)
+#' Default is to use the same broadcaster, but optionally another broadcaster could
+#' be used.
 #' 
-#' @param name (str) Name of the context
-#' @param path (str (optional)) Path to where to put the context
-#'  
-#' @examples
-#' \dontrun{
-#' ctx <- create_context("myproject")
-#' }
+#' @param context (Context) Broadcast the log of this context
+#' @param broadcaster (str (optional)) Name of the broadcaster to use. Default is to use the same as was original used. 
 #' 
 #' @export
-create_context <- function(name, path=NULL) {
+broadcast_log <- function(context, broadcaster=NULL) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$create_context(name, path=path)
+		func_out <- pharmpy$tools$broadcast_log(context, broadcaster=broadcaster)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -7119,8 +7262,7 @@ create_context <- function(name, path=NULL) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7135,8 +7277,7 @@ create_context <- function(name, path=NULL) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7175,8 +7316,7 @@ create_report <- function(results, path) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7191,8 +7331,7 @@ create_report <- function(results, path) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7211,8 +7350,9 @@ create_report <- function(results, path) {
 #' 
 #' @param model_or_models (Model or array(Model)) List of models or one single model
 #' @param esttool (str (optional)) Estimation tool to use. NULL to use default
-#' @param path (str (optional)) Path to fit directory
+#' @param name (str (optional)) Name of run
 #' @param context (Context (optional)) Run in this context
+#' @param ncores (numeric) Number of cores to use for estimation
 #'  
 #' @return (ModelfitResults | vector of ModelfitResults) ModelfitResults for the model or models
 #' 
@@ -7226,10 +7366,11 @@ create_report <- function(results, path) {
 #' 
 #' 
 #' @export
-fit <- function(model_or_models, esttool=NULL, path=NULL, context=NULL) {
+fit <- function(model_or_models, esttool=NULL, name=NULL, context=NULL, ncores=1) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$fit(model_or_models, esttool=esttool, path=path, context=context)
+		ncores <- convert_input(ncores, "int")
+		func_out <- pharmpy$tools$fit(model_or_models, esttool=esttool, name=name, context=context, ncores=ncores)
 		return(py_to_r(func_out))
 	},
 	error=function(cond) {
@@ -7239,8 +7380,7 @@ fit <- function(model_or_models, esttool=NULL, path=NULL, context=NULL) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7255,8 +7395,7 @@ fit <- function(model_or_models, esttool=NULL, path=NULL, context=NULL) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7304,8 +7443,7 @@ is_strictness_fulfilled <- function(model, results, strictness) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7320,8 +7458,66 @@ is_strictness_fulfilled <- function(model, results, strictness) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
+			    message('Python stack:')
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
+		return(NA)
+	}
+	)
+}
+
+#' @title
+#' list_models
+#' 
+#' @description
+#' List names of all models in a context
+#' 
+#' Will by default vector only models in the top level, but can vector
+#' all recursively using the recursive option. This will add the context
+#' path to each model name as a qualifier.
+#' 
+#' @param context (Context) The context
+#' @param recursive (logical) Only top level or all levels recursively down.
+#'  
+#' @return (vectorc(str)) A vector of the model names
+#' 
+#' 
+#' @export
+list_models <- function(context, recursive=FALSE) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$list_models(context, recursive=recursive)
+		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
+			func_out <- reset_indices_results(func_out)
+		}
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
 			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Python stack:')
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
+		return(NA)
+	},
+	warning=function(cond) {
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7367,8 +7563,7 @@ load_example_modelfit_results <- function(name) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7383,8 +7578,64 @@ load_example_modelfit_results <- function(name) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
+			    message('Python stack:')
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
+		return(NA)
+	}
+	)
+}
+
+#' @title
+#' open_context
+#' 
+#' @description
+#' Open a context from a tool run
+#' 
+#' @param name (str) Name of the context
+#' @param ref (str (optional)) Parent path of the context
+#'  
+#' @examples
+#' \dontrun{
+#' ctx <- open_context("myrun")
+#' }
+#' 
+#' @export
+open_context <- function(name, ref=NULL) {
+	tryCatch(
+	{
+		func_out <- pharmpy$tools$open_context(name, ref=ref)
+		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
+			func_out <- reset_indices_results(func_out)
+		}
+		return(py_to_r(func_out))
+	},
+	error=function(cond) {
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
 			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Python stack:')
+			    message(err)
+			    message("pharmr version: ", packageVersion("pharmr"))
+			    message("Pharmpy version: ", print_pharmpy_version())
+			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+		}
+		return(NA)
+	},
+	warning=function(cond) {
+		err <- reticulate::py_last_error()
+		if (is.null(err)) {
+			    message(cond)
+		} else if (err$type == "InputValidationError") {
+			    message(err$value)
+		} else {
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7434,8 +7685,7 @@ predict_influential_individuals <- function(model, results, cutoff=3.84) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7450,8 +7700,7 @@ predict_influential_individuals <- function(model, results, cutoff=3.84) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7502,8 +7751,7 @@ predict_influential_outliers <- function(model, results, outlier_cutoff=3.0, inf
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7518,8 +7766,7 @@ predict_influential_outliers <- function(model, results, outlier_cutoff=3.0, inf
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7577,8 +7824,7 @@ predict_outliers <- function(model, results, cutoff=3.0) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7593,8 +7839,7 @@ predict_outliers <- function(model, results, cutoff=3.0) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7631,8 +7876,7 @@ print_fit_summary <- function(model, modelfit_results) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7647,8 +7891,7 @@ print_fit_summary <- function(model, modelfit_results) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7684,8 +7927,7 @@ print_log <- function(context) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7700,8 +7942,7 @@ print_log <- function(context) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7738,8 +7979,7 @@ read_modelfit_results <- function(path, esttool=NULL) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7754,8 +7994,7 @@ read_modelfit_results <- function(path, esttool=NULL) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7801,8 +8040,7 @@ read_results <- function(path) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7817,8 +8055,7 @@ read_results <- function(path) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7833,28 +8070,27 @@ read_results <- function(path) {
 #' retrieve_model
 #' 
 #' @description
-#' Retrieve a model from a context/tool run
+#' Retrieve a model from a context
 #' 
 #' Any models created and run by the tool can be
 #' retrieved.
 #' 
-#' @param source (str or Context) Source where to find models. Can be a path (as str or Path), or a
-#' Context
-#' @param name (str) Name of the model
+#' @param context (Context) A previously opened context
+#' @param name (str) Name of the model or a qualified name with a subcontext path, e.g.
 #'  
 #' @return (Model) The model object
 #' 
 #' @examples
 #' \dontrun{
-#' tooldir_path <- 'path/to/tool/directory'
-#' model <- retrieve_model(tooldir_path, 'run1')
+#' context <- open_context(ref='path/to/', name='modelsearch1')
+#' model <- retrieve_model(context, 'run1')
 #' }
 #' 
 #' @export
-retrieve_model <- function(source, name) {
+retrieve_model <- function(context, name) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$retrieve_model(source, name)
+		func_out <- pharmpy$tools$retrieve_model(context, name)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -7867,8 +8103,7 @@ retrieve_model <- function(source, name) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7883,8 +8118,7 @@ retrieve_model <- function(source, name) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7901,24 +8135,22 @@ retrieve_model <- function(source, name) {
 #' @description
 #' Retrieve the modelfit results of a model
 #' 
-#' @param source (str or Context) Source where to find models. Can be a path (as str or Path), or a
-#' Context
-#' @param name (str) Name of the model
+#' @param context (Context) A previously opened context
+#' @param name (str) Name of the model or a qualified name with a subcontext path, e.g.
 #'  
 #' @return (ModelfitResults) The results object
 #' 
 #' @examples
 #' \dontrun{
-#' tooldir_path <- 'path/to/tool/directory'
-#' context <- create_context("iivsearch1")
+#' context <- open_context("iivsearch1")
 #' results <- retrieve_modelfit_results(context, 'input')
 #' }
 #' 
 #' @export
-retrieve_modelfit_results <- function(source, name) {
+retrieve_modelfit_results <- function(context, name) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$retrieve_modelfit_results(source, name)
+		func_out <- pharmpy$tools$retrieve_modelfit_results(context, name)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -7931,8 +8163,7 @@ retrieve_modelfit_results <- function(source, name) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7947,8 +8178,7 @@ retrieve_modelfit_results <- function(source, name) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -7998,8 +8228,7 @@ retrieve_models <- function(source, names=NULL) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8014,8 +8243,7 @@ retrieve_models <- function(source, names=NULL) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8073,8 +8301,7 @@ run_allometry <- function(model, results, allometric_variable='WT', reference_va
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8089,8 +8316,7 @@ run_allometry <- function(model, results, allometric_variable='WT', reference_va
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8125,8 +8351,6 @@ run_allometry <- function(model, results, allometric_variable='WT', reference_va
 #' @param allometric_variable (str or Expr (optional)) Variable to use for allometry. This option is deprecated.
 #' Please use ALLOMETRY in the mfl instead.
 #' @param occasion (str (optional)) Name of occasion column
-#' @param path (str (optional)) Path to run AMD in
-#' @param resume (logical) Whether to allow resuming previous run
 #' @param strictness (str) Strictness criteria
 #' @param dv_types (list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DVs.
 #' @param mechanistic_covariates (array(str or list(str)) (optional)) List of covariates or tuple of covariate and parameter combination to run in a
@@ -8134,10 +8358,10 @@ run_allometry <- function(model, results, allometric_variable='WT', reference_va
 #' The effects are extracted from the search space for covsearch.
 #' @param retries_strategy (str) Whether or not to run retries tool. Valid options are 'skip', 'all_final' or 'final'.
 #' Default is 'final'.
-#' @param seed (numeric) Random seed to be used.
 #' @param parameter_uncertainty_method (str (optional)) Parameter uncertainty method.
 #' @param ignore_datainfo_fallback (logical) Ignore using datainfo to get information not given by the user. Default is FALSE
-#' @param .E (list(str=numeric or str) (optional)) EXPERIMENTAL FEATURE. Dictionary of different E-values used in mBIC.
+#' @param .E (list(str=numeric or str) (optional)) EXPERIMENTAL FEATURE. Dictionary of different E-values used in mBIC
+#' @param ... Arguments to pass to tool
 #'  
 #' @return (AMDResults) Results for the run
 #' 
@@ -8154,12 +8378,11 @@ run_allometry <- function(model, results, allometric_variable='WT', reference_va
 #' 
 #' 
 #' @export
-run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='oral', strategy='default', cl_init=NULL, vc_init=NULL, mat_init=NULL, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, search_space=NULL, lloq_method=NULL, lloq_limit=NULL, allometric_variable=NULL, occasion=NULL, path=NULL, resume=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', dv_types=NULL, mechanistic_covariates=NULL, retries_strategy='all_final', seed=1234, parameter_uncertainty_method=NULL, ignore_datainfo_fallback=FALSE, .E=NULL) {
+run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='oral', strategy='default', cl_init=NULL, vc_init=NULL, mat_init=NULL, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, search_space=NULL, lloq_method=NULL, lloq_limit=NULL, allometric_variable=NULL, occasion=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', dv_types=NULL, mechanistic_covariates=NULL, retries_strategy='all_final', parameter_uncertainty_method=NULL, ignore_datainfo_fallback=FALSE, .E=NULL, ...) {
 	tryCatch(
 	{
 		mechanistic_covariates <- convert_input(mechanistic_covariates, "list")
-		seed <- convert_input(seed, "int")
-		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, administration=administration, strategy=strategy, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, search_space=search_space, lloq_method=lloq_method, lloq_limit=lloq_limit, allometric_variable=allometric_variable, occasion=occasion, path=path, resume=resume, strictness=strictness, dv_types=dv_types, mechanistic_covariates=mechanistic_covariates, retries_strategy=retries_strategy, seed=seed, parameter_uncertainty_method=parameter_uncertainty_method, ignore_datainfo_fallback=ignore_datainfo_fallback, `_E`=.E)
+		func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, administration=administration, strategy=strategy, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, search_space=search_space, lloq_method=lloq_method, lloq_limit=lloq_limit, allometric_variable=allometric_variable, occasion=occasion, strictness=strictness, dv_types=dv_types, mechanistic_covariates=mechanistic_covariates, retries_strategy=retries_strategy, parameter_uncertainty_method=parameter_uncertainty_method, ignore_datainfo_fallback=ignore_datainfo_fallback, `_E`=.E, ...)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -8172,8 +8395,7 @@ run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='o
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8188,8 +8410,7 @@ run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='o
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8208,7 +8429,8 @@ run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='o
 #' 
 #' @param model (Model) Pharmpy model
 #' @param results (ModelfitResults (optional)) Results for model
-#' @param resamples (numeric) Number of bootstrap resample
+#' @param resamples (numeric) Number of bootstrap resamples
+#' @param dofv (logical) Will evaluate bootstrap models with original dataset if se
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (BootstrapResults) Bootstrap tool result object
@@ -8221,11 +8443,11 @@ run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='o
 #' }
 #' 
 #' @export
-run_bootstrap <- function(model, results=NULL, resamples=1, ...) {
+run_bootstrap <- function(model, results=NULL, resamples=1, dofv=FALSE, ...) {
 	tryCatch(
 	{
 		resamples <- convert_input(resamples, "int")
-		func_out <- pharmpy$tools$run_bootstrap(model, results=results, resamples=resamples, ...)
+		func_out <- pharmpy$tools$run_bootstrap(model, results=results, resamples=resamples, dofv=dofv, ...)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -8238,8 +8460,7 @@ run_bootstrap <- function(model, results=NULL, resamples=1, ...) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8254,8 +8475,7 @@ run_bootstrap <- function(model, results=NULL, resamples=1, ...) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8330,8 +8550,7 @@ run_covsearch <- function(model, results, search_space, p_forward=0.01, p_backwa
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8346,8 +8565,7 @@ run_covsearch <- function(model, results, search_space, p_forward=0.01, p_backwa
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8407,8 +8625,7 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8423,8 +8640,7 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8486,8 +8702,7 @@ run_iivsearch <- function(model, results, algorithm='top_down_exhaustive', iiv_s
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8502,8 +8717,7 @@ run_iivsearch <- function(model, results, algorithm='top_down_exhaustive', iiv_s
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8559,8 +8773,7 @@ run_iovsearch <- function(model, results, column='OCC', list_of_parameters=NULL,
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8575,8 +8788,7 @@ run_iovsearch <- function(model, results, column='OCC', list_of_parameters=NULL,
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8619,8 +8831,7 @@ run_linearize <- function(model=NULL, results=NULL, model_name='linbase', descri
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8635,8 +8846,7 @@ run_linearize <- function(model=NULL, results=NULL, model_name='linbase', descri
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8686,8 +8896,7 @@ run_modelfit <- function(model_or_models=NULL, n=NULL, ...) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8702,8 +8911,7 @@ run_modelfit <- function(model_or_models=NULL, n=NULL, ...) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8759,8 +8967,7 @@ run_modelsearch <- function(model, results, search_space, algorithm='reduced_ste
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8775,8 +8982,7 @@ run_modelsearch <- function(model, results, search_space, algorithm='reduced_ste
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8824,8 +9030,7 @@ run_retries <- function(model=NULL, results=NULL, number_of_candidates=5, fracti
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8840,8 +9045,7 @@ run_retries <- function(model=NULL, results=NULL, number_of_candidates=5, fracti
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8898,8 +9102,7 @@ run_ruvsearch <- function(model, results, groups=4, p_value=0.001, skip=NULL, ma
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8914,8 +9117,7 @@ run_ruvsearch <- function(model, results, groups=4, p_value=0.001, skip=NULL, ma
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8961,8 +9163,7 @@ run_simulation <- function(model=NULL, ...) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -8977,8 +9178,7 @@ run_simulation <- function(model=NULL, ...) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -9035,8 +9235,7 @@ run_structsearch <- function(model, results, type, search_space=NULL, b_init=NUL
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -9051,8 +9250,7 @@ run_structsearch <- function(model, results, type, search_space=NULL, b_init=NUL
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -9073,7 +9271,7 @@ run_structsearch <- function(model, results, type, search_space=NULL, b_init=NUL
 #' This is a general function that can run any tool. There is also one function for each
 #' specific tool. Please refer to the documentation of these for more specific information.
 #' 
-#' @param name (str) Name of tool to run
+#' @param tool_name (str) Name of tool to run
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (Results) Results object for tool
@@ -9085,10 +9283,10 @@ run_structsearch <- function(model, results, type, search_space=NULL, b_init=NUL
 #' }
 #' 
 #' @export
-run_tool <- function(name, ...) {
+run_tool <- function(tool_name, ...) {
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_tool(name, ...)
+		func_out <- pharmpy$tools$run_tool(tool_name, ...)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -9101,8 +9299,7 @@ run_tool <- function(name, ...) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -9117,8 +9314,7 @@ run_tool <- function(name, ...) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -9166,8 +9362,7 @@ summarize_modelfit_results <- function(context, include_all_execution_steps=FALS
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -9182,8 +9377,7 @@ summarize_modelfit_results <- function(context, include_all_execution_steps=FALS
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -9224,8 +9418,7 @@ write_results <- function(results, path, compression=FALSE, csv=FALSE) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
@@ -9240,8 +9433,7 @@ write_results <- function(results, path, compression=FALSE, csv=FALSE) {
 		} else if (err$type == "InputValidationError") {
 			    message(err$value)
 		} else {
-			    message('Full stack:')
-			    message(cond)
+			    message('Python stack:')
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())

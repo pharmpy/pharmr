@@ -4,27 +4,26 @@
 \alias{retrieve_model}
 \title{retrieve_model}
 \usage{
-retrieve_model(source, name)
+retrieve_model(context, name)
 }
 \arguments{
-\item{source}{(str or Context) Source where to find models. Can be a path (as str or Path), or a
-Context}
+\item{context}{(Context) A previously opened context}
 
-\item{name}{(str) Name of the model}
+\item{name}{(str) Name of the model or a qualified name with a subcontext path, e.g.}
 }
 \value{
 (Model) The model object
 }
 \description{
-Retrieve a model from a context/tool run
+Retrieve a model from a context
 
 Any models created and run by the tool can be
 retrieved.
 }
 \examples{
 \dontrun{
-tooldir_path <- 'path/to/tool/directory'
-model <- retrieve_model(tooldir_path, 'run1')
+context <- open_context(ref='path/to/', name='modelsearch1')
+model <- retrieve_model(context, 'run1')
 }
 
 }

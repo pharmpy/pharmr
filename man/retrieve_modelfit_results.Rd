@@ -4,13 +4,12 @@
 \alias{retrieve_modelfit_results}
 \title{retrieve_modelfit_results}
 \usage{
-retrieve_modelfit_results(source, name)
+retrieve_modelfit_results(context, name)
 }
 \arguments{
-\item{source}{(str or Context) Source where to find models. Can be a path (as str or Path), or a
-Context}
+\item{context}{(Context) A previously opened context}
 
-\item{name}{(str) Name of the model}
+\item{name}{(str) Name of the model or a qualified name with a subcontext path, e.g.}
 }
 \value{
 (ModelfitResults) The results object
@@ -20,8 +19,7 @@ Retrieve the modelfit results of a model
 }
 \examples{
 \dontrun{
-tooldir_path <- 'path/to/tool/directory'
-context <- create_context("iivsearch1")
+context <- open_context("iivsearch1")
 results <- retrieve_modelfit_results(context, 'input')
 }
 

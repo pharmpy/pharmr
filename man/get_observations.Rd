@@ -4,13 +4,15 @@
 \alias{get_observations}
 \title{get_observations}
 \usage{
-get_observations(model, keep_index = FALSE)
+get_observations(model, keep_index = FALSE, dv = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{keep_index}{(logical) Set to TRUE if the original index should be kept.
 Otherwise a new index using ID and idv will be created.}
+
+\item{dv}{(Expr or str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)}
 }
 \value{
 (data.frame) Observations indexed over ID and TIME

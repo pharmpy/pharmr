@@ -4,16 +4,18 @@
 \alias{fit}
 \title{fit}
 \usage{
-fit(model_or_models, esttool = NULL, path = NULL, context = NULL)
+fit(model_or_models, esttool = NULL, name = NULL, context = NULL, ncores = 1)
 }
 \arguments{
 \item{model_or_models}{(Model or array(Model)) List of models or one single model}
 
 \item{esttool}{(str (optional)) Estimation tool to use. NULL to use default}
 
-\item{path}{(str (optional)) Path to fit directory}
+\item{name}{(str (optional)) Name of run}
 
 \item{context}{(Context (optional)) Run in this context}
+
+\item{ncores}{(numeric) Number of cores to use for estimation}
 }
 \value{
 (ModelfitResults | vector of ModelfitResults) ModelfitResults for the model or models

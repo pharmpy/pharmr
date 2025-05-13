@@ -4,7 +4,29 @@
 \alias{add_estimation_step}
 \title{add_estimation_step}
 \usage{
-add_estimation_step(model, method, idx = NULL, ...)
+add_estimation_step(
+  model,
+  method,
+  idx = NULL,
+  interaction = FALSE,
+  parameter_uncertainty_method = NULL,
+  evaluation = FALSE,
+  maximum_evaluations = NULL,
+  laplace = FALSE,
+  isample = NULL,
+  niter = NULL,
+  auto = NULL,
+  keep_every_nth_iter = NULL,
+  residuals = c(),
+  predictions = c(),
+  solver = NULL,
+  solver_rtol = NULL,
+  solver_atol = NULL,
+  tool_options = {
+ },
+  derivatives = c(),
+  individual_eta_samples = FALSE
+)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
@@ -13,7 +35,39 @@ add_estimation_step(model, method, idx = NULL, ...)
 
 \item{idx}{(numeric (optional)) index of estimation step (starting from 0), default is NULL (adds step at the end)}
 
-\item{...}{Arguments to pass to EstimationStep (such as interaction, evaluation)}
+\item{interaction}{(logical) See :class:\code{~pharmpy.model.EstimationStep} for more information on options}
+
+\item{parameter_uncertainty_method}{(str (optional)) See above}
+
+\item{evaluation}{(logical) See above}
+
+\item{maximum_evaluations}{(numeric (optional)) See above}
+
+\item{laplace}{(logical) See above}
+
+\item{isample}{(numeric (optional)) See above}
+
+\item{niter}{(numeric (optional)) See above}
+
+\item{auto}{(logical (optional)) See above}
+
+\item{keep_every_nth_iter}{(numeric (optional)) See above}
+
+\item{residuals}{(array(str)) See above}
+
+\item{predictions}{(array(str)) See above}
+
+\item{solver}{(str (optional)) See above}
+
+\item{solver_rtol}{(numeric (optional)) See above}
+
+\item{solver_atol}{(numeric (optional)) See above}
+
+\item{tool_options}{(list(str=any)) See above}
+
+\item{derivatives}{(array(array(Expr))) See above}
+
+\item{individual_eta_samples}{(logical) See above}
 }
 \value{
 (Model) Pharmpy model object
