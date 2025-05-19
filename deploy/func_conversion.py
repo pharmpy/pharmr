@@ -76,7 +76,7 @@ def _create_func_body_tool(func, func_execute):
         'err <- reticulate::py_last_error()',
         'if (is.null(err)) {',
         '    message(cond)',
-        '} else if (err$type == "InputValidationError") {',
+        '} else if (err$type %in% c("InputValidationError", "DispatchingError")) {',
         '    message(err$value)',
         '} else {',
         '    message(\'Python stack:\')',
