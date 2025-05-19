@@ -85,7 +85,7 @@ def _create_func_body_tool(func, func_execute):
         '    message("Pharmpy version: ", print_pharmpy_version())',
         '    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")',
         '}',
-        'return(NA)'
+        'return(invisible())'
     ]
 
     if func.__name__ not in ['fit', 'read_modelfit_results']:
