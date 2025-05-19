@@ -64,7 +64,8 @@ def _get_args(params):
 
 
 def _create_func_body_modeling(func, func_execute):
-    r_func_body = [*_preprocess_input(func),
+    r_func_body = ['reticulate::py_clear_last_error()',
+                   *_preprocess_input(func),
                    f'{func_execute}',
                    *_create_func_return(func)]
     return r_func_body
@@ -95,6 +96,7 @@ def _create_func_body_tool(func, func_execute):
         r_results_transform = []
 
     r_func_body = [
+        'reticulate::py_clear_last_error()',
         'tryCatch(',
         '{',
         *_preprocess_input(func),
