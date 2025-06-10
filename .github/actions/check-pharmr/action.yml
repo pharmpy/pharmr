@@ -3,6 +3,19 @@ description: "Updates pharmr and runs checks"
 runs:
   using: "composite"
   steps:
+    - name: Explicitly install pharmr
+      working-directory: pharmr_repo
+      run: |
+        reticulate::py_discover_config()
+        venv_path = file.path('..', 'pharmpy_repo', 'pharmpy_venv')
+        if(.Platform$OS.type == "unix") {
+            venv_path = file.path(venv_path, 'bin')
+        } else {
+            venv_path = file.path(venv_path, 'Scripts')          
+        }
+        devtools::install()
+      shell: Rscript {0}
+
     - name: Start Pharmpy venv
       working-directory: pharmr_repo
       run: |
