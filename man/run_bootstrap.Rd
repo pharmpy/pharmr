@@ -4,7 +4,14 @@
 \alias{run_bootstrap}
 \title{run_bootstrap}
 \usage{
-run_bootstrap(model, results = NULL, resamples = 1, dofv = FALSE, ...)
+run_bootstrap(
+  model,
+  results = NULL,
+  resamples = 1,
+  dofv = FALSE,
+  strictness = "",
+  ...
+)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
@@ -13,7 +20,10 @@ run_bootstrap(model, results = NULL, resamples = 1, dofv = FALSE, ...)
 
 \item{resamples}{(numeric) Number of bootstrap resamples}
 
-\item{dofv}{(logical) Will evaluate bootstrap models with original dataset if se}
+\item{dofv}{(logical) Will evaluate bootstrap models with original dataset if set}
+
+\item{strictness}{(str) Strictness expression for which models should be used in the
+calculations. Default is all models}
 
 \item{...}{Arguments to pass to tool}
 }

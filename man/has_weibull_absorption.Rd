@@ -14,7 +14,4 @@ has_weibull_absorption(model)
 }
 \description{
 Check if ode system describes a weibull type absorption
-
-warning::
-This function is still under development.
 }

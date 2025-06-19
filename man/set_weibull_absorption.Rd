@@ -15,17 +15,27 @@ set_weibull_absorption(model)
 \description{
 Set or change to Weibull type absorption
 
-Initial estimate for absorption rate is set to??
+The Weibull absorption has an abosption rate varying with time (or rather time after dose).
+(equation could not be rendered, see API doc on website)
 
-If multiple doses is set to the affected compartment, currently only iv+oral
-doses (one of each) is supported
+Initial parameter estimates will be set differently depending on whether the original model
+has MAT and/or MDT.
 
-Weibull absorption cannot be used together with lag time and transit compartments.
+=== === ========= =======================================================
+MAT MDT (equation could not be rendered, see API doc on website)
+=== === ========= =======================================================
+yes yes 1.5       (equation could not be rendered, see API doc on website)
+yes no  1.0       MAT
+no  yes 1.0       MDT
+no  no  1.5       Same as if having MAT, but use min observation time * 2
+=== === ========= =======================================================
 
-Assumes that absorption of one does is done when next dose is given.
+If multiple doses are fed into the affected compartment, currently only iv+oral
+doses (one of each) is supported.
 
-warning::
-This function is still under development.
+Weibull absorption cannot be used together with lag time or transit compartments.
+
+Assumes that absorption of one dose is complete when the next dose is given.
 }
 \examples{
 \dontrun{

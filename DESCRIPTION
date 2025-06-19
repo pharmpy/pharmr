@@ -1,7 +1,7 @@
 Package: pharmr
 Encoding: UTF-8
-Version: 1.7.2
-Date: 2025-05-21
+Version: 1.8.0
+Date: 2025-06-19
 Title: Interface to the 'Pharmpy' 'Pharmacometrics' Library
 Authors@R: c(
   person("Rikard", "Nordgren", role=c("aut", "cre", "cph"), email="rikard.nordgren@uu.se"),

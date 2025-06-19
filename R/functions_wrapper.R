@@ -173,7 +173,7 @@ add_cmt <- function(model) {
 #' * For each additional category:
 #' 
 #' (equation could not be rendered, see API doc on website)
-#' 
+#' cov_effect = NULL
 #' * Init: 0.001
 #' * Upper: 6
 #' * Lower: 0
@@ -953,11 +953,36 @@ add_residuals <- function(model, res) {
 #' model <- load_example_model("pheno")
 #' model <- add_time_after_dose(model)
 #' }
+#' @seealso
+#' add_time_of_last_dose : Add time of last dose to model
+#' 
 #' 
 #' @export
 add_time_after_dose <- function(model) {
 	reticulate::py_clear_last_error()
 	func_out <- pharmpy$modeling$add_time_after_dose(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' add_time_of_last_dose
+#' 
+#' @description
+#' Add a variable for time of last dose to the model
+#' 
+#' @param model (Model) Pharmpy model
+#' @param name (str) Name of time of last dose variable
+#'  
+#' @return (Model) Pharmpy model object
+#' 
+#' @seealso
+#' add_time_after_dose : Add time after dose to dataset
+#' 
+#' 
+#' @export
+add_time_of_last_dose <- function(model, name='TDOSE') {
+	reticulate::py_clear_last_error()
+	func_out <- pharmpy$modeling$add_time_of_last_dose(model, name=name)
 	return(py_to_r(func_out))
 }
 
@@ -4154,9 +4179,6 @@ has_seq_zo_fo_absorption <- function(model) {
 #' @description
 #' Check if ode system describes a weibull type absorption
 #' 
-#' warning::
-#' This function is still under development.
-#' 
 #' @param model (Model) Pharmpy model
 #'  
 #' @return (Bool : TRUE if model has weibull type absorption) 
@@ -6727,17 +6749,27 @@ set_upper_bounds <- function(model, bounds, strict=TRUE) {
 #' @description
 #' Set or change to Weibull type absorption
 #' 
-#' Initial estimate for absorption rate is set to??
+#' The Weibull absorption has an abosption rate varying with time (or rather time after dose).
+#' (equation could not be rendered, see API doc on website)
 #' 
-#' If multiple doses is set to the affected compartment, currently only iv+oral
-#' doses (one of each) is supported
+#' Initial parameter estimates will be set differently depending on whether the original model
+#' has MAT and/or MDT.
 #' 
-#' Weibull absorption cannot be used together with lag time and transit compartments.
+#' === === ========= =======================================================
+#' MAT MDT (equation could not be rendered, see API doc on website)
+#' === === ========= =======================================================
+#' yes yes 1.5       (equation could not be rendered, see API doc on website)
+#' yes no  1.0       MAT
+#' no  yes 1.0       MDT
+#' no  no  1.5       Same as if having MAT, but use min observation time * 2
+#' === === ========= =======================================================
 #' 
-#' Assumes that absorption of one does is done when next dose is given.
+#' If multiple doses are fed into the affected compartment, currently only iv+oral
+#' doses (one of each) is supported.
 #' 
-#' warning::
-#' This function is still under development.
+#' Weibull absorption cannot be used together with lag time or transit compartments.
+#' 
+#' Assumes that absorption of one dose is complete when the next dose is given.
 #' 
 #' @param model (Model) Model to set or change to use Weibull absorption rate
 #'  
@@ -7478,45 +7510,8 @@ write_model <- function(model, path='', force=TRUE) {
 #' @export
 broadcast_log <- function(context, broadcaster=NULL) {
 	reticulate::py_clear_last_error()
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$broadcast_log(context, broadcaster=broadcaster)
-		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	},
-	warning=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	}
-	)
+	func_out <- pharmpy$tools$broadcast_log(context, broadcaster=broadcaster)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -7533,45 +7528,8 @@ broadcast_log <- function(context, broadcaster=NULL) {
 #' @export
 create_report <- function(results, path) {
 	reticulate::py_clear_last_error()
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$create_report(results, path)
-		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	},
-	warning=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	}
-	)
+	func_out <- pharmpy$tools$create_report(results, path)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -7600,43 +7558,9 @@ create_report <- function(results, path) {
 #' @export
 fit <- function(model_or_models, esttool=NULL, name=NULL, context=NULL, ncores=1) {
 	reticulate::py_clear_last_error()
-	tryCatch(
-	{
-		ncores <- convert_input(ncores, "int")
-		func_out <- pharmpy$tools$fit(model_or_models, esttool=esttool, name=name, context=context, ncores=ncores)
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	},
-	warning=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	}
-	)
+	ncores <- convert_input(ncores, "int")
+	func_out <- pharmpy$tools$fit(model_or_models, esttool=esttool, name=name, context=context, ncores=ncores)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -7662,45 +7586,8 @@ fit <- function(model_or_models, esttool=NULL, name=NULL, context=NULL, ncores=1
 #' @export
 is_strictness_fulfilled <- function(model, results, strictness) {
 	reticulate::py_clear_last_error()
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$is_strictness_fulfilled(model, results, strictness)
-		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	},
-	warning=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	}
-	)
+	func_out <- pharmpy$tools$is_strictness_fulfilled(model, results, strictness)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -7722,45 +7609,8 @@ is_strictness_fulfilled <- function(model, results, strictness) {
 #' @export
 list_models <- function(context, recursive=FALSE) {
 	reticulate::py_clear_last_error()
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$list_models(context, recursive=recursive)
-		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	},
-	warning=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	}
-	)
+	func_out <- pharmpy$tools$list_models(context, recursive=recursive)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -7784,45 +7634,8 @@ list_models <- function(context, recursive=FALSE) {
 #' @export
 load_example_modelfit_results <- function(name) {
 	reticulate::py_clear_last_error()
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$load_example_modelfit_results(name)
-		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	},
-	warning=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	}
-	)
+	func_out <- pharmpy$tools$load_example_modelfit_results(name)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -7842,45 +7655,8 @@ load_example_modelfit_results <- function(name) {
 #' @export
 open_context <- function(name, ref=NULL) {
 	reticulate::py_clear_last_error()
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$open_context(name, ref=ref)
-		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	},
-	warning=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	}
-	)
+	func_out <- pharmpy$tools$open_context(name, ref=ref)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -7907,46 +7683,9 @@ open_context <- function(name, ref=NULL) {
 #' @export
 predict_influential_individuals <- function(model, results, cutoff=3.84) {
 	reticulate::py_clear_last_error()
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$predict_influential_individuals(model, results, cutoff=cutoff)
-		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		func_out <- reset_index_df(func_out)
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	},
-	warning=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	}
-	)
+	func_out <- pharmpy$tools$predict_influential_individuals(model, results, cutoff=cutoff)
+	func_out <- reset_index_df(func_out)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -7974,46 +7713,9 @@ predict_influential_individuals <- function(model, results, cutoff=3.84) {
 #' @export
 predict_influential_outliers <- function(model, results, outlier_cutoff=3.0, influential_cutoff=3.84) {
 	reticulate::py_clear_last_error()
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$predict_influential_outliers(model, results, outlier_cutoff=outlier_cutoff, influential_cutoff=influential_cutoff)
-		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		func_out <- reset_index_df(func_out)
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	},
-	warning=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	}
-	)
+	func_out <- pharmpy$tools$predict_influential_outliers(model, results, outlier_cutoff=outlier_cutoff, influential_cutoff=influential_cutoff)
+	func_out <- reset_index_df(func_out)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -8048,46 +7750,9 @@ predict_influential_outliers <- function(model, results, outlier_cutoff=3.0, inf
 #' @export
 predict_outliers <- function(model, results, cutoff=3.0) {
 	reticulate::py_clear_last_error()
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$predict_outliers(model, results, cutoff=cutoff)
-		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		func_out <- reset_index_df(func_out)
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	},
-	warning=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	}
-	)
+	func_out <- pharmpy$tools$predict_outliers(model, results, cutoff=cutoff)
+	func_out <- reset_index_df(func_out)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -8102,45 +7767,8 @@ predict_outliers <- function(model, results, cutoff=3.0) {
 #' @export
 print_fit_summary <- function(model, modelfit_results) {
 	reticulate::py_clear_last_error()
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$print_fit_summary(model, modelfit_results)
-		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	},
-	warning=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	}
-	)
+	func_out <- pharmpy$tools$print_fit_summary(model, modelfit_results)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -8154,45 +7782,8 @@ print_fit_summary <- function(model, modelfit_results) {
 #' @export
 print_log <- function(context) {
 	reticulate::py_clear_last_error()
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$print_log(context)
-		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	},
-	warning=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	}
-	)
+	func_out <- pharmpy$tools$print_log(context)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -8210,42 +7801,8 @@ print_log <- function(context) {
 #' @export
 read_modelfit_results <- function(path, esttool=NULL) {
 	reticulate::py_clear_last_error()
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$read_modelfit_results(path, esttool=esttool)
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	},
-	warning=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	}
-	)
+	func_out <- pharmpy$tools$read_modelfit_results(path, esttool=esttool)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -8269,45 +7826,8 @@ read_modelfit_results <- function(path, esttool=NULL) {
 #' @export
 read_results <- function(path) {
 	reticulate::py_clear_last_error()
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$read_results(path)
-		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	},
-	warning=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	}
-	)
+	func_out <- pharmpy$tools$read_results(path)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -8333,45 +7853,8 @@ read_results <- function(path) {
 #' @export
 retrieve_model <- function(context, name) {
 	reticulate::py_clear_last_error()
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$retrieve_model(context, name)
-		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	},
-	warning=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	}
-	)
+	func_out <- pharmpy$tools$retrieve_model(context, name)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -8394,45 +7877,8 @@ retrieve_model <- function(context, name) {
 #' @export
 retrieve_modelfit_results <- function(context, name) {
 	reticulate::py_clear_last_error()
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$retrieve_modelfit_results(context, name)
-		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	},
-	warning=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	}
-	)
+	func_out <- pharmpy$tools$retrieve_modelfit_results(context, name)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -8459,46 +7905,9 @@ retrieve_modelfit_results <- function(context, name) {
 #' @export
 retrieve_models <- function(source, names=NULL) {
 	reticulate::py_clear_last_error()
-	tryCatch(
-	{
-		names <- convert_input(names, "list")
-		func_out <- pharmpy$tools$retrieve_models(source, names=names)
-		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	},
-	warning=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	}
-	)
+	names <- convert_input(names, "list")
+	func_out <- pharmpy$tools$retrieve_models(source, names=names)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -8679,7 +8088,9 @@ run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='o
 #' @param model (Model) Pharmpy model
 #' @param results (ModelfitResults (optional)) Results for model
 #' @param resamples (numeric) Number of bootstrap resamples
-#' @param dofv (logical) Will evaluate bootstrap models with original dataset if se
+#' @param dofv (logical) Will evaluate bootstrap models with original dataset if set
+#' @param strictness (str) Strictness expression for which models should be used in the
+#' calculations. Default is all models
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (BootstrapResults) Bootstrap tool result object
@@ -8692,12 +8103,12 @@ run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='o
 #' }
 #' 
 #' @export
-run_bootstrap <- function(model, results=NULL, resamples=1, dofv=FALSE, ...) {
+run_bootstrap <- function(model, results=NULL, resamples=1, dofv=FALSE, strictness='', ...) {
 	reticulate::py_clear_last_error()
 	tryCatch(
 	{
 		resamples <- convert_input(resamples, "int")
-		func_out <- pharmpy$tools$run_bootstrap(model, results=results, resamples=resamples, dofv=dofv, ...)
+		func_out <- pharmpy$tools$run_bootstrap(model, results=results, resamples=resamples, dofv=dofv, strictness=strictness, ...)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -9609,46 +9020,9 @@ run_tool <- function(tool_name, ...) {
 #' @export
 summarize_modelfit_results <- function(context, include_all_execution_steps=FALSE) {
 	reticulate::py_clear_last_error()
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$summarize_modelfit_results(context, include_all_execution_steps=include_all_execution_steps)
-		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		func_out <- reset_index_df(func_out)
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	},
-	warning=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	}
-	)
+	func_out <- pharmpy$tools$summarize_modelfit_results(context, include_all_execution_steps=include_all_execution_steps)
+	func_out <- reset_index_df(func_out)
+	return(py_to_r(func_out))
 }
 
 #' @title
@@ -9667,44 +9041,7 @@ summarize_modelfit_results <- function(context, include_all_execution_steps=FALS
 #' @export
 write_results <- function(results, path, compression=FALSE, csv=FALSE) {
 	reticulate::py_clear_last_error()
-	tryCatch(
-	{
-		func_out <- pharmpy$tools$write_results(results, path, compression=compression, csv=csv)
-		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
-			func_out <- reset_indices_results(func_out)
-		}
-		return(py_to_r(func_out))
-	},
-	error=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	},
-	warning=function(cond) {
-		err <- reticulate::py_last_error()
-		if (is.null(err)) {
-			    message(cond)
-		} else if (err$type %in% c("InputValidationError", "DispatchingError")) {
-			    message(err$value)
-		} else {
-			    message('Python stack:')
-			    message(err)
-			    message("pharmr version: ", packageVersion("pharmr"))
-			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
-		}
-		return(invisible())
-	}
-	)
+	func_out <- pharmpy$tools$write_results(results, path, compression=compression, csv=csv)
+	return(py_to_r(func_out))
 }
 
