@@ -27,6 +27,7 @@ runs:
       run: |
         python3 -m venv pharmpy_venv
         source pharmpy_venv/bin/activate
+        pip install -r requirements.txt
         pip install .
       shell: bash
 
@@ -36,6 +37,7 @@ runs:
       run: |
         python3 -m venv pharmpy_venv
         . pharmpy_venv/Scripts/activate
+        pip install -r requirements.txt
         pip install .
       shell: bash
 
