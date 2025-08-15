@@ -68,7 +68,7 @@ named_onedim_to_list <- function(x) {
 
 to_list <- function(x) {
     if (is.list(x)) {
-	    x
+        x
     } else if (is_named_onedim(x)) {
         named_onedim_to_list(x)
     } else {
@@ -95,5 +95,15 @@ convert_input <- function(arg, to_py_type) {
             return(as.integer(arg))
         }
         return(arg)
+    }
+    else if (to_py_type == 'pd.DataFrame') {
+        row_names <- row.names(arg)
+        if (length(row_names) > 0 && !any(is.na(as.integer(row_names)))) {
+            df <- reticulate::r_to_py(arg)
+            df$index <- df$index$astype("int")
+            return(df)
+        } else {
+            return(arg)
+        }
     }
 }
