@@ -11,7 +11,7 @@ on_error_pharmpy <- function(e) {
 
 pharmpy <- NULL
 
-#' @import altair
+#' @import vegawidget
 #' @importFrom reticulate py_to_r
 .onLoad <- function(libname, pkgname) {
     # Lazy loading cannot currently be avoided even for the case when pharmpy
