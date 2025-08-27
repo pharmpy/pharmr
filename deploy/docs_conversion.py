@@ -3,7 +3,7 @@ import re
 import warnings
 
 from typing import Any, Literal, Union, get_args, get_origin, get_type_hints
-from collections.abc import Iterable, Mapping, Sequence
+from collections.abc import Collection, Iterable, Mapping, Sequence
 
 from help_functions import py_to_r_str, SKIP, TYPE_DICT
 
@@ -127,7 +127,7 @@ def _translate_type_hints(var_type):
                 return f'{" or ".join(args_trans)} (optional)'
             else:
                 return ' or '.join(args_trans)
-        elif origin in (list, Iterable, Sequence):
+        elif origin in (list, Iterable, Sequence, Collection):
             return f'array({",".join(args_trans)})'
         elif origin in (dict, Mapping):
             return f'list({"=".join(args_trans)})'
