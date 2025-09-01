@@ -2,6 +2,7 @@ import inspect
 import re
 import warnings
 
+from types import UnionType
 from typing import Any, Literal, Union, get_args, get_origin, get_type_hints
 from collections.abc import Collection, Iterable, Mapping, Sequence
 
@@ -122,7 +123,7 @@ def _translate_type_hints(var_type):
             args_trans = list(filter(None, dict.fromkeys(args_trans)))
         if not args_trans:
             return ''
-        if origin is Union:
+        if origin is Union or origin is UnionType:
             if type(None) in args:
                 return f'{" or ".join(args_trans)} (optional)'
             else:
