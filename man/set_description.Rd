@@ -12,7 +12,7 @@ set_description(model, new_description)
 \item{new_description}{(str) New description of model}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Set description of model object

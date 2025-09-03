@@ -12,7 +12,7 @@ check_parameters_near_bounds(
 )
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 
 \item{values}{(array) Series of values with index a subset of parameter names.}
 

@@ -7,7 +7,7 @@
 get_individual_parameters(model, level = "all", dv = NULL)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model to retrieve the individuals parameters from}
+\item{model}{(Model) Pharmpy model}
 
 \item{level}{(str) The variability level to look for: 'iiv', 'iov', 'random' or 'all' (default)}
 

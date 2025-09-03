@@ -12,7 +12,7 @@ remove_estimation_step(model, idx)
 \item{idx}{(numeric) index of estimation step to remove (starting from 0)}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Update Pharmpy model
 }
 \description{
 Remove estimation step

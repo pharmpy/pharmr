@@ -13,7 +13,7 @@ add_iov(
 )
 }
 \arguments{
-\item{model}{(Model) Pharmpy model to add new IOVs to.}
+\item{model}{(Model) Pharmpy model}
 
 \item{occ}{(str) Name of occasion column.}
 
@@ -29,7 +29,7 @@ distribution, 'explicit' for an explicit mix of joint and disjoint
 distributions, and 'same-as-iiv' for copying the distribution of IIV etas.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Adds IOVs to :class:\code{pharmpy.model}.

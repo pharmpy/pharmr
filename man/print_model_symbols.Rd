@@ -7,7 +7,7 @@
 print_model_symbols(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 }
 \description{
 Print all symbols defined in a model

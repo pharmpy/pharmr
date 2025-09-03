@@ -7,12 +7,12 @@
 bump_model_number(model, path = NULL)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 
 \item{path}{(str (optional)) Default is to not look for files.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 If the model name ends in a number increase it

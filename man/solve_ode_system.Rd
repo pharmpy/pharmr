@@ -10,7 +10,7 @@ solve_ode_system(model)
 \item{model}{(Model) Pharmpy model object}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Replace ODE system with analytical solution if possible

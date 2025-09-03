@@ -7,12 +7,12 @@
 get_nested_model(model_1, model_2)
 }
 \arguments{
-\item{model_1}{(Model) Pharmpy model object}
+\item{model_1}{(Model) Pharmpy model}
 
-\item{model_2}{(Model) Pharmpy model object}
+\item{model_2}{(Model) Pharmpy model}
 }
 \value{
-(Model | NULL) Pharmpy model object or NULL
+(Model | NULL) Pharmpy model or NULL
 }
 \description{
 Return nested model from a pair of models

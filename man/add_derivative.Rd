@@ -7,12 +7,12 @@
 add_derivative(model, with_respect_to = NULL)
 }
 \arguments{
-\item{model}{(Model) Pharmpy modeas.}
+\item{model}{(Model) Pharmpy model}
 
 \item{with_respect_to}{(array(array(str) or str) or str (optional)) Parameter name(s) to use as independent variables. Default is NULL.}
 }
 \value{
-(Pharmpy model.)
+(Model) Updated Pharmpy model
 }
 \description{
 Add a derivative to be calculcated when running the model. Currently, only

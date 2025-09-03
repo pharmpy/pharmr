@@ -7,12 +7,12 @@
 undrop_columns(model, column_names)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 
 \item{column_names}{(array(str) or str) List of column names or one column name to undrop}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Undrop columns of model

@@ -11,7 +11,7 @@ plot_transformed_eta_distributions(
 )
 }
 \arguments{
-\item{model}{(Model) Previously run Pharmpy model.}
+\item{model}{(Model) Pharmpy model}
 
 \item{parameter_estimates}{(array or list(str=numeric)) Parameter estimates of model fit}
 

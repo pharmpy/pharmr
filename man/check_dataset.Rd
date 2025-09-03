@@ -7,7 +7,7 @@
 check_dataset(model, dataframe = FALSE, verbose = FALSE)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 
 \item{dataframe}{(logical) TRUE to return a DataFrame instead of printing to the console}
 

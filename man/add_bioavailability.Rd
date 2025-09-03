@@ -14,7 +14,7 @@ add_bioavailability(model, add_parameter = TRUE, logit_transform = FALSE)
 \item{logit_transform}{(logical) Logit transform the added bioavailability parameter.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Add bioavailability statement for the first dose compartment of the model.

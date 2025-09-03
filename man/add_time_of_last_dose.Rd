@@ -12,7 +12,7 @@ add_time_of_last_dose(model, name = "TDOSE")
 \item{name}{(str) Name of time of last dose variable}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Add a variable for time of last dose to the model

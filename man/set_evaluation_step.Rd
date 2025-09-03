@@ -12,7 +12,7 @@ set_evaluation_step(model, idx = -1)
 \item{idx}{(numeric) Index of estimation step, default is -1 (last estimation step)}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Update Pharmpy model
 }
 \description{
 Set evaluation step

@@ -7,7 +7,7 @@
 get_pk_parameters(model, kind = "all")
 }
 \arguments{
-\item{model}{(Model) Pharmpy model to retrieve the PK parameters from}
+\item{model}{(Model) Pharmpy model}
 
 \item{kind}{(str) The type of parameter to retrieve: 'absorption', 'distribution',
 'elimination', or 'all' (default).}

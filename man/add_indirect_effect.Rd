@@ -14,7 +14,7 @@ add_indirect_effect(model, expr, prod = TRUE)
 \item{prod}{(logical) Name of PD effect function.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Add indirect (turnover) effect

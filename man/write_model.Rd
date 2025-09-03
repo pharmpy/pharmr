@@ -14,7 +14,7 @@ write_model(model, path = "", force = TRUE)
 \item{force}{(logical) Force overwrite, default is TRUE}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Write model code to file

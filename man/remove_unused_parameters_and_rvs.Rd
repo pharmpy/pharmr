@@ -7,10 +7,10 @@
 remove_unused_parameters_and_rvs(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Remove any parameters and rvs that are not used in the model statements

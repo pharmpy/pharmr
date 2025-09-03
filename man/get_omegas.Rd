@@ -7,7 +7,7 @@
 get_omegas(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 }
 \value{
 (Parameters) A copy of all omega parameters

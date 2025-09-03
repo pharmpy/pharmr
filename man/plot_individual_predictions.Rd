@@ -7,7 +7,7 @@
 plot_individual_predictions(model, predictions, individuals = NULL)
 }
 \arguments{
-\item{model}{(Model) Previously run Pharmpy model.}
+\item{model}{(Model) Pharmpy model}
 
 \item{predictions}{(data.frame) One column for each type of prediction}
 

@@ -7,7 +7,7 @@
 get_mu_connected_to_parameter(model, parameter)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object.}
+\item{model}{(Model) Pharmpy model}
 
 \item{parameter}{(str) Name of parameter which to find Mu parameter for.}
 }

@@ -12,17 +12,19 @@ set_initial_estimates(
 )
 }
 \arguments{
-\item{model}{(Model) Pharmpy model to update initial estimates}
+\item{model}{(Model) Pharmpy model}
 
 \item{inits}{(list(str=numeric)) Initial parameter estimates to update}
 
 \item{move_est_close_to_bounds}{(logical) Move estimates that are close to bounds. If correlation >0.99 the correlation will
 be set to 0.9, if variance is <0.001 the variance will be set to 0.01.}
 
-\item{strict}{(logical) Whether all parameters in input need to exist in the model. Default is TRUE}
+\item{strict}{(logical) Whether all parameters in input need to exist in the model. Default is TRUE
+Setting strict to FALSE will also disregard any initial estimate being NaN and keep
+the original value for these parameters.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Update initial parameter estimate for a model

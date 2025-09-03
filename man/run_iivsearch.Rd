@@ -17,6 +17,7 @@ run_iivsearch(
   correlation_algorithm = NULL,
   E_p = NULL,
   E_q = NULL,
+  parameter_uncertainty_method = NULL,
   ...
 )
 }
@@ -47,7 +48,10 @@ algorithm is determined based on the 'algorithm' argument}
 when the argument 'algorithm' is not 'skip'}
 
 \item{E_q}{(numeric or str (optional)) Expected number of predictors for off-diagonal elements (used for mBIC). Must be set when using mBIC
-and when the argument \code{correlation_algorithm} is not \code{skip} or Non}
+and when the argument \code{correlation_algorithm} is not \code{skip} or NULL}
+
+\item{parameter_uncertainty_method}{(str (optional)) Parameter uncertainty method. Will be used in ranking models if strictness includes
+parameter uncertaint}
 
 \item{...}{Arguments to pass to tool}
 }

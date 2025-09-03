@@ -10,7 +10,7 @@ set_weighted_error_model(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Encode error model with one epsilon and W as weight

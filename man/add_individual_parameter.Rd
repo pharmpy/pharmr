@@ -16,7 +16,7 @@ add_individual_parameter(model, name, init = 0.1, lower = 0)
 \item{lower}{(numeric) Lower bound for the population parameter}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Add an individual or pk parameter to a model

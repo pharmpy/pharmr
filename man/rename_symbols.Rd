@@ -7,12 +7,12 @@
 rename_symbols(model, new_names)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 
 \item{new_names}{(list(str or Expr=str or Expr)) From old name or symbol to new name or symbol}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Rename symbols in the model

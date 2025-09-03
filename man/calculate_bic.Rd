@@ -7,7 +7,7 @@
 calculate_bic(model, likelihood, type = "mixed")
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 
 \item{likelihood}{(numeric) -2LL to use}
 

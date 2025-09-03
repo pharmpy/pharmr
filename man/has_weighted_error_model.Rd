@@ -7,7 +7,7 @@
 has_weighted_error_model(model)
 }
 \arguments{
-\item{model}{(Model) The model to check}
+\item{model}{(Model) Pharmpy model}
 }
 \value{
 (logical) TRUE if the model has a weighted error model and FALSE otherwise

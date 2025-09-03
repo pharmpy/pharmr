@@ -10,7 +10,7 @@ load_example_model(name)
 \item{name}{(str) Name of the model. Currently available models are "pheno" and "pheno_linear"}
 }
 \value{
-(Model) Loaded model object
+(Model) Pharmpy model
 }
 \description{
 Load an example model

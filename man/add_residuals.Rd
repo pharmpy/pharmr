@@ -12,7 +12,7 @@ add_residuals(model, res)
 \item{res}{(array(str)) List of residuals (e.g. c('CWRES'))}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Add predictions and/or residuals

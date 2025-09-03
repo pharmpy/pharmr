@@ -7,7 +7,7 @@
 check_high_correlations(model, cor, limit = 0.9)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 
 \item{cor}{(data.frame) Estimated correlation matrix}
 

@@ -13,7 +13,7 @@ Context}
 \item{names}{(array(str) (optional)) List of names of the models to retrieve or NULL for all}
 }
 \value{
-(vector) List of retrieved model objects
+(vector) List of retrieved Pharmpy models
 }
 \description{
 Retrieve models after a tool run

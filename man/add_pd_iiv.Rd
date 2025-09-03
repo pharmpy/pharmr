@@ -7,12 +7,12 @@
 add_pd_iiv(model, initial_estimate = 0.09)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model to add new IIVs to.}
+\item{model}{(Model) Pharmpy model}
 
 \item{initial_estimate}{(numeric) Value of initial estimate of parameter. Default is 0.09}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Adds IIVs to all PD parameters in :class:\code{pharmpy.model}.

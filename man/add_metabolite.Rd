@@ -14,7 +14,7 @@ add_metabolite(model, drug_dvid = 1, presystemic = FALSE)
 \item{presystemic}{(logical) Decide wether or not to add metabolite as a presystemetic fixed drug.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Adds a metabolite compartment to a model

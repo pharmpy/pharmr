@@ -7,7 +7,10 @@
 has_seq_zo_fo_absorption(model)
 }
 \arguments{
-\item{model}{(Model) DPharmpy model}
+\item{model}{(Model) Pharmpy model}
+}
+\value{
+(logical) TRUE if model has sequential zero-first absorption
 }
 \description{
 Check if ode system describes a sequential zero-order, first-order absorption

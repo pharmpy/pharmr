@@ -14,7 +14,7 @@ set_simulation(model, n = 1, seed = 1234)
 \item{seed}{(numeric) Random seed for the simulation}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Update Pharmpy model
 }
 \description{
 Change model into simulation model

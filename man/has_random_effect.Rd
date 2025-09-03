@@ -7,7 +7,7 @@
 has_random_effect(model, parameter, level = "all")
 }
 \arguments{
-\item{model}{(Model) Input Pharmpy model}
+\item{model}{(Model) Pharmpy model}
 
 \item{parameter}{(str) Input parameter}
 

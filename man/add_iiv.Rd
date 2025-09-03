@@ -14,7 +14,7 @@ add_iiv(
 )
 }
 \arguments{
-\item{model}{(Model) Pharmpy model to add new IIVs to.}
+\item{model}{(Model) Pharmpy model}
 
 \item{list_of_parameters}{(array(str) or str) Name/names of parameter to add new IIVs to.}
 
@@ -27,7 +27,7 @@ add_iiv(
 \item{eta_names}{(array(str) (optional)) Custom name/names of new eta}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Adds IIVs to :class:\code{pharmpy.model}.

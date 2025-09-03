@@ -12,7 +12,7 @@ add_parameter_uncertainty_step(model, parameter_uncertainty_method)
 \item{parameter_uncertainty_method}{(str) Parameter uncertainty method to use}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Update Pharmpy model
 }
 \description{
 Adds parameter uncertainty step to the final estimation step

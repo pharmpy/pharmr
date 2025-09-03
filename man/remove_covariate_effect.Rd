@@ -7,14 +7,14 @@
 remove_covariate_effect(model, parameter, covariate)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model from which to remove the covariate effect.}
+\item{model}{(Model) Pharmpy model}
 
 \item{parameter}{(str) Name of parameter.}
 
 \item{covariate}{(str) Name of covariate.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Remove a covariate effect from an instance of :class:\code{pharmpy.model}.

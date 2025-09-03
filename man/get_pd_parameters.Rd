@@ -7,7 +7,7 @@
 get_pd_parameters(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model to retrieve the PD parameters from}
+\item{model}{(Model) Pharmpy model}
 }
 \value{
 (vectorc(str)) A vector of the PD parameter names of the given model

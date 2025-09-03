@@ -14,7 +14,7 @@ set_dataset(model, path_or_df, datatype = NULL)
 \item{datatype}{(str (optional)) Type of dataset (optional)}
 }
 \value{
-(Model) Pharmpy model with new dataset and updated datainfo
+(Model) Updated Pharmpy model
 }
 \description{
 Load the dataset given datainfo

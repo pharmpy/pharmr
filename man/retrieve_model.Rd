@@ -12,7 +12,7 @@ retrieve_model(context, name)
 \item{name}{(str) Name of the model or a qualified name with a subcontext path, e.g.}
 }
 \value{
-(Model) The model object
+(Model) Pharmpy model
 }
 \description{
 Retrieve a model from a context

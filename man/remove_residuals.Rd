@@ -12,7 +12,7 @@ remove_residuals(model, to_remove = NULL)
 \item{to_remove}{(array(str) (optional)) Residuals to remove}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Remove residuals

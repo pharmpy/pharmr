@@ -12,7 +12,7 @@ remove_peripheral_compartment(model, name = NULL)
 \item{name}{(str (optional)) Name of compartment to remove peripheral compartment from.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Remove a peripheral distribution compartment from model

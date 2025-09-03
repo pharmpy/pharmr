@@ -7,7 +7,7 @@
 has_covariate_effect(model, parameter, covariate)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model to check for covariate effect.}
+\item{model}{(Model) Pharmpy model}
 
 \item{parameter}{(str) Name of parameter.}
 

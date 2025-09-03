@@ -10,7 +10,7 @@ remove_bioavailability(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Remove bioavailability from the first dose compartment of model.

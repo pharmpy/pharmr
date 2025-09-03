@@ -10,7 +10,7 @@ has_instantaneous_absorption(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Bool : TRUE if model has instantaneous absorption)
+(logical) TRUE if model has instantaneous absorption
 }
 \description{
 Check if ode system describes a instantaneous absorption

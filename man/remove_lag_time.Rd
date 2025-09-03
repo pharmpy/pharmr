@@ -10,7 +10,7 @@ remove_lag_time(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Remove lag time from the dose compartment of model.

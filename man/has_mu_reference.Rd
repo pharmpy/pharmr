@@ -7,7 +7,7 @@
 has_mu_reference(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 }
 \value{
 (logical) Whether the model is mu referenced

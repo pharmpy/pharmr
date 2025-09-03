@@ -7,7 +7,7 @@
 get_sigmas(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 }
 \value{
 (Parameters) A copy of all sigma parameters

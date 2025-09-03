@@ -33,7 +33,7 @@ add_allometry(
 \item{fixed}{(logical) Whether the exponents should be fixed}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Add allometric scaling of parameters

@@ -14,7 +14,7 @@ fix_or_unfix_parameters(model, parameters, strict = TRUE)
 \item{strict}{(logical) Whether all parameters in input need to exist in the model. Default is TRUE}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Fix or unfix parameters

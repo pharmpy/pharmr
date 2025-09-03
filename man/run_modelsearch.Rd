@@ -14,6 +14,7 @@ run_modelsearch(
   cutoff = NULL,
   strictness = "minimization_successful or (rounding_errors and sigdigs >= 0.1)",
   E = NULL,
+  parameter_uncertainty_method = NULL,
   ...
 )
 }
@@ -35,7 +36,10 @@ is NULL (all models will be ranked)}
 
 \item{strictness}{(str) Strictness criteria}
 
-\item{E}{(numeric or str (optional)) Expected number of predictors (used for mBIC). Must be set when using mBI}
+\item{E}{(numeric or str (optional)) Expected number of predictors (used for mBIC). Must be set when using mBIC}
+
+\item{parameter_uncertainty_method}{(str (optional)) Parameter uncertainty method. Will be used in ranking models if strictness includes
+parameter uncertaint}
 
 \item{...}{Arguments to pass to tool}
 }

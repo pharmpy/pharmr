@@ -14,13 +14,13 @@ set_transit_compartments(model, n, keep_depot = TRUE)
 \item{keep_depot}{(logical) FALSE to convert depot compartment into a transit compartment}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Set the number of transit compartments of model.
 
-Initial estimate for absorption rate is
-set the previous rate if available, otherwise it is set to the time of first observation/2.
+Initial estimate for the absorption delay is
+set the previous delay if available, otherwise it is set to the time of first observation/2.
 }
 \examples{
 \dontrun{
@@ -31,4 +31,6 @@ model$statements$ode_system
 }
 \seealso{
 add_lag_time
+
+set_n_transit_compartments
 }

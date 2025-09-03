@@ -7,7 +7,7 @@
 get_unit_of(model, variable)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 
 \item{variable}{(str) Find physical unit of this variable}
 }

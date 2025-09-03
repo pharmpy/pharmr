@@ -14,7 +14,7 @@ remove_loq_data(
 )
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 
 \item{lloq}{(numeric or str (optional)) Value or column name for lower limit of quantification.}
 
@@ -27,7 +27,7 @@ remove_loq_data(
 \item{keep}{(numeric) Number of loq records to keep for each run of consecutive loq records.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Remove loq data records from the dataset

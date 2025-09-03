@@ -7,10 +7,10 @@
 cleanup_model(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Updated model
+(Model) Updated Pharmpy model
 }
 \description{
 Perform various cleanups of a model

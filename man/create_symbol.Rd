@@ -7,7 +7,7 @@
 create_symbol(model, stem, force_numbering = FALSE)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 
 \item{stem}{(str) First part of the new variable name}
 

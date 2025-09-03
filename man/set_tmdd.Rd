@@ -17,7 +17,7 @@ For dv = 1 the only allowed keys are 'drug' and 'drug_tot'. If no DV for drug is
 will have dv = 1.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Sets target mediated drug disposition

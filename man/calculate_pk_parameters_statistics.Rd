@@ -12,7 +12,7 @@ calculate_pk_parameters_statistics(
 )
 }
 \arguments{
-\item{model}{(Model) A previously estimated model}
+\item{model}{(Model) Pharmpy model}
 
 \item{parameter_estimates}{(array) Parameter estimates}
 

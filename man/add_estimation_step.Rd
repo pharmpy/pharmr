@@ -70,7 +70,7 @@ add_estimation_step(
 \item{individual_eta_samples}{(logical) See above}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Add estimation step

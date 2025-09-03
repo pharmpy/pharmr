@@ -12,7 +12,7 @@ set_ode_solver(model, solver)
 \item{solver}{(str) Solver to use or NULL for no preference}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Sets ODE solver to use for model

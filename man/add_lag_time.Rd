@@ -10,7 +10,7 @@ add_lag_time(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Add lag time to the dose compartment of model.

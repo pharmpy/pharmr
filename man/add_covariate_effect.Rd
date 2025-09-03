@@ -14,7 +14,7 @@ add_covariate_effect(
 )
 }
 \arguments{
-\item{model}{(Model) Pharmpy model to add covariate effect to.}
+\item{model}{(Model) Pharmpy model}
 
 \item{parameter}{(str) Name of parameter to add covariate effect to.}
 
@@ -28,7 +28,7 @@ add_covariate_effect(
 the input parameter-covariate pair.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Adds covariate effect to :class:\code{pharmpy.model}.

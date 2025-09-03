@@ -7,7 +7,7 @@
 run_bootstrap(
   model,
   results = NULL,
-  resamples = 1,
+  samples = 1,
   dofv = FALSE,
   strictness = "",
   ...
@@ -18,7 +18,7 @@ run_bootstrap(
 
 \item{results}{(ModelfitResults (optional)) Results for model}
 
-\item{resamples}{(numeric) Number of bootstrap resamples}
+\item{samples}{(numeric) Number of bootstrap resamples}
 
 \item{dofv}{(logical) Will evaluate bootstrap models with original dataset if set}
 
@@ -37,7 +37,7 @@ Run bootstrap tool
 \dontrun{
 model <- load_example_model("pheno")
 results <- load_example_modelfit_results("pheno")
-run_bootstrap(model, res, resamples=500)
+run_bootstrap(model, res, samples=500)
 }
 
 }

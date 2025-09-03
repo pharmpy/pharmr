@@ -7,10 +7,10 @@
 set_instantaneous_absorption(model)
 }
 \arguments{
-\item{model}{(Model) Model to set or change absorption rate}
+\item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Set or change to instantaneous absorption rate.

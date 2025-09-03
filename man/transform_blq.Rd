@@ -14,7 +14,7 @@ transform_blq(model, method = "m4", lloq = NULL)
 \item{lloq}{(numeric (optional)) LLOQ limit to use, if NULL Pharmpy will use the BLQ/LLOQ column in the dataset}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Transform for BLQ data

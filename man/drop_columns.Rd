@@ -7,14 +7,14 @@
 drop_columns(model, column_names, mark = FALSE)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 
 \item{column_names}{(array(str) or str) List of column names or one column name to drop or mark as dropped}
 
 \item{mark}{(logical) Default is to remove column from dataset. Set this to TRUE to only mark as dropped}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Drop columns from the dataset or mark as dropped

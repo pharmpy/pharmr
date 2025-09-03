@@ -15,7 +15,7 @@ non-fixed will be used (full block). NULL is default.}
 \item{individual_estimates}{(data.frame (optional)) Optional individual estimates to use for calculation of initial estimates}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Combines some or all etas into a joint distribution.

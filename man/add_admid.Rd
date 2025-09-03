@@ -10,7 +10,7 @@ add_admid(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(model : Model) Pharmpy model
+(model : Model) Updated Pharmpy model
 }
 \description{
 Add an admid column to the model dataset and datainfo. Dependent on the

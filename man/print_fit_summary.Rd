@@ -7,7 +7,7 @@
 print_fit_summary(model, modelfit_results)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 
 \item{modelfit_results}{(ModelfitResults) Pharmpy ModelfitResults object}
 }

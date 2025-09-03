@@ -10,7 +10,7 @@ replace_non_random_rvs(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) A new model
+(Model) Updated Pharmpy model
 }
 \description{
 Replace all random variables that are not actually random

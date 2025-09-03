@@ -14,9 +14,12 @@ run_structsearch(
   ec50_init = NULL,
   met_init = NULL,
   extra_model = NULL,
+  rank_type = "bic",
+  cutoff = NULL,
   strictness = "minimization_successful or (rounding_errors and sigdigs >= 0.1)",
   extra_model_results = NULL,
   dv_types = NULL,
+  parameter_uncertainty_method = NULL,
   ...
 )
 }
@@ -39,11 +42,19 @@ run_structsearch(
 
 \item{extra_model}{(Model (optional)) Optional extra Pharmpy model to use in TMDD structsearch}
 
-\item{strictness}{(str (optional)) Results for the extra model}
+\item{rank_type}{(str) Results for the extra model}
+
+\item{cutoff}{(numeric (optional)) Which ranking type should be used. Default is BIC.}
+
+\item{strictness}{(str (optional)) Cutoff for which value of the ranking function that is considered significant. Default
+is NULL (all models will be ranked)}
 
 \item{extra_model_results}{(ModelfitResults (optional)) Strictness criteria}
 
-\item{dv_types}{(list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DV}
+\item{dv_types}{(list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DVs}
+
+\item{parameter_uncertainty_method}{(str (optional)) Parameter uncertainty method. Will be used in ranking models if strictness includes
+parameter uncertaint}
 
 \item{...}{Arguments to pass to tool}
 }

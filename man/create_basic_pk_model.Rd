@@ -24,7 +24,7 @@ create_basic_pk_model(
 \item{mat_init}{(numeric) Initial estimate of the mean absorption time parameter (if applicable)}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Pharmpy model
 }
 \description{
 Creates a basic pk model of given type. The model will be a one compartment model, with first

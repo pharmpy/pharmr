@@ -13,6 +13,7 @@ run_ruvsearch(
   max_iter = 3,
   dv = NULL,
   strictness = "minimization_successful or (rounding_errors and sigdigs>=0.1)",
+  parameter_uncertainty_method = NULL,
   ...
 )
 }
@@ -31,7 +32,10 @@ run_ruvsearch(
 
 \item{dv}{(numeric (optional)) Which DV to assess the error model for.}
 
-\item{strictness}{(str) Strictness criteri}
+\item{strictness}{(str) Strictness criteria}
+
+\item{parameter_uncertainty_method}{(str (optional)) Parameter uncertainty method. Will be used in ranking models if strictness includes
+parameter uncertaint}
 
 \item{...}{Arguments to pass to tool}
 }

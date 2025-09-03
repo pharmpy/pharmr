@@ -7,7 +7,7 @@
 plot_eta_distributions(model, individual_estimates)
 }
 \arguments{
-\item{model}{(Model) Previously run Pharmpy model.}
+\item{model}{(Model) Pharmpy model}
 
 \item{individual_estimates}{(data.frame) Individual estimates for etas}
 }

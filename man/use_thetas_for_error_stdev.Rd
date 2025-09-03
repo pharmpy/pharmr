@@ -10,7 +10,7 @@ use_thetas_for_error_stdev(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Use thetas to estimate standard deviation of error

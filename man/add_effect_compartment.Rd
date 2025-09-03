@@ -12,7 +12,7 @@ add_effect_compartment(model, expr)
 \item{expr}{(str) Name of the PD effect function.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Add an effect compartment.

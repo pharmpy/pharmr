@@ -7,7 +7,7 @@
 calculate_aic(model, likelihood)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 
 \item{likelihood}{(numeric) -2LL}
 }

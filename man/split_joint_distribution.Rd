@@ -13,7 +13,7 @@ split_joint_distribution(model, rvs = NULL)
 non-fixed will become single. NULL is default.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Splits etas following a joint distribution into separate distributions.

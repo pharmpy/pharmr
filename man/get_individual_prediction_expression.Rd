@@ -7,7 +7,7 @@
 get_individual_prediction_expression(model)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 }
 \value{
 (Expression) Symbolic expression

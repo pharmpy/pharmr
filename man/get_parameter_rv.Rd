@@ -7,7 +7,7 @@
 get_parameter_rv(model, parameter, var_type = "iiv")
 }
 \arguments{
-\item{model}{(Model) Pharmpy model to retrieve parameters from}
+\item{model}{(Model) Pharmpy model}
 
 \item{parameter}{(str) Name of parameter to retrieve random variable from}
 

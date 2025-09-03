@@ -10,7 +10,7 @@ replace_fixed_thetas(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) A new model
+(Model) Updated Pharmpy model
 }
 \description{
 Replace all fixed thetas with constants in the model statements

@@ -10,7 +10,7 @@ set_zero_order_elimination(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Sets elimination to zero order.

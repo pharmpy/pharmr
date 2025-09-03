@@ -10,7 +10,7 @@ set_michaelis_menten_elimination(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Sets elimination to Michaelis-Menten.

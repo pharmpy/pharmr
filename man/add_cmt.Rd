@@ -10,7 +10,7 @@ add_cmt(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(model : Model) Pharmpy model
+(model : Model) Updated Pharmpy model
 }
 \description{
 Add a CMT column to the model dataset and datainfo if not existed

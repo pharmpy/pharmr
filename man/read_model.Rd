@@ -13,7 +13,7 @@ read_model(path, missing_data_token = NULL)
 (This option was added in Pharmpy version 1.2.0)}
 }
 \value{
-(Model) Read model object
+(Model) Pharmpy model
 }
 \description{
 Read model from file

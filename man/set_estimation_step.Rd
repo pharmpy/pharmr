@@ -16,7 +16,7 @@ set_estimation_step(model, method, idx = 0, ...)
 \item{...}{Arguments to pass to EstimationStep (such as interaction, evaluation)}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Set estimation step

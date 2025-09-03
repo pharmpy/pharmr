@@ -10,7 +10,7 @@ unload_dataset(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Pharmpy model with dataset removed
+(Model) Updated Pharmpy model
 }
 \description{
 Unload the dataset from a model

@@ -12,7 +12,7 @@ set_dvid(model, name)
 \item{name}{(str) Name of DVID column}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Set a column to act as DVID. Replace DVID if one is already set.

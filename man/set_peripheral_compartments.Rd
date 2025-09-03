@@ -14,7 +14,7 @@ set_peripheral_compartments(model, n, name = NULL)
 \item{name}{(str (optional)) Name of compartment to add peripheral to.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Sets the number of peripheral compartments for central compartment to a specified number.

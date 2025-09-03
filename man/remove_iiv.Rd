@@ -7,13 +7,13 @@
 remove_iiv(model, to_remove = NULL)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model to create block effect on.}
+\item{model}{(Model) Pharmpy model}
 
 \item{to_remove}{(array(str) or str (optional)) Name/names of etas and/or name/names of individual parameters to remove.
 If NULL, all etas that are IIVs will be removed. NULL is default.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Removes all IIV etas given a vector with eta names and/or parameter names.

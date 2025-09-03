@@ -16,7 +16,7 @@ set_initial_condition(model, compartment, expression, time = 0)
 \item{time}{(numeric or str or Expr) Time point. Default 0}
 }
 \value{
-(model) Pharmpy model object
+(model) Updated Pharmpy model
 }
 \description{
 Set an initial condition for the ode system

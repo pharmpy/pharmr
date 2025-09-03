@@ -7,7 +7,7 @@
 calculate_ucp_scale(model)
 }
 \arguments{
-\item{model}{(Model) Model for which to calculate an ucp scale}
+\item{model}{(Model) Pharmpy model}
 }
 \value{
 (UCPScale) A scale object

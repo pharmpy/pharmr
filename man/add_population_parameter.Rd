@@ -27,7 +27,7 @@ add_population_parameter(
 \item{fix}{(logical) Should the new parameter be fixed?}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Add a new population parameter to the model

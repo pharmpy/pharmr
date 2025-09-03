@@ -14,7 +14,7 @@ set_zero_order_input(model, compartment, expression)
 \item{expression}{(numeric or str or Expr) The expression of the zero order input}
 }
 \value{
-(model) Pharmpy model object
+(model) Updated Pharmpy model
 }
 \description{
 Set a zero order input for the ode system

@@ -7,7 +7,7 @@
 get_covariate_effects(model)
 }
 \arguments{
-\item{model}{(Model) Model to extract covariates from.}
+\item{model}{(Model) Pharmpy model}
 }
 \value{
 (Dictionary : Dictionary of parameters and connected covariate(s))

@@ -14,7 +14,7 @@ append_estimation_step_options(model, tool_options, idx)
 \item{idx}{(numeric) index of estimation step (starting from 0)}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Append estimation step options

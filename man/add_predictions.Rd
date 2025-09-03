@@ -12,7 +12,7 @@ add_predictions(model, pred)
 \item{pred}{(array(str)) List of predictions (e.g. c('IPRED', 'PRED'))}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Add predictions and/or residuals

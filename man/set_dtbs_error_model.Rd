@@ -12,7 +12,7 @@ set_dtbs_error_model(model, fix_to_log = FALSE)
 \item{fix_to_log}{(logical) Set to TRUE to fix lambda and zeta to 0, i.e. emulating log-transformed data}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Dynamic transform both sides

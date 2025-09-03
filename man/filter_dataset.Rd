@@ -7,12 +7,12 @@
 filter_dataset(model, expr)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 
 \item{expr}{(str) expression for dataset query}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Filter dataset according to expr and return a model with the filtered dataset.

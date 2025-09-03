@@ -7,10 +7,10 @@
 remove_error_model(model)
 }
 \arguments{
-\item{model}{(Model) Remove error model for this model}
+\item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Remove error model.

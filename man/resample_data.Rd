@@ -16,7 +16,7 @@ resample_data(
 )
 }
 \arguments{
-\item{dataset_or_model}{(data.frame or Model) Dataset or Model to use}
+\item{dataset_or_model}{(data.frame or Model) Dataset or Pharmpy model to use}
 
 \item{group}{(str) Name of column to group by}
 

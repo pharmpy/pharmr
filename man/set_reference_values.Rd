@@ -7,12 +7,12 @@
 set_reference_values(model, refs)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 
 \item{refs}{(list(str=numeric)) Pairs of column names and reference values}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Set reference values for selected columns

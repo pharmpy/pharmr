@@ -12,7 +12,7 @@ set_proportional_error_model(
 )
 }
 \arguments{
-\item{model}{(Model) Set error model for this model}
+\item{model}{(Model) Pharmpy model}
 
 \item{dv}{(Expr or str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)}
 
@@ -22,7 +22,7 @@ specified by the model.}
 \item{zero_protection}{(logical) Set to TRUE to add code protecting from IPRED=0}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Set a proportional error model. Initial estimate for new sigma is 0.09.

@@ -7,7 +7,7 @@
 set_combined_error_model(model, dv = NULL, data_trans = NULL)
 }
 \arguments{
-\item{model}{(Model) Set error model for this model}
+\item{model}{(Model) Pharmpy model}
 
 \item{dv}{(Expr or str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)}
 
@@ -15,7 +15,7 @@ set_combined_error_model(model, dv = NULL, data_trans = NULL)
 specified by the model.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Set a combined error model. Initial estimates for new sigmas are (equation could not be rendered, see API doc on website)

@@ -14,7 +14,7 @@ set_direct_effect(model, expr, variable = NULL)
 \item{variable}{(str (optional)) Name of variable to use (if NULL concentration will be used)}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Add an effect to a model.

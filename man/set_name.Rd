@@ -12,7 +12,7 @@ set_name(model, new_name)
 \item{new_name}{(str) New name of model}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Set name of model object

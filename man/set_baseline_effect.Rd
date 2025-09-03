@@ -12,7 +12,7 @@ set_baseline_effect(model, expr = "const")
 \item{expr}{(str) Name of baseline effect function.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Create baseline effect model.

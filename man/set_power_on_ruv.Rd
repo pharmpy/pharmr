@@ -14,22 +14,22 @@ set_power_on_ruv(
 )
 }
 \arguments{
-\item{model}{(Model) Pharmpy model to create block effect on.}
+\item{model}{(Model) Pharmpy model}
 
 \item{list_of_eps}{(str or array (optional)) Name/names of epsilons to apply power effect. If NULL, all epsilons will be used.
 NULL is default.}
 
-\item{dv}{(str or Expr or numeric (optional)) Name or DVID of dependent variable. NULL will change the epsilon on all occurences
+\item{dv}{(Expr or numeric (optional)) Name or DVID of dependent variable. NULL will change the epsilon on all occurences
 regardless of affected dependent variable.}
 
 \item{lower_limit}{(numeric (optional)) Lower limit of power (theta). NULL for no limit.}
 
-\item{ipred}{(str or Expr (optional)) Symbol to use as IPRED. Default is to autodetect expression for IPRED.}
+\item{ipred}{(Expr (optional)) Symbol to use as IPRED. Default is to autodetect expression for IPRED.}
 
 \item{zero_protection}{(logical) Set to TRUE to add code protecting from IPRED=0}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Applies a power effect to provided epsilons. If a dependent variable

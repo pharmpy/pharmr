@@ -7,7 +7,7 @@
 has_additive_error_model(model, dv = NULL)
 }
 \arguments{
-\item{model}{(Model) The model to check}
+\item{model}{(Model) Pharmpy model}
 
 \item{dv}{(Expr or str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)}
 }

@@ -10,7 +10,7 @@ add_time_after_dose(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Calculate and add a TAD column to the dataset

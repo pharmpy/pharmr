@@ -13,9 +13,9 @@ set_iiv_on_ruv(
 )
 }
 \arguments{
-\item{model}{(Model) Pharmpy model to apply IIV on epsilons.}
+\item{model}{(Model) Pharmpy model}
 
-\item{dv}{(str or Expr or numeric (optional)) Name/names of epsilons to multiply with exponential etas. If NULL, all epsilons will
+\item{dv}{(Expr or numeric (optional)) Name/names of epsilons to multiply with exponential etas. If NULL, all epsilons will
 be chosen. NULL is default.}
 
 \item{list_of_eps}{(array(str) or str (optional)) Boolean of whether all RUVs from input should use the same new ETA or if one ETA
@@ -26,7 +26,7 @@ should be created for each RUV. TRUE is default.}
 \item{eta_names}{(array(str) or str (optional)) Name or DVID of dependent variable. NULL for the default (first or only)}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Multiplies epsilons with exponential (new) etas.

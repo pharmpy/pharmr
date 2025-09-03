@@ -10,7 +10,7 @@ has_first_order_absorption(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Bool : TRUE if model has first order absorption)
+(logical) TRUE if model has first order absorption
 }
 \description{
 Check if ode system describes a first order absorption

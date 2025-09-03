@@ -7,12 +7,12 @@
 transform_etas_boxcox(model, list_of_etas = NULL)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model to apply boxcox transformation to.}
+\item{model}{(Model) Pharmpy model}
 
 \item{list_of_etas}{(array(str) or str (optional)) Name/names of etas to transform. If NULL, all etas will be transformed (default).}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Applies a boxcox transformation to selected etas

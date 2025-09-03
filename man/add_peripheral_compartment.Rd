@@ -12,7 +12,7 @@ add_peripheral_compartment(model, name = NULL)
 \item{name}{(str (optional)) Name of compartment to add peripheral to.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Add a peripheral distribution compartment to model

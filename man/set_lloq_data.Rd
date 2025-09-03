@@ -7,7 +7,7 @@
 set_lloq_data(model, value, lloq = NULL, blq = NULL)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model object}
+\item{model}{(Model) Pharmpy model}
 
 \item{value}{(str or numeric or Expr) The new dv value}
 
@@ -16,7 +16,7 @@ set_lloq_data(model, value, lloq = NULL, blq = NULL)
 \item{blq}{(str (optional)) Column name for below limit of quantification indicator.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Set a dv value for lloq data records

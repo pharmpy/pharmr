@@ -7,14 +7,14 @@
 update_initial_individual_estimates(model, individual_estimates, force = TRUE)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model to update initial estimates}
+\item{model}{(Model) Pharmpy model}
 
 \item{individual_estimates}{(array) Individual estimates to use}
 
 \item{force}{(logical) Set to FALSE to only update if the model had initial individual estimates before}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Update initial individual estimates for a model

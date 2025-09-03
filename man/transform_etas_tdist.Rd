@@ -7,12 +7,12 @@
 transform_etas_tdist(model, list_of_etas = NULL)
 }
 \arguments{
-\item{model}{(Model) Pharmpy model to apply t distribution transformation to.}
+\item{model}{(Model) Pharmpy model}
 
 \item{list_of_etas}{(array(str) or str (optional)) Name/names of etas to transform. If NULL, all etas will be transformed (default).}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Applies a t-distribution transformation to selected etas

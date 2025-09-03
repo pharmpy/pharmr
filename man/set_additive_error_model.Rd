@@ -7,7 +7,7 @@
 set_additive_error_model(model, dv = NULL, data_trans = NULL, series_terms = 2)
 }
 \arguments{
-\item{model}{(Model) Set error model for this model}
+\item{model}{(Model) Pharmpy model}
 
 \item{dv}{(Expr or str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)}
 
@@ -18,7 +18,7 @@ specified by the model. Series expansion will be used for approximation.}
 transformation.}
 }
 \value{
-(Model) Pharmpy model object
+(Model) Updated Pharmpy model
 }
 \description{
 Set an additive error model. Initial estimate for new sigma is (equation could not be rendered, see API doc on website)
