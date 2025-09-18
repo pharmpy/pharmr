@@ -13,6 +13,7 @@ run_retries(
   strictness = "minimization_successful or (rounding_errors and sigdigs >= 0.1)",
   scale = "UCP",
   prefix_name = "",
+  parameter_uncertainty_method = NULL,
   ...
 )
 }
@@ -31,7 +32,10 @@ run_retries(
 
 \item{scale}{(str (optional)) Which scale to update the initial values on. Either normal scale or UCP scale.}
 
-\item{prefix_name}{(str (optional)) Prefix the candidate model names with given string}
+\item{prefix_name}{(str (optional)) Prefix the candidate model names with given string.}
+
+\item{parameter_uncertainty_method}{(str (optional)) Parameter uncertainty method. Will be used in ranking models if strictness includes
+parameter uncertaint}
 
 \item{...}{Arguments to pass to tool}
 }

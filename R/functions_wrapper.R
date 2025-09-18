@@ -4770,6 +4770,12 @@ plot_eta_distributions <- function(model, individual_estimates) {
 #' @description
 #' Plot DV and predictions grouped on individuals
 #' 
+#' The predictions would normally be taken from the modelfit results, but any data frame of
+#' appropriate format can be used. It should have one column per type of prediction where
+#' the column name is the type (e.g. "PRED" or "IPRED"), one row for each record of the dataset
+#' in the model. A predictions table containing only some of the individuals is ok to use,
+#' but then care needs to be taken to get match the row index of the original dataset.
+#' 
 #' @param model (Model) Pharmpy model
 #' @param predictions (data.frame) One column for each type of prediction
 #' @param individuals (array(numeric) (optional)) A vector of individuals to include. NULL for all individuals
@@ -4787,7 +4793,6 @@ plot_eta_distributions <- function(model, individual_estimates) {
 plot_individual_predictions <- function(model, predictions, individuals=NULL) {
 	reticulate::py_clear_last_error()
 	predictions <- convert_input(predictions, "pd.DataFrame")
-	individuals <- convert_input(individuals, "list")
 	func_out <- pharmpy$modeling$plot_individual_predictions(model, predictions, individuals=individuals)
 	return(py_to_r(func_out))
 }
@@ -7663,6 +7668,9 @@ write_dataset <- function(model, path=NULL, force=FALSE, type='csv') {
 #' @description
 #' Write model code to file
 #' 
+#' An updated Pharmpy model is returned. This will have a new name based on the filename
+#' and it might have updates to the model code (e.g. for $DATA in NONMEM models).
+#' 
 #' @param model (Model) Pharmpy model
 #' @param path (str) Destination path
 #' @param force (logical) Force overwrite, default is TRUE
@@ -8383,6 +8391,8 @@ run_bootstrap <- function(model, results=NULL, samples=1, dofv=FALSE, strictness
 #' tested, try adding the stashed effects once more with a regular forward approach.
 #' Default is FALSE
 #' @param strictness (str) Strictness criteria
+#' @param parameter_uncertainty_method (str (optional)) Parameter uncertainty method. Will be used in ranking models if strictness includes
+#' parameter uncertainty
 #' @param naming_index_offset (numeric (optional)) index offset for naming of runs. Default is 0.
 #' @param nsamples (numeric) Number of samples from individual parameter conditional distribution for linear covariate model selection.
 #' Default is 10, i.e. generating 10 samples per subject
@@ -8406,7 +8416,7 @@ run_bootstrap <- function(model, results=NULL, samples=1, dofv=FALSE, strictness
 #' }
 #' 
 #' @export
-run_covsearch <- function(model, results, search_space, p_forward=0.01, p_backward=0.001, max_steps=-1, algorithm='scm-forward-then-backward', max_eval=FALSE, adaptive_scope_reduction=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', naming_index_offset=0, nsamples=10, .samba_max_covariates=3, .samba_selection_criterion='bic', .samba_linreg_method='ols', .samba_stepwise_lcs=NULL, ...) {
+run_covsearch <- function(model, results, search_space, p_forward=0.01, p_backward=0.001, max_steps=-1, algorithm='scm-forward-then-backward', max_eval=FALSE, adaptive_scope_reduction=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', parameter_uncertainty_method=NULL, naming_index_offset=0, nsamples=10, .samba_max_covariates=3, .samba_selection_criterion='bic', .samba_linreg_method='ols', .samba_stepwise_lcs=NULL, ...) {
 	reticulate::py_clear_last_error()
 	tryCatch(
 	{
@@ -8414,7 +8424,7 @@ run_covsearch <- function(model, results, search_space, p_forward=0.01, p_backwa
 		naming_index_offset <- convert_input(naming_index_offset, "int")
 		nsamples <- convert_input(nsamples, "int")
 		.samba_max_covariates <- convert_input(.samba_max_covariates, "int")
-		func_out <- pharmpy$tools$run_covsearch(model, results, search_space, p_forward=p_forward, p_backward=p_backward, max_steps=max_steps, algorithm=algorithm, max_eval=max_eval, adaptive_scope_reduction=adaptive_scope_reduction, strictness=strictness, naming_index_offset=naming_index_offset, nsamples=nsamples, `_samba_max_covariates`=.samba_max_covariates, `_samba_selection_criterion`=.samba_selection_criterion, `_samba_linreg_method`=.samba_linreg_method, `_samba_stepwise_lcs`=.samba_stepwise_lcs, ...)
+		func_out <- pharmpy$tools$run_covsearch(model, results, search_space, p_forward=p_forward, p_backward=p_backward, max_steps=max_steps, algorithm=algorithm, max_eval=max_eval, adaptive_scope_reduction=adaptive_scope_reduction, strictness=strictness, parameter_uncertainty_method=parameter_uncertainty_method, naming_index_offset=naming_index_offset, nsamples=nsamples, `_samba_max_covariates`=.samba_max_covariates, `_samba_selection_criterion`=.samba_selection_criterion, `_samba_linreg_method`=.samba_linreg_method, `_samba_stepwise_lcs`=.samba_stepwise_lcs, ...)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -8965,19 +8975,21 @@ run_modelsearch <- function(model, results, search_space, algorithm='reduced_ste
 #' @param use_initial_estimates (logical) Use initial parameter estimates instead of final estimates of input model when creating candidate models.
 #' @param strictness (str) Strictness criteria. The default is "minimization_successful or (rounding_errors and sigdigs >= 0.1)".
 #' @param scale (str (optional)) Which scale to update the initial values on. Either normal scale or UCP scale.
-#' @param prefix_name (str (optional)) Prefix the candidate model names with given string
+#' @param prefix_name (str (optional)) Prefix the candidate model names with given string.
+#' @param parameter_uncertainty_method (str (optional)) Parameter uncertainty method. Will be used in ranking models if strictness includes
+#' parameter uncertaint
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (RetriesResults) Retries tool results object.
 #' 
 #' 
 #' @export
-run_retries <- function(model=NULL, results=NULL, number_of_candidates=5, fraction=0.1, use_initial_estimates=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs >= 0.1)', scale='UCP', prefix_name='', ...) {
+run_retries <- function(model=NULL, results=NULL, number_of_candidates=5, fraction=0.1, use_initial_estimates=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs >= 0.1)', scale='UCP', prefix_name='', parameter_uncertainty_method=NULL, ...) {
 	reticulate::py_clear_last_error()
 	tryCatch(
 	{
 		number_of_candidates <- convert_input(number_of_candidates, "int")
-		func_out <- pharmpy$tools$run_retries(model=model, results=results, number_of_candidates=number_of_candidates, fraction=fraction, use_initial_estimates=use_initial_estimates, strictness=strictness, scale=scale, prefix_name=prefix_name, ...)
+		func_out <- pharmpy$tools$run_retries(model=model, results=results, number_of_candidates=number_of_candidates, fraction=fraction, use_initial_estimates=use_initial_estimates, strictness=strictness, scale=scale, prefix_name=prefix_name, parameter_uncertainty_method=parameter_uncertainty_method, ...)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}

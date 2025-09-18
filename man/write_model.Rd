@@ -18,6 +18,9 @@ write_model(model, path = "", force = TRUE)
 }
 \description{
 Write model code to file
+
+An updated Pharmpy model is returned. This will have a new name based on the filename
+and it might have updates to the model code (e.g. for $DATA in NONMEM models).
 }
 \examples{
 \dontrun{

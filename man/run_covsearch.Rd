@@ -15,6 +15,7 @@ run_covsearch(
   max_eval = FALSE,
   adaptive_scope_reduction = FALSE,
   strictness = "minimization_successful or (rounding_errors and sigdigs>=0.1)",
+  parameter_uncertainty_method = NULL,
   naming_index_offset = 0,
   nsamples = 10,
   .samba_max_covariates = 3,
@@ -49,6 +50,9 @@ tested, try adding the stashed effects once more with a regular forward approach
 Default is FALSE}
 
 \item{strictness}{(str) Strictness criteria}
+
+\item{parameter_uncertainty_method}{(str (optional)) Parameter uncertainty method. Will be used in ranking models if strictness includes
+parameter uncertainty}
 
 \item{naming_index_offset}{(numeric (optional)) index offset for naming of runs. Default is 0.}
 
