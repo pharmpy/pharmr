@@ -9,7 +9,7 @@ split_joint_distribution(model, rvs = NULL)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{rvs}{(array(str) or str (optional)) Name/names of etas to separate. If NULL, all etas that are IIVs and
+\item{rvs}{(array(str) or str (optional)) Name/names of etas or individual parameters to separate. If NULL, all etas that are IIVs and
 non-fixed will become single. NULL is default.}
 }
 \value{

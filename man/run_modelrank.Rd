@@ -14,6 +14,7 @@ run_modelrank(
   search_space = NULL,
   E = NULL,
   parameter_uncertainty_method = NULL,
+  exclude_reference_model = FALSE,
   ...
 )
 }
@@ -38,7 +39,9 @@ is NULL}
 if mBIC for IIV (both diagonals and off-diagonals)}
 
 \item{parameter_uncertainty_method}{(str (optional)) Parameter uncertainty method. Will be used in ranking models if strictness includes
-parameter uncertaint}
+parameter uncertainty}
+
+\item{exclude_reference_model}{(logical) Should it be possible to select the reference model? Default is TRUE}
 
 \item{...}{Arguments to pass to tool}
 }

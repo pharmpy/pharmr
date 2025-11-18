@@ -24,7 +24,7 @@ regardless of affected dependent variable.}
 
 \item{lower_limit}{(numeric (optional)) Lower limit of power (theta). NULL for no limit.}
 
-\item{ipred}{(Expr (optional)) Symbol to use as IPRED. Default is to autodetect expression for IPRED.}
+\item{ipred}{(str or Expr (optional)) Symbol to use as IPRED. Default is to autodetect expression for IPRED.}
 
 \item{zero_protection}{(logical) Set to TRUE to add code protecting from IPRED=0}
 }

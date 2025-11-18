@@ -9,7 +9,7 @@ create_joint_distribution(model, rvs = NULL, individual_estimates = NULL)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{rvs}{(array(str) (optional)) Sequence of etas or names of etas to combine. If NULL, all etas that are IIVs and
+\item{rvs}{(array(str) (optional)) Sequence of etas or individual parameters. If NULL, all etas that are IIVs and
 non-fixed will be used (full block). NULL is default.}
 
 \item{individual_estimates}{(data.frame (optional)) Optional individual estimates to use for calculation of initial estimates}

@@ -4,7 +4,14 @@
 \alias{run_vpc}
 \title{run_vpc}
 \usage{
-run_vpc(model, results = NULL, samples = 20, stratify = NULL, ...)
+run_vpc(
+  model,
+  results = NULL,
+  samples = 20,
+  stratify = NULL,
+  frem = FALSE,
+  ...
+)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
@@ -13,7 +20,9 @@ run_vpc(model, results = NULL, samples = 20, stratify = NULL, ...)
 
 \item{samples}{(numeric) Number of samples}
 
-\item{stratify}{(str (optional)) Column to stratify o}
+\item{stratify}{(str (optional)) Column to stratify on}
+
+\item{frem}{(logical) Should we run the special vpc procedure a FREM model}
 
 \item{...}{Arguments to pass to tool}
 }

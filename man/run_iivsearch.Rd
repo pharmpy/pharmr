@@ -18,6 +18,8 @@ run_iivsearch(
   E_p = NULL,
   E_q = NULL,
   parameter_uncertainty_method = NULL,
+  .search_space = NULL,
+  .as_fullblock = FALSE,
   ...
 )
 }
@@ -51,7 +53,11 @@ when the argument 'algorithm' is not 'skip'}
 and when the argument \code{correlation_algorithm} is not \code{skip} or NULL}
 
 \item{parameter_uncertainty_method}{(str (optional)) Parameter uncertainty method. Will be used in ranking models if strictness includes
-parameter uncertaint}
+parameter uncertainty}
+
+\item{.search_space}{(str (optional)) EXPERIMENTAL FEATURE. Search space to test}
+
+\item{.as_fullblock}{(logical) EXPERIMENTAL FEATURE. Whether use a fullbloc}
 
 \item{...}{Arguments to pass to tool}
 }

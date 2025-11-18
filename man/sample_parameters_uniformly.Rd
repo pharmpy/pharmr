@@ -17,7 +17,7 @@ sample_parameters_uniformly(
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{parameter_estimates}{(array) Parameter estimates for parameters to use}
+\item{parameter_estimates}{(list(str=numeric)) Parameter estimates for parameters to use}
 
 \item{fraction}{(numeric) Fraction of estimate value to use for distribution bounds}
 

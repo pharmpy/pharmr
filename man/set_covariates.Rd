@@ -9,7 +9,7 @@ set_covariates(model, covariates)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{covariates}{(array(str)) List of column names}
+\item{covariates}{(array(str)) Column names}
 }
 \value{
 (Model) Updated Pharmpy model

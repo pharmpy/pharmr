@@ -28,7 +28,7 @@ run_structsearch(
 
 \item{results}{(ModelfitResults) Results for the start model}
 
-\item{type}{(str) Type of model. Currently only 'drug_metabolite' and 'pkpd'}
+\item{type}{(str) Type of model. Currently only 'drug_metabolite', 'pkpd' and 'tmdd'}
 
 \item{search_space}{(str or ModelFeatures (optional)) Search space to test}
 

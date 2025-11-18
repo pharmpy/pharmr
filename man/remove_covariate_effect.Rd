@@ -4,7 +4,7 @@
 \alias{remove_covariate_effect}
 \title{remove_covariate_effect}
 \usage{
-remove_covariate_effect(model, parameter, covariate)
+remove_covariate_effect(model, parameter, covariate, keep_fixed = TRUE)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
@@ -12,6 +12,8 @@ remove_covariate_effect(model, parameter, covariate)
 \item{parameter}{(str) Name of parameter.}
 
 \item{covariate}{(str) Name of covariate.}
+
+\item{keep_fixed}{(logical) Whether to keep fixed effects (e.g. allometry) or not. Default is TRUE}
 }
 \value{
 (Model) Updated Pharmpy model
@@ -23,7 +25,7 @@ Remove a covariate effect from an instance of :class:\code{pharmpy.model}.
 \dontrun{
 model <- load_example_model("pheno")
 has_covariate_effect(model, "CL", "WGT")
-model <- remove_covariate_effect(model, "CL", "WGT")
+model <- remove_covariate_effect(model, "CL", "WGT", keep_fixed=FALSE)
 has_covariate_effect(model, "CL", "WGT")
 }
 

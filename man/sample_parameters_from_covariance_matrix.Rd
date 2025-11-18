@@ -17,7 +17,7 @@ sample_parameters_from_covariance_matrix(
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{parameter_estimates}{(array) Parameter estimates to use as means in sampling}
+\item{parameter_estimates}{(list(str=numeric)) Parameter estimates to use as means in sampling}
 
 \item{covariance_matrix}{(data.frame) Parameter uncertainty covariance matrix}
 
