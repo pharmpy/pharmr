@@ -2034,6 +2034,8 @@ convert_model <- function(model, to_format) {
 #' delay. The elimination rate will be (equation could not be rendered, see API doc on website)
 #' 
 #' @param dataset_path (str (optional)) Optional path to a dataset
+#' @param driver (str) Driver variable of the KPD model. Can either be 'ir' (virtual infusion
+#' rate) or 'amount'.
 #'  
 #' @return (Model) Pharmpy model
 #' 
@@ -2043,9 +2045,9 @@ convert_model <- function(model, to_format) {
 #' }
 #' 
 #' @export
-create_basic_kpd_model <- function(dataset_path=NULL) {
+create_basic_kpd_model <- function(dataset_path=NULL, driver='ir') {
 	reticulate::py_clear_last_error()
-	func_out <- pharmpy$modeling$create_basic_kpd_model(dataset_path=dataset_path)
+	func_out <- pharmpy$modeling$create_basic_kpd_model(dataset_path=dataset_path, driver=driver)
 	return(py_to_r(func_out))
 }
 
