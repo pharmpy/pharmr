@@ -83,7 +83,7 @@ def _create_func_body_tool(func, func_execute):
         '    message(err)',
         '    message("pharmr version: ", packageVersion("pharmr"))',
         '    message("Pharmpy version: ", print_pharmpy_version())',
-        '    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")',
+        '    message("This is a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")',
         '}',
         'return(invisible())'
     ]
