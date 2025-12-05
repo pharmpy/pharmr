@@ -173,7 +173,7 @@ add_cmt <- function(model) {
 #' * For each additional category:
 #' 
 #' (equation could not be rendered, see API doc on website)
-#' cov_effect = NULL
+#' 
 #' * Init: 0.001
 #' * Upper: 6
 #' * Lower: 0
@@ -4513,7 +4513,7 @@ infer_datatypes <- function(model, columns=NULL) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param individual_estimates (data.frame) Individual eta estimates (EBEs). Could be taken directly from ModelfitResults.
-#' @param individual_estimates_covariance (data.frame) Uncertainties of individual estimates (ETCs). Could be taken directly from ModelfitResults.
+#' @param individual_estimates_covariance (data.frame (optional)) Uncertainties of individual estimates (ETCs). Could be taken directly from ModelfitResults.
 #'  
 #' @return (Model) Updated Pharmpy model
 #' 
@@ -4528,11 +4528,11 @@ infer_datatypes <- function(model, columns=NULL) {
 #' }
 #' 
 #' @export
-insert_ebes_into_dataset <- function(model, individual_estimates, individual_estimates_covariance) {
+insert_ebes_into_dataset <- function(model, individual_estimates, individual_estimates_covariance=NULL) {
 	reticulate::py_clear_last_error()
 	individual_estimates <- convert_input(individual_estimates, "pd.DataFrame")
 	individual_estimates_covariance <- convert_input(individual_estimates_covariance, "pd.DataFrame")
-	func_out <- pharmpy$modeling$insert_ebes_into_dataset(model, individual_estimates, individual_estimates_covariance)
+	func_out <- pharmpy$modeling$insert_ebes_into_dataset(model, individual_estimates, individual_estimates_covariance=individual_estimates_covariance)
 	return(py_to_r(func_out))
 }
 
@@ -5655,6 +5655,37 @@ remove_residuals <- function(model, to_remove=NULL) {
 }
 
 #' @title
+#' remove_unused_columns
+#' 
+#' @description
+#' Remove all columns in the dataset that are not used by the model including dropped columns
+#' 
+#' Warnings
+#' Currently columns not needed to give a prediction, but used by other expressions in the
+#' model are kept. This will change in the future.
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (Model) Updated Pharmpy model
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- remove_unused_columns(model)
+#' vector(model$dataset$columns)
+#' }
+#' @seealso
+#' drop_columns : Drop columns from the dataset
+#' 
+#' 
+#' @export
+remove_unused_columns <- function(model) {
+	reticulate::py_clear_last_error()
+	func_out <- pharmpy$modeling$remove_unused_columns(model)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' remove_unused_parameters_and_rvs
 #' 
 #' @description
@@ -6637,7 +6668,7 @@ set_mixed_mm_fo_elimination <- function(model) {
 #' set_n_transit_compartments
 #' 
 #' @description
-#' Set the n-transit compartments model
+#' Set the n-transit compartments model (1) (2)
 #' 
 #' This is the absorption delay model where the number of transit compartments is a parameter
 #' to be estimated. Initial estimate for absorption rate is
@@ -6646,6 +6677,18 @@ set_mixed_mm_fo_elimination <- function(model) {
 #' 
 #' Currently only handles a single oral route of administration.
 #' Assumes complete absorption between doses
+#' 
+#' (1) Savic, R.M., Jonker, D.M., Kerbusch, T. et al.
+#' Implementation of a transit compartment model for describing drug absorption
+#' in pharmacokinetic studies.
+#' J Pharmacokinet Pharmacodyn 34, 711–726 (2007).
+#' https://doi.org/10.1007/s10928-007-9066-0
+#' 
+#' (2) Shen, J., Boeckmann, A. & Vick, A.
+#' Implementation of dose superimposition to introduce multiple doses for a
+#' mathematical absorption model (transit compartment model).
+#' J Pharmacokinet Pharmacodyn 39, 251–262 (2012).
+#' https://doi.org/10.1007/s10928-012-9247-3
 #' 
 #' @param model (Model) Pharmpy model
 #' @param keep_depot (logical) FALSE to convert depot compartment into a transit compartment
@@ -7379,7 +7422,7 @@ split_joint_distribution <- function(model, rvs=NULL) {
 #' rows with BLQ = 1 are counted as BLQ observations. If instead an lloq value is specified then all rows with
 #' dv values below the lloq value are counted as BLQ observations.
 #' If no lloq is specified and no BLQ column exists in the dataset then all rows with dv values below the value
-#' specified in the DV column are counted as BLQ observations.
+#' specified in the LLOQ column are counted as BLQ observations.
 #' 
 #' 
 #' M1 method:
@@ -7482,7 +7525,7 @@ transform_etas_boxcox <- function(model, list_of_etas=NULL) {
 #' transform_etas_john_draper
 #' 
 #' @description
-#' Applies a John Draper transformation (1) to spelected etas
+#' Applies a John Draper transformation (1) to selected etas
 #' 
 #' Initial estimate for lambda is 0.1 with bounds (-3, 3).
 #' 
@@ -8372,7 +8415,8 @@ run_allometry <- function(model, results, allometric_variable='WT', reference_va
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	},
@@ -8387,7 +8431,8 @@ run_allometry <- function(model, results, allometric_variable='WT', reference_va
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	}
@@ -8467,7 +8512,8 @@ run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='o
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	},
@@ -8482,7 +8528,8 @@ run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='o
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	}
@@ -8535,7 +8582,8 @@ run_bootstrap <- function(model, results=NULL, samples=1, dofv=FALSE, strictness
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	},
@@ -8550,7 +8598,8 @@ run_bootstrap <- function(model, results=NULL, samples=1, dofv=FALSE, strictness
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	}
@@ -8628,7 +8677,8 @@ run_covsearch <- function(model, results, search_space, p_forward=0.01, p_backwa
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	},
@@ -8643,7 +8693,8 @@ run_covsearch <- function(model, results, search_space, p_forward=0.01, p_backwa
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	}
@@ -8704,7 +8755,8 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	},
@@ -8719,7 +8771,8 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	}
@@ -8786,7 +8839,8 @@ run_iivsearch <- function(model, results, algorithm='top_down_exhaustive', iiv_s
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	},
@@ -8801,7 +8855,8 @@ run_iivsearch <- function(model, results, algorithm='top_down_exhaustive', iiv_s
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	}
@@ -8860,7 +8915,8 @@ run_iovsearch <- function(model, results, column='OCC', list_of_parameters=NULL,
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	},
@@ -8875,7 +8931,8 @@ run_iovsearch <- function(model, results, column='OCC', list_of_parameters=NULL,
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	}
@@ -8919,7 +8976,8 @@ run_linearize <- function(model=NULL, results=NULL, model_name='linbase', descri
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	},
@@ -8934,7 +8992,8 @@ run_linearize <- function(model=NULL, results=NULL, model_name='linbase', descri
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	}
@@ -8985,7 +9044,8 @@ run_modelfit <- function(model_or_models=NULL, n=NULL, ...) {
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	},
@@ -9000,7 +9060,8 @@ run_modelfit <- function(model_or_models=NULL, n=NULL, ...) {
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	}
@@ -9056,7 +9117,8 @@ run_modelrank <- function(models, results, ref_model, strictness='minimization_s
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	},
@@ -9071,7 +9133,8 @@ run_modelrank <- function(models, results, ref_model, strictness='minimization_s
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	}
@@ -9130,7 +9193,8 @@ run_modelsearch <- function(model, results, search_space, algorithm='reduced_ste
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	},
@@ -9145,7 +9209,8 @@ run_modelsearch <- function(model, results, search_space, algorithm='reduced_ste
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	}
@@ -9158,8 +9223,11 @@ run_modelsearch <- function(model, results, search_space, algorithm='reduced_ste
 #' @description
 #' Build a PD model
 #' 
-#' @param dataset (str) A PD dataset
-#' @param treatment_variable (str) Name of the variable representing the treatment, e.g. TRT, DOSE or AUC
+#' @param input (str or Model) A PD/KPD dataset or PD/KPD model
+#' @param type (str) Type of PD model to build ('pd' or 'kpd')
+#' @param treatment_variable (str (optional)) Name of the variable representing the treatment, e.g. TRT, DOSE or AUC. Do not use if `type` is 'kpd'
+#' @param kpd_driver (str) Driver for KPD model (virtual infusion rate 'ir' or 'amount')
+#' @param results (ModelfitResults (optional)) Results to input model
 #' @param strictness (str) Strictness criteria
 #' @param parameter_uncertainty_method (str (optional)) Parameter uncertainty method. Will be used in ranking models if strictness includes
 #' parameter uncertaint
@@ -9169,11 +9237,11 @@ run_modelsearch <- function(model, results, search_space, algorithm='reduced_ste
 #' 
 #' 
 #' @export
-run_pdsearch <- function(dataset, treatment_variable, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', parameter_uncertainty_method=NULL, ...) {
+run_pdsearch <- function(input, type, treatment_variable=NULL, kpd_driver='ir', results=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', parameter_uncertainty_method=NULL, ...) {
 	reticulate::py_clear_last_error()
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_pdsearch(dataset, treatment_variable, strictness=strictness, parameter_uncertainty_method=parameter_uncertainty_method, ...)
+		func_out <- pharmpy$tools$run_pdsearch(input, type, treatment_variable=treatment_variable, kpd_driver=kpd_driver, results=results, strictness=strictness, parameter_uncertainty_method=parameter_uncertainty_method, ...)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -9190,7 +9258,8 @@ run_pdsearch <- function(dataset, treatment_variable, strictness='minimization_s
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	},
@@ -9205,7 +9274,8 @@ run_pdsearch <- function(dataset, treatment_variable, strictness='minimization_s
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	}
@@ -9256,7 +9326,8 @@ run_qa <- function(model=NULL, results=NULL, linearize=FALSE, skip=NULL, ...) {
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	},
@@ -9271,7 +9342,8 @@ run_qa <- function(model=NULL, results=NULL, linearize=FALSE, skip=NULL, ...) {
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	}
@@ -9322,7 +9394,8 @@ run_retries <- function(model=NULL, results=NULL, number_of_candidates=5, fracti
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	},
@@ -9337,7 +9410,8 @@ run_retries <- function(model=NULL, results=NULL, number_of_candidates=5, fracti
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	}
@@ -9397,7 +9471,8 @@ run_ruvsearch <- function(model, results, groups=4, p_value=0.001, skip=NULL, ma
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	},
@@ -9412,7 +9487,8 @@ run_ruvsearch <- function(model, results, groups=4, p_value=0.001, skip=NULL, ma
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	}
@@ -9459,7 +9535,8 @@ run_simulation <- function(model=NULL, ...) {
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	},
@@ -9474,7 +9551,8 @@ run_simulation <- function(model=NULL, ...) {
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	}
@@ -9537,7 +9615,8 @@ run_structsearch <- function(model, results, type, search_space=NULL, b_init=NUL
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	},
@@ -9552,7 +9631,8 @@ run_structsearch <- function(model, results, type, search_space=NULL, b_init=NUL
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	}
@@ -9602,7 +9682,8 @@ run_tool <- function(tool_name, ...) {
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	},
@@ -9617,7 +9698,8 @@ run_tool <- function(tool_name, ...) {
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	}
@@ -9669,7 +9751,8 @@ run_vpc <- function(model, results=NULL, samples=20, stratify=NULL, frem=FALSE, 
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	},
@@ -9684,7 +9767,8 @@ run_vpc <- function(model, results=NULL, samples=20, stratify=NULL, frem=FALSE, 
 			    message(err)
 			    message("pharmr version: ", packageVersion("pharmr"))
 			    message("Pharmpy version: ", print_pharmpy_version())
-			    message("This is a BUG. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
+			    message("Pharmpy has crashed!")
+			    message("This is caused by a BUG! What you see above is NOT AN INTENTIONAL error message. Please report it at https://github.com/pharmpy/pharmpy/issues. Thanks!")
 		}
 		return(invisible())
 	}

@@ -48,7 +48,7 @@ If both a BLQ and an LLOQ column exist in the dataset and no lloq is specified t
 rows with BLQ = 1 are counted as BLQ observations. If instead an lloq value is specified then all rows with
 dv values below the lloq value are counted as BLQ observations.
 If no lloq is specified and no BLQ column exists in the dataset then all rows with dv values below the value
-specified in the DV column are counted as BLQ observations.
+specified in the LLOQ column are counted as BLQ observations.
 
 M1 method:
 All BLQ observations are discarded.

@@ -5,17 +5,26 @@
 \title{run_pdsearch}
 \usage{
 run_pdsearch(
-  dataset,
-  treatment_variable,
+  input,
+  type,
+  treatment_variable = NULL,
+  kpd_driver = "ir",
+  results = NULL,
   strictness = "minimization_successful or (rounding_errors and sigdigs>=0.1)",
   parameter_uncertainty_method = NULL,
   ...
 )
 }
 \arguments{
-\item{dataset}{(str) A PD dataset}
+\item{input}{(str or Model) A PD/KPD dataset or PD/KPD model}
 
-\item{treatment_variable}{(str) Name of the variable representing the treatment, e.g. TRT, DOSE or AUC}
+\item{type}{(str) Type of PD model to build ('pd' or 'kpd')}
+
+\item{treatment_variable}{(str (optional)) Name of the variable representing the treatment, e.g. TRT, DOSE or AUC. Do not use if \code{type} is 'kpd'}
+
+\item{kpd_driver}{(str) Driver for KPD model (virtual infusion rate 'ir' or 'amount')}
+
+\item{results}{(ModelfitResults (optional)) Results to input model}
 
 \item{strictness}{(str) Strictness criteria}
 

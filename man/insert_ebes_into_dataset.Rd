@@ -7,7 +7,7 @@
 insert_ebes_into_dataset(
   model,
   individual_estimates,
-  individual_estimates_covariance
+  individual_estimates_covariance = NULL
 )
 }
 \arguments{
@@ -15,7 +15,7 @@ insert_ebes_into_dataset(
 
 \item{individual_estimates}{(data.frame) Individual eta estimates (EBEs). Could be taken directly from ModelfitResults.}
 
-\item{individual_estimates_covariance}{(data.frame) Uncertainties of individual estimates (ETCs). Could be taken directly from ModelfitResults.}
+\item{individual_estimates_covariance}{(data.frame (optional)) Uncertainties of individual estimates (ETCs). Could be taken directly from ModelfitResults.}
 }
 \value{
 (Model) Updated Pharmpy model

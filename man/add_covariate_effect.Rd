@@ -74,7 +74,6 @@ The following effects have templates:
 }
 
 (equation could not be rendered, see API doc on website)
-cov_effect = NULL
 \itemize{
 \item Init: 0.001
 \item Upper: 6
