@@ -28,7 +28,7 @@ jobs:
       matrix:
         config:
           - {os: windows-2022, r: 'release'}
-          - {os: macOS-13, r: 'release'}
+          - {os: macOS-15, r: 'release'}
           - {os: ubuntu-22.04, r: 'release'}
 
     env:
