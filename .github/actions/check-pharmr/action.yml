@@ -46,7 +46,7 @@ runs:
         desc::desc_set('Version', pharmpy_version)
         desc::desc_set('Date', Sys.Date())
         
-        reticulate::py_run_file('build_functions.py')
+        reticulate::py_run_file('create_functions_wrapper.py')
         devtools::document()
       shell: Rscript {0}
 
