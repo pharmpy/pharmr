@@ -1,13 +1,10 @@
-import inspect
 import os
 
 from pathlib import Path
 
 import pharmpy.modeling
 import pharmpy.tools
-
-from func_conversion import create_r_func
-from docs_conversion import create_r_doc
+from pywrapr.build_functions import create_module_functions
 
 
 def create_functions():
@@ -21,18 +18,6 @@ def create_functions():
 
     with open(func_path, 'w') as f:
         f.write(full_str)
-
-
-def create_module_functions(module):
-    funcs = inspect.getmembers(module, inspect.isfunction)
-    func_str = ''
-    for name, func in funcs:
-        if name not in module.__all__:
-            continue
-        r_func = create_r_func(func, module)
-        r_doc = create_r_doc(func)
-        func_str += f'{r_doc}\n{r_func}\n\n'
-    return func_str
 
 
 if __name__ == '__main__':
