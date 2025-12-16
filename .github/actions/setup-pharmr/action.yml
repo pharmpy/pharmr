@@ -29,6 +29,7 @@ runs:
         source pharmpy_venv/bin/activate
         pip install -r requirements.txt
         pip install .
+        pip install pywrapr@git+https://github.com/pharmpy/pywrapr
       shell: bash
 
     - name: Install Pharmpy in venv
@@ -39,5 +40,6 @@ runs:
         . pharmpy_venv/Scripts/activate
         pip install -r requirements.txt
         pip install .
+        pip install pywrapr@git+https://github.com/pharmpy/pywrapr
       shell: bash
 
