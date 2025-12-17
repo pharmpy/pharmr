@@ -8,8 +8,9 @@ from pywrapr.build_functions import create_module_functions
 
 
 def create_functions():
-    modeling_str = create_module_functions(pharmpy.modeling)
-    tool_str = create_module_functions(pharmpy.tools)
+    skip = ['sympy', 'symengine', 'numpy']
+    modeling_str = create_module_functions(pharmpy.modeling, skip=skip)
+    tool_str = create_module_functions(pharmpy.tools, skip=skip)
     full_str = modeling_str + tool_str
     # TODO: more general way to get right directory
     cwd = os.getcwd()
