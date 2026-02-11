@@ -14,6 +14,13 @@ pharmpy <- NULL
 #' @import vegawidget
 #' @importFrom reticulate py_to_r
 .onLoad <- function(libname, pkgname) {
+    # This is to both support older reticulate versions and pandas 3
+    reticulate_version <- utils::packageVersion("reticulate")
+    if (reticulate_version <= "1.44.1") {
+        registerS3method("py_to_r", "pandas.DataFrame", reticulate:::py_to_r.pandas.core.frame.DataFrame)
+        registerS3method("py_to_r", "pandas.Series", reticulate:::py_to_r.pandas.core.series.Series)
+    }
+
     # Lazy loading cannot currently be avoided even for the case when pharmpy
     # is already installed.
     # This is because R attempts to load the package at installation time
