@@ -17,8 +17,11 @@ pharmpy <- NULL
     # This is to both support older reticulate versions and pandas 3
     reticulate_version <- utils::packageVersion("reticulate")
     if (reticulate_version <= "1.44.1") {
-        registerS3method("py_to_r", "pandas.DataFrame", reticulate:::py_to_r.pandas.core.frame.DataFrame)
-        registerS3method("py_to_r", "pandas.Series", reticulate:::py_to_r.pandas.core.series.Series)
+        reticulate_env <- asNamespace("reticulate")
+        df_fn <- getFromNamespace("py_to_r.pandas.core.frame.DataFrame", "reticulate")
+        ser_fn <- getFromNamespace("py_to_r.pandas.core.series.Series", "reticulate")
+        registerS3method("py_to_r", "pandas.DataFrame", df_fn, envir=reticulate_env)
+        registerS3method("py_to_r", "pandas.Series", ser_fn, envir=reticulate_env)
     }
 
     # Lazy loading cannot currently be avoided even for the case when pharmpy
