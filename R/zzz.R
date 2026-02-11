@@ -18,8 +18,8 @@ pharmpy <- NULL
     reticulate_version <- utils::packageVersion("reticulate")
     if (reticulate_version <= "1.44.1") {
         reticulate_env <- asNamespace("reticulate")
-        df_fn <- getFromNamespace("py_to_r.pandas.core.frame.DataFrame", "reticulate")
-        ser_fn <- getFromNamespace("py_to_r.pandas.core.series.Series", "reticulate")
+        df_fn <- get("py_to_r.pandas.core.frame.DataFrame", envir = ns, inherits = FALSE)
+        ser_fn <- get("py_to_r.pandas.core.series.Series", envir = ns, inherits = FALSE)
         registerS3method("py_to_r", "pandas.DataFrame", df_fn, envir=reticulate_env)
         registerS3method("py_to_r", "pandas.Series", ser_fn, envir=reticulate_env)
     }
