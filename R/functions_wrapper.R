@@ -826,11 +826,15 @@ add_pk_iiv <- function(model, initial_estimate=0.09) {
 #' 
 #' (equation could not be rendered, see API doc on website)
 #' 
-#' * exp
+#' * exp_decrease
 #' 
 #' (equation could not be rendered, see API doc on website)
 #' 
-#' * hyperbolic
+#' * exp_increase
+#' 
+#' (equation could not be rendered, see API doc on website)
+#' 
+#' * tmax
 #' 
 #' (equation could not be rendered, see API doc on website)
 #' 
@@ -1825,6 +1829,39 @@ calculate_se_from_prec <- function(precision_matrix) {
 	precision_matrix <- convert_input(precision_matrix, "pd.DataFrame")
 	func_out <- pharmpy$modeling$calculate_se_from_prec(precision_matrix)
 	func_out <- reset_index_df(func_out)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' calculate_summary_statistic
+#' 
+#' @description
+#' Calculate a summary statistic for an expression over the dataset
+#' 
+#' The expression can be a dataset column name, a variable from the model, e.g. a derived
+#' covariate or a matematical expression involving dataset columns or model variables.
+#' If a calculation involves population parameters, the initial estimates will be used.
+#' 
+#' @param model (Model) Pharmpy model
+#' @param stat (str) The summary statistic. Can be "max", "min", "median" or "mean"
+#' @param expr (str (optional)) A mathematical expression containing column or variable names
+#' @param default (numeric (optional)) An optional default value to use in case the statistic couldn't be calculated.
+#' For example if the model has no dataset.
+#'  
+#' @return (numeric) The summary statistic
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' calculate_summary_statistic(model, "max", "TIME")
+#' calculate_summary_statistic(model, "median", "log(WGT)")
+#' calculate_summary_statistic(model, "median", "TVCL")
+#' }
+#' 
+#' @export
+calculate_summary_statistic <- function(model, stat, expr, default=NULL) {
+	reticulate::py_clear_last_error()
+	func_out <- pharmpy$modeling$calculate_summary_statistic(model, stat, expr, default=default)
 	return(py_to_r(func_out))
 }
 
@@ -4537,6 +4574,31 @@ insert_ebes_into_dataset <- function(model, individual_estimates, individual_est
 }
 
 #' @title
+#' is_binary
+#' 
+#' @description
+#' Check if an expression defines a binary variable (only having values 0 and 1)
+#' 
+#' @param model (Model) Pharmpy model
+#' @param expr (str) A mathematical expression containing column or variable names
+#'  
+#' @return (logical) TRUE if binary
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' is_binary(model, "WGT")
+#' is_binary(model, "FA1")
+#' }
+#' 
+#' @export
+is_binary <- function(model, expr) {
+	reticulate::py_clear_last_error()
+	func_out <- pharmpy$modeling$is_binary(model, expr)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' is_linearized
 #' 
 #' @description
@@ -5041,7 +5103,7 @@ plot_transformed_eta_distributions <- function(model, parameter_estimates, indiv
 #' Creates a VPC plot for a model
 #' 
 #' @param model (Model) Pharmpy model
-#' @param simulations (data.frame or str) DataFrame containing the simulation data or path to dataset.
+#' @param simulations (str or data.frame) DataFrame containing the simulation data or path to dataset.
 #' The dataset has to have one (index) column named "SIM" containing
 #' the simulation number, one (index) column named "index" containing the data indices and one dv column.
 #' See below for more information.
@@ -5570,7 +5632,7 @@ remove_peripheral_compartment <- function(model, name=NULL) {
 #' @description
 #' Remove predictions and/or residuals
 #' 
-#' Remove predictions from estimation step.
+#' Remove predictions from estimation step. Default is to remove all predictions.
 #' 
 #' @param model (Model) Pharmpy model
 #' @param to_remove (array(str) (optional)) Predictions to remove
@@ -5615,7 +5677,7 @@ remove_predictions <- function(model, to_remove=NULL) {
 #' @description
 #' Remove residuals
 #' 
-#' Remove residuals from estimation step.
+#' Remove residuals from estimation step. Default is to remove all residuals.
 #' 
 #' @param model (Model) Pharmpy model
 #' @param to_remove (array(str) (optional)) Residuals to remove
@@ -6668,10 +6730,10 @@ set_mixed_mm_fo_elimination <- function(model) {
 #' set_n_transit_compartments
 #' 
 #' @description
-#' Set the n-transit compartments model (1) (2)
+#' Set the n-transit compartments model
 #' 
 #' This is the absorption delay model where the number of transit compartments is a parameter
-#' to be estimated. Initial estimate for absorption rate is
+#' to be estimated (1) (2). Initial estimate for absorption rate is
 #' set the previous rate if available, otherwise it is set to the time of first observation/2.
 #' Initial estimate for the number of transit compartments is set to 2.
 #' 
@@ -6745,23 +6807,8 @@ set_name <- function(model, new_name) {
 #' @description
 #' Sets ODE solver to use for model
 #' 
-#' Recognized solvers and their corresponding NONMEM advans:
-#' 
-#' +----------------------------+------------------+
-#' | Solver                     | NONMEM ADVAN     |
-#' +============================+==================+
-#' | CVODES                     | ADVAN14          |
-#' +----------------------------+------------------+
-#' | DGEAR                      | ADVAN8           |
-#' +----------------------------+------------------+
-#' | DVERK                      | ADVAN6           |
-#' +----------------------------+------------------+
-#' | IDA                        | ADVAN15          |
-#' +----------------------------+------------------+
-#' | LSODA                      | ADVAN13          |
-#' +----------------------------+------------------+
-#' | LSODI                      | ADVAN9           |
-#' +----------------------------+------------------+
+#' The recognized solvers are CVODS, DGEAR, DVERK, IDA, LSODA and LSODI.
+#' To see the corresponding NONMEM ADVANs see :ref:`ADVANS`.
 #' 
 #' @param model (Model) Pharmpy model
 #' @param solver (str) Solver to use or NULL for no preference
@@ -7525,7 +7572,9 @@ transform_etas_boxcox <- function(model, list_of_etas=NULL) {
 #' transform_etas_john_draper
 #' 
 #' @description
-#' Applies a John Draper transformation (1) to selected etas
+#' Applies a John Draper transformation to selected etas
+#' 
+#' See (1) for more information.
 #' 
 #' Initial estimate for lambda is 0.1 with bounds (-3, 3).
 #' 
@@ -8788,12 +8837,12 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 #' @param model (Model) Pharmpy model
 #' @param results (ModelfitResults) Results for model
 #' @param algorithm (str) Which algorithm to run when determining number of IIVs.
-#' @param iiv_strategy (str) If/how IIV should be added to start model. Default is 'no_add'.
+#' @param search_space (str (optional)) Search space to explore
+#' @param as_fullblock (logical) Whether to add IIVs as a fullblock
 #' @param rank_type (str) Which ranking type should be used. Default is BIC.
 #' @param linearize (logical) Wheter or not use linearization when running the tool.
 #' @param cutoff (numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 #' is NULL (all models will be ranked)
-#' @param keep (array(str) (optional)) List of IIVs to keep. Default is "CL"
 #' @param strictness (str) Strictness criteria
 #' @param correlation_algorithm (str (optional)) Which algorithm to run for the determining block structure of added IIVs. If NULL, the
 #' algorithm is determined based on the 'algorithm' argument
@@ -8802,9 +8851,7 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 #' @param E_q (numeric or str (optional)) Expected number of predictors for off-diagonal elements (used for mBIC). Must be set when using mBIC
 #' and when the argument `correlation_algorithm` is not `skip` or NULL
 #' @param parameter_uncertainty_method (str (optional)) Parameter uncertainty method. Will be used in ranking models if strictness includes
-#' parameter uncertainty
-#' @param .search_space (str (optional)) EXPERIMENTAL FEATURE. Search space to test
-#' @param .as_fullblock (logical) EXPERIMENTAL FEATURE. Whether use a fullbloc
+#' parameter uncertaint
 #' @param ... Arguments to pass to tool
 #'  
 #' @return (IIVSearchResults) IIVsearch tool result object
@@ -8813,16 +8860,15 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 #' \dontrun{
 #' model <- load_example_model("pheno")
 #' results <- load_example_modelfit_results("pheno")
-#' run_iivsearch(model=model, results=results, algorithm='td_brute_force')
+#' run_iivsearch(model=model, results=results, algorithm='top_down_exhaustive')
 #' }
 #' 
 #' @export
-run_iivsearch <- function(model, results, algorithm='top_down_exhaustive', iiv_strategy='no_add', rank_type='bic', linearize=FALSE, cutoff=NULL, keep=c('CL'), strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', correlation_algorithm=NULL, E_p=NULL, E_q=NULL, parameter_uncertainty_method=NULL, .search_space=NULL, .as_fullblock=FALSE, ...) {
+run_iivsearch <- function(model, results, algorithm='top_down_exhaustive', search_space=NULL, as_fullblock=FALSE, rank_type='bic', linearize=FALSE, cutoff=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', correlation_algorithm=NULL, E_p=NULL, E_q=NULL, parameter_uncertainty_method=NULL, ...) {
 	reticulate::py_clear_last_error()
 	tryCatch(
 	{
-		keep <- convert_input(keep, "list")
-		func_out <- pharmpy$tools$run_iivsearch(model, results, algorithm=algorithm, iiv_strategy=iiv_strategy, rank_type=rank_type, linearize=linearize, cutoff=cutoff, keep=keep, strictness=strictness, correlation_algorithm=correlation_algorithm, E_p=E_p, E_q=E_q, parameter_uncertainty_method=parameter_uncertainty_method, `_search_space`=.search_space, `_as_fullblock`=.as_fullblock, ...)
+		func_out <- pharmpy$tools$run_iivsearch(model, results, algorithm=algorithm, search_space=search_space, as_fullblock=as_fullblock, rank_type=rank_type, linearize=linearize, cutoff=cutoff, strictness=strictness, correlation_algorithm=correlation_algorithm, E_p=E_p, E_q=E_q, parameter_uncertainty_method=parameter_uncertainty_method, ...)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}
@@ -8945,7 +8991,7 @@ run_iovsearch <- function(model, results, column='OCC', list_of_parameters=NULL,
 #' @description
 #' Linearize a model
 #' 
-#' @param model (Model (optional)) Pharmpy model.
+#' @param model (Model (optional)) Pharmpy model. Should use FOCEI or other EM-methods for estimation
 #' @param results (ModelfitResults (optional)) Results of estimation of model
 #' @param model_name (str) New name of linearized model. The default is "linbase".
 #' @param description (str) Description of linearized model. The default is ""

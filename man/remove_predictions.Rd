@@ -17,7 +17,7 @@ remove_predictions(model, to_remove = NULL)
 \description{
 Remove predictions and/or residuals
 
-Remove predictions from estimation step.
+Remove predictions from estimation step. Default is to remove all predictions.
 }
 \examples{
 \dontrun{

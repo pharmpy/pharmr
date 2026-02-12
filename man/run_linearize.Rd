@@ -13,7 +13,7 @@ run_linearize(
 )
 }
 \arguments{
-\item{model}{(Model (optional)) Pharmpy model.}
+\item{model}{(Model (optional)) Pharmpy model. Should use FOCEI or other EM-methods for estimation}
 
 \item{results}{(ModelfitResults (optional)) Results of estimation of model}
 

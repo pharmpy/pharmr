@@ -17,7 +17,7 @@ remove_residuals(model, to_remove = NULL)
 \description{
 Remove residuals
 
-Remove residuals from estimation step.
+Remove residuals from estimation step. Default is to remove all residuals.
 }
 \examples{
 \dontrun{

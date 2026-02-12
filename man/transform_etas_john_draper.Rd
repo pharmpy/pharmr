@@ -15,7 +15,9 @@ transform_etas_john_draper(model, list_of_etas = NULL)
 (Model) Updated Pharmpy model
 }
 \description{
-Applies a John Draper transformation (1) to selected etas
+Applies a John Draper transformation to selected etas
+
+See (1) for more information.
 
 Initial estimate for lambda is 0.1 with bounds (-3, 3).
 

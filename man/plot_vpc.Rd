@@ -17,7 +17,7 @@ plot_vpc(
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{simulations}{(data.frame or str) DataFrame containing the simulation data or path to dataset.
+\item{simulations}{(str or data.frame) DataFrame containing the simulation data or path to dataset.
 The dataset has to have one (index) column named "SIM" containing
 the simulation number, one (index) column named "index" containing the data indices and one dv column.
 See below for more information.}

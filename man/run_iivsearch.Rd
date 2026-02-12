@@ -8,18 +8,16 @@ run_iivsearch(
   model,
   results,
   algorithm = "top_down_exhaustive",
-  iiv_strategy = "no_add",
+  search_space = NULL,
+  as_fullblock = FALSE,
   rank_type = "bic",
   linearize = FALSE,
   cutoff = NULL,
-  keep = c("CL"),
   strictness = "minimization_successful or (rounding_errors and sigdigs>=0.1)",
   correlation_algorithm = NULL,
   E_p = NULL,
   E_q = NULL,
   parameter_uncertainty_method = NULL,
-  .search_space = NULL,
-  .as_fullblock = FALSE,
   ...
 )
 }
@@ -30,7 +28,9 @@ run_iivsearch(
 
 \item{algorithm}{(str) Which algorithm to run when determining number of IIVs.}
 
-\item{iiv_strategy}{(str) If/how IIV should be added to start model. Default is 'no_add'.}
+\item{search_space}{(str (optional)) Search space to explore}
+
+\item{as_fullblock}{(logical) Whether to add IIVs as a fullblock}
 
 \item{rank_type}{(str) Which ranking type should be used. Default is BIC.}
 
@@ -38,8 +38,6 @@ run_iivsearch(
 
 \item{cutoff}{(numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 is NULL (all models will be ranked)}
-
-\item{keep}{(array(str) (optional)) List of IIVs to keep. Default is "CL"}
 
 \item{strictness}{(str) Strictness criteria}
 
@@ -53,11 +51,7 @@ when the argument 'algorithm' is not 'skip'}
 and when the argument \code{correlation_algorithm} is not \code{skip} or NULL}
 
 \item{parameter_uncertainty_method}{(str (optional)) Parameter uncertainty method. Will be used in ranking models if strictness includes
-parameter uncertainty}
-
-\item{.search_space}{(str (optional)) EXPERIMENTAL FEATURE. Search space to test}
-
-\item{.as_fullblock}{(logical) EXPERIMENTAL FEATURE. Whether use a fullbloc}
+parameter uncertaint}
 
 \item{...}{Arguments to pass to tool}
 }
@@ -71,7 +65,7 @@ Run IIVsearch tool. For more details, see :ref:\code{iivsearch}.
 \dontrun{
 model <- load_example_model("pheno")
 results <- load_example_modelfit_results("pheno")
-run_iivsearch(model=model, results=results, algorithm='td_brute_force')
+run_iivsearch(model=model, results=results, algorithm='top_down_exhaustive')
 }
 
 }

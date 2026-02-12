@@ -26,12 +26,17 @@ warning:: This function is under development.
 
 (equation could not be rendered, see API doc on website)
 \itemize{
-\item exp
+\item exp_decrease
 }
 
 (equation could not be rendered, see API doc on website)
 \itemize{
-\item hyperbolic
+\item exp_increase
+}
+
+(equation could not be rendered, see API doc on website)
+\itemize{
+\item tmax
 }
 
 (equation could not be rendered, see API doc on website)
