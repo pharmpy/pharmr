@@ -501,6 +501,7 @@ add_iiv <- function(model, list_of_parameters, expression, operation='*', initia
 #' @param model (Model) Pharmpy model
 #' @param expr (str) Production (TRUE) (default) or degradation (FALSE)
 #' @param prod (logical) Name of PD effect function.
+#' @param variable (str (optional)) Name of variable to use (if NULL concentration will be used)
 #'  
 #' @return (Model) Updated Pharmpy model
 #' 
@@ -511,9 +512,9 @@ add_iiv <- function(model, list_of_parameters, expression, operation='*', initia
 #' }
 #' 
 #' @export
-add_indirect_effect <- function(model, expr, prod=TRUE) {
+add_indirect_effect <- function(model, expr, prod=TRUE, variable=NULL) {
 	reticulate::py_clear_last_error()
-	func_out <- pharmpy$modeling$add_indirect_effect(model, expr, prod=prod)
+	func_out <- pharmpy$modeling$add_indirect_effect(model, expr, prod=prod, variable=variable)
 	return(py_to_r(func_out))
 }
 
@@ -649,6 +650,43 @@ add_metabolite <- function(model, drug_dvid=1, presystemic=FALSE) {
 	reticulate::py_clear_last_error()
 	drug_dvid <- convert_input(drug_dvid, "int")
 	func_out <- pharmpy$modeling$add_metabolite(model, drug_dvid=drug_dvid, presystemic=presystemic)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' add_output_variables
+#' 
+#' @description
+#' Add output variables to an execution step
+#' 
+#' @param model (Model) Pharmpy model
+#' @param variables (array(str)) List of variables to add
+#' @param append (logical) Set to false to overwrite all variables
+#'  
+#' @return (Model) Updated Pharmpy model
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model$execution_steps[-1].variables
+#' model <- add_output_variables(model, c('CL'))
+#' model$execution_steps[-1].variables
+#' }
+#' @seealso
+#' add_predictions
+#' 
+#' add_residuals
+#' 
+#' remove_predictions
+#' 
+#' remove_residuals
+#' 
+#' 
+#' @export
+add_output_variables <- function(model, variables, append=TRUE) {
+	reticulate::py_clear_last_error()
+	variables <- convert_input(variables, "list")
+	func_out <- pharmpy$modeling$add_output_variables(model, variables, append=append)
 	return(py_to_r(func_out))
 }
 
@@ -811,52 +849,6 @@ add_peripheral_compartment <- function(model, name=NULL) {
 add_pk_iiv <- function(model, initial_estimate=0.09) {
 	reticulate::py_clear_last_error()
 	func_out <- pharmpy$modeling$add_pk_iiv(model, initial_estimate=initial_estimate)
-	return(py_to_r(func_out))
-}
-
-#' @title
-#' add_placebo_model
-#' 
-#' @description
-#' Add a placebo or disease progression effect to a model.
-#' 
-#' warning:: This function is under development.
-#' 
-#' * linear
-#' 
-#' (equation could not be rendered, see API doc on website)
-#' 
-#' * exp_decrease
-#' 
-#' (equation could not be rendered, see API doc on website)
-#' 
-#' * exp_increase
-#' 
-#' (equation could not be rendered, see API doc on website)
-#' 
-#' * tmax
-#' 
-#' (equation could not be rendered, see API doc on website)
-#' 
-#' (equation could not be rendered, see API doc on website)
-#' 
-#' @param model (Model) Pharmpy model
-#' @param expr (str) Name of placebo/disease progression effect function.
-#' @param operator (str) Operator to use for combining the baseline with the placebo/disease progression
-#'  
-#' @return (Model) Updated Pharmpy model
-#' 
-#' @examples
-#' \dontrun{
-#' model <- create_basic_pd_model()
-#' model <- add_placebo_model(model, "linear")
-#' model$statements$find_assignment("PDP")
-#' }
-#' 
-#' @export
-add_placebo_model <- function(model, expr, operator='*') {
-	reticulate::py_clear_last_error()
-	func_out <- pharmpy$modeling$add_placebo_model(model, expr, operator=operator)
 	return(py_to_r(func_out))
 }
 
@@ -2060,6 +2052,35 @@ cleanup_model <- function(model) {
 convert_model <- function(model, to_format) {
 	reticulate::py_clear_last_error()
 	func_out <- pharmpy$modeling$convert_model(model, to_format)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' convert_unit
+#' 
+#' @description
+#' Convert between units for a data variable
+#' 
+#' The conversion could either be handled in the model code or optionally in the dataset (if applicable).
+#' 
+#' @param model (Model) Pharmpy model
+#' @param variable (str) Which variable in the dataset or the model code to convert
+#' @param unit (str or Unit) The new unit
+#' @param original_unit (str or Unit (optional)) If no original unit is available in the datainfo this will be used
+#' @param in_dataset (logical) Set to TRUE if the conversion should be done in the dataset instead of in model code
+#'  
+#' @return (Model) Updated Pharmpy model
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- convert_unit(model, "WGT", "g")
+#' }
+#' 
+#' @export
+convert_unit <- function(model, variable, unit, original_unit=NULL, in_dataset=FALSE) {
+	reticulate::py_clear_last_error()
+	func_out <- pharmpy$modeling$convert_unit(model, variable, unit, original_unit=original_unit, in_dataset=in_dataset)
 	return(py_to_r(func_out))
 }
 
@@ -3623,7 +3644,7 @@ get_observation_expression <- function(model) {
 #' @param model (Model) Pharmpy model
 #' @param keep_index (logical) Set to TRUE if the original index should be kept.
 #' Otherwise a new index using ID and idv will be created.
-#' @param dv (Expr or str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)
+#' @param dv (Expr or str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (all DVIDs)
 #'  
 #' @return (data.frame) Observations indexed over ID and TIME
 #' 
@@ -3891,11 +3912,13 @@ get_thetas <- function(model) {
 #' Derive the physical unit of a variable in the model
 #' 
 #' Unit information for the dataset needs to be available.
-#' The variable can be defined in the code, a dataset olumn, a parameter
-#' or a random variable.
+#' The variable can be defined in the code, a dataset column, a parameter
+#' or a random variable. Optionally units could be derived for all variables
+#' in the model.
 #' 
 #' @param model (Model) Pharmpy model
-#' @param variable (str) Find physical unit of this variable
+#' @param variable (str or Expr (optional)) Find physical unit of this variable. For NULL get a list with units for
+#' all variables defined by the model.
 #'  
 #' @return (Unit) A unit expression
 #' 
@@ -3908,9 +3931,9 @@ get_thetas <- function(model) {
 #' }
 #' 
 #' @export
-get_unit_of <- function(model, variable) {
+get_unit_of <- function(model, variable=NULL) {
 	reticulate::py_clear_last_error()
-	func_out <- pharmpy$modeling$get_unit_of(model, variable)
+	func_out <- pharmpy$modeling$get_unit_of(model, variable=variable)
 	return(py_to_r(func_out))
 }
 
@@ -6864,6 +6887,52 @@ set_peripheral_compartments <- function(model, n, name=NULL) {
 }
 
 #' @title
+#' set_placebo_model
+#' 
+#' @description
+#' Add a placebo or disease progression effect to a model.
+#' 
+#' warning:: This function is under development.
+#' 
+#' * linear
+#' 
+#' (equation could not be rendered, see API doc on website)
+#' 
+#' * exp_decrease
+#' 
+#' (equation could not be rendered, see API doc on website)
+#' 
+#' * exp_increase
+#' 
+#' (equation could not be rendered, see API doc on website)
+#' 
+#' * tmax
+#' 
+#' (equation could not be rendered, see API doc on website)
+#' 
+#' (equation could not be rendered, see API doc on website)
+#' 
+#' @param model (Model) Pharmpy model
+#' @param expr (str) Name of placebo/disease progression effect function.
+#' @param operator (str) Operator to use for combining the baseline with the placebo/disease progression
+#'  
+#' @return (Model) Updated Pharmpy model
+#' 
+#' @examples
+#' \dontrun{
+#' model <- create_basic_pd_model()
+#' model <- set_placebo_model(model, "linear")
+#' model$statements$find_assignment("PDP")
+#' }
+#' 
+#' @export
+set_placebo_model <- function(model, expr, operator='*') {
+	reticulate::py_clear_last_error()
+	func_out <- pharmpy$modeling$set_placebo_model(model, expr, operator=operator)
+	return(py_to_r(func_out))
+}
+
+#' @title
 #' set_power_on_ruv
 #' 
 #' @description
@@ -6903,6 +6972,41 @@ set_power_on_ruv <- function(model, list_of_eps=NULL, dv=NULL, lower_limit=0.01,
 	reticulate::py_clear_last_error()
 	dv <- convert_input(dv, "int")
 	func_out <- pharmpy$modeling$set_power_on_ruv(model, list_of_eps=list_of_eps, dv=dv, lower_limit=lower_limit, ipred=ipred, zero_protection=zero_protection)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' set_property
+#' 
+#' @description
+#' Specify a property of a column
+#' 
+#' See :py:attr:`pharmpy.DataInfo.properties` for documentation on data properties.
+#' 
+#' @param model_or_datainfo (Model or DataInfo) Model object or DataInfo object
+#' @param column (str) Name of a column. If the column contains multiple variables, e.g. DV
+#' with multiple DVs, the ID can be specified with a colon. For example "DV:1"
+#' will mean the DV column only when DVID is 1.
+#' @param property (str) Name of the property to set
+#' @param value (any) Value of the property to set
+#'  
+#' @return (Model | DataInfo) An updated Model or DataInfo object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- set_property(model, "APGR", "categories", c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+#' }
+#' @seealso
+#' 
+#' 
+#' set_unit - Set unit of a data variable
+#' 
+#' 
+#' @export
+set_property <- function(model_or_datainfo, column, property, value) {
+	reticulate::py_clear_last_error()
+	func_out <- pharmpy$modeling$set_property(model_or_datainfo, column, property, value)
 	return(py_to_r(func_out))
 }
 
@@ -7149,6 +7253,40 @@ set_transit_compartments <- function(model, n, keep_depot=TRUE) {
 	reticulate::py_clear_last_error()
 	n <- convert_input(n, "int")
 	func_out <- pharmpy$modeling$set_transit_compartments(model, n, keep_depot=keep_depot)
+	return(py_to_r(func_out))
+}
+
+#' @title
+#' set_unit
+#' 
+#' @description
+#' Specify the unit of a column
+#' 
+#' Note that no conversion of units will happen if the unit was already set.
+#' 
+#' @param model_or_datainfo (Model or DataInfo) Model object or DataInfo object
+#' @param column (str) Name of a column. If the column contains multiple variables, e.g. DV
+#' with multiple DVs, the ID can be specified with a colon. For example "DV:1"
+#' will mean the DV column only when DVID is 1.
+#' @param unit (str) The unit
+#'  
+#' @return (Model | DataInfo) An updated Model or DataInfo object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- set_unit(model, "WGT", "kg")
+#' }
+#' @seealso
+#' 
+#' 
+#' convert_unit - Convert between units for a variable
+#' 
+#' 
+#' @export
+set_unit <- function(model_or_datainfo, column, unit) {
+	reticulate::py_clear_last_error()
+	func_out <- pharmpy$modeling$set_unit(model_or_datainfo, column, unit)
 	return(py_to_r(func_out))
 }
 
@@ -9273,6 +9411,8 @@ run_modelsearch <- function(model, results, search_space, algorithm='reduced_ste
 #' @param type (str) Type of PD model to build ('pd' or 'kpd')
 #' @param treatment_variable (str (optional)) Name of the variable representing the treatment, e.g. TRT, DOSE or AUC. Do not use if `type` is 'kpd'
 #' @param kpd_driver (str) Driver for KPD model (virtual infusion rate 'ir' or 'amount')
+#' @param algorithm (str) Which search algorithm to use. Either 'stepwise' or 'exhaustive_stepwise'
+#' @param data_strategy (str) Strategy for using the dataset: 'full', 'partial' or 'fix'
 #' @param results (ModelfitResults (optional)) Results to input model
 #' @param strictness (str) Strictness criteria
 #' @param parameter_uncertainty_method (str (optional)) Parameter uncertainty method. Will be used in ranking models if strictness includes
@@ -9283,11 +9423,11 @@ run_modelsearch <- function(model, results, search_space, algorithm='reduced_ste
 #' 
 #' 
 #' @export
-run_pdsearch <- function(input, type, treatment_variable=NULL, kpd_driver='ir', results=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', parameter_uncertainty_method=NULL, ...) {
+run_pdsearch <- function(input, type, treatment_variable=NULL, kpd_driver='ir', algorithm='stepwise', data_strategy='full', results=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', parameter_uncertainty_method=NULL, ...) {
 	reticulate::py_clear_last_error()
 	tryCatch(
 	{
-		func_out <- pharmpy$tools$run_pdsearch(input, type, treatment_variable=treatment_variable, kpd_driver=kpd_driver, results=results, strictness=strictness, parameter_uncertainty_method=parameter_uncertainty_method, ...)
+		func_out <- pharmpy$tools$run_pdsearch(input, type, treatment_variable=treatment_variable, kpd_driver=kpd_driver, algorithm=algorithm, data_strategy=data_strategy, results=results, strictness=strictness, parameter_uncertainty_method=parameter_uncertainty_method, ...)
 		if ('pharmpy.workflows.results.Results' %in% class(func_out)) {
 			func_out <- reset_indices_results(func_out)
 		}

@@ -9,6 +9,8 @@ run_pdsearch(
   type,
   treatment_variable = NULL,
   kpd_driver = "ir",
+  algorithm = "stepwise",
+  data_strategy = "full",
   results = NULL,
   strictness = "minimization_successful or (rounding_errors and sigdigs>=0.1)",
   parameter_uncertainty_method = NULL,
@@ -23,6 +25,10 @@ run_pdsearch(
 \item{treatment_variable}{(str (optional)) Name of the variable representing the treatment, e.g. TRT, DOSE or AUC. Do not use if \code{type} is 'kpd'}
 
 \item{kpd_driver}{(str) Driver for KPD model (virtual infusion rate 'ir' or 'amount')}
+
+\item{algorithm}{(str) Which search algorithm to use. Either 'stepwise' or 'exhaustive_stepwise'}
+
+\item{data_strategy}{(str) Strategy for using the dataset: 'full', 'partial' or 'fix'}
 
 \item{results}{(ModelfitResults (optional)) Results to input model}
 

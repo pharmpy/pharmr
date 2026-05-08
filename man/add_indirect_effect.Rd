@@ -4,7 +4,7 @@
 \alias{add_indirect_effect}
 \title{add_indirect_effect}
 \usage{
-add_indirect_effect(model, expr, prod = TRUE)
+add_indirect_effect(model, expr, prod = TRUE, variable = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
@@ -12,6 +12,8 @@ add_indirect_effect(model, expr, prod = TRUE)
 \item{expr}{(str) Production (TRUE) (default) or degradation (FALSE)}
 
 \item{prod}{(logical) Name of PD effect function.}
+
+\item{variable}{(str (optional)) Name of variable to use (if NULL concentration will be used)}
 }
 \value{
 (Model) Updated Pharmpy model

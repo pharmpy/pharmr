@@ -4,12 +4,13 @@
 \alias{get_unit_of}
 \title{get_unit_of}
 \usage{
-get_unit_of(model, variable)
+get_unit_of(model, variable = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{variable}{(str) Find physical unit of this variable}
+\item{variable}{(str or Expr (optional)) Find physical unit of this variable. For NULL get a list with units for
+all variables defined by the model.}
 }
 \value{
 (Unit) A unit expression
@@ -18,8 +19,9 @@ get_unit_of(model, variable)
 Derive the physical unit of a variable in the model
 
 Unit information for the dataset needs to be available.
-The variable can be defined in the code, a dataset olumn, a parameter
-or a random variable.
+The variable can be defined in the code, a dataset column, a parameter
+or a random variable. Optionally units could be derived for all variables
+in the model.
 }
 \examples{
 \dontrun{
