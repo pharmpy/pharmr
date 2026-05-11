@@ -80,3 +80,17 @@ knit_print.altair.vegalite.v5.api.TopLevelMixin <- function(x, ..., options = NU
     widget <- vegawidget::as_vegaspec(json, ...)
     knitr::knit_print(widget, ..., options=options)
 }
+
+#' @exportS3Method print altair.vegalite.v6.api.TopLevelMixin
+print.altair.vegalite.v6.api.TopLevelMixin <- function(x, ...) {
+    json <- x$to_json()
+    widget <- vegawidget::as_vegaspec(json, ...)
+    print(widget, ...)
+}
+
+#' @exportS3Method knitr::knit_print altair.vegalite.v6.api.TopLevelMixin
+knit_print.altair.vegalite.v6.api.TopLevelMixin <- function(x, ..., options = NULL) {
+    json <- x$to_json()
+    widget <- vegawidget::as_vegaspec(json, ...)
+    knitr::knit_print(widget, ..., options=options)
+}
