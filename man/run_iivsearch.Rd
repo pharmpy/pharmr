@@ -8,7 +8,7 @@ run_iivsearch(
   model,
   results,
   algorithm = "top_down_exhaustive",
-  search_space = NULL,
+  search_space = "IIV?(@IIV,EXP);COVARIANCE?(IIV,@IIV)",
   as_fullblock = FALSE,
   rank_type = "bic",
   linearize = FALSE,
@@ -28,7 +28,7 @@ run_iivsearch(
 
 \item{algorithm}{(str) Which algorithm to run when determining number of IIVs.}
 
-\item{search_space}{(str (optional)) Search space to explore}
+\item{search_space}{(str) Search space to explore}
 
 \item{as_fullblock}{(logical) Whether to add IIVs as a fullblock}
 

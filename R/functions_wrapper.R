@@ -8975,7 +8975,7 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 #' @param model (Model) Pharmpy model
 #' @param results (ModelfitResults) Results for model
 #' @param algorithm (str) Which algorithm to run when determining number of IIVs.
-#' @param search_space (str (optional)) Search space to explore
+#' @param search_space (str) Search space to explore
 #' @param as_fullblock (logical) Whether to add IIVs as a fullblock
 #' @param rank_type (str) Which ranking type should be used. Default is BIC.
 #' @param linearize (logical) Wheter or not use linearization when running the tool.
@@ -9002,7 +9002,7 @@ run_estmethod <- function(algorithm, methods=NULL, solvers=NULL, parameter_uncer
 #' }
 #' 
 #' @export
-run_iivsearch <- function(model, results, algorithm='top_down_exhaustive', search_space=NULL, as_fullblock=FALSE, rank_type='bic', linearize=FALSE, cutoff=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', correlation_algorithm=NULL, E_p=NULL, E_q=NULL, parameter_uncertainty_method=NULL, ...) {
+run_iivsearch <- function(model, results, algorithm='top_down_exhaustive', search_space='IIV?(@IIV,EXP);COVARIANCE?(IIV,@IIV)', as_fullblock=FALSE, rank_type='bic', linearize=FALSE, cutoff=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', correlation_algorithm=NULL, E_p=NULL, E_q=NULL, parameter_uncertainty_method=NULL, ...) {
 	reticulate::py_clear_last_error()
 	tryCatch(
 	{
