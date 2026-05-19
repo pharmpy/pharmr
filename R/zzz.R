@@ -11,7 +11,6 @@ on_error_pharmpy <- function(e) {
 
 pharmpy <- NULL
 
-#' @import vegawidget
 #' @importFrom reticulate py_to_r
 .onLoad <- function(libname, pkgname) {
     # This is to both support older reticulate versions and pandas 3
