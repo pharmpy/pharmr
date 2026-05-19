@@ -19,10 +19,10 @@ Authors@R: c(
 Maintainer: Rikard Nordgren <rikard.nordgren@uu.se>
 Depends:
     R (>= 3.6.0),
-    htmltools (>= 0.5.8.1)
 SystemRequirements:
     Python (>= 3.11.0)
 Imports:
+    htmltools (>= 0.5.8.1)
     reticulate (>= 1.38),
     cli,
     utils
