@@ -85,4 +85,4 @@ knit_print.altair.vegalite.v5.api.TopLevelMixin <- function(x, ..., options = NU
 }
 
 #' @exportS3Method knitr::knit_print altair.vegalite.v6.api.TopLevelMixin
-knit_print.altair.vegalite.v5.api.TopLevelMixin <- knit_print.altair.vegalite.v6.api.TopLevelMixin
+knit_print.altair.vegalite.v6.api.TopLevelMixin <- knit_print.altair.vegalite.v5.api.TopLevelMixin
