@@ -69,28 +69,20 @@ repr_latex.pharmpy.model.random_variables.RandomVariables <- function(obj, ...) 
 
 #' @exportS3Method print altair.vegalite.v5.api.TopLevelMixin
 print.altair.vegalite.v5.api.TopLevelMixin <- function(x, ...) {
-    json <- x$to_json()
-    widget <- vegawidget::as_vegaspec(json, ...)
-    print(widget, ...)
-}
-
-#' @exportS3Method knitr::knit_print altair.vegalite.v5.api.TopLevelMixin
-knit_print.altair.vegalite.v5.api.TopLevelMixin <- function(x, ..., options = NULL) {
-    json <- x$to_json()
-    widget <- vegawidget::as_vegaspec(json, ...)
-    knitr::knit_print(widget, ..., options=options)
+    html_string <- x$to_html()
+    html_object <- htmltools::HTML(html_string)
+    htmltools::html_print(html_object)
 }
 
 #' @exportS3Method print altair.vegalite.v6.api.TopLevelMixin
-print.altair.vegalite.v6.api.TopLevelMixin <- function(x, ...) {
-    json <- x$to_json()
-    widget <- vegawidget::as_vegaspec(json, ...)
-    print(widget, ...)
+print.altair.vegalite.v6.api.TopLevelMixin <- print.altair.vegalite.v5.api.TopLevelMixin
+
+#' @exportS3Method knitr::knit_print altair.vegalite.v5.api.TopLevelMixin
+knit_print.altair.vegalite.v5.api.TopLevelMixin <- function(x, ..., options = NULL) {
+    html_string <- x$to_html()
+    html_object <- htmltools::HTML(html_string)
+    knitr::knit_print(html_object, ..., options=options)
 }
 
 #' @exportS3Method knitr::knit_print altair.vegalite.v6.api.TopLevelMixin
-knit_print.altair.vegalite.v6.api.TopLevelMixin <- function(x, ..., options = NULL) {
-    json <- x$to_json()
-    widget <- vegawidget::as_vegaspec(json, ...)
-    knitr::knit_print(widget, ..., options=options)
-}
+knit_print.altair.vegalite.v5.api.TopLevelMixin <- knit_print.altair.vegalite.v6.api.TopLevelMixin
