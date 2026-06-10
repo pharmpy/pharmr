@@ -13,16 +13,6 @@ pharmpy <- NULL
 
 #' @importFrom reticulate py_to_r
 .onLoad <- function(libname, pkgname) {
-    # This is to both support older reticulate versions and pandas 3
-    reticulate_version <- utils::packageVersion("reticulate")
-    if (reticulate_version <= "1.44.1") {
-        ns <- asNamespace("reticulate")
-        df_fn <- get("py_to_r.pandas.core.frame.DataFrame", envir=ns, inherits=FALSE)
-        ser_fn <- get("py_to_r.pandas.core.series.Series", envir=ns, inherits=FALSE)
-        registerS3method("py_to_r", "pandas.DataFrame", df_fn, envir=ns)
-        registerS3method("py_to_r", "pandas.Series", ser_fn, envir=ns)
-    }
-
     # Lazy loading cannot currently be avoided even for the case when pharmpy
     # is already installed.
     # This is because R attempts to load the package at installation time
