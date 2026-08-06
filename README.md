@@ -70,7 +70,7 @@ you need NONMEM installed to be able to fit the model, see the [following guide]
 on how to set up the config file.
 
 ```R
-model <- load_example_model('pheno') %>%
+model <- load_example_model('pheno') |>
   add_peripheral_compartment()
  
 res <- fit(model)
