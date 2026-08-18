@@ -41,6 +41,12 @@ to_list <- function(x) {
     }
 }
 
+
+is_consecutive <- function(x) {
+    all(diff(x) == 1)
+}
+
+
 convert_input <- function(arg, to_py_type) {
     if (is.null(arg)) {
         return(arg)
@@ -74,7 +80,13 @@ convert_input <- function(arg, to_py_type) {
                 new_index <- old_index$`__class__`(reticulate::py_to_r(old_index$start) + 1, reticulate::py_to_r(old_index$stop) + 1, reticulate::py_to_r(old_index$step))
                 df <- df$set_axis(new_index)
             } else {
-                df <- df$set_axis(df$index$astype("int"))
+                rows <- attr(arg, "row.names")
+                if (is.integer(rows) && is_consecutive(rows)) {
+                    first <- rows[1]
+                    last <- tail(rows, n=1)
+                    new_index <- df$index$`__class__`(first, last + 1L, 1L)
+                    df <- df$set_axis(new_index)
+                }
             }
             return(df)
         } else {
