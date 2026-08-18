@@ -47,6 +47,18 @@ is_consecutive <- function(x) {
 }
 
 
+create_integer_index <- function(rows) {
+    pd <- reticulate::import("pandas", convert=FALSE)
+    if (is_consecutive(rows)) {
+        first <- rows[1]
+        last <- tail(rows, n=1)
+        pd$RangeIndex(first, last + 1L, 1L)
+    } else {
+        rows
+    }
+}
+
+
 convert_input <- function(arg, to_py_type) {
     if (is.null(arg)) {
         return(arg)
@@ -68,8 +80,8 @@ convert_input <- function(arg, to_py_type) {
         return(arg)
     }
     else if (to_py_type == 'pd.DataFrame') {
-        row_names <- row.names(arg)
-        if (length(row_names) > 0 && !any(is.na(as.integer(row_names)))) {
+        rows <- attr(arg, "row.names")
+        if (length(rows) > 0) {
             df <- reticulate::r_to_py(arg)
             old_index <- attr(arg, "pandas.index")
             is_old <- "pandas.RangeIndex" %in% class(old_index)
@@ -77,17 +89,20 @@ convert_input <- function(arg, to_py_type) {
             if (is_old && is_df
                     && reticulate::py_to_r(old_index$start) == reticulate::py_to_r(df$index$start)
                     && reticulate::py_to_r(old_index$stop) ==  reticulate::py_to_r(df$index$stop)) {
-                new_index <- old_index$`__class__`(reticulate::py_to_r(old_index$start) + 1, reticulate::py_to_r(old_index$stop) + 1, reticulate::py_to_r(old_index$step))
-                df <- df$set_axis(new_index)
+                index <- old_index$`__class__`(reticulate::py_to_r(old_index$start) + 1, reticulate::py_to_r(old_index$stop) + 1, reticulate::py_to_r(old_index$step))
             } else {
-                rows <- attr(arg, "row.names")
-                if (is.integer(rows) && is_consecutive(rows)) {
-                    first <- rows[1]
-                    last <- tail(rows, n=1)
-                    new_index <- df$index$`__class__`(first, last + 1L, 1L)
-                    df <- df$set_axis(new_index)
+                if (is.integer(rows)) {
+                    index <- create_integer_index(rows)
+                } else {
+                    int_rows <- suppressWarnings(as.integer(rows))
+                    if (!anyNA(int_rows)) {
+                        index <- create_integer_index(int_rows)
+                    } else {
+                        index <- rows
+                    }
                 }
             }
+            df <- df$set_axis(index)
             return(df)
         } else {
             return(arg)
