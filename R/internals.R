@@ -1,56 +1,21 @@
-#' @title
-#' Reset result indices
-#' 
-#' @description
-#' Resets indices in dataframes within Results-objects when needed 
-#' 
-#' @param res A Pharmpy results object
-reset_indices_results <- function(res) {
-  attrs_new <- list()
-  args_new <- c()
-  for (py_attr_name in reticulate::py_list_attributes(res)) {
-    # Skip e.g. __class__
-    if (startsWith(py_attr_name, '_')) {
-      next
+convert_output <- function(obj) {
+    if (inherits(obj, "pandas.DataFrame")
+            || inherits(obj, "pandas.core.frame.DataFrame")
+            || inherits(obj, "pandas.Series")
+            || inherits(obj, "pandas.core.series.Series")) {
+        index <- obj$index
+        # FIXME: some version of reticulate started to shift the index 
+        if (inherits(index, "pandas.RangeIndex")) {
+            new_index <- index$`__class__`(index$start - 1, index$stop - 1, index$step)
+            obj <- obj$set_axis(new_index)
+        } else {
+            nlevels <- as.integer(as.character(obj$index$nlevels)) # nlevels is of environment type
+            if (nlevels > 1) {
+                obj <- obj$reset_index()
+            }
+        }
     }
-    py_attr <- reticulate::py_get_attr(res, py_attr_name)
-    py_attr_class <- class(py_attr)
-    
-    # Skip object methods
-    if ('python.builtin.method' %in% py_attr_class) {
-      next
-    }
-    if ('pandas.core.frame.DataFrame' %in% py_attr_class) {
-      # Reset index if dataframe has multiindex
-      py_attr <- reset_index_df(py_attr)
-    }
-    
-    attrs_new[[py_attr_name]] <- py_attr
-    # The following two lines creates a string that looks something like:
-    #  summary_tool=attrs_new$summary_tool
-    list_accessor <- paste('attrs_new', py_attr_name, sep='$')
-    args_new <- c(args_new, paste(py_attr_name, list_accessor, sep='='))
-  }
-  
-  # Combine all arguments into a comma separated string
-  input_args <- paste(args_new, collapse=', ')
-  # Get class name and transform to R, e.g. 
-  #  pharmpy.tools$modelsearch$tool$ModelSearchResults
-  res_class <- class(res)[1]
-  res_class_r <- gsub('\\.', '$', res_class)
-  # Create full constructor call, e.g.
-  #  pharmpy.tools$modelsearch$tool$ModelSearchResults(summary_tool=attrs_new$summary_tool, ...)
-  constructor_str <- paste(res_class_r, '(', input_args, ')', sep = '')
-  res_new <- eval(parse(text=constructor_str))
-  return(res_new)
-}
-
-reset_index_df <- function(df) {
-      nlevels <- as.integer(as.character(df$index$nlevels)) # nlevels is of environment type
-      if (nlevels > 1) {
-        df <- df$reset_index()
-      }
-      return(df)
+    return(obj)
 }
 
 
@@ -100,7 +65,17 @@ convert_input <- function(arg, to_py_type) {
         row_names <- row.names(arg)
         if (length(row_names) > 0 && !any(is.na(as.integer(row_names)))) {
             df <- reticulate::r_to_py(arg)
-            df$index <- df$index$astype("int")
+            old_index <- attr(arg, "pandas.index")
+            is_old <- "pandas.RangeIndex" %in% class(old_index)
+            is_df <- "pandas.RangeIndex" %in% class(df$index)
+            if (is_old && is_df
+                    && reticulate::py_to_r(old_index$start) == reticulate::py_to_r(df$index$start)
+                    && reticulate::py_to_r(old_index$stop) ==  reticulate::py_to_r(df$index$stop)) {
+                new_index <- old_index$`__class__`(reticulate::py_to_r(old_index$start) + 1, reticulate::py_to_r(old_index$stop) + 1, reticulate::py_to_r(old_index$step))
+                df <- df$set_axis(new_index)
+            } else {
+                df <- df$set_axis(df$index$astype("int"))
+            }
             return(df)
         } else {
             return(arg)
