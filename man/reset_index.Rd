@@ -7,10 +7,10 @@
 reset_index(df)
 }
 \arguments{
-\item{df}{A data.frame converted from python using reticulate}
+\item{df}{A data.frame coming from Pharmpy}
 }
 \description{
 Reset index of dataframe.
 
-Reset index from a multi indexed data.frame so that index is added as columns
+Reset index from a multi indexed data.frame or a non-standard index
 }
