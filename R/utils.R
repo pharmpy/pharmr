@@ -4,14 +4,28 @@
 #' @description
 #' Reset index of dataframe. 
 #' 
-#' Reset index from a multi indexed data.frame so that index is added as columns
-#' @param df A data.frame converted from python using reticulate
+#' Reset index from a multi indexed data.frame or a non-standard index
+#' @param df A data.frame coming from Pharmpy
 #' @export
 reset_index <- function(df) {
-    ind <- attributes(df)$pandas.index
-    inddf <- suppressWarnings(ind$to_frame(index=FALSE))
-    inddf <- reticulate::py_to_r(inddf)
-    cbind(inddf, df)
+    attr(df, "pandas.multiindex") <- NULL
+    attr(df, "row.names") <- NULL
+    df
+}
+
+#' @title
+#' Set index
+#' 
+#' @description
+#' Set a multiindex for a dataframe. 
+#' 
+#' The index columns will be used when using the data.frame in a pharmpy call
+#' @param df A data.frame
+#' @param colnames An array of column names
+#' @export
+set_index <- function(df, colnames) {
+    attr(df, "pandas.multiindex") <- colnames
+    df
 }
 
 
