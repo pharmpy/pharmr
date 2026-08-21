@@ -25,7 +25,7 @@ check_setup_python <- function() {
   }
   print_status('success', 'Python found:', additional_info=py$python)
   py_version <- as.character(py$version)
-  if (utils::compareVersion(py_version, '3.11') == -1) {
+  if (utils::compareVersion(py_version, '3.12') == -1) {
     print_status('fail', 'Version not supported:', additional_info=py_version)
     return(FALSE)
   }

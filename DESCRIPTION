@@ -20,7 +20,7 @@ Maintainer: Rikard Nordgren <rikard.nordgren@uu.se>
 Depends:
     R (>= 3.6.0),
 SystemRequirements:
-    Python (>= 3.11.0)
+    Python (>= 3.12.0)
 Imports:
     htmltools (>= 0.5.8.1),
     reticulate (>= 1.46.0),
