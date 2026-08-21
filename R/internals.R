@@ -100,9 +100,9 @@ convert_input <- function(arg, to_py_type) {
             rows <- attr(arg, "row.names")
             if (length(rows) > 0) {
                 df <- reticulate::r_to_py(arg)
-                df <- backconvert_multiindex(arg, df, to_py_type)
-                if (!is.null(df)) {
-                    return(df)
+                df2 <- backconvert_multiindex(arg, df, to_py_type)
+                if (!is.null(df2)) {
+                    return(df2)
                 }
                 old_index <- attr(arg, "pandas.index")
                 is_old <- "pandas.RangeIndex" %in% class(old_index)
