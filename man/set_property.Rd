@@ -32,5 +32,5 @@ model <- set_property(model, "APGR", "categories", c(0, 1, 2, 3, 4, 5, 6, 7, 8, 
 }
 }
 \seealso{
-set_unit - Set unit of a data variable
+annotate_unit - Annotate the unit of a data variable
 }

@@ -15,7 +15,7 @@ create_symbol(model, stem, force_numbering = FALSE)
 COVEFF → COVEFF1}
 }
 \value{
-(Symbol) Created symbol with unique name
+(Expr) Created symbol with unique name
 }
 \description{
 Create a new unique variable symbol given a model

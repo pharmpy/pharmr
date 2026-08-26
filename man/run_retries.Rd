@@ -5,8 +5,8 @@
 \title{run_retries}
 \usage{
 run_retries(
-  model = NULL,
-  results = NULL,
+  model,
+  results,
   number_of_candidates = 5,
   fraction = 0.1,
   use_initial_estimates = FALSE,
@@ -18,9 +18,9 @@ run_retries(
 )
 }
 \arguments{
-\item{model}{(Model (optional)) Model object to run retries on. The default is NULL.}
+\item{model}{(Model) Model object to run retries on. The default is NULL.}
 
-\item{results}{(ModelfitResults (optional)) Connected ModelfitResults object. The default is NULL.}
+\item{results}{(ModelfitResults) Connected ModelfitResults object. The default is NULL.}
 
 \item{number_of_candidates}{(numeric) Number of retry candidates to run. The default is 5.}
 

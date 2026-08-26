@@ -24,6 +24,10 @@ convert_unit(model, variable, unit, original_unit = NULL, in_dataset = FALSE)
 Convert between units for a data variable
 
 The conversion could either be handled in the model code or optionally in the dataset (if applicable).
+Note that when doing the conversion in the model the unit of the data variable itself will not
+change. The change will affect the unit of relevant parameters in the model.
+
+Note that only ratio units are supported (i.e. not interval scale units like °C).
 }
 \examples{
 \dontrun{

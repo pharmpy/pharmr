@@ -10,7 +10,7 @@ calculate_epsilon_gradient_expression(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Expression) Symbolic expression
+(vectorc(Expr)) List of symbolic expressions
 }
 \description{
 Calculate the symbolic expression for the epsilon gradient

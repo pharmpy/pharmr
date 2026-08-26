@@ -4,12 +4,12 @@
 \alias{run_qa}
 \title{run_qa}
 \usage{
-run_qa(model = NULL, results = NULL, linearize = FALSE, skip = NULL, ...)
+run_qa(model, results, linearize = FALSE, skip = NULL, ...)
 }
 \arguments{
-\item{model}{(Model (optional)) Pharmpy model}
+\item{model}{(Model) Pharmpy model}
 
-\item{results}{(ModelfitResults (optional)) Results of model}
+\item{results}{(ModelfitResults) Results of model}
 
 \item{linearize}{(logical) Whether or not to use linearization when running the tool}
 

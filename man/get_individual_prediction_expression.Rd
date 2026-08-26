@@ -10,7 +10,7 @@ get_individual_prediction_expression(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Expression) Symbolic expression
+(Expr) Symbolic expression
 }
 \description{
 Get the full symbolic expression for the modelled individual prediction

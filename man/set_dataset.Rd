@@ -4,14 +4,16 @@
 \alias{set_dataset}
 \title{set_dataset}
 \usage{
-set_dataset(model, path_or_df, datatype = NULL)
+set_dataset(model, path_or_df, format = NULL, datatype = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
 \item{path_or_df}{(str or data.frame) Dataset path or dataframe}
 
-\item{datatype}{(str (optional)) Type of dataset (optional)}
+\item{format}{(str (optional)) File format of dataset (default csv. Can also be set to 'nonmem')}
+
+\item{datatype}{(any) Deprecated. Use format instead}
 }
 \value{
 (Model) Updated Pharmpy model
@@ -25,7 +27,7 @@ model <- load_example_model("pheno")
 model <- unload_dataset(model)
 dataset_path <- model$datainfo$path
 model$dataset is NULL
-model <- set_dataset(model, dataset_path, datatype='nonmem')
+model <- set_dataset(model, dataset_path, format='nonmem')
 model$dataset
 }
 

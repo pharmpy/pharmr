@@ -4,18 +4,12 @@
 \alias{run_linearize}
 \title{run_linearize}
 \usage{
-run_linearize(
-  model = NULL,
-  results = NULL,
-  model_name = "linbase",
-  description = "",
-  ...
-)
+run_linearize(model, results, model_name = "linbase", description = "", ...)
 }
 \arguments{
-\item{model}{(Model (optional)) Pharmpy model. Should use FOCEI or other EM-methods for estimation}
+\item{model}{(Model) Pharmpy model. Should use FOCEI or other EM-methods for estimation}
 
-\item{results}{(ModelfitResults (optional)) Results of estimation of model}
+\item{results}{(ModelfitResults) Results of estimation of model}
 
 \item{model_name}{(str) New name of linearized model. The default is "linbase".}
 

@@ -10,7 +10,7 @@ get_observation_expression(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Expression) Symbolic expression
+(Expr) Symbolic expression
 }
 \description{
 Get the full symbolic expression for the observation according to the model

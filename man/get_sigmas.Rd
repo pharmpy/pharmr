@@ -10,7 +10,7 @@ get_sigmas(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Parameters) A copy of all sigma parameters
+(Parameters) All sigma parameters
 }
 \description{
 Get all sigmas (residual error variability parameters) of a model

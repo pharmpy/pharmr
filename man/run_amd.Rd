@@ -27,15 +27,17 @@ run_amd(
   mechanistic_covariates = NULL,
   retries_strategy = "all_final",
   parameter_uncertainty_method = NULL,
+  units = {
+ },
   ignore_datainfo_fallback = FALSE,
   .E = NULL,
   ...
 )
 }
 \arguments{
-\item{input}{(Model or str) Starting model or dataset}
+\item{input}{(Model or str or DataInfo) Starting model or dataset}
 
-\item{results}{(ModelfitResults (optional)) Reults of input if input is a model}
+\item{results}{(ModelfitResults (optional)) Results of input if input is a model}
 
 \item{modeltype}{(str) Type of model to build. Valid strings are 'basic_pk', 'pkpd', 'drug_metabolite' and 'tmdd'}
 
@@ -80,6 +82,8 @@ The effects are extracted from the search space for covsearch.}
 Default is 'final'.}
 
 \item{parameter_uncertainty_method}{(str (optional)) Parameter uncertainty method.}
+
+\item{units}{(list(str=str)) Specify units to use for DV or AMT. For example list('DV'= 'mg/L')}
 
 \item{ignore_datainfo_fallback}{(logical) Ignore using datainfo to get information not given by the user. Default is FALSE}
 

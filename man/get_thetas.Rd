@@ -10,7 +10,7 @@ get_thetas(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Parameters) A copy of all theta parameters
+(Parameters) All theta parameters
 }
 \description{
 Get all thetas (structural parameters) of a model

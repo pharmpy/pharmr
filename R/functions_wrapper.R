@@ -27,6 +27,39 @@ add_admid <- function(model) {
 }
 
 #' @title
+#' add_administration
+#' 
+#' @description
+#' Add observations to an arm in a trial design
+#' 
+#' @param td (TrialDesign) TrialDesign to add to
+#' @param arm (str) Name of the arm
+#' @param variable (str) Name of the dose variable (e.g. AMT)
+#' @param amount (numeric) The dose amount
+#' @param time_points (array(numeric)) List of the time points for the administration
+#' @param start_time (numeric) Set a start_time to offset the time_points. Default 0.0
+#'  
+#' @return (TrialDesign) An updated TrialDesign
+#' 
+#' @examples
+#' \dontrun{
+#' td <- create_trial_design()
+#' td <- add_arm(td, name="Drug", size=100)
+#' td <- add_observations(td, arm="Drug", variable="DV", time_points=[0.0, 1.0, 2.0, 4.0, 16.0])
+#' td <- add_administration(td, arm="Drug", variable="AMT", amount=10.0, time_points=[0.0, 8.0])
+#' td
+#' }
+#' 
+#' @export
+add_administration <- function(td, arm, variable, amount, time_points, start_time=0.0) {
+	reticulate::py_clear_last_error()
+	time_points <- convert_input(time_points, "list")
+	func_out <- pharmpy$modeling$add_administration(td, arm, variable, amount, time_points, start_time=start_time)
+	func_out <- convert_output(func_out)
+	return(func_out)
+}
+
+#' @title
 #' add_allometry
 #' 
 #' @description
@@ -70,6 +103,34 @@ add_allometry <- function(model, allometric_variable=NULL, reference_value=70, p
 	lower_bounds <- convert_input(lower_bounds, "list")
 	upper_bounds <- convert_input(upper_bounds, "list")
 	func_out <- pharmpy$modeling$add_allometry(model, allometric_variable=allometric_variable, reference_value=reference_value, parameters=parameters, initials=initials, lower_bounds=lower_bounds, upper_bounds=upper_bounds, fixed=fixed)
+	func_out <- convert_output(func_out)
+	return(func_out)
+}
+
+#' @title
+#' add_arm
+#' 
+#' @description
+#' Add an empty arm to a trial design
+#' 
+#' @param td (TrialDesign) TrialDesign to add to
+#' @param name (str) Name of the arm
+#' @param size (numeric) Size of the arm (number of subjects)
+#'  
+#' @return (TrialDesign) An updated TrialDesign
+#' 
+#' @examples
+#' \dontrun{
+#' td <- create_trial_design()
+#' td <- add_arm(td, name="Placebo", size=100)
+#' td
+#' }
+#' 
+#' @export
+add_arm <- function(td, name, size) {
+	reticulate::py_clear_last_error()
+	size <- convert_input(size, "int")
+	func_out <- pharmpy$modeling$add_arm(td, name, size)
 	func_out <- convert_output(func_out)
 	return(func_out)
 }
@@ -668,6 +729,37 @@ add_metabolite <- function(model, drug_dvid=1, presystemic=FALSE) {
 }
 
 #' @title
+#' add_observations
+#' 
+#' @description
+#' Add observations to an arm in a trial design
+#' 
+#' @param td (TrialDesign) TrialDesign to add to
+#' @param arm (str) Name of the arm
+#' @param variable (str) Name of the variable to observe
+#' @param time_points (array(numeric)) List of the time points for the observations
+#' @param start_time (numeric) Set a start_time to offset the time_points. Default 0.0
+#'  
+#' @return (TrialDesign) An updated TrialDesign
+#' 
+#' @examples
+#' \dontrun{
+#' td <- create_trial_design()
+#' td <- add_arm(td, name="Placebo", size=100)
+#' td <- add_observations(td, arm="Placebo", variable="DV", time_points=[0.0, 1.0, 2.0, 4.0, 16.0])
+#' td
+#' }
+#' 
+#' @export
+add_observations <- function(td, arm, variable, time_points, start_time=0.0) {
+	reticulate::py_clear_last_error()
+	time_points <- convert_input(time_points, "list")
+	func_out <- pharmpy$modeling$add_observations(td, arm, variable, time_points, start_time=start_time)
+	func_out <- convert_output(func_out)
+	return(func_out)
+}
+
+#' @title
 #' add_output_variables
 #' 
 #' @description
@@ -1049,6 +1141,41 @@ add_time_of_last_dose <- function(model, name='TDOSE') {
 }
 
 #' @title
+#' annotate_unit
+#' 
+#' @description
+#' Specify the unit of a data column
+#' 
+#' Note that no conversion of units will happen if the unit was already set.
+#' 
+#' @param model_or_datainfo (Model or DataInfo) Model object or DataInfo object
+#' @param column (str) Name of a column. If the column contains multiple variables, e.g. DV
+#' with multiple DVs, the ID can be specified with a colon. For example "DV:1"
+#' will mean the DV column only when DVID is 1.
+#' @param unit (str) The unit
+#'  
+#' @return (Model | DataInfo) An updated Model or DataInfo object
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- annotate_unit(model, "WGT", "kg")
+#' }
+#' @seealso
+#' 
+#' 
+#' convert_unit - Convert between units for a variable
+#' 
+#' 
+#' @export
+annotate_unit <- function(model_or_datainfo, column, unit) {
+	reticulate::py_clear_last_error()
+	func_out <- pharmpy$modeling$annotate_unit(model_or_datainfo, column, unit)
+	func_out <- convert_output(func_out)
+	return(func_out)
+}
+
+#' @title
 #' append_estimation_step_options
 #' 
 #' @description
@@ -1228,15 +1355,23 @@ calculate_aic <- function(model, likelihood) {
 #' 
 #' Different variations of the BIC can be calculated:
 #' 
-#' * | mixed (default)
+#' * | mixed :footcite:p:`delattre_2014` (default)
 #' | BIC = -2LL + n_random_parameters * log(n_individuals) +
 #' |       n_fixed_parameters * log(n_observations)
-#' * | fixed
+#' * | fixed :footcite:p:`delattre_2020`
 #' | BIC = -2LL + n_estimated_parameters * log(n_observations)
 #' * | random
 #' | BIC = -2LL + n_estimated_parameters * log(n_individuals)
 #' * | iiv
 #' | BIC = -2LL + n_estimated_iiv_omega_parameters * log(n_individuals)
+#' 
+#' note::
+#' 
+#' Note that for the mixed BIC sigmas are always counted as fixed parameters and thetas
+#' can be counted as random if it associated with an eta. See :footcite:p:`delattre_2014`
+#' for details.
+#' 
+#' footbibliography::
 #' 
 #' @param model (Model) Pharmpy model
 #' @param likelihood (numeric) -2LL to use
@@ -1444,7 +1579,7 @@ calculate_cov_from_prec <- function(precision_matrix) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Expression) Symbolic expression
+#' @return (vectorc(Expr)) List of symbolic expressions
 #' 
 #' @examples
 #' \dontrun{
@@ -1473,7 +1608,7 @@ calculate_epsilon_gradient_expression <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Expression) Symbolic expression
+#' @return (vectorc(Expr)) List of symbolic expressions
 #' 
 #' @examples
 #' \dontrun{
@@ -2098,6 +2233,10 @@ convert_model <- function(model, to_format) {
 #' Convert between units for a data variable
 #' 
 #' The conversion could either be handled in the model code or optionally in the dataset (if applicable).
+#' Note that when doing the conversion in the model the unit of the data variable itself will not
+#' change. The change will affect the unit of relevant parameters in the model.
+#' 
+#' Note that only ratio units are supported (i.e. not interval scale units like °C).
 #' 
 #' @param model (Model) Pharmpy model
 #' @param variable (str) Which variable in the dataset or the model code to convert
@@ -2223,6 +2362,55 @@ create_config_template <- function() {
 }
 
 #' @title
+#' create_datainfo
+#' 
+#' @description
+#' Create a DataInfo
+#' 
+#' Will assume NONMEM names of columns
+#' 
+#' @param path_or_df (str or data.frame) A path to a dataset or a dataset
+#'  
+#' @return (DataInfo) DataInfo object
+#' 
+#' 
+#' @export
+create_datainfo <- function(path_or_df) {
+	reticulate::py_clear_last_error()
+	func_out <- pharmpy$modeling$create_datainfo(path_or_df)
+	func_out <- convert_output(func_out)
+	return(func_out)
+}
+
+#' @title
+#' create_dataset_from_design
+#' 
+#' @description
+#' Create a dataset matching a design
+#' 
+#' @param td (TrialDesign) TrialDesign to add to
+#'  
+#' @return (data.frame) A dataset
+#' 
+#' @examples
+#' \dontrun{
+#' td <- create_trial_design()
+#' td <- add_arm(td, name="Drug", size=100)
+#' td <- add_observations(td, arm="Drug", variable="DV", time_points=[0.0, 1.0, 2.0, 4.0, 16.0])
+#' td <- add_administration(td, arm="Drug", variable="AMT", amount=10.0, time_points=[0.0, 8.0])
+#' df <- create_dataset_from_design(td)
+#' df
+#' }
+#' 
+#' @export
+create_dataset_from_design <- function(td) {
+	reticulate::py_clear_last_error()
+	func_out <- pharmpy$modeling$create_dataset_from_design(td)
+	func_out <- convert_output(func_out)
+	return(func_out)
+}
+
+#' @title
 #' create_joint_distribution
 #' 
 #' @description
@@ -2301,7 +2489,7 @@ create_rng <- function(seed=1234) {
 #' @param force_numbering (logical) Forces addition of number to name even if variable does not exist, e.g.
 #' COVEFF → COVEFF1
 #'  
-#' @return (Symbol) Created symbol with unique name
+#' @return (Expr) Created symbol with unique name
 #' 
 #' @examples
 #' \dontrun{
@@ -2315,6 +2503,31 @@ create_rng <- function(seed=1234) {
 create_symbol <- function(model, stem, force_numbering=FALSE) {
 	reticulate::py_clear_last_error()
 	func_out <- pharmpy$modeling$create_symbol(model, stem, force_numbering=force_numbering)
+	func_out <- convert_output(func_out)
+	return(func_out)
+}
+
+#' @title
+#' create_trial_design
+#' 
+#' @description
+#' Create an empty trial design
+#' 
+#' @param idv_name (str) Optional name of the independent variable. Default is TIME
+#'  
+#' @return (TrialDesign) An empty trial design
+#' 
+#' @examples
+#' \dontrun{
+#' td <- create_trial_design()
+#' td$is_empty
+#' td
+#' }
+#' 
+#' @export
+create_trial_design <- function(idv_name='TIME') {
+	reticulate::py_clear_last_error()
+	func_out <- pharmpy$modeling$create_trial_design(idv_name=idv_name)
 	func_out <- convert_output(func_out)
 	return(func_out)
 }
@@ -2990,7 +3203,7 @@ get_bioavailability <- function(model) {
 #' @param model (Model) Pharmpy model
 #' 
 #'  
-#' @return (sympy.Symbol) Volume symbol sympy.Symbol Clearance symbol
+#' @return (Expr) Volume symbol Expr Clearance symbol
 #' 
 #' @examples
 #' \dontrun{
@@ -3338,7 +3551,7 @@ get_individual_parameters <- function(model, level='all', dv=NULL) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Expression) Symbolic expression
+#' @return (Expr) Symbolic expression
 #' 
 #' @examples
 #' \dontrun{
@@ -3692,7 +3905,7 @@ get_number_of_transit_compartments <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Expression) Symbolic expression
+#' @return (Expr) Symbolic expression
 #' 
 #' @examples
 #' \dontrun{
@@ -3750,7 +3963,7 @@ get_observations <- function(model, keep_index=FALSE, dv=NULL) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Parameters) A copy of all omega parameters
+#' @return (Parameters) All omega parameters
 #' 
 #' @examples
 #' \dontrun{
@@ -3878,7 +4091,7 @@ get_pk_parameters <- function(model, kind='all') {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Expression) Symbolic expression
+#' @return (Expr) Symbolic expression
 #' 
 #' @examples
 #' \dontrun{
@@ -3937,7 +4150,7 @@ get_rv_parameters <- function(model, rv) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Parameters) A copy of all sigma parameters
+#' @return (Parameters) All sigma parameters
 #' 
 #' @examples
 #' \dontrun{
@@ -3966,7 +4179,7 @@ get_sigmas <- function(model) {
 #' 
 #' @param model (Model) Pharmpy model
 #'  
-#' @return (Parameters) A copy of all theta parameters
+#' @return (Parameters) All theta parameters
 #' 
 #' @examples
 #' \dontrun{
@@ -5327,6 +5540,25 @@ print_model_symbols <- function(model) {
 }
 
 #' @title
+#' read_datainfo
+#' 
+#' @description
+#' Read a datainfo file
+#' 
+#' @param path (str) A path to a datainfo file
+#'  
+#' @return (DataInfo) DataInfo object
+#' 
+#' 
+#' @export
+read_datainfo <- function(path) {
+	reticulate::py_clear_last_error()
+	func_out <- pharmpy$modeling$read_datainfo(path)
+	func_out <- convert_output(func_out)
+	return(func_out)
+}
+
+#' @title
 #' read_dataset_from_datainfo
 #' 
 #' @description
@@ -6041,6 +6273,37 @@ resample_data <- function(dataset_or_model, group, resamples=1, stratify=NULL, s
 }
 
 #' @title
+#' reset_dataset
+#' 
+#' @description
+#' Use Pharmpy dataset instead of original file
+#' 
+#' The parsed dataset will be written down when doing e.g. estimation or writing files
+#' instead of the original dataset file
+#' 
+#' Removes path and provenance from DataInfo.
+#' 
+#' Note: Use this to get same behavior as Pharmpy<=2.1.1
+#' 
+#' @param model (Model) Pharmpy model
+#'  
+#' @return (Model) Updated Pharmpy model
+#' 
+#' @examples
+#' \dontrun{
+#' model <- load_example_model("pheno")
+#' model <- reset_dataset(model)
+#' }
+#' 
+#' @export
+reset_dataset <- function(model) {
+	reticulate::py_clear_last_error()
+	func_out <- pharmpy$modeling$reset_dataset(model)
+	func_out <- convert_output(func_out)
+	return(func_out)
+}
+
+#' @title
 #' sample_individual_estimates
 #' 
 #' @description
@@ -6319,10 +6582,10 @@ set_combined_error_model <- function(model, dv=NULL, data_trans=NULL) {
 #' @description
 #' Set columns in the dataset to be covariates in the datainfo
 #' 
-#' @param model (Model) Pharmpy model
+#' @param model (Model or DataInfo) Pharmpy model or a DataInfo object
 #' @param covariates (array(str)) Column names
 #'  
-#' @return (Model) Updated Pharmpy model
+#' @return (Model) Updated Pharmpy model or DataInfo object
 #' 
 #' 
 #' @export
@@ -6341,7 +6604,8 @@ set_covariates <- function(model, covariates) {
 #' 
 #' @param model (Model) Pharmpy model
 #' @param path_or_df (str or data.frame) Dataset path or dataframe
-#' @param datatype (str (optional)) Type of dataset (optional)
+#' @param format (str (optional)) File format of dataset (default csv. Can also be set to 'nonmem')
+#' @param datatype (any) Deprecated. Use format instead
 #'  
 #' @return (Model) Updated Pharmpy model
 #' 
@@ -6351,14 +6615,14 @@ set_covariates <- function(model, covariates) {
 #' model <- unload_dataset(model)
 #' dataset_path <- model$datainfo$path
 #' model$dataset is NULL
-#' model <- set_dataset(model, dataset_path, datatype='nonmem')
+#' model <- set_dataset(model, dataset_path, format='nonmem')
 #' model$dataset
 #' }
 #' 
 #' @export
-set_dataset <- function(model, path_or_df, datatype=NULL) {
+set_dataset <- function(model, path_or_df, format=NULL, datatype=NULL) {
 	reticulate::py_clear_last_error()
-	func_out <- pharmpy$modeling$set_dataset(model, path_or_df, datatype=datatype)
+	func_out <- pharmpy$modeling$set_dataset(model, path_or_df, format=format, datatype=datatype)
 	func_out <- convert_output(func_out)
 	return(func_out)
 }
@@ -7177,7 +7441,7 @@ set_power_on_ruv <- function(model, list_of_eps=NULL, dv=NULL, lower_limit=0.01,
 #' @seealso
 #' 
 #' 
-#' set_unit - Set unit of a data variable
+#' annotate_unit - Annotate the unit of a data variable
 #' 
 #' 
 #' @export
@@ -7437,41 +7701,6 @@ set_transit_compartments <- function(model, n, keep_depot=TRUE) {
 	reticulate::py_clear_last_error()
 	n <- convert_input(n, "int")
 	func_out <- pharmpy$modeling$set_transit_compartments(model, n, keep_depot=keep_depot)
-	func_out <- convert_output(func_out)
-	return(func_out)
-}
-
-#' @title
-#' set_unit
-#' 
-#' @description
-#' Specify the unit of a column
-#' 
-#' Note that no conversion of units will happen if the unit was already set.
-#' 
-#' @param model_or_datainfo (Model or DataInfo) Model object or DataInfo object
-#' @param column (str) Name of a column. If the column contains multiple variables, e.g. DV
-#' with multiple DVs, the ID can be specified with a colon. For example "DV:1"
-#' will mean the DV column only when DVID is 1.
-#' @param unit (str) The unit
-#'  
-#' @return (Model | DataInfo) An updated Model or DataInfo object
-#' 
-#' @examples
-#' \dontrun{
-#' model <- load_example_model("pheno")
-#' model <- set_unit(model, "WGT", "kg")
-#' }
-#' @seealso
-#' 
-#' 
-#' convert_unit - Convert between units for a variable
-#' 
-#' 
-#' @export
-set_unit <- function(model_or_datainfo, column, unit) {
-	reticulate::py_clear_last_error()
-	func_out <- pharmpy$modeling$set_unit(model_or_datainfo, column, unit)
 	func_out <- convert_output(func_out)
 	return(func_out)
 }
@@ -8260,6 +8489,24 @@ write_csv <- function(model, path=NULL, force=FALSE) {
 }
 
 #' @title
+#' write_datainfo
+#' 
+#' @description
+#' Write a DataInfo object to a datainfo file
+#' 
+#' @param di (DataInfo) DataInfo object
+#' @param path (str) Path to write the datainfo file
+#' @param force (logical) Force overwrite if file already exists 
+#' 
+#' @export
+write_datainfo <- function(di, path, force=FALSE) {
+	reticulate::py_clear_last_error()
+	func_out <- pharmpy$modeling$write_datainfo(di, path, force=force)
+	func_out <- convert_output(func_out)
+	return(func_out)
+}
+
+#' @title
 #' write_dataset
 #' 
 #' @description
@@ -8396,6 +8643,7 @@ export_model_files <- function(context, destination_path=NULL, force=FALSE) {
 #' @param name (str (optional)) Name of run
 #' @param context (Context (optional)) Run in this context
 #' @param ncores (numeric) Number of cores to use for estimation
+#' @param validate_dataset (logical) Whether to validate Pharmpy dataset against FDATA file (relevant for NONMEM models)
 #'  
 #' @return (ModelfitResults | vector of ModelfitResults) ModelfitResults for the model or models
 #' 
@@ -8409,10 +8657,10 @@ export_model_files <- function(context, destination_path=NULL, force=FALSE) {
 #' 
 #' 
 #' @export
-fit <- function(model_or_models, esttool=NULL, name=NULL, context=NULL, ncores=1) {
+fit <- function(model_or_models, esttool=NULL, name=NULL, context=NULL, ncores=1, validate_dataset=FALSE) {
 	reticulate::py_clear_last_error()
 	ncores <- convert_input(ncores, "int")
-	func_out <- pharmpy$tools$fit(model_or_models, esttool=esttool, name=name, context=context, ncores=ncores)
+	func_out <- pharmpy$tools$fit(model_or_models, esttool=esttool, name=name, context=context, ncores=ncores, validate_dataset=validate_dataset)
 	func_out <- convert_output(func_out)
 	return(func_out)
 }
@@ -8819,8 +9067,8 @@ run_allometry <- function(model, results, allometric_variable='WT', reference_va
 #' @description
 #' Run Automatic Model Development (AMD) tool
 #' 
-#' @param input (Model or str) Starting model or dataset
-#' @param results (ModelfitResults (optional)) Reults of input if input is a model
+#' @param input (Model or str or DataInfo) Starting model or dataset
+#' @param results (ModelfitResults (optional)) Results of input if input is a model
 #' @param modeltype (str) Type of model to build. Valid strings are 'basic_pk', 'pkpd', 'drug_metabolite' and 'tmdd'
 #' @param administration (str) Route of administration. Either 'iv', 'oral' or 'ivoral'
 #' @param strategy (str) Run algorithm for AMD procedure. Valid options are 'default', 'reevaluation', 'SIR', 'SRI', and 'RSI'.
@@ -8845,6 +9093,7 @@ run_allometry <- function(model, results, allometric_variable='WT', reference_va
 #' @param retries_strategy (str) Whether or not to run retries tool. Valid options are 'skip', 'all_final' or 'final'.
 #' Default is 'final'.
 #' @param parameter_uncertainty_method (str (optional)) Parameter uncertainty method.
+#' @param units (list(str=str)) Specify units to use for DV or AMT. For example list('DV'= 'mg/L')
 #' @param ignore_datainfo_fallback (logical) Ignore using datainfo to get information not given by the user. Default is FALSE
 #' @param .E (list(str=numeric or str) (optional)) EXPERIMENTAL FEATURE. Dictionary of different E-values used in mBIC
 #' @param ... Arguments to pass to tool
@@ -8864,10 +9113,11 @@ run_allometry <- function(model, results, allometric_variable='WT', reference_va
 #' 
 #' 
 #' @export
-run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='oral', strategy='default', cl_init=NULL, vc_init=NULL, mat_init=NULL, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, search_space=NULL, lloq_method=NULL, lloq_limit=NULL, allometric_variable=NULL, occasion=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', dv_types=NULL, mechanistic_covariates=NULL, retries_strategy='all_final', parameter_uncertainty_method=NULL, ignore_datainfo_fallback=FALSE, .E=NULL, ...) {
+run_amd <- function(input, results=NULL, modeltype='basic_pk', administration='oral', strategy='default', cl_init=NULL, vc_init=NULL, mat_init=NULL, b_init=NULL, emax_init=NULL, ec50_init=NULL, met_init=NULL, search_space=NULL, lloq_method=NULL, lloq_limit=NULL, allometric_variable=NULL, occasion=NULL, strictness='minimization_successful or (rounding_errors and sigdigs>=0.1)', dv_types=NULL, mechanistic_covariates=NULL, retries_strategy='all_final', parameter_uncertainty_method=NULL, units={}, ignore_datainfo_fallback=FALSE, .E=NULL, ...) {
 	reticulate::py_clear_last_error()
 	mechanistic_covariates <- convert_input(mechanistic_covariates, "list")
-	func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, administration=administration, strategy=strategy, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, search_space=search_space, lloq_method=lloq_method, lloq_limit=lloq_limit, allometric_variable=allometric_variable, occasion=occasion, strictness=strictness, dv_types=dv_types, mechanistic_covariates=mechanistic_covariates, retries_strategy=retries_strategy, parameter_uncertainty_method=parameter_uncertainty_method, ignore_datainfo_fallback=ignore_datainfo_fallback, `_E`=.E, ...)
+	units <- convert_input(units, "Mapping")
+	func_out <- pharmpy$tools$run_amd(input, results=results, modeltype=modeltype, administration=administration, strategy=strategy, cl_init=cl_init, vc_init=vc_init, mat_init=mat_init, b_init=b_init, emax_init=emax_init, ec50_init=ec50_init, met_init=met_init, search_space=search_space, lloq_method=lloq_method, lloq_limit=lloq_limit, allometric_variable=allometric_variable, occasion=occasion, strictness=strictness, dv_types=dv_types, mechanistic_covariates=mechanistic_covariates, retries_strategy=retries_strategy, parameter_uncertainty_method=parameter_uncertainty_method, units=units, ignore_datainfo_fallback=ignore_datainfo_fallback, `_E`=.E, ...)
 	func_out <- convert_output(func_out)
 	return(func_out)
 }
@@ -9088,8 +9338,8 @@ run_iovsearch <- function(model, results, column='OCC', list_of_parameters=NULL,
 #' @description
 #' Linearize a model
 #' 
-#' @param model (Model (optional)) Pharmpy model. Should use FOCEI or other EM-methods for estimation
-#' @param results (ModelfitResults (optional)) Results of estimation of model
+#' @param model (Model) Pharmpy model. Should use FOCEI or other EM-methods for estimation
+#' @param results (ModelfitResults) Results of estimation of model
 #' @param model_name (str) New name of linearized model. The default is "linbase".
 #' @param description (str) Description of linearized model. The default is ""
 #' @param ... Arguments to pass to tool
@@ -9098,9 +9348,9 @@ run_iovsearch <- function(model, results, column='OCC', list_of_parameters=NULL,
 #' 
 #' 
 #' @export
-run_linearize <- function(model=NULL, results=NULL, model_name='linbase', description='', ...) {
+run_linearize <- function(model, results, model_name='linbase', description='', ...) {
 	reticulate::py_clear_last_error()
-	func_out <- pharmpy$tools$run_linearize(model=model, results=results, model_name=model_name, description=description, ...)
+	func_out <- pharmpy$tools$run_linearize(model, results, model_name=model_name, description=description, ...)
 	func_out <- convert_output(func_out)
 	return(func_out)
 }
@@ -9243,8 +9493,8 @@ run_pdsearch <- function(input, type, treatment_variable=NULL, kpd_driver='ir', 
 #' @description
 #' Run QA tool.
 #' 
-#' @param model (Model (optional)) Pharmpy model
-#' @param results (ModelfitResults (optional)) Results of model
+#' @param model (Model) Pharmpy model
+#' @param results (ModelfitResults) Results of model
 #' @param linearize (logical) Whether or not to use linearization when running the tool
 #' @param skip (array(str) (optional)) A vector of sections to ski
 #' @param ... Arguments to pass to tool
@@ -9259,10 +9509,10 @@ run_pdsearch <- function(input, type, treatment_variable=NULL, kpd_driver='ir', 
 #' }
 #' 
 #' @export
-run_qa <- function(model=NULL, results=NULL, linearize=FALSE, skip=NULL, ...) {
+run_qa <- function(model, results, linearize=FALSE, skip=NULL, ...) {
 	reticulate::py_clear_last_error()
 	skip <- convert_input(skip, "list")
-	func_out <- pharmpy$tools$run_qa(model=model, results=results, linearize=linearize, skip=skip, ...)
+	func_out <- pharmpy$tools$run_qa(model, results, linearize=linearize, skip=skip, ...)
 	func_out <- convert_output(func_out)
 	return(func_out)
 }
@@ -9273,8 +9523,8 @@ run_qa <- function(model=NULL, results=NULL, linearize=FALSE, skip=NULL, ...) {
 #' @description
 #' Run retries tool.
 #' 
-#' @param model (Model (optional)) Model object to run retries on. The default is NULL.
-#' @param results (ModelfitResults (optional)) Connected ModelfitResults object. The default is NULL.
+#' @param model (Model) Model object to run retries on. The default is NULL.
+#' @param results (ModelfitResults) Connected ModelfitResults object. The default is NULL.
 #' @param number_of_candidates (numeric) Number of retry candidates to run. The default is 5.
 #' @param fraction (numeric) Determines allowed increase/decrease from initial parameter estimate. Default is 0.1 (10%)
 #' @param use_initial_estimates (logical) Use initial parameter estimates instead of final estimates of input model when creating candidate models.
@@ -9289,10 +9539,10 @@ run_qa <- function(model=NULL, results=NULL, linearize=FALSE, skip=NULL, ...) {
 #' 
 #' 
 #' @export
-run_retries <- function(model=NULL, results=NULL, number_of_candidates=5, fraction=0.1, use_initial_estimates=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs >= 0.1)', scale='UCP', prefix_name='', parameter_uncertainty_method=NULL, ...) {
+run_retries <- function(model, results, number_of_candidates=5, fraction=0.1, use_initial_estimates=FALSE, strictness='minimization_successful or (rounding_errors and sigdigs >= 0.1)', scale='UCP', prefix_name='', parameter_uncertainty_method=NULL, ...) {
 	reticulate::py_clear_last_error()
 	number_of_candidates <- convert_input(number_of_candidates, "int")
-	func_out <- pharmpy$tools$run_retries(model=model, results=results, number_of_candidates=number_of_candidates, fraction=fraction, use_initial_estimates=use_initial_estimates, strictness=strictness, scale=scale, prefix_name=prefix_name, parameter_uncertainty_method=parameter_uncertainty_method, ...)
+	func_out <- pharmpy$tools$run_retries(model, results, number_of_candidates=number_of_candidates, fraction=fraction, use_initial_estimates=use_initial_estimates, strictness=strictness, scale=scale, prefix_name=prefix_name, parameter_uncertainty_method=parameter_uncertainty_method, ...)
 	func_out <- convert_output(func_out)
 	return(func_out)
 }

@@ -10,7 +10,7 @@ get_omegas(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Parameters) A copy of all omega parameters
+(Parameters) All omega parameters
 }
 \description{
 Get all omegas (variability parameters) of a model

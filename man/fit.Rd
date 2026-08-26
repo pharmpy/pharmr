@@ -4,7 +4,14 @@
 \alias{fit}
 \title{fit}
 \usage{
-fit(model_or_models, esttool = NULL, name = NULL, context = NULL, ncores = 1)
+fit(
+  model_or_models,
+  esttool = NULL,
+  name = NULL,
+  context = NULL,
+  ncores = 1,
+  validate_dataset = FALSE
+)
 }
 \arguments{
 \item{model_or_models}{(Model or array(Model)) List of models or one single model}
@@ -16,6 +23,8 @@ fit(model_or_models, esttool = NULL, name = NULL, context = NULL, ncores = 1)
 \item{context}{(Context (optional)) Run in this context}
 
 \item{ncores}{(numeric) Number of cores to use for estimation}
+
+\item{validate_dataset}{(logical) Whether to validate Pharmpy dataset against FDATA file (relevant for NONMEM models)}
 }
 \value{
 (ModelfitResults | vector of ModelfitResults) ModelfitResults for the model or models
