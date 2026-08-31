@@ -54,7 +54,7 @@ create_integer_index <- function(rows) {
     pd <- reticulate::import("pandas", convert=FALSE)
     if (is_consecutive(rows)) {
         first <- rows[1]
-        last <- tail(rows, n=1)
+        last <- utils::tail(rows, n=1)
         pd$RangeIndex(first, last + 1L, 1L)
     } else {
         rows
