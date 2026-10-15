@@ -88,6 +88,10 @@ convert_input <- function(arg, to_py_type) {
         return(arg)
     } else if (to_py_type == 'Mapping') {
         return(to_list(arg))
+    } else if (to_py_type == 'Mapping[int]') {
+        arg <- to_list(arg)
+        py_dict <- reticulate::py_dict(keys=as.integer(names(arg)), values=unlist(arg))
+        return(py_dict)
     } else if (to_py_type == 'list') {
         return(as.list(arg))
     } else if (to_py_type == 'int') {
