@@ -9,6 +9,7 @@ SPDX-License-Identifier: CC-BY-4.0
 [![CRAN status](https://www.r-pkg.org/badges/version/pharmr)](https://cran.r-project.org/package=pharmr)
 [![](https://img.shields.io/github/r-package/v/pharmpy/pharmr?label=github%20version&logo=github)](https://github.com/pharmpy/pharmr)
 [![check](https://github.com/pharmpy/pharmr/actions/workflows/check.yaml/badge.svg)](https://github.com/pharmpy/pharmr/actions)
+[![REUSE status](https://img.shields.io/badge/REUSE-compliant-green.svg)](https://reuse.software)
 <!-- badges: end -->
 
 # ![](https://github.com/pharmpy/pharmpy/blob/main/docs/pharmr_logo.svg)
