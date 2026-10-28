@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021-2026 Rikard Nordgren and Stella Belin
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 # The knit_print functions are used by knitr in rmarkdown
 # The repr_html functions are used in jupyter
 

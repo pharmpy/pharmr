@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021-2026 Rikard Nordgren and Stella Belin
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 #' @exportS3Method "$" pharmpy.internals.immutable.Immutable
 `$.pharmpy.internals.immutable.Immutable` <- function(x, name)
 {

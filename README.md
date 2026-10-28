@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2021-2026 Rikard Nordgren and Stella Belin
+
+SPDX-License-Identifier: CC-BY-4.0
+-->
+
 <!-- badges: start -->
 
 [![CRAN status](https://www.r-pkg.org/badges/version/pharmr)](https://cran.r-project.org/package=pharmr)

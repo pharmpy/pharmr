@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: None
+#
+# SPDX-License-Identifier: CC0-1.0
+
 name: "Set up pharmr"
 description: "Sets up Pharmpy and installs into virtual environment"
 inputs:

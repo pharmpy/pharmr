@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021-2026 Rikard Nordgren and Stella Belin
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 on_load_pharmpy <- function() {
     pharmpy_version <- py_to_r(pharmpy$`__version__`)
     check_pharmpy(pharmpy_version)

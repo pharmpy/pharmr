@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021-2026 Rikard Nordgren and Stella Belin
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 convert_output <- function(obj) {
     if (inherits(obj, "pandas.DataFrame")
             || inherits(obj, "pandas.core.frame.DataFrame")
