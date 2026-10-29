@@ -4,14 +4,22 @@
 \alias{set_dataset}
 \title{set_dataset}
 \usage{
-set_dataset(model, path_or_df, format = NULL, datatype = NULL)
+set_dataset(
+  model,
+  path_or_df,
+  format = NULL,
+  annotate_using = NULL,
+  datatype = NULL
+)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{path_or_df}{(str or data.frame) Dataset path or dataframe}
+\item{path_or_df}{(str or str or data.frame) Dataset path or dataframe}
 
 \item{format}{(str (optional)) File format of dataset (default csv. Can also be set to 'nonmem')}
+
+\item{annotate_using}{(str (optional)) How dataset should be annotated. Can be NULL (default), 'infer', or 'skip'.}
 
 \item{datatype}{(any) Deprecated. Use format instead}
 }
@@ -20,6 +28,10 @@ set_dataset(model, path_or_df, format = NULL, datatype = NULL)
 }
 \description{
 Load the dataset given datainfo
+
+Option \code{annotate_using} will by default use the datainfo file (if available), otherwise the
+information in the input model. If all or any columns have not been annotated, this option
+will infer those.
 }
 \examples{
 \dontrun{

@@ -9,7 +9,7 @@ write_results(results, path, compression = FALSE, csv = FALSE)
 \arguments{
 \item{results}{(Results) Pharmpy results object}
 
-\item{path}{(str) Path to results file}
+\item{path}{(str or str) Path to results file}
 
 \item{compression}{(logical) TRUE to compress the file. Not applicable to csv file}
 

@@ -9,7 +9,7 @@ set_reference_values(model, refs)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{refs}{(list(str=numeric)) Pairs of column names and reference values}
+\item{refs}{(list(str=numeric or numeric)) Pairs of column names and reference values}
 }
 \value{
 (Model) Updated Pharmpy model

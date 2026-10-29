@@ -11,7 +11,7 @@ sample_parameters_from_covariance_matrix(
   force_posdef_samples = NULL,
   force_posdef_covmatrix = FALSE,
   n = 1,
-  seed = 1234
+  seed = NULL
 )
 }
 \arguments{
@@ -28,7 +28,7 @@ default and means never and 0 means always}
 
 \item{n}{(numeric) Number of samples}
 
-\item{seed}{(numeric) Random number generator}
+\item{seed}{(RandomNumberGenerator or numeric or numeric or Seed (optional)) An integer seed or a random number generator}
 }
 \value{
 (data.frame) A dataframe with one sample per row

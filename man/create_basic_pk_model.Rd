@@ -15,7 +15,7 @@ create_basic_pk_model(
 \arguments{
 \item{administration}{(str) Type of PK model to create. Supported are 'iv', 'oral' and 'ivoral'}
 
-\item{dataset_path}{(str (optional)) Optional path to a dataset}
+\item{dataset_path}{(str or str (optional)) Optional path to a dataset}
 
 \item{cl_init}{(numeric) Initial estimate of the clearance parameter}
 

@@ -9,7 +9,7 @@ set_baseline_effect(model, expr = "const")
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{expr}{(str) Name of baseline effect function.}
+\item{expr}{(str) Name of baseline function.}
 }
 \value{
 (Model) Updated Pharmpy model
@@ -19,7 +19,7 @@ Create baseline effect model.
 
 Currently implemented baseline effects are:
 
-Constant baseline effect (const):
+Constant baseline response (const):
 
 (equation could not be rendered, see API doc on website)
 }
@@ -27,7 +27,7 @@ Constant baseline effect (const):
 \dontrun{
 model <- load_example_model("pheno")
 model <- set_baseline_effect(model, expr='const')
-model$statements$find_assignment("E")
+model$statements$find_assignment("R")
 }
 
 }

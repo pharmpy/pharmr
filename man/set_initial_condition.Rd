@@ -11,9 +11,9 @@ set_initial_condition(model, compartment, expression, time = 0)
 
 \item{compartment}{(str) Name of the compartment}
 
-\item{expression}{(numeric or str or Expr) The expression of the initial condition}
+\item{expression}{(numeric or numeric or str or Expr) The expression of the initial condition}
 
-\item{time}{(numeric or str or Expr) Time point. Default 0}
+\item{time}{(numeric or numeric or str or Expr) Time point. Default 0}
 }
 \value{
 (model) Updated Pharmpy model

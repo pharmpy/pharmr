@@ -10,7 +10,7 @@ has_weibull_absorption(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Bool : TRUE if model has weibull type absorption)
+(logical) TRUE if model has weibull type absorption
 }
 \description{
 Check if ode system describes a weibull type absorption

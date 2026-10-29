@@ -9,7 +9,7 @@ export_model_files(context, destination_path = NULL, force = FALSE)
 \arguments{
 \item{context}{(Context) The context}
 
-\item{destination_path}{(str (optional)) Path to export model files to, NULL means current working directory}
+\item{destination_path}{(str or str (optional)) Path to export model files to, NULL means current working directory}
 
 \item{force}{(logical) Allow file overwrite (default is FALSE)}
 }

@@ -27,15 +27,16 @@ run_amd(
   mechanistic_covariates = NULL,
   retries_strategy = "all_final",
   parameter_uncertainty_method = NULL,
-  units = {
- },
+  units = NULL,
   ignore_datainfo_fallback = FALSE,
+  initial_error_models = NULL,
+  filter_data_records = NULL,
   .E = NULL,
   ...
 )
 }
 \arguments{
-\item{input}{(Model or str or DataInfo) Starting model or dataset}
+\item{input}{(Model or str or str or DataInfo) Starting model or dataset}
 
 \item{results}{(ModelfitResults (optional)) Results of input if input is a model}
 
@@ -75,7 +76,7 @@ Please use ALLOMETRY in the mfl instead.}
 \item{dv_types}{(list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DVs.}
 
 \item{mechanistic_covariates}{(array(str or list(str)) (optional)) List of covariates or tuple of covariate and parameter combination to run in a
-separate proioritized covsearch run. For instance c("WT", ("CRCL", "CL")).
+separate prioritized covsearch run. For instance c("WT", ("CRCL", "CL")).
 The effects are extracted from the search space for covsearch.}
 
 \item{retries_strategy}{(str) Whether or not to run retries tool. Valid options are 'skip', 'all_final' or 'final'.
@@ -83,9 +84,16 @@ Default is 'final'.}
 
 \item{parameter_uncertainty_method}{(str (optional)) Parameter uncertainty method.}
 
-\item{units}{(list(str=str)) Specify units to use for DV or AMT. For example list('DV'= 'mg/L')}
+\item{units}{(list(str=str) (optional)) Specify units to use for DV or AMT. For example list('DV'= 'mg/L')}
 
 \item{ignore_datainfo_fallback}{(logical) Ignore using datainfo to get information not given by the user. Default is FALSE}
+
+\item{initial_error_models}{(list(numeric=str) (optional)) Dictionary of DVID to error model. Supported error models are 'proportional',
+'additive' and 'combined'. If NULL or if any DVID is not specified, 'proportional'
+will be used. The error model will be applied for the start model for DVID == 1,
+if any other are provided they will be applied in the StructSearch tool}
+
+\item{filter_data_records}{(str (optional)) Expression of which to filter dataset on. E.g. 'DVID == 1' will keep all data records where DVID is 1}
 
 \item{.E}{(list(str=numeric or str) (optional)) EXPERIMENTAL FEATURE. Dictionary of different E-values used in mBIC}
 

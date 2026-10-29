@@ -9,7 +9,7 @@ open_context(name, ref = NULL)
 \arguments{
 \item{name}{(str) Name of the context}
 
-\item{ref}{(str (optional)) Parent path of the context}
+\item{ref}{(str or str (optional)) Parent path of the context}
 }
 \description{
 Open a context from a tool run

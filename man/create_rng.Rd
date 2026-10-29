@@ -4,14 +4,14 @@
 \alias{create_rng}
 \title{create_rng}
 \usage{
-create_rng(seed = 1234)
+create_rng(seed = NULL)
 }
 \arguments{
-\item{seed}{(numeric) Seed for the random number generator or NULL (default) for a randomized seed. If seed
-is generator it will be passed through.}
+\item{seed}{(numeric or numeric or RandomNumberGenerator or Seed (optional)) Seed for the random number generator or NULL (default) for a randomized seed. If seed
+is a generator it will be passed through.}
 }
 \value{
-(Generator) Initialized numpy random number generator object
+(RandomNumberGenerator) Initialized random number generator object
 }
 \description{
 Create a new random number generator
@@ -22,7 +22,7 @@ This function can be used to create a default new random number generator.
 \examples{
 \dontrun{
 rng <- create_rng(23)
-rng$standard_normal()
+rng$to_numpy().standard_normal()
 }
 
 }

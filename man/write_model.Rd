@@ -9,7 +9,7 @@ write_model(model, path = "", force = TRUE)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{path}{(str) Destination path}
+\item{path}{(str or str) Destination path}
 
 \item{force}{(logical) Force overwrite, default is TRUE}
 }

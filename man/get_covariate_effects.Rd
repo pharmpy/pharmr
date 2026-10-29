@@ -10,7 +10,7 @@ get_covariate_effects(model)
 \item{model}{(Model) Pharmpy model}
 }
 \value{
-(Dictionary : Dictionary of parameters and connected covariate(s))
+(Dictionary) Dictionary of parameters and connected covariate(s)
 }
 \description{
 Return a list of all used covariates within a model

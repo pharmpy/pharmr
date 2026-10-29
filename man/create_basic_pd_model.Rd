@@ -7,7 +7,7 @@
 create_basic_pd_model(dataset_path = NULL)
 }
 \arguments{
-\item{dataset_path}{(str (optional)) Optional path to a dataset}
+\item{dataset_path}{(str or str (optional)) Optional path to a dataset}
 }
 \value{
 (Model) Pharmpy model

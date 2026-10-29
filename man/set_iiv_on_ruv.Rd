@@ -15,15 +15,15 @@ set_iiv_on_ruv(
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{dv}{(Expr or numeric (optional)) Name/names of epsilons to multiply with exponential etas. If NULL, all epsilons will
+\item{dv}{(Expr or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)}
+
+\item{list_of_eps}{(array(str) or str (optional)) Name/names of epsilons to multiply with exponential etas. If NULL, all epsilons will
 be chosen. NULL is default.}
 
-\item{list_of_eps}{(array(str) or str (optional)) Boolean of whether all RUVs from input should use the same new ETA or if one ETA
+\item{same_eta}{(logical) Boolean of whether all RUVs from input should use the same new ETA or if one ETA
 should be created for each RUV. TRUE is default.}
 
-\item{same_eta}{(logical) Custom names of new etas. Must be equal to the number epsilons or 1 if same eta.}
-
-\item{eta_names}{(array(str) or str (optional)) Name or DVID of dependent variable. NULL for the default (first or only)}
+\item{eta_names}{(array(str) or str (optional)) Custom names of new etas. Must be equal to the number epsilons or 1 if same eta.}
 }
 \value{
 (Model) Updated Pharmpy model

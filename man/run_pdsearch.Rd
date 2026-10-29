@@ -18,7 +18,7 @@ run_pdsearch(
 )
 }
 \arguments{
-\item{input}{(str or Model) A PD/KPD dataset or PD/KPD model}
+\item{input}{(str or str or Model) A PD/KPD dataset or a PK, PD or KPD model}
 
 \item{type}{(str) Type of PD model to build ('pd' or 'kpd')}
 

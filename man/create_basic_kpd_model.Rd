@@ -7,7 +7,7 @@
 create_basic_kpd_model(dataset_path = NULL, driver = "ir")
 }
 \arguments{
-\item{dataset_path}{(str (optional)) Optional path to a dataset}
+\item{dataset_path}{(str or str (optional)) Optional path to a dataset}
 
 \item{driver}{(str) Driver variable of the KPD model. Can either be 'ir' (virtual infusion
 rate) or 'amount'.}

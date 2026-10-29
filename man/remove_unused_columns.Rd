@@ -17,7 +17,7 @@ Remove all columns in the dataset that are not used by the model including dropp
 
 Warnings
 Currently columns not needed to give a prediction, but used by other expressions in the
-model are kept. This will change in the future.
+model are kept. This might change in the future.
 }
 \examples{
 \dontrun{

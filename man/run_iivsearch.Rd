@@ -36,7 +36,7 @@ run_iivsearch(
 
 \item{linearize}{(logical) Wheter or not use linearization when running the tool.}
 
-\item{cutoff}{(numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
+\item{cutoff}{(numeric or numeric (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 is NULL (all models will be ranked)}
 
 \item{strictness}{(str) Strictness criteria}

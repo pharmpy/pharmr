@@ -16,7 +16,7 @@ set_proportional_error_model(
 
 \item{dv}{(Expr or str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)}
 
-\item{data_trans}{(numeric or str or Expr (optional)) A data transformation expression or NULL (default) to use the transformation
+\item{data_trans}{(numeric or numeric or str or Expr (optional)) A data transformation expression or NULL (default) to use the transformation
 specified by the model.}
 
 \item{zero_protection}{(logical) Set to TRUE to add code protecting from IPRED=0}

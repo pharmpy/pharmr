@@ -12,7 +12,7 @@ summarize_modelfit_results(context, include_all_execution_steps = FALSE)
 \item{include_all_execution_steps}{(logical) Whether to include all estimation steps, default is FALSE}
 }
 \value{
-(data.frame) A DataFrame of modelfit results with model name and estmation step as index.
+(data.frame) A DataFrame of modelfit results with model name and estimation step as index.
 }
 \description{
 Summarize results of model runs

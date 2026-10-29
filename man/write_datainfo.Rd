@@ -9,7 +9,7 @@ write_datainfo(di, path, force = FALSE)
 \arguments{
 \item{di}{(DataInfo) DataInfo object}
 
-\item{path}{(str) Path to write the datainfo file}
+\item{path}{(str or str) Path to write the datainfo file}
 
 \item{force}{(logical) Force overwrite if file already exists}
 }

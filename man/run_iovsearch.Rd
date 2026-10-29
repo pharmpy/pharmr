@@ -29,7 +29,7 @@ run_iovsearch(
 
 \item{rank_type}{(str) Which ranking type should be used. Default is BIC.}
 
-\item{cutoff}{(numeric (optional)) Cutoff for which value of the ranking type that is considered significant. Default
+\item{cutoff}{(numeric or numeric (optional)) Cutoff for which value of the ranking type that is considered significant. Default
 is NULL (all models will be ranked)}
 
 \item{distribution}{(str) Which distribution added IOVs should have (default is same-as-iiv)}

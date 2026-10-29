@@ -11,7 +11,7 @@ set_combined_error_model(model, dv = NULL, data_trans = NULL)
 
 \item{dv}{(Expr or str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)}
 
-\item{data_trans}{(numeric or str or Expr (optional)) A data transformation expression or NULL (default) to use the transformation
+\item{data_trans}{(numeric or numeric or str or Expr (optional)) A data transformation expression or NULL (default) to use the transformation
 specified by the model.}
 }
 \value{

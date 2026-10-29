@@ -4,10 +4,12 @@
 \alias{remove_error_model}
 \title{remove_error_model}
 \usage{
-remove_error_model(model)
+remove_error_model(model, dv = NULL)
 }
 \arguments{
 \item{model}{(Model) Pharmpy model}
+
+\item{dv}{(Expr or str or numeric (optional)) Name or DVID of dependent variable. NULL for the default (first or only)}
 }
 \value{
 (Model) Updated Pharmpy model

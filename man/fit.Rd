@@ -8,9 +8,9 @@ fit(
   model_or_models,
   esttool = NULL,
   name = NULL,
-  context = NULL,
   ncores = 1,
-  validate_dataset = FALSE
+  validate_dataset = FALSE,
+  project = NULL
 )
 }
 \arguments{
@@ -20,11 +20,11 @@ fit(
 
 \item{name}{(str (optional)) Name of run}
 
-\item{context}{(Context (optional)) Run in this context}
-
 \item{ncores}{(numeric) Number of cores to use for estimation}
 
 \item{validate_dataset}{(logical) Whether to validate Pharmpy dataset against FDATA file (relevant for NONMEM models)}
+
+\item{project}{(Project (optional)) Which project if any to run fit in}
 }
 \value{
 (ModelfitResults | vector of ModelfitResults) ModelfitResults for the model or models

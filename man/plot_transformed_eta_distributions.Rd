@@ -9,7 +9,7 @@ plot_transformed_eta_distributions(
   parameter_estimates,
   individual_estimates,
   parameter_estimates_untransformed,
-  seed = 1234
+  seed = NULL
 )
 }
 \arguments{
@@ -21,7 +21,7 @@ plot_transformed_eta_distributions(
 
 \item{parameter_estimates_untransformed}{(array or list(str=numeric)) Parameter estimates of untransformed model fit}
 
-\item{seed}{(numeric) Random number generator or seed}
+\item{seed}{(RandomNumberGenerator or Seed or numeric or numeric (optional)) Random number generator or seed}
 }
 \value{
 (alt.Chart) Plot
