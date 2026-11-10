@@ -5,7 +5,7 @@ Date: 2026-10-29
 Title: Interface to the 'Pharmpy' 'Pharmacometrics' Library
 Authors@R: c(
   person("Rikard", "Nordgren", role=c("aut", "cre", "cph"), email="rikard.nordgren@uu.se"),
-  person("Stella", "Belin", role=c("aut", "cph"), email="stella.belin@uu.se"),
+  person("Stella", "Belin", role=c("cph")),
   person("Mats O.", "Karlsson", role=c("sad")),
   person("Andrew C.", "Hooker", role=c("sad")),
   person("Xiaomei", "Chen", role=c("sad")),
