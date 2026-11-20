@@ -13,7 +13,7 @@ read_model_from_string(code)
 (Model) Pharmpy model
 }
 \description{
-Read model from the model code in a string
+Read model from the model code in a string.
 }
 \examples{
 \dontrun{

@@ -13,7 +13,7 @@ is_linearized(model)
 (logical) TRUE if model has been linearized and FALSE otherwise
 }
 \description{
-Determine if a model is linearized
+Determine if a model is linearized.
 }
 \examples{
 \dontrun{

@@ -9,13 +9,13 @@ set_reference_values(model, refs)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{refs}{(list(str=numeric or numeric)) Pairs of column names and reference values}
+\item{refs}{(list(str=numeric)) Pairs of column names and reference values}
 }
 \value{
 (Model) Updated Pharmpy model
 }
 \description{
-Set reference values for selected columns
+Set reference values for selected columns.
 
 All values for each selected column will be replaced. For dose columns
 only the values for dosing events will be replaced.

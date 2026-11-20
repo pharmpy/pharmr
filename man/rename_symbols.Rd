@@ -15,7 +15,7 @@ rename_symbols(model, new_names)
 (Model) Updated Pharmpy model
 }
 \description{
-Rename symbols in the model
+Rename symbols in the model.
 
 Make sure that no name clash occur.
 }

@@ -10,5 +10,5 @@ print_log(context)
 \item{context}{(Context) Print the log of this context}
 }
 \description{
-Print the log of a context
+Print the log of a context.
 }

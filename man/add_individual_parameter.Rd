@@ -19,7 +19,7 @@ add_individual_parameter(model, name, init = 0.1, lower = 0)
 (Model) Updated Pharmpy model
 }
 \description{
-Add an individual or pk parameter to a model
+Add an individual or pk parameter to a model.
 }
 \examples{
 \dontrun{

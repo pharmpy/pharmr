@@ -15,7 +15,7 @@ set_evaluation_step(model, idx = -1)
 (Model) Update Pharmpy model
 }
 \description{
-Set evaluation step
+Set evaluation step.
 
 Change the final or the estimation step with a specific index to do evaulation.
 }

@@ -17,7 +17,7 @@ calculate_parameters_from_ucp(model, scale, ucps)
 (data.frame) Parameters on the normal scale
 }
 \description{
-Scale parameter values from ucp to normal scale
+Scale parameter values from ucp to normal scale.
 }
 \examples{
 \dontrun{

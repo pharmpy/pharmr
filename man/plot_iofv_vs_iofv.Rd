@@ -19,7 +19,7 @@ plot_iofv_vs_iofv(iofv1, iofv2, name1, name2)
 (alt.Chart) Scatterplot
 }
 \description{
-Plot individual OFV of two models against each other
+Plot individual OFV of two models against each other.
 }
 \examples{
 \dontrun{

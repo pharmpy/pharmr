@@ -17,7 +17,7 @@ set_lower_bounds(model, bounds, strict = TRUE)
 (Model) Updated Pharmpy model
 }
 \description{
-Set parameter lower bounds
+Set parameter lower bounds.
 }
 \examples{
 \dontrun{

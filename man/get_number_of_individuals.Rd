@@ -13,7 +13,7 @@ get_number_of_individuals(model)
 (integer) Number of individuals in the model dataset
 }
 \description{
-Retrieve the number of individuals in the model dataset
+Retrieve the number of individuals in the model dataset.
 }
 \note{
 For NONMEM models this is the number of individuals of the active dataset, i.e. after filteringof IGNORE and ACCEPT and removal of individuals with no observations.

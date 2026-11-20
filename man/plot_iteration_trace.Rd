@@ -15,7 +15,7 @@ plot_iteration_trace(ofv_iterations, parameter_estimates_iterations)
 (alt.Chart) Plot
 }
 \description{
-Plot iteration traces for OFV and parameters of an estimation
+Plot iteration traces for OFV and parameters of an estimation.
 }
 \examples{
 \dontrun{

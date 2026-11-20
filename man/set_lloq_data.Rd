@@ -19,7 +19,7 @@ set_lloq_data(model, value, lloq = NULL, blq = NULL)
 (Model) Updated Pharmpy model
 }
 \description{
-Set a dv value for lloq data records
+Set a dv value for lloq data records.
 }
 \examples{
 \dontrun{

@@ -15,7 +15,7 @@ get_column_name(model, type)
 (str or NULL) Name of the column. NULL if no column found
 }
 \description{
-Retrieve the column with a certain type
+Retrieve the column with a certain type.
 
 If multiple columns have the same type an exception will be raised.
 }

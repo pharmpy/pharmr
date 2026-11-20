@@ -13,7 +13,7 @@ unload_dataset(model)
 (Model) Updated Pharmpy model
 }
 \description{
-Unload the dataset from a model
+Unload the dataset from a model.
 }
 \examples{
 \dontrun{

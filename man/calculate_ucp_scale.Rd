@@ -13,7 +13,7 @@ calculate_ucp_scale(model)
 (UCPScale) A scale object
 }
 \description{
-Calculate a scale for unconstrained parameters for a model
+Calculate a scale for unconstrained parameters for a model.
 
 The UCPScale object can be used to calculate unconstrained parameters
 back into the normal parameter space.

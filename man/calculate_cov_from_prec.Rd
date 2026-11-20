@@ -13,7 +13,7 @@ calculate_cov_from_prec(precision_matrix)
 (data.frame) Covariance matrix
 }
 \description{
-Calculate covariance matrix from a precision matrix
+Calculate covariance matrix from a precision matrix.
 }
 \examples{
 \dontrun{

@@ -7,13 +7,13 @@
 create_datainfo(path_or_df)
 }
 \arguments{
-\item{path_or_df}{(str or str or data.frame) A path to a dataset or a dataset}
+\item{path_or_df}{(str or data.frame) A path to a dataset or a dataset}
 }
 \value{
 (DataInfo) DataInfo object
 }
 \description{
-Create a DataInfo
+Create a DataInfo.
 
 Will assume NONMEM names of columns
 }

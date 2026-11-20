@@ -30,7 +30,7 @@ remove_loq_data(
 (Model) Updated Pharmpy model
 }
 \description{
-Remove loq data records from the dataset
+Remove loq data records from the dataset.
 
 Does nothing if none of the limits are specified.
 }

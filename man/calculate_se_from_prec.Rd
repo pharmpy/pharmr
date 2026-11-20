@@ -13,7 +13,7 @@ calculate_se_from_prec(precision_matrix)
 (data.frame) Standard errors
 }
 \description{
-Calculate standard errors from a precision matrix
+Calculate standard errors from a precision matrix.
 }
 \examples{
 \dontrun{

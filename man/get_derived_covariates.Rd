@@ -13,7 +13,7 @@ get_derived_covariates(model)
 (vector) List of the names of all derived covariate variables
 }
 \description{
-Get all derived covariates in a model
+Get all derived covariates in a model.
 
 A derived covariate is a covariate calculated in the model by
 only using variables from the dataset and constants.

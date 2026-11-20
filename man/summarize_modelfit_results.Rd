@@ -15,7 +15,7 @@ summarize_modelfit_results(context, include_all_execution_steps = FALSE)
 (data.frame) A DataFrame of modelfit results with model name and estimation step as index.
 }
 \description{
-Summarize results of model runs
+Summarize results of model runs.
 
 Summarize different results after fitting a model, includes runtime, ofv,
 and parameter estimates (with errors). If include_all_execution_steps is FALSE,

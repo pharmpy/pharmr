@@ -15,7 +15,7 @@ has_additive_error_model(model, dv = NULL)
 (logical) TRUE if the model has an additive error model and FALSE otherwise
 }
 \description{
-Check if a model has an additive error model
+Check if a model has an additive error model.
 
 Multiple dependent variables are supported. By default the only (in case of one) or the
 first (in case of many) dependent variable is going to be checked.

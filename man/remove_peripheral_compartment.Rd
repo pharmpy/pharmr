@@ -15,7 +15,7 @@ remove_peripheral_compartment(model, name = NULL)
 (Model) Updated Pharmpy model
 }
 \description{
-Remove a peripheral distribution compartment from model
+Remove a peripheral distribution compartment from model.
 
 If name is set, a peripheral compartment will be removed from the compartment
 with the specified name.

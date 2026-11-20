@@ -21,7 +21,7 @@ add_observations(td, arm, variable, time_points, start_time = 0)
 (TrialDesign) An updated TrialDesign
 }
 \description{
-Add observations to an arm in a trial design
+Add observations to an arm in a trial design.
 }
 \examples{
 \dontrun{

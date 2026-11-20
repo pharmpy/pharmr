@@ -13,7 +13,7 @@ cleanup_model(model)
 (Model) Updated Pharmpy model
 }
 \description{
-Perform various cleanups of a model
+Perform various cleanups of a model.
 
 This is what is currently done
 \itemize{

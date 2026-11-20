@@ -13,7 +13,7 @@ set_weighted_error_model(model)
 (Model) Updated Pharmpy model
 }
 \description{
-Encode error model with one epsilon and W as weight
+Encode error model with one epsilon and W as weight.
 }
 \examples{
 \dontrun{

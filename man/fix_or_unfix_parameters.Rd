@@ -17,7 +17,7 @@ fix_or_unfix_parameters(model, parameters, strict = TRUE)
 (Model) Updated Pharmpy model
 }
 \description{
-Fix or unfix parameters
+Fix or unfix parameters.
 
 Set fixedness of parameters to specified values
 }

@@ -13,7 +13,7 @@ has_mixed_mm_fo_elimination(model)
 (logical) TRUE if model has describes Michaelis-Menten elimination
 }
 \description{
-Check if the model describes mixed Michaelis-Menten and first order elimination
+Check if the model describes mixed Michaelis-Menten and first order elimination.
 
 This function relies on heuristics and will not be able to detect all
 possible ways of coding the mixed Michalis-Menten and first order elimination.

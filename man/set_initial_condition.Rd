@@ -11,15 +11,15 @@ set_initial_condition(model, compartment, expression, time = 0)
 
 \item{compartment}{(str) Name of the compartment}
 
-\item{expression}{(numeric or numeric or str or Expr) The expression of the initial condition}
+\item{expression}{(numeric or str or Expr) The expression of the initial condition}
 
-\item{time}{(numeric or numeric or str or Expr) Time point. Default 0}
+\item{time}{(numeric or str or Expr) Time point. Default 0}
 }
 \value{
 (model) Updated Pharmpy model
 }
 \description{
-Set an initial condition for the ode system
+Set an initial condition for the ode system.
 
 If the initial condition is already set it will be updated. If the initial condition
 is set to zero at time zero it will be removed (since the default is 0).

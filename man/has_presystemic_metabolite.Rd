@@ -13,7 +13,7 @@ has_presystemic_metabolite(model)
 (logical) Whether a model has presystemic metabolite
 }
 \description{
-Checks whether a model has a presystemic metabolite
+Checks whether a model has a presystemic metabolite.
 
 If pre-systemic drug there will be a flow from DEPOT to METABOLITE as well
 as being a flow from the CENTRAL to METABOLITE

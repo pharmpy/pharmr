@@ -13,7 +13,7 @@ has_zero_order_absorption(model)
 (logical) Whether the model has zero order absorption or not
 }
 \description{
-Check if ode system describes a zero order absorption
+Check if ode system describes a zero order absorption.
 
 currently defined as having Infusion dose with rate not in dataset
 }

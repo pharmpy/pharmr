@@ -16,7 +16,7 @@ only or first dv.}
 (Expr) DV symbol
 }
 \description{
-Get the symbol for a certain dvid or dv and check that it is valid
+Get the symbol for a certain dvid or dv and check that it is valid.
 }
 \examples{
 \dontrun{

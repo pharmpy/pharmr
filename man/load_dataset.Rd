@@ -13,7 +13,7 @@ load_dataset(model)
 (Model) Updated Pharmpy model
 }
 \description{
-Load the dataset given datainfo
+Load the dataset given datainfo.
 }
 \examples{
 \dontrun{

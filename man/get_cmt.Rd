@@ -13,7 +13,7 @@ get_cmt(model)
 (data.frame) CMT
 }
 \description{
-Get the cmt (compartment) column from the model dataset
+Get the cmt (compartment) column from the model dataset.
 
 If a cmt column is present this will be extracted otherwise
 a cmt column will be created. If created, multiple dose compartments are

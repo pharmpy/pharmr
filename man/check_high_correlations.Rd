@@ -17,7 +17,7 @@ check_high_correlations(model, cor, limit = 0.9)
 (data.frame) Correlation values indexed on pairs of parameters for (absolute) correlations above limit
 }
 \description{
-Check for highly correlated parameter estimates
+Check for highly correlated parameter estimates.
 }
 \examples{
 \dontrun{

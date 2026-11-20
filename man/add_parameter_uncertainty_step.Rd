@@ -15,7 +15,7 @@ add_parameter_uncertainty_step(model, parameter_uncertainty_method)
 (Model) Update Pharmpy model
 }
 \description{
-Adds parameter uncertainty step to the final estimation step
+Adds parameter uncertainty step to the final estimation step.
 }
 \examples{
 \dontrun{

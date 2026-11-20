@@ -17,7 +17,7 @@ append_estimation_step_options(model, tool_options, idx = -1)
 (Model) Updated Pharmpy model
 }
 \description{
-Append estimation step options
+Append estimation step options.
 
 Appends options to an existing estimation step.
 }

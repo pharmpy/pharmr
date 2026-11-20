@@ -17,7 +17,7 @@ add_output_variables(model, variables, append = TRUE)
 (Model) Updated Pharmpy model
 }
 \description{
-Add output variables to an execution step
+Add output variables to an execution step.
 }
 \examples{
 \dontrun{

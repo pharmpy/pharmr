@@ -15,7 +15,7 @@ list_models(context, recursive = FALSE)
 (vectorc(str)) A vector of the model names
 }
 \description{
-List names of all models in a context
+List names of all models in a context.
 
 Will by default vector only models in the top level, but can vector
 all recursively using the recursive option. This will add the context

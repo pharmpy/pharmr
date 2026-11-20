@@ -17,7 +17,7 @@ drop_columns(model, column_names, mark = FALSE)
 (Model) Updated Pharmpy model
 }
 \description{
-Drop columns from the dataset or mark as dropped
+Drop columns from the dataset or mark as dropped.
 }
 \examples{
 \dontrun{

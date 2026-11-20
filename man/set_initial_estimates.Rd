@@ -27,7 +27,7 @@ the original value for these parameters.}
 (Model) Updated Pharmpy model
 }
 \description{
-Update initial parameter estimate for a model
+Update initial parameter estimate for a model.
 
 Updates initial estimates of population parameters for a model.
 If the new initial estimates are out of bounds or NaN this function will raise.

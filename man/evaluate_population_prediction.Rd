@@ -17,7 +17,7 @@ evaluate_population_prediction(model, parameters = NULL, dataset = NULL)
 (data.frame) Population predictions
 }
 \description{
-Evaluate the numeric population prediction
+Evaluate the numeric population prediction.
 
 The prediction is evaluated at the current model parameter values
 or optionally at the given parameter values.

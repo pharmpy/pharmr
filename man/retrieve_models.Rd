@@ -7,7 +7,7 @@
 retrieve_models(source, names = NULL)
 }
 \arguments{
-\item{source}{(str or str or Context) Source where to find models. Can be a path (as str or Path), or a
+\item{source}{(str or Context) Source where to find models. Can be a path (as str or Path), or a
 Context}
 
 \item{names}{(array(str) (optional)) List of names of the models to retrieve or NULL for all}
@@ -16,7 +16,7 @@ Context}
 (vector) List of retrieved Pharmpy models
 }
 \description{
-Retrieve models after a tool run
+Retrieve models after a tool run.
 
 Any models created and run by the tool can be
 retrieved.

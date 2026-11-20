@@ -9,10 +9,10 @@ create_report(results, path)
 \arguments{
 \item{results}{(Results) Results for which to create report}
 
-\item{path}{(str or str) Path to report file}
+\item{path}{(str) Path to report file}
 }
 \description{
-Create standard report for results
+Create standard report for results.
 
 The report will be an html created at specified path.
 }

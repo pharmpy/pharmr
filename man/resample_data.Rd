@@ -40,7 +40,7 @@ be put in the placeholder.}
 
 \item{name}{(str (optional)) Option to name pattern in case of only one resample}
 
-\item{seed}{(RandomNumberGenerator or numeric or numeric or Seed (optional)) Seed for the random number generator or NULL (default) for a randomized seed. If seed
+\item{seed}{(RandomNumberGenerator or numeric or Seed (optional)) Seed for the random number generator or NULL (default) for a randomized seed. If seed
 is a generator it will be passed through.}
 }
 \value{

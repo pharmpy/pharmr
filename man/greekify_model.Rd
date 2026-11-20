@@ -15,7 +15,7 @@ greekify_model(model, named_subscripts = FALSE)
 (Model) Updated Pharmpy model
 }
 \description{
-Convert to using greek letters for all population parameters
+Convert to using greek letters for all population parameters.
 }
 \examples{
 \dontrun{

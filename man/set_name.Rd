@@ -15,7 +15,7 @@ set_name(model, new_name)
 (Model) Updated Pharmpy model
 }
 \description{
-Set name of model object
+Set name of model object.
 }
 \examples{
 \dontrun{

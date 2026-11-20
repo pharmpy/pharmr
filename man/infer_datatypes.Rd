@@ -15,7 +15,7 @@ infer_datatypes(model, columns = NULL)
 (Model) Updated Pharmpy model
 }
 \description{
-Infer and set datatypes for the dataset
+Infer and set datatypes for the dataset.
 
 All columns or only the ones set in the columns option will be checked
 for conversion to a simpler datatype. Currently only int32 will be checked since

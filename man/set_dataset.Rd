@@ -15,7 +15,7 @@ set_dataset(
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{path_or_df}{(str or str or data.frame) Dataset path or dataframe}
+\item{path_or_df}{(str or data.frame) Dataset path or dataframe}
 
 \item{format}{(str (optional)) File format of dataset (default csv. Can also be set to 'nonmem')}
 
@@ -27,7 +27,7 @@ set_dataset(
 (Model) Updated Pharmpy model
 }
 \description{
-Load the dataset given datainfo
+Load the dataset given datainfo.
 
 Option \code{annotate_using} will by default use the datainfo file (if available), otherwise the
 information in the input model. If all or any columns have not been annotated, this option

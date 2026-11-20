@@ -20,7 +20,7 @@ For example if the model has no dataset.}
 (numeric) The summary statistic
 }
 \description{
-Calculate a summary statistic for an expression over the dataset
+Calculate a summary statistic for an expression over the dataset.
 
 The expression can be a dataset column name, a variable from the model, e.g. a derived
 covariate or a matematical expression involving dataset columns or model variables.

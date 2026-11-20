@@ -11,13 +11,13 @@ set_zero_order_input(model, compartment, expression)
 
 \item{compartment}{(str) Name of the compartment}
 
-\item{expression}{(numeric or numeric or str or Expr) The expression of the zero order input}
+\item{expression}{(numeric or str or Expr) The expression of the zero order input}
 }
 \value{
 (model) Updated Pharmpy model
 }
 \description{
-Set a zero order input for the ode system
+Set a zero order input for the ode system.
 
 If the zero order input is already set it will be updated.
 }

@@ -4,10 +4,12 @@
 \alias{create_basic_pd_model}
 \title{create_basic_pd_model}
 \usage{
-create_basic_pd_model(dataset_path = NULL)
+create_basic_pd_model(input = NULL, dataset_path = NULL)
 }
 \arguments{
-\item{dataset_path}{(str or str (optional)) Optional path to a dataset}
+\item{input}{(str or data.frame (optional)) Optional path to a dataset or the dataset itself}
+
+\item{dataset_path}{(str (optional)) Deprecated. Use input instead}
 }
 \value{
 (Model) Pharmpy model

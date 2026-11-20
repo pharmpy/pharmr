@@ -13,5 +13,5 @@ replace_fixed_thetas(model)
 (Model) Updated Pharmpy model
 }
 \description{
-Replace all fixed thetas with constants in the model statements
+Replace all fixed thetas with constants in the model statements.
 }

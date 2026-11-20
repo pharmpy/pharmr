@@ -15,7 +15,7 @@ is_binary(model, expr)
 (logical) TRUE if binary
 }
 \description{
-Check if an expression defines a binary variable (only having values 0 and 1)
+Check if an expression defines a binary variable (only having values 0 and 1).
 }
 \examples{
 \dontrun{

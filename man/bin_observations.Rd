@@ -17,7 +17,7 @@ bin_observations(model, method, nbins)
 (data.frame) A series of bin ids indexed on the original record index of the dataset vector A vector of bin edges
 }
 \description{
-Bin all observations on the independent variable
+Bin all observations on the independent variable.
 
 Available binning methods:
 

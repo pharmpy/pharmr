@@ -13,7 +13,7 @@ has_linear_odes(model)
 (logical) TRUE if model has an ODE system that is linear
 }
 \description{
-Check if model has a linear ODE system
+Check if model has a linear ODE system.
 }
 \examples{
 \dontrun{

@@ -13,7 +13,7 @@ display_odes(model)
 (ODEDisplayer) A displayable object
 }
 \description{
-Displays the ordinary differential equation system
+Displays the ordinary differential equation system.
 }
 \examples{
 \dontrun{

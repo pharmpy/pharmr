@@ -12,5 +12,5 @@ print_fit_summary(model, modelfit_results)
 \item{modelfit_results}{(ModelfitResults) Pharmpy ModelfitResults object}
 }
 \description{
-Print a summary of the model fit
+Print a summary of the model fit.
 }

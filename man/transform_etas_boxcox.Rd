@@ -15,7 +15,7 @@ transform_etas_boxcox(model, list_of_etas = NULL)
 (Model) Updated Pharmpy model
 }
 \description{
-Applies a boxcox transformation to selected etas
+Applies a boxcox transformation to selected etas.
 
 Initial estimate for lambda is 0.1 with bounds (-3, 3).
 }

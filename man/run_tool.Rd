@@ -15,7 +15,7 @@ run_tool(tool_name, ...)
 (Results) Results object for tool
 }
 \description{
-Run tool workflow
+Run tool workflow.
 
 note::
 This is a general function that can run any tool. There is also one function for each

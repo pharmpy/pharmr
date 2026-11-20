@@ -13,7 +13,7 @@ get_zero_order_inputs(model)
 (Matrix) Vector of inputs
 }
 \description{
-Get zero order inputs for all compartments
+Get zero order inputs for all compartments.
 }
 \examples{
 \dontrun{

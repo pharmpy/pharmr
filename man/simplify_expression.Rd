@@ -9,13 +9,13 @@ simplify_expression(model, expr)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{expr}{(str or numeric or numeric or Expr) Expression to simplify}
+\item{expr}{(str or numeric or Expr) Expression to simplify}
 }
 \value{
 (Expression) Simplified expression
 }
 \description{
-Simplify expression given constraints in model
+Simplify expression given constraints in model.
 }
 \examples{
 \dontrun{

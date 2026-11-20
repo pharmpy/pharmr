@@ -15,7 +15,7 @@ get_nested_model(model_1, model_2)
 (Model | NULL) Pharmpy model or NULL
 }
 \description{
-Return nested model from a pair of models
+Return nested model from a pair of models.
 
 Function to get a nested model from a pair of models, NULL
 if neither model is nested. A model is not considered nested if:

@@ -13,7 +13,7 @@ get_evid(model)
 (data.frame) EVID
 }
 \description{
-Get the evid from model dataset
+Get the evid from model dataset.
 
 If an event column is present this will be extracted otherwise
 an evid column will be created.

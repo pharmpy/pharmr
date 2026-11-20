@@ -13,7 +13,7 @@ calculate_corr_from_prec(precision_matrix)
 (data.frame) Correlation matrix
 }
 \description{
-Calculate correlation matrix from a precision matrix
+Calculate correlation matrix from a precision matrix.
 }
 \examples{
 \dontrun{

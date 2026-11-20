@@ -7,14 +7,14 @@
 create_rng(seed = NULL)
 }
 \arguments{
-\item{seed}{(numeric or numeric or RandomNumberGenerator or Seed (optional)) Seed for the random number generator or NULL (default) for a randomized seed. If seed
+\item{seed}{(numeric or RandomNumberGenerator or Seed (optional)) Seed for the random number generator or NULL (default) for a randomized seed. If seed
 is a generator it will be passed through.}
 }
 \value{
 (RandomNumberGenerator) Initialized random number generator object
 }
 \description{
-Create a new random number generator
+Create a new random number generator.
 
 Pharmpy functions that use random sampling take a random number generator or seed as input.
 This function can be used to create a default new random number generator.

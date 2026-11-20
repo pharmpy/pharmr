@@ -21,7 +21,7 @@ will mean the DV column only when DVID is 1.}
 (Model | DataInfo) An updated Model or DataInfo object
 }
 \description{
-Specify a property of a column
+Specify a property of a column.
 
 See :py:attr:\code{pharmpy.DataInfo.properties} for documentation on data properties.
 }

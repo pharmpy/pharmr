@@ -18,7 +18,7 @@ COVEFF → COVEFF1}
 (Expr) Created symbol with unique name
 }
 \description{
-Create a new unique variable symbol given a model
+Create a new unique variable symbol given a model.
 }
 \examples{
 \dontrun{

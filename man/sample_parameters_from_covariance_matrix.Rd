@@ -28,13 +28,13 @@ default and means never and 0 means always}
 
 \item{n}{(numeric) Number of samples}
 
-\item{seed}{(RandomNumberGenerator or numeric or numeric or Seed (optional)) An integer seed or a random number generator}
+\item{seed}{(RandomNumberGenerator or numeric or Seed (optional)) An integer seed or a random number generator}
 }
 \value{
 (data.frame) A dataframe with one sample per row
 }
 \description{
-Sample parameter vectors using the covariance matrix
+Sample parameter vectors using the covariance matrix.
 
 If parameters is not provided all estimated parameters will be used
 }

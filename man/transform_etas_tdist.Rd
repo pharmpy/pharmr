@@ -15,7 +15,7 @@ transform_etas_tdist(model, list_of_etas = NULL)
 (Model) Updated Pharmpy model
 }
 \description{
-Applies a t-distribution transformation to selected etas
+Applies a t-distribution transformation to selected etas.
 
 Initial estimate for degrees of freedom is 80 with bounds (3, 100).
 }

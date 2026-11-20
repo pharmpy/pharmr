@@ -13,7 +13,7 @@ get_sigmas(model)
 (Parameters) All sigma parameters
 }
 \description{
-Get all sigmas (residual error variability parameters) of a model
+Get all sigmas (residual error variability parameters) of a model.
 }
 \examples{
 \dontrun{

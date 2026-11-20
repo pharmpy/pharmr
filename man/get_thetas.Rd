@@ -13,7 +13,7 @@ get_thetas(model)
 (Parameters) All theta parameters
 }
 \description{
-Get all thetas (structural parameters) of a model
+Get all thetas (structural parameters) of a model.
 }
 \examples{
 \dontrun{

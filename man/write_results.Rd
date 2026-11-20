@@ -9,14 +9,14 @@ write_results(results, path, compression = FALSE, csv = FALSE)
 \arguments{
 \item{results}{(Results) Pharmpy results object}
 
-\item{path}{(str or str) Path to results file}
+\item{path}{(str) Path to results file}
 
 \item{compression}{(logical) TRUE to compress the file. Not applicable to csv file}
 
 \item{csv}{(logical) Save as csv file}
 }
 \description{
-Write results object to json (or csv) file
+Write results object to json (or csv) file.
 
 Note that the csv-file cannot be read into a results object again.
 }

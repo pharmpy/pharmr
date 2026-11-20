@@ -13,7 +13,7 @@ has_instantaneous_absorption(model)
 (logical) TRUE if model has instantaneous absorption
 }
 \description{
-Check if ode system describes a instantaneous absorption
+Check if ode system describes a instantaneous absorption.
 
 Defined as being a instantaneous dose directly into the central compartment
 }

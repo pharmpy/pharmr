@@ -13,7 +13,7 @@ get_concentration_parameters_from_data(model)
 (data.frame) Concentration parameters
 }
 \description{
-Create a dataframe with concentration parameters
+Create a dataframe with concentration parameters.
 
 Note that all values are directly calculated from the dataset
 }

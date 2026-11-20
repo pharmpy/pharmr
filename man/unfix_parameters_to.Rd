@@ -17,7 +17,7 @@ unfix_parameters_to(model, inits, strict = TRUE)
 (Model) Updated Pharmpy model
 }
 \description{
-Unfix parameters to
+Unfix parameters to.
 
 Unfix all listed parameters to specified value/values
 }

@@ -17,7 +17,7 @@ evaluate_weighted_residuals(model, parameters = NULL, dataset = NULL)
 (data.frame) WRES
 }
 \description{
-Evaluate the weighted residuals
+Evaluate the weighted residuals.
 
 The residuals is evaluated at the current model parameter values
 or optionally at the given parameter values.

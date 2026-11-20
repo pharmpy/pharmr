@@ -11,9 +11,9 @@ run_linearize(model, results, model_name = "linbase", description = "", ...)
 
 \item{results}{(ModelfitResults) Results of estimation of model}
 
-\item{model_name}{(str) New name of linearized model. The default is "linbase".}
+\item{model_name}{(str) New name of linearized model. The default is 'linbase'.}
 
-\item{description}{(str) Description of linearized model. The default is ""}
+\item{description}{(str) Description of linearized model. The default is ''}
 
 \item{...}{Arguments to pass to tool}
 }
@@ -21,5 +21,5 @@ run_linearize(model, results, model_name = "linbase", description = "", ...)
 (LinearizeResults) Linearize tool results object.
 }
 \description{
-Linearize a model
+Linearize a model.
 }

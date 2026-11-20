@@ -13,7 +13,7 @@ remove_parameter_uncertainty_step(model)
 (Model) Pharmpy model object
 }
 \description{
-Removes parameter uncertainty step from the final estimation step
+Removes parameter uncertainty step from the final estimation step.
 }
 \examples{
 \dontrun{

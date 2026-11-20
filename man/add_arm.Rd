@@ -17,7 +17,7 @@ add_arm(td, name, size)
 (TrialDesign) An updated TrialDesign
 }
 \description{
-Add an empty arm to a trial design
+Add an empty arm to a trial design.
 }
 \examples{
 \dontrun{

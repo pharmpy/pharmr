@@ -15,7 +15,7 @@ set_n_transit_compartments(model, keep_depot = TRUE)
 (Model) Updated Pharmpy model
 }
 \description{
-Set the n-transit compartments model
+Set the n-transit compartments model.
 
 This is the absorption delay model where the number of transit compartments is a parameter
 to be estimated (1) (2). Initial estimate for absorption rate is

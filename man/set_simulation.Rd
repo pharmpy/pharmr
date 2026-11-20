@@ -17,7 +17,7 @@ set_simulation(model, n = 1, seed = 1234)
 (Model) Update Pharmpy model
 }
 \description{
-Change model into simulation model
+Change model into simulation model.
 }
 \examples{
 \dontrun{

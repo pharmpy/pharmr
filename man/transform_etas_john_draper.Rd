@@ -15,7 +15,7 @@ transform_etas_john_draper(model, list_of_etas = NULL)
 (Model) Updated Pharmpy model
 }
 \description{
-Applies a John Draper transformation to selected etas
+Applies a John Draper transformation to selected etas.
 
 See (1) for more information.
 

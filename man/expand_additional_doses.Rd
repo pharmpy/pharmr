@@ -17,5 +17,5 @@ the new dataset.}
 (Model) Updated Pharmpy model
 }
 \description{
-Expand additional doses into separate dose records
+Expand additional doses into separate dose records.
 }

@@ -24,7 +24,7 @@ check_parameters_near_bounds(
 (data.frame) Logical Series with same index as values
 }
 \description{
-Check if any estimated parameter value is close to its bounds
+Check if any estimated parameter value is close to its bounds.
 }
 \examples{
 \dontrun{

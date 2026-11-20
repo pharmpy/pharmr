@@ -15,7 +15,7 @@ add_time_of_last_dose(model, name = "TDOSE")
 (Model) Updated Pharmpy model
 }
 \description{
-Add a variable for time of last dose to the model
+Add a variable for time of last dose to the model.
 }
 \seealso{
 add_time_after_dose : Add time after dose to dataset

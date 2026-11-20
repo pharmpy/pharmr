@@ -24,7 +24,7 @@ evaluate_epsilon_gradient(
 (data.frame) Gradient
 }
 \description{
-Evaluate the numeric epsilon gradient
+Evaluate the numeric epsilon gradient.
 
 The gradient is evaluated at the current model parameter values
 or optionally at the given parameter values.

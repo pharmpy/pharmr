@@ -13,7 +13,7 @@ remove_unused_columns(model)
 (Model) Updated Pharmpy model
 }
 \description{
-Remove all columns in the dataset that are not used by the model including dropped columns
+Remove all columns in the dataset that are not used by the model including dropped columns.
 
 Warnings
 Currently columns not needed to give a prediction, but used by other expressions in the

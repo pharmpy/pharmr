@@ -13,7 +13,7 @@ use_thetas_for_error_stdev(model)
 (Model) Updated Pharmpy model
 }
 \description{
-Use thetas to estimate standard deviation of error
+Use thetas to estimate standard deviation of error.
 }
 \seealso{
 set_weighted_error_model : Encode error model with one epsilon and weight

@@ -13,7 +13,7 @@ get_number_of_observations_per_individual(model)
 (data.frame) Number of observations in the model dataset
 }
 \description{
-Number of observations for each individual
+Number of observations for each individual.
 }
 \note{
 For NONMEM models this is the individuals and number of observations of the active dataset, i.e.after filtering of IGNORE and ACCEPT and removal of individuals with no observations.

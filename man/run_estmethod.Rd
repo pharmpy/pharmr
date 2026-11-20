@@ -16,7 +16,7 @@ run_estmethod(
 )
 }
 \arguments{
-\item{algorithm}{(str) The algorithm to use (can be 'exhaustive', 'exhaustive_with_update' or 'exhaustive_only_eval')}
+\item{algorithm}{(str) The algorithm to use (can be 'exhaustive'\verb{, }'exhaustive_with_update'\code{or}'exhaustive_only_eval')}
 
 \item{methods}{(array(str) or str (optional)) List of estimation methods to test.
 Can be specified as 'all', a vector of estimation methods, or NULL (to not test any estimation method)}

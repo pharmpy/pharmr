@@ -15,13 +15,13 @@ set_description(model, new_description)
 (Model) Updated Pharmpy model
 }
 \description{
-Set description of model object
+Set description of model object.
 }
 \examples{
 \dontrun{
 model <- load_example_model("pheno")
 model$description
-model <- set_description(model, "PHENOBARB run 2")
+model <- set_description(model, "Phenobarbital PK run 2")
 model$description
 }
 

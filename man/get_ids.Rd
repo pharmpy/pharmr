@@ -13,7 +13,7 @@ get_ids(model)
 (vector) All subject ids
 }
 \description{
-Retrieve a vector of all subject ids of the dataset
+Retrieve a vector of all subject ids of the dataset.
 }
 \examples{
 \dontrun{

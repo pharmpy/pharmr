@@ -9,7 +9,7 @@ evaluate_expression(model, expression, parameter_estimates = NULL)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{expression}{(str or numeric or numeric or Expr) Expression to evaluate}
+\item{expression}{(str or numeric or Expr) Expression to evaluate}
 
 \item{parameter_estimates}{(list(str=numeric) (optional)) Parameter estimates to use instead of initial estimates}
 }
@@ -17,7 +17,7 @@ evaluate_expression(model, expression, parameter_estimates = NULL)
 (data.frame) A series of one evaluated value for each data record
 }
 \description{
-Evaluate expression using model
+Evaluate expression using model.
 
 Calculate the value of expression for each data record.
 The expression can contain dataset columns, variables in model and

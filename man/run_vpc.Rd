@@ -30,7 +30,7 @@ run_vpc(
 (VPCResults) VPC results object
 }
 \description{
-Run VPC
+Run VPC.
 }
 \examples{
 \dontrun{

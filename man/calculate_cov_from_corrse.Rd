@@ -15,7 +15,7 @@ calculate_cov_from_corrse(corr, se)
 (data.frame) Covariance matrix
 }
 \description{
-Calculate covariance matrix from a correlation matrix and standard errors
+Calculate covariance matrix from a correlation matrix and standard errors.
 }
 \examples{
 \dontrun{

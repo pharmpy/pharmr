@@ -21,7 +21,7 @@ calculate_individual_shrinkage(
 (DataFrame) Shrinkage for each eta and individual
 }
 \description{
-Calculate the individual eta-shrinkage
+Calculate the individual eta-shrinkage.
 
 Definition: ieta_shr = (var(eta) / omega)
 }

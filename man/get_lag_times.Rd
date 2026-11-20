@@ -13,5 +13,5 @@ get_lag_times(model)
 (list) Dictionary from compartment name to lag time expression
 }
 \description{
-Get lag times for all compartments
+Get lag times for all compartments.
 }

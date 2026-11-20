@@ -7,13 +7,13 @@
 load_example_model(name)
 }
 \arguments{
-\item{name}{(str) Name of the model. Currently available models are "pheno" and "pheno_linear"}
+\item{name}{(str) Name of the model. Currently available models are "pheno", "pheno_linear", and "moxo"}
 }
 \value{
 (Model) Pharmpy model
 }
 \description{
-Load an example model
+Load an example model.
 
 Load an example model from models built into Pharmpy
 }

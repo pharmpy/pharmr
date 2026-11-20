@@ -13,7 +13,7 @@ calculate_se_from_cov(cov)
 (data.frame) Standard errors
 }
 \description{
-Calculate standard errors from a covariance matrix
+Calculate standard errors from a covariance matrix.
 }
 \examples{
 \dontrun{

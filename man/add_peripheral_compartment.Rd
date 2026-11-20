@@ -15,7 +15,7 @@ add_peripheral_compartment(model, name = NULL)
 (Model) Updated Pharmpy model
 }
 \description{
-Add a peripheral distribution compartment to model
+Add a peripheral distribution compartment to model.
 
 The rate of flow from the central to the peripheral compartment
 will be parameterized as QPn / VC where VC is the volume of the central compartment.

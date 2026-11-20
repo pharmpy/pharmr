@@ -13,7 +13,7 @@ list_time_varying_covariates(model)
 (vector) Names of all time varying covariates
 }
 \description{
-Return a vector of names of all time varying covariates
+Return a vector of names of all time varying covariates.
 }
 \examples{
 \dontrun{

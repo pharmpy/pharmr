@@ -12,7 +12,7 @@ broadcast_log(context, broadcaster = NULL)
 \item{broadcaster}{(str (optional)) Name of the broadcaster to use. Default is to use the same as was original used.}
 }
 \description{
-Broadcast the log of a context
+Broadcast the log of a context.
 
 Default is to use the same broadcaster, but optionally another broadcaster could
 be used.

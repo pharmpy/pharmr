@@ -13,7 +13,7 @@ get_symbolic_constraints(model)
 (vectorc(BooleanExpr)) A vector of expressions constraining the parameters
 }
 \description{
-Create symbolic constraints on parameters for a model
+Create symbolic constraints on parameters for a model.
 
 The output of this function can be used for further inference or manipulation
 of expressions. For example in the :func:\code{pharmpy.basic.equals} function.

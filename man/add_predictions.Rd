@@ -15,7 +15,7 @@ add_predictions(model, pred)
 (Model) Updated Pharmpy model
 }
 \description{
-Add predictions and/or residuals
+Add predictions and/or residuals.
 
 Add predictions to estimation step.
 }

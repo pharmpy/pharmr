@@ -9,13 +9,13 @@ is_real(model, expr)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{expr}{(numeric or numeric or str or Expr) Expression to test}
+\item{expr}{(numeric or str or Expr) Expression to test}
 }
 \value{
 (logical or NULL) TRUE if expression is real, FALSE if not and NULL if unknown
 }
 \description{
-Determine if an expression is real valued given constraints of a model
+Determine if an expression is real valued given constraints of a model.
 }
 \examples{
 \dontrun{

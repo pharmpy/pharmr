@@ -13,7 +13,7 @@ has_first_order_absorption(model)
 (logical) TRUE if model has first order absorption
 }
 \description{
-Check if ode system describes a first order absorption
+Check if ode system describes a first order absorption.
 
 Currently defined as the central compartment having a unidirectional input
 flow from another compartment (such as depot or transit)

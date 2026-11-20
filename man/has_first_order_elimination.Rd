@@ -13,7 +13,7 @@ has_first_order_elimination(model)
 (logical) TRUE if model has describes first order elimination
 }
 \description{
-Check if the model describes first order elimination
+Check if the model describes first order elimination.
 
 This function relies on heuristics and will not be able to detect all
 possible ways of coding the first order elimination.

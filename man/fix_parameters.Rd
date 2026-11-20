@@ -17,7 +17,7 @@ fix_parameters(model, parameter_names, strict = TRUE)
 (Model) Updated Pharmpy model
 }
 \description{
-Fix parameters
+Fix parameters.
 
 Fix all listed parameters
 }

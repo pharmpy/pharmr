@@ -19,7 +19,7 @@ set_estimation_step(model, method, idx = 0, ...)
 (Model) Updated Pharmpy model
 }
 \description{
-Set estimation step
+Set estimation step.
 
 Sets estimation step for a model. Methods currently supported are:
 FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM, BAYES

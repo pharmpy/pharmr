@@ -10,7 +10,7 @@ print_model_code(model)
 \item{model}{(Model) Pharmpy model}
 }
 \description{
-Print the model code of the underlying model language to the console
+Print the model code of the underlying model language to the console.
 }
 \examples{
 \dontrun{

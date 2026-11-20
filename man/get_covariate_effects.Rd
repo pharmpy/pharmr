@@ -13,7 +13,7 @@ get_covariate_effects(model)
 (Dictionary) Dictionary of parameters and connected covariate(s)
 }
 \description{
-Return a list of all used covariates within a model
+Return a list of all used covariates within a model.
 
 The list will have parameter name as key with a connected value as
 a vector of tuple(s) with (covariate, effect type, operator)

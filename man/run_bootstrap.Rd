@@ -31,7 +31,7 @@ calculations. Default is all models}
 (BootstrapResults) Bootstrap tool result object
 }
 \description{
-Run bootstrap tool
+Run bootstrap tool.
 }
 \examples{
 \dontrun{

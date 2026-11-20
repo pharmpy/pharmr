@@ -15,7 +15,7 @@ get_model_covariates(model, strings = FALSE)
 (vector) Covariate symbols or names
 }
 \description{
-List of covariates used in model
+List of covariates used in model.
 
 A covariate in the model is here defined to be a data item
 affecting the model prediction excluding dosing items that

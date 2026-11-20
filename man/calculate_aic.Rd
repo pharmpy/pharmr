@@ -15,7 +15,7 @@ calculate_aic(model, likelihood)
 (numeric) AIC of model fit
 }
 \description{
-Calculate AIC
+Calculate AIC.
 
 AIC = -2LL + 2*n_estimated_parameters
 }

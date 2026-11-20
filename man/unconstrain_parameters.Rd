@@ -17,7 +17,7 @@ unconstrain_parameters(model, parameter_names, strict = TRUE)
 (Model) Updated Pharmpy model
 }
 \description{
-Remove all constraints from parameters
+Remove all constraints from parameters.
 }
 \examples{
 \dontrun{

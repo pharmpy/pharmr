@@ -7,7 +7,7 @@
 read_model(path, missing_data_token = NULL)
 }
 \arguments{
-\item{path}{(str or str) Path to model}
+\item{path}{(str) Path to model}
 
 \item{missing_data_token}{(str (optional)) Use this token for missing data. This option will override the token from the config.
 (This option was added in Pharmpy version 1.2.0)}
@@ -16,7 +16,7 @@ read_model(path, missing_data_token = NULL)
 (Model) Pharmpy model
 }
 \description{
-Read model from file
+Read model from file.
 }
 \examples{
 \dontrun{

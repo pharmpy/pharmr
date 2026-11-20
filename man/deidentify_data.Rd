@@ -17,7 +17,7 @@ deidentify_data(df, id_column = "ID", date_columns = NULL)
 (data.frame) Deidentified dataset
 }
 \description{
-Deidentify a dataset
+Deidentify a dataset.
 
 Two operations are performed on the dataset:
 \enumerate{

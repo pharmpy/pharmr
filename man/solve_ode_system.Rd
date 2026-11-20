@@ -13,7 +13,7 @@ solve_ode_system(model)
 (Model) Updated Pharmpy model
 }
 \description{
-Replace ODE system with analytical solution if possible
+Replace ODE system with analytical solution if possible.
 
 Warnings
 This function can currently only handle the most simple of ODE systems.

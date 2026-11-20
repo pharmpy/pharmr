@@ -30,7 +30,7 @@ add_population_parameter(
 (Model) Updated Pharmpy model
 }
 \description{
-Add a new population parameter to the model
+Add a new population parameter to the model.
 }
 \examples{
 \dontrun{

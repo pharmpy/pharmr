@@ -13,7 +13,7 @@ load_example_modelfit_results(name)
 (ModelfitResults) Loaded modelfit results object
 }
 \description{
-Load the modelfit results of an example model
+Load the modelfit results of an example model.
 
 Load the modelfit results of an example model built into Pharmpy
 }

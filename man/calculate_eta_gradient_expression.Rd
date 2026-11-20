@@ -13,7 +13,7 @@ calculate_eta_gradient_expression(model)
 (vectorc(Expr)) List of symbolic expressions
 }
 \description{
-Calculate the symbolic expression for the eta gradient
+Calculate the symbolic expression for the eta gradient.
 
 This function currently only support models without ODE systems
 }

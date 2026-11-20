@@ -16,7 +16,7 @@ all variables defined by the model.}
 (Unit) A unit expression
 }
 \description{
-Derive the physical unit of a variable in the model
+Derive the physical unit of a variable in the model.
 
 Unit information for the dataset needs to be available.
 The variable can be defined in the code, a dataset column, a parameter

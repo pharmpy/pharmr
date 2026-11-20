@@ -13,7 +13,7 @@ has_michaelis_menten_elimination(model)
 (logical) TRUE if model has describes Michaelis-Menten elimination
 }
 \description{
-Check if the model describes Michaelis-Menten elimination
+Check if the model describes Michaelis-Menten elimination.
 
 This function relies on heuristics and will not be able to detect all
 possible ways of coding the Michaelis-Menten elimination.

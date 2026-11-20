@@ -17,7 +17,7 @@ add_metabolite(model, drug_dvid = 1, presystemic = FALSE)
 (Model) Updated Pharmpy model
 }
 \description{
-Adds a metabolite compartment to a model
+Adds a metabolite compartment to a model.
 
 The flow from the central compartment to the metabolite compartment
 will be unidirectional.

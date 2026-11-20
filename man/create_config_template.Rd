@@ -7,7 +7,7 @@
 create_config_template()
 }
 \description{
-Create a basic config file template
+Create a basic config file template.
 
 If a configuration file already exists it will not be overwritten
 }

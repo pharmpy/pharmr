@@ -13,7 +13,7 @@ create_trial_design(idv_name = "TIME")
 (TrialDesign) An empty trial design
 }
 \description{
-Create an empty trial design
+Create an empty trial design.
 }
 \examples{
 \dontrun{

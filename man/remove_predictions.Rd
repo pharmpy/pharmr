@@ -15,7 +15,7 @@ remove_predictions(model, to_remove = NULL)
 (Model) Updated Pharmpy model
 }
 \description{
-Remove predictions and/or residuals
+Remove predictions and/or residuals.
 
 Remove predictions from estimation step. Default is to remove all predictions.
 }

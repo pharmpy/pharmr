@@ -19,7 +19,7 @@ set_time_varying_error_model(model, cutoff, idv = "TIME", dv = NULL)
 (Model) Updated Pharmpy model
 }
 \description{
-Set a time varying error model per time cutoff
+Set a time varying error model per time cutoff.
 }
 \examples{
 \dontrun{

@@ -17,7 +17,7 @@ calculate_bic(model, likelihood, type = "mixed")
 (numeric) BIC of model fit
 }
 \description{
-Calculate BIC
+Calculate BIC.
 
 Different variations of the BIC can be calculated:
 \itemize{

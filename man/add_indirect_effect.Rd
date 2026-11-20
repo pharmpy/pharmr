@@ -19,7 +19,7 @@ add_indirect_effect(model, expr, prod = TRUE, variable = NULL)
 (Model) Updated Pharmpy model
 }
 \description{
-Add indirect (turnover) effect
+Add indirect (turnover) effect.
 
 The concentration (equation could not be rendered, see API doc on website)
 \itemize{

@@ -13,7 +13,7 @@ calculate_corr_from_cov(cov)
 (data.frame) Correlation matrix
 }
 \description{
-Calculate correlation matrix from a covariance matrix
+Calculate correlation matrix from a covariance matrix.
 }
 \examples{
 \dontrun{

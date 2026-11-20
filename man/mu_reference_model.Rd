@@ -13,7 +13,7 @@ mu_reference_model(model)
 (Model) Updated Pharmpy model
 }
 \description{
-Convert model to use mu-referencing
+Convert model to use mu-referencing.
 
 Mu-referencing an eta is to separately define its actual mu (mean) parameter.
 For example: (equation could not be rendered, see API doc on website)

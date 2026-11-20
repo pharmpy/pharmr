@@ -13,7 +13,7 @@ make_declarative(model)
 (Model) Updated Pharmpy model
 }
 \description{
-Make the model statments declarative
+Make the model statments declarative.
 
 Each symbol will only be declared once.
 }

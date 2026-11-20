@@ -13,5 +13,5 @@ remove_unused_parameters_and_rvs(model)
 (Model) Updated Pharmpy model
 }
 \description{
-Remove any parameters and rvs that are not used in the model statements
+Remove any parameters and rvs that are not used in the model statements.
 }

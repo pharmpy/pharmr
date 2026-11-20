@@ -17,7 +17,7 @@ plot_individual_predictions(model, predictions, individuals = NULL)
 (alt.Chart) Plot
 }
 \description{
-Plot DV and predictions grouped on individuals
+Plot DV and predictions grouped on individuals.
 
 The predictions would normally be taken from the modelfit results, but any data frame of
 appropriate format can be used. It should have one column per type of prediction where

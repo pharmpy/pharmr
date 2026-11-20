@@ -24,7 +24,7 @@ evaluate_individual_prediction(
 (data.frame) Individual predictions
 }
 \description{
-Evaluate the numeric individual prediction
+Evaluate the numeric individual prediction.
 
 The prediction is evaluated at the current model parameter values
 or optionally at the given parameter values.

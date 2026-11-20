@@ -13,5 +13,5 @@ get_mdv(model)
 (data.frame) MDVs
 }
 \description{
-Get MDVs from dataset
+Get MDVs from dataset.
 }

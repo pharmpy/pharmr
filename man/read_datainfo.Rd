@@ -7,11 +7,11 @@
 read_datainfo(path)
 }
 \arguments{
-\item{path}{(str or str) A path to a datainfo file}
+\item{path}{(str) A path to a datainfo file}
 }
 \value{
 (DataInfo) DataInfo object
 }
 \description{
-Read a datainfo file
+Read a datainfo file.
 }

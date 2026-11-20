@@ -13,7 +13,7 @@ get_omegas(model)
 (Parameters) All omega parameters
 }
 \description{
-Get all omegas (variability parameters) of a model
+Get all omegas (variability parameters) of a model.
 }
 \examples{
 \dontrun{

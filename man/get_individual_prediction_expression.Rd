@@ -13,7 +13,7 @@ get_individual_prediction_expression(model)
 (Expr) Symbolic expression
 }
 \description{
-Get the full symbolic expression for the modelled individual prediction
+Get the full symbolic expression for the modelled individual prediction.
 
 This function currently only support models without ODE systems
 }

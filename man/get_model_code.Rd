@@ -13,7 +13,7 @@ get_model_code(model)
 (str) Model code
 }
 \description{
-Get the model code of the underlying model language as a string
+Get the model code of the underlying model language as a string.
 }
 \examples{
 \dontrun{

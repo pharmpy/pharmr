@@ -17,7 +17,7 @@ fix_parameters_to(model, inits, strict = TRUE)
 (Model) Updated Pharmpy model
 }
 \description{
-Fix parameters to
+Fix parameters to.
 
 Fix all listed parameters to specified value/values
 }

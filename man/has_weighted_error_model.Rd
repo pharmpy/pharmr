@@ -13,7 +13,7 @@ has_weighted_error_model(model)
 (logical) TRUE if the model has a weighted error model and FALSE otherwise
 }
 \description{
-Check if a model has a weighted error model
+Check if a model has a weighted error model.
 }
 \examples{
 \dontrun{

@@ -13,7 +13,7 @@ has_zero_order_elimination(model)
 (logical) TRUE if model has describes zero order elimination
 }
 \description{
-Check if the model describes zero-order elimination
+Check if the model describes zero-order elimination.
 
 This function relies on heuristics and will not be able to detect all
 possible ways of coding the zero-order elimination.

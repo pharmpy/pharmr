@@ -13,7 +13,7 @@ set_first_order_elimination(model)
 (Model) Updated Pharmpy model
 }
 \description{
-Sets elimination to first order
+Sets elimination to first order.
 }
 \examples{
 \dontrun{

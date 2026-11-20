@@ -13,7 +13,7 @@ has_linear_odes_with_real_eigenvalues(model)
 (logical) TRUE if model has an ODE system that is linear
 }
 \description{
-Check if model has a linear ode system with real eigenvalues
+Check if model has a linear ode system with real eigenvalues.
 }
 \examples{
 \dontrun{

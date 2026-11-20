@@ -17,7 +17,7 @@ transform_blq(model, method = "m4", lloq = NULL)
 (Model) Updated Pharmpy model
 }
 \description{
-Transform for BLQ data
+Transform for BLQ data.
 
 Transform a given model, methods available are m1, m3, m4, m5, m6 and m7 (1).
 The blq information can come from the dataset, the lloq option or a combination. Both LLOQ and BLQ

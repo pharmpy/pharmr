@@ -13,7 +13,7 @@ is_simulation_model(model)
 (logical) TRUE if it is a simulation model
 }
 \description{
-Check if a model is a pure simulation model
+Check if a model is a pure simulation model.
 }
 \examples{
 \dontrun{

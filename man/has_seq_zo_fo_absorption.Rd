@@ -13,7 +13,7 @@ has_seq_zo_fo_absorption(model)
 (logical) TRUE if model has sequential zero-first absorption
 }
 \description{
-Check if ode system describes a sequential zero-order, first-order absorption
+Check if ode system describes a sequential zero-order, first-order absorption.
 
 Defined as the model having both zero- and first-order absorption.
 }

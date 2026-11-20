@@ -40,6 +40,11 @@ warning:: This function is under development.
 }
 
 (equation could not be rendered, see API doc on website)
+\itemize{
+\item exp_decrease_to_new_SS
+}
+
+(equation could not be rendered, see API doc on website)
 
 (equation could not be rendered, see API doc on website)
 }

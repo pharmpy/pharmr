@@ -15,7 +15,7 @@ retrieve_modelfit_results(context, name)
 (ModelfitResults) The results object
 }
 \description{
-Retrieve the modelfit results of a model
+Retrieve the modelfit results of a model.
 }
 \examples{
 \dontrun{

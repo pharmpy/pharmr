@@ -15,7 +15,7 @@ retrieve_model(context, name)
 (Model) Pharmpy model
 }
 \description{
-Retrieve a model from a context
+Retrieve a model from a context.
 
 Any models created and run by the tool can be
 retrieved.

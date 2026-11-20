@@ -17,5 +17,5 @@ check_dataset(model, dataframe = FALSE, verbose = FALSE)
 (data.frame) Only returns a DataFrame is dataframe=TRUE
 }
 \description{
-Check dataset for consistency across a set of rules
+Check dataset for consistency across a set of rules.
 }

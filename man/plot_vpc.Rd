@@ -17,7 +17,7 @@ plot_vpc(
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{simulations}{(str or data.frame or str) DataFrame containing the simulation data or path to dataset.
+\item{simulations}{(str or data.frame) DataFrame containing the simulation data or path to dataset.
 The dataset has to have one (index) column named "SIM" containing
 the simulation number, one (index) column named "index" containing the data indices and one dv column.
 See below for more information.}
@@ -36,7 +36,7 @@ See below for more information.}
 (alt.Chart) Plot The simulation data should have the following format: +-----+-------+--------+ | SIM | index | DV     | +=====+=======+========+ | 1   | 0     | 0.000  | +-----+-------+--------+ | 1   | 1     | 34.080 | +-----+-------+--------+ | 1   | 2     | 28.858 | +-----+-------+--------+ | 1   | 3     | 0.000  | +-----+-------+--------+ | 1   | 4     | 12.157 | +-----+-------+--------+ | 2   | 0     | 23.834 | +-----+-------+--------+ | 2   | 1     | 0.000  | +-----+-------+--------+ | ... | ...   | ...    | +-----+-------+--------+ | 20  | 2     | 0.000  | +-----+-------+--------+ | 20  | 3     | 31.342 | +-----+-------+--------+ | 20  | 4     | 29.983 | +-----+-------+--------+
 }
 \description{
-Creates a VPC plot for a model
+Creates a VPC plot for a model.
 }
 \examples{
 \dontrun{

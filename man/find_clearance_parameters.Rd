@@ -13,7 +13,7 @@ find_clearance_parameters(model)
 (vector) A vector of clearance parameters
 }
 \description{
-Find clearance parameters in model
+Find clearance parameters in model.
 }
 \examples{
 \dontrun{

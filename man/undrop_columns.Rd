@@ -15,7 +15,7 @@ undrop_columns(model, column_names)
 (Model) Updated Pharmpy model
 }
 \description{
-Undrop columns of model
+Undrop columns of model.
 }
 \examples{
 \dontrun{

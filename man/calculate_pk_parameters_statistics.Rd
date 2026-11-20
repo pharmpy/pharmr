@@ -18,13 +18,13 @@ calculate_pk_parameters_statistics(
 
 \item{covariance_matrix}{(data.frame (optional)) Parameter uncertainty covariance matrix}
 
-\item{seed}{(RandomNumberGenerator or Seed or numeric or numeric (optional)) Random number generator or seed}
+\item{seed}{(RandomNumberGenerator or Seed or numeric (optional)) Random number generator or seed}
 }
 \value{
 (data.frame) A DataFrame of statistics indexed on parameter and covariate value.
 }
 \description{
-Calculate statistics for common pharmacokinetic parameters
+Calculate statistics for common pharmacokinetic parameters.
 
 Calculate the mean (expected value of the distribution), variance
 (variance of the distribution) and standard error for some individual

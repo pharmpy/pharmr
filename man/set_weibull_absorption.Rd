@@ -13,7 +13,7 @@ set_weibull_absorption(model)
 (Model) Updated Pharmpy model
 }
 \description{
-Set or change to Weibull type absorption
+Set or change to Weibull type absorption.
 
 The Weibull absorption has an abosption rate varying with time (or rather time after dose).
 (equation could not be rendered, see API doc on website)

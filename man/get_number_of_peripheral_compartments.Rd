@@ -14,5 +14,5 @@ get_number_of_peripheral_compartments(model)
 }
 \description{
 Return the number of peripherals compartments connected to the central
-compartment
+compartment.
 }

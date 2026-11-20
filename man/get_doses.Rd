@@ -13,7 +13,7 @@ get_doses(model)
 (data.frame) doses
 }
 \description{
-Get a series of all doses
+Get a series of all doses.
 
 Indexed with ID and TIME
 }

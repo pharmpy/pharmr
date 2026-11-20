@@ -13,7 +13,7 @@ calculate_epsilon_gradient_expression(model)
 (vectorc(Expr)) List of symbolic expressions
 }
 \description{
-Calculate the symbolic expression for the epsilon gradient
+Calculate the symbolic expression for the epsilon gradient.
 
 This function currently only support models without ODE systems
 }

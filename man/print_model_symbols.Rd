@@ -10,7 +10,7 @@ print_model_symbols(model)
 \item{model}{(Model) Pharmpy model}
 }
 \description{
-Print all symbols defined in a model
+Print all symbols defined in a model.
 
 Symbols will be in one of the categories thetas, etas, omegas, epsilons, sigmas,
 variables and data columns

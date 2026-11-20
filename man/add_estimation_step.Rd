@@ -73,7 +73,7 @@ add_estimation_step(
 (Model) Updated Pharmpy model
 }
 \description{
-Add estimation step
+Add estimation step.
 
 Adds estimation step for a model in a given index. Methods currently supported are:
 FO, FOCE, ITS, LAPLACE, IMPMAP, IMP, SAEM

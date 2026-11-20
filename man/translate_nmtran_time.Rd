@@ -13,7 +13,7 @@ translate_nmtran_time(model)
 (Model) Updated Pharmpy model
 }
 \description{
-Translate NM-TRAN TIME and DATE column into one TIME column
+Translate NM-TRAN TIME and DATE column into one TIME column.
 
 If dataset of model have special NM-TRAN TIME and DATE columns these
 will be translated into one single time column with time in hours.

@@ -13,5 +13,5 @@ get_number_of_transit_compartments(model)
 (integer) Number of transit compartments
 }
 \description{
-Return the number of transit compartments in the model
+Return the number of transit compartments in the model.
 }

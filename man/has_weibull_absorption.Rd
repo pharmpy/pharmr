@@ -13,5 +13,5 @@ has_weibull_absorption(model)
 (logical) TRUE if model has weibull type absorption
 }
 \description{
-Check if ode system describes a weibull type absorption
+Check if ode system describes a weibull type absorption.
 }

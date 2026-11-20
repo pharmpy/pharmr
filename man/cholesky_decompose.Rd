@@ -15,7 +15,7 @@ cholesky_decompose(model, rvs = NULL)
 (Model) An updated Pharmpy model
 }
 \description{
-Cholesky decomposition of joint normally distributed random variables
+Cholesky decomposition of joint normally distributed random variables.
 }
 \examples{
 \dontrun{

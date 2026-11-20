@@ -13,7 +13,7 @@ get_population_prediction_expression(model)
 (Expr) Symbolic expression
 }
 \description{
-Get the full symbolic expression for the modelled population prediction
+Get the full symbolic expression for the modelled population prediction.
 
 This function currently only support models without ODE systems
 }

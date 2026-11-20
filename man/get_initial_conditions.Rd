@@ -15,7 +15,7 @@ get_initial_conditions(model, dosing = FALSE)
 (list) Initial conditions
 }
 \description{
-Get initial conditions for the ode system
+Get initial conditions for the ode system.
 
 Default initial conditions at t=0 for amounts is 0
 }

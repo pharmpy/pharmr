@@ -31,7 +31,7 @@ the input parameter-covariate pair.}
 (Model) Updated Pharmpy model
 }
 \description{
-Adds covariate effect to :class:\code{pharmpy.model}.
+Add covariate effect to :class:\code{pharmpy.model}.
 
 The following effects have templates:
 \itemize{

@@ -24,7 +24,7 @@ sample_individual_estimates(
 
 \item{samples_per_id}{(numeric) Number of samples per individual}
 
-\item{seed}{(RandomNumberGenerator or Seed or numeric or numeric (optional)) Random number generator or seed}
+\item{seed}{(RandomNumberGenerator or Seed or numeric (optional)) Random number generator or seed}
 }
 \value{
 (data.frame) Pool of samples in a DataFrame

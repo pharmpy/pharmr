@@ -13,7 +13,7 @@ reset_dataset(model)
 (Model) Updated Pharmpy model
 }
 \description{
-Use Pharmpy dataset instead of original file
+Use Pharmpy dataset instead of original file.
 
 The parsed dataset will be written down when doing e.g. estimation or writing files
 instead of the original dataset file

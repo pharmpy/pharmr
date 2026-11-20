@@ -15,7 +15,7 @@ convert_model(model, to_format)
 (Model) Updated Pharmpy model
 }
 \description{
-Convert model to other format
+Convert model to other format.
 
 Note that the operation is not done inplace.
 }

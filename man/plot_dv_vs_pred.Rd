@@ -19,7 +19,7 @@ plot_dv_vs_pred(model, predictions, stratify_on = NULL, bins = 8)
 (alt.Chart) Plot
 }
 \description{
-Plot DV vs PRED
+Plot DV vs PRED.
 }
 \examples{
 \dontrun{

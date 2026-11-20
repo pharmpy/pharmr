@@ -15,7 +15,7 @@ plot_eta_distributions(model, individual_estimates)
 (alt.Chart) Plot
 }
 \description{
-Plot eta distributions for all etas
+Plot eta distributions for all etas.
 }
 \examples{
 \dontrun{

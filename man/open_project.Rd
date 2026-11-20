@@ -9,10 +9,10 @@ open_project(name, ref = NULL)
 \arguments{
 \item{name}{(str) Name of the project}
 
-\item{ref}{(str or str (optional)) Parent path of the project}
+\item{ref}{(str (optional)) Parent path of the project}
 }
 \description{
-Open or create a project (with model database)
+Open or create a project (with model database).
 }
 \examples{
 \dontrun{

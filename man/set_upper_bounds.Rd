@@ -17,7 +17,7 @@ set_upper_bounds(model, bounds, strict = TRUE)
 (Model) Updated Pharmpy model
 }
 \description{
-Set parameter upper bounds
+Set parameter upper bounds.
 }
 \examples{
 \dontrun{

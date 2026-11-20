@@ -18,7 +18,7 @@ Otherwise a new index using ID and idv will be created.}
 (data.frame) Observations indexed over ID and TIME
 }
 \description{
-Get observations from dataset
+Get observations from dataset.
 }
 \examples{
 \dontrun{

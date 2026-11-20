@@ -26,7 +26,7 @@ positive definite covariance matrices.}
 
 \item{n}{(numeric) Number of samples}
 
-\item{seed}{(RandomNumberGenerator or numeric or numeric or Seed (optional)) Random number generator or seed}
+\item{seed}{(RandomNumberGenerator or numeric or Seed (optional)) Random number generator or seed}
 
 \item{scale}{(str) Scale to perform sampling on. Valid options are 'normal' and 'UCP'}
 }
@@ -34,7 +34,7 @@ positive definite covariance matrices.}
 (data.frame) samples
 }
 \description{
-Sample parameter vectors using uniform sampling
+Sample parameter vectors using uniform sampling.
 
 Each parameter value will be randomly sampled from a uniform distribution
 with the bounds being estimate ± estimate * fraction.

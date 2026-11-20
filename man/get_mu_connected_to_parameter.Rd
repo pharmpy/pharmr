@@ -15,7 +15,7 @@ get_mu_connected_to_parameter(model, parameter)
 (str) Name of Mu parameter or NULL
 }
 \description{
-Return Mu name connected to parameter
+Return Mu name connected to parameter.
 
 If the given parameter is not dependent on any Mu, NULL is returned
 }

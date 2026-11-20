@@ -21,11 +21,11 @@ plot_transformed_eta_distributions(
 
 \item{parameter_estimates_untransformed}{(array or list(str=numeric)) Parameter estimates of untransformed model fit}
 
-\item{seed}{(RandomNumberGenerator or Seed or numeric or numeric (optional)) Random number generator or seed}
+\item{seed}{(RandomNumberGenerator or Seed or numeric (optional)) Random number generator or seed}
 }
 \value{
 (alt.Chart) Plot
 }
 \description{
-Plot transformed eta distributions for all transformed etas
+Plot transformed eta distributions for all transformed etas.
 }

@@ -29,23 +29,23 @@ run_structsearch(
 
 \item{results}{(ModelfitResults) Results for the start model}
 
-\item{type}{(str) Type of model. Currently only 'drug_metabolite', 'pkpd' and 'tmdd'}
+\item{type}{(str) Type of model. Currently only 'drug_metabolite'\verb{, }'pkpd'\code{and}'tmdd'}
 
 \item{search_space}{(str or ModelFeatures (optional)) Search space to test}
 
-\item{b_init}{(numeric or numeric (optional)) Initial estimate for the baseline for pkpd models.}
+\item{b_init}{(numeric (optional)) Initial estimate for the baseline for pkpd models.}
 
-\item{emax_init}{(numeric or numeric (optional)) Initial estimate for E_MAX (for pkpd models only).}
+\item{emax_init}{(numeric (optional)) Initial estimate for E_MAX (for pkpd models only).}
 
-\item{ec50_init}{(numeric or numeric (optional)) Initial estimate for EC_50 (for pkpd models only).}
+\item{ec50_init}{(numeric (optional)) Initial estimate for EC_50 (for pkpd models only).}
 
-\item{met_init}{(numeric or numeric (optional)) Initial estimate for MET (for pkpd models only).}
+\item{met_init}{(numeric (optional)) Initial estimate for MET (for pkpd models only).}
 
 \item{extra_model}{(Model (optional)) Optional extra Pharmpy model to use in TMDD structsearch}
 
 \item{rank_type}{(str) Results for the extra model}
 
-\item{cutoff}{(numeric or numeric (optional)) Which ranking type should be used. Default is BIC.}
+\item{cutoff}{(numeric (optional)) Which ranking type should be used. Default is BIC.}
 
 \item{strictness}{(str (optional)) Cutoff for which value of the ranking function that is considered significant. Default
 is NULL (all models will be ranked)}
@@ -55,7 +55,7 @@ is NULL (all models will be ranked)}
 \item{dv_types}{(list(str=numeric) (optional)) Dictionary of DV types for TMDD models with multiple DVs}
 
 \item{initial_error_models}{(list(numeric=str) (optional)) Dictionary of DVID to error model. Supported error models are 'proportional',
-'additive' and 'combined'. If NULL or if any DVID is not specified, 'proportional'
+'additive'\code{and}'combined'\verb{. If NULL or if any DVID is not specified, }'proportional'
 will be used}
 
 \item{parameter_uncertainty_method}{(str (optional)) Parameter uncertainty method. Will be used in ranking models if strictness includes

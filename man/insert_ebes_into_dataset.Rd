@@ -21,7 +21,7 @@ insert_ebes_into_dataset(
 (Model) Updated Pharmpy model
 }
 \description{
-Insert EBEs and ETCs from results into the dataset of a model
+Insert EBEs and ETCs from results into the dataset of a model.
 }
 \examples{
 \dontrun{

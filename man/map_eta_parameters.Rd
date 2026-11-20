@@ -19,7 +19,7 @@ map_eta_parameters(model, keys, values, level = "iiv")
 (list) A list from parameters, omegas or etas to a vector of connected parameters, omegas or etas.
 }
 \description{
-Create a map with the connections from and to individual parameters, omegas and/or etas
+Create a map with the connections from and to individual parameters, omegas and/or etas.
 
 The mapping will always be one to many.
 }

@@ -15,5 +15,5 @@ set_covariates(model, covariates)
 (Model) Updated Pharmpy model or DataInfo object
 }
 \description{
-Set columns in the dataset to be covariates in the datainfo
+Set columns in the dataset to be covariates in the datainfo.
 }

@@ -9,7 +9,7 @@ write_csv(model, path = NULL, force = FALSE)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{path}{(str or str (optional)) Destination path. Default is to use original path with .csv suffix.}
+\item{path}{(str (optional)) Destination path. Default is to use original path with .csv suffix.}
 
 \item{force}{(logical) Overwrite file with same path. Default is FALSE.}
 }
@@ -17,7 +17,7 @@ write_csv(model, path = NULL, force = FALSE)
 (Model) Updated Pharmpy model
 }
 \description{
-Write dataset to a csv file and updates the datainfo path
+Write dataset to a csv file and updates the datainfo path.
 }
 \examples{
 \dontrun{

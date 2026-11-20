@@ -10,7 +10,7 @@ get_config_path()
 (str or NULL) Path to user config or NULL if file does not exist
 }
 \description{
-Returns path to the user config path
+Returns path to the user config path.
 }
 \examples{
 \dontrun{

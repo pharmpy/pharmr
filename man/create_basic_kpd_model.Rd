@@ -4,13 +4,15 @@
 \alias{create_basic_kpd_model}
 \title{create_basic_kpd_model}
 \usage{
-create_basic_kpd_model(dataset_path = NULL, driver = "ir")
+create_basic_kpd_model(input = NULL, driver = "ir", dataset_path = NULL)
 }
 \arguments{
-\item{dataset_path}{(str or str (optional)) Optional path to a dataset}
+\item{input}{(str or data.frame (optional)) Optional path to a dataset or the dataset itself}
 
 \item{driver}{(str) Driver variable of the KPD model. Can either be 'ir' (virtual infusion
 rate) or 'amount'.}
+
+\item{dataset_path}{(str (optional)) Deprecated. Use input instead}
 }
 \value{
 (Model) Pharmpy model

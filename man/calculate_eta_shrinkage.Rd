@@ -25,7 +25,7 @@ variance scale)}
 (Series) Shrinkage for each eta
 }
 \description{
-Calculate eta shrinkage for each eta
+Calculate eta shrinkage for each eta.
 }
 \examples{
 \dontrun{

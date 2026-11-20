@@ -6,22 +6,25 @@
 \usage{
 create_basic_pk_model(
   administration = "iv",
-  dataset_path = NULL,
+  input = NULL,
   cl_init = 0.01,
   vc_init = 1,
-  mat_init = 0.1
+  mat_init = 0.1,
+  dataset_path = NULL
 )
 }
 \arguments{
 \item{administration}{(str) Type of PK model to create. Supported are 'iv', 'oral' and 'ivoral'}
 
-\item{dataset_path}{(str or str (optional)) Optional path to a dataset}
+\item{input}{(str or data.frame (optional)) Optional path to a dataset or the dataset itself}
 
 \item{cl_init}{(numeric) Initial estimate of the clearance parameter}
 
 \item{vc_init}{(numeric) Initial estimate of the central volume parameter}
 
 \item{mat_init}{(numeric) Initial estimate of the mean absorption time parameter (if applicable)}
+
+\item{dataset_path}{(str (optional)) Deprecated. Use input instead}
 }
 \value{
 (Model) Pharmpy model

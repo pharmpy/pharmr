@@ -9,7 +9,7 @@ write_dataset(model, path = NULL, force = FALSE, type = "csv")
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{path}{(str or str (optional)) Destination path. Default is to use original path with .csv suffix.}
+\item{path}{(str (optional)) Destination path. Default is to use original path with .csv suffix.}
 
 \item{force}{(logical) Overwrite file with same path. Default is FALSE.}
 
@@ -19,7 +19,7 @@ write_dataset(model, path = NULL, force = FALSE, type = "csv")
 (Model) Updated Pharmpy model
 }
 \description{
-Write dataset to file and updates the datainfo path
+Write dataset to file and updates the datainfo path.
 
 Curretly supports csv files.
 }

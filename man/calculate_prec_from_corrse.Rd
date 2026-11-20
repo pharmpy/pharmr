@@ -15,7 +15,7 @@ calculate_prec_from_corrse(corr, se)
 (data.frame) Precision matrix
 }
 \description{
-Calculate precision matrix from a correlation matrix and standard errors
+Calculate precision matrix from a correlation matrix and standard errors.
 }
 \examples{
 \dontrun{

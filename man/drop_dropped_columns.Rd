@@ -13,7 +13,7 @@ drop_dropped_columns(model)
 (Model) Updated Pharmpy model
 }
 \description{
-Drop columns marked as dropped from the dataset
+Drop columns marked as dropped from the dataset.
 
 NM-TRAN date columns will not be dropped by this function
 even if marked as dropped.

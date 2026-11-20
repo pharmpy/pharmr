@@ -13,7 +13,7 @@ get_number_of_observations(model)
 (integer) Number of observations in the model dataset
 }
 \description{
-Retrieve the total number of observations in the model dataset
+Retrieve the total number of observations in the model dataset.
 }
 \note{
 For NONMEM models this is the number of observations of the active dataset, i.e. after filteringof IGNORE and ACCEPT and removal of individuals with no observations.

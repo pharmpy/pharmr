@@ -13,5 +13,5 @@ get_bioavailability(model)
 (list) Dictionary from compartment name to bioavailability expression
 }
 \description{
-Get bioavailability of doses for all compartments
+Get bioavailability of doses for all compartments.
 }

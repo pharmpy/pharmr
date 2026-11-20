@@ -13,7 +13,7 @@ create_dataset_from_design(td)
 (data.frame) A dataset
 }
 \description{
-Create a dataset matching a design
+Create a dataset matching a design.
 }
 \examples{
 \dontrun{

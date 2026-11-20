@@ -13,7 +13,7 @@ add_cmt(model)
 (model : Model) Updated Pharmpy model
 }
 \description{
-Add a CMT column to the model dataset and datainfo if not existed
+Add a CMT column to the model dataset and datainfo if not existed.
 
 In case of multiple doses, this method is dependent on the presence of an
 admid column to correctly number each dose.

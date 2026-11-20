@@ -13,7 +13,7 @@ find_volume_parameters(model)
 (vector) A vector of volume parameters
 }
 \description{
-Find volume parameters in model
+Find volume parameters in model.
 }
 \examples{
 \dontrun{

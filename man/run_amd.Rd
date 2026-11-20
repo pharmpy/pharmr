@@ -36,15 +36,15 @@ run_amd(
 )
 }
 \arguments{
-\item{input}{(Model or str or str or DataInfo) Starting model or dataset}
+\item{input}{(Model or str or DataInfo) Starting model or dataset}
 
 \item{results}{(ModelfitResults (optional)) Results of input if input is a model}
 
-\item{modeltype}{(str) Type of model to build. Valid strings are 'basic_pk', 'pkpd', 'drug_metabolite' and 'tmdd'}
+\item{modeltype}{(str) Type of model to build. Valid strings are 'basic_pk'\verb{, }'pkpd'\verb{, }'drug_metabolite'\code{and}'tmdd'}
 
-\item{administration}{(str) Route of administration. Either 'iv', 'oral' or 'ivoral'}
+\item{administration}{(str) Route of administration. Either 'iv'\verb{, }'oral'\code{or}'ivoral'}
 
-\item{strategy}{(str) Run algorithm for AMD procedure. Valid options are 'default', 'reevaluation', 'SIR', 'SRI', and 'RSI'.}
+\item{strategy}{(str) Run algorithm for AMD procedure. Valid options are 'default'\verb{, }'reevaluation'\verb{, }'SIR'\verb{, }'SRI'\verb{, and }'RSI'.}
 
 \item{cl_init}{(numeric (optional)) Initial estimate for the population clearance}
 
@@ -89,7 +89,7 @@ Default is 'final'.}
 \item{ignore_datainfo_fallback}{(logical) Ignore using datainfo to get information not given by the user. Default is FALSE}
 
 \item{initial_error_models}{(list(numeric=str) (optional)) Dictionary of DVID to error model. Supported error models are 'proportional',
-'additive' and 'combined'. If NULL or if any DVID is not specified, 'proportional'
+'additive'\code{and}'combined'\verb{. If NULL or if any DVID is not specified, }'proportional'
 will be used. The error model will be applied for the start model for DVID == 1,
 if any other are provided they will be applied in the StructSearch tool}
 
@@ -103,7 +103,7 @@ if any other are provided they will be applied in the StructSearch tool}
 (AMDResults) Results for the run
 }
 \description{
-Run Automatic Model Development (AMD) tool
+Run Automatic Model Development (AMD) tool.
 }
 \examples{
 \dontrun{

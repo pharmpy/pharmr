@@ -19,7 +19,7 @@ evaluate_eta_gradient(model, etas = NULL, parameters = NULL, dataset = NULL)
 (data.frame) Gradient
 }
 \description{
-Evaluate the numeric eta gradient
+Evaluate the numeric eta gradient.
 
 The gradient is evaluated at the current model parameter values
 or optionally at the given parameter values.

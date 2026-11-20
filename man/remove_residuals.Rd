@@ -15,7 +15,7 @@ remove_residuals(model, to_remove = NULL)
 (Model) Updated Pharmpy model
 }
 \description{
-Remove residuals
+Remove residuals.
 
 Remove residuals from estimation step. Default is to remove all residuals.
 }

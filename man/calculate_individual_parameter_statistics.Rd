@@ -23,13 +23,13 @@ the names of the left hand sides will be used as the names of the parameters.}
 
 \item{covariance_matrix}{(data.frame (optional)) Parameter uncertainty covariance matrix}
 
-\item{seed}{(RandomNumberGenerator or numeric or Seed or numeric (optional)) Random number generator or integer seed}
+\item{seed}{(RandomNumberGenerator or numeric or Seed (optional)) Random number generator or integer seed}
 }
 \value{
 (data.frame) A DataFrame of statistics indexed on parameter and covariate value.
 }
 \description{
-Calculate statistics for individual parameters
+Calculate statistics for individual parameters.
 
 Calculate the mean (expected value of the distribution), variance
 (variance of the distribution) and standard error for individual

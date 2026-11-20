@@ -9,13 +9,13 @@ bump_model_number(model, path = NULL)
 \arguments{
 \item{model}{(Model) Pharmpy model}
 
-\item{path}{(str or str (optional)) Default is to not look for files.}
+\item{path}{(str (optional)) Default is to not look for files.}
 }
 \value{
 (Model) Updated Pharmpy model
 }
 \description{
-If the model name ends in a number increase it
+If the model name ends in a number increase it.
 
 If path is set increase the number until no file exists
 with the same name in path.

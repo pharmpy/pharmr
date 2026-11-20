@@ -15,7 +15,7 @@ set_ode_solver(model, solver)
 (Model) Updated Pharmpy model
 }
 \description{
-Sets ODE solver to use for model
+Sets ODE solver to use for model.
 
 The recognized solvers are CVODS, DGEAR, DVERK, IDA, LSODA and LSODI.
 To see the corresponding NONMEM ADVANs see :ref:\code{ADVANS}.

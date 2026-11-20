@@ -15,7 +15,7 @@ remove_estimation_step(model, idx)
 (Model) Update Pharmpy model
 }
 \description{
-Remove estimation step
+Remove estimation step.
 }
 \examples{
 \dontrun{

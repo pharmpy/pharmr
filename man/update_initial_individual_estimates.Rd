@@ -17,7 +17,7 @@ update_initial_individual_estimates(model, individual_estimates, force = TRUE)
 (Model) Updated Pharmpy model
 }
 \description{
-Update initial individual estimates for a model
+Update initial individual estimates for a model.
 
 Updates initial individual estimates for a model.
 }

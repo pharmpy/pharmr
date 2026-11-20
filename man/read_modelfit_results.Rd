@@ -7,7 +7,7 @@
 read_modelfit_results(path, esttool = NULL)
 }
 \arguments{
-\item{path}{(str or str) Path to model file}
+\item{path}{(str) Path to model file}
 
 \item{esttool}{(str (optional)) Set if other than the default estimation tool is to be used}
 }
@@ -15,5 +15,5 @@ read_modelfit_results(path, esttool = NULL)
 (ModelfitResults) Results object
 }
 \description{
-Read results from external tool for a model
+Read results from external tool for a model.
 }

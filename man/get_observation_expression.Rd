@@ -13,7 +13,7 @@ get_observation_expression(model)
 (Expr) Symbolic expression
 }
 \description{
-Get the full symbolic expression for the observation according to the model
+Get the full symbolic expression for the observation according to the model.
 
 This function currently only support models without ODE systems
 }

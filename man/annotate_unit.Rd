@@ -19,7 +19,7 @@ will mean the DV column only when DVID is 1.}
 (Model | DataInfo) An updated Model or DataInfo object
 }
 \description{
-Specify the unit of a data column
+Specify the unit of a data column.
 
 Note that no conversion of units will happen if the unit was already set.
 }

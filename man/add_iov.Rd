@@ -38,9 +38,11 @@ Initial estimate of new IOVs are 10\% of the IIV eta it is based on.
 }
 \examples{
 \dontrun{
-model <- load_example_model("pheno")
-model <- add_iov(model, "TIME", "CL")
-model$statements$find_assignment("CL")
+dataset <- load_example_dataset('moxo')
+model <- create_basic_pk_model('oral', dataset)
+model <- convert_model(model, 'nonmem')
+model <- add_iov(model, "VISI", "CL")
+model$random_variables$iov
 }
 }
 \seealso{

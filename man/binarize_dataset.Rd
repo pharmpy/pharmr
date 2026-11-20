@@ -19,7 +19,7 @@ binarize_dataset(model, columns, keep = FALSE, all_levels = FALSE)
 (Model) Updated Pharmpy model
 }
 \description{
-Binarize dataset
+Binarize dataset.
 
 Will create one column per category if specified, otherwise for all columns
 except for the last one. Will also update datainfo so that new columns have

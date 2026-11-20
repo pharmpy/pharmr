@@ -13,7 +13,7 @@ get_admid(model)
 (data.frame) ADMID
 }
 \description{
-Get the admid from model dataset
+Get the admid from model dataset.
 
 If an administration column is present this will be extracted otherwise
 an admid column will be created based on the admids of the present doses.

@@ -15,7 +15,7 @@ set_dtbs_error_model(model, fix_to_log = FALSE)
 (Model) Updated Pharmpy model
 }
 \description{
-Dynamic transform both sides
+Dynamic transform both sides.
 }
 \examples{
 \dontrun{
