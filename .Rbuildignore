@@ -5,3 +5,4 @@
 .idea/*
 .scripts/*
 ^LICENSE
+^REUSE\.toml$
